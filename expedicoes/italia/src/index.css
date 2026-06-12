@@ -49,6 +49,39 @@
   .eyebrow {
     @apply inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] uppercase;
   }
+
+  /* ========== FORMULARIO PROPRIO (padrao PADRONIZACAO FORMULARIO LP) ========== */
+  .form-section-container {
+    @apply max-w-3xl;
+  }
+  .form-section-wrap {
+    @apply relative;
+  }
+  .form-white-block {
+    @apply relative;
+  }
+  .input-label {
+    @apply block text-sm font-semibold text-dark-teal mb-2;
+  }
+  .input {
+    @apply w-full rounded-xl border border-dark-teal/15 bg-off-white px-4 py-3.5 text-dark-teal placeholder:text-dark-teal/35 outline-none transition-colors focus:border-lime-dark focus:ring-2 focus:ring-lime/40;
+  }
+  .radio-group {
+    @apply flex flex-col gap-2 mt-3;
+  }
+  .radio-item {
+    @apply flex items-center gap-3 rounded-xl border border-dark-teal/15 bg-off-white px-4 py-3 cursor-pointer transition-colors hover:border-dark-teal/30 has-[:checked]:border-lime-dark has-[:checked]:bg-lime/15;
+  }
+  .field-error {
+    @apply text-red-600 text-xs mt-1.5;
+  }
+  .input-error {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-200;
+  }
+  .radio-error-legend {
+    @apply text-red-600;
+  }
+
   .eyebrow-center {
     @apply inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] uppercase;
   }
@@ -278,21 +311,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* ========== BITRIX FORM OVERRIDES ========== */
-.b24-form-footer,
-.b24-form-btn-abuse,
-[class*="b24-form-abuse"] { display: none !important; }
-.b24-form { font-family: inherit !important; }
-.b24-form-btn-main {
-  background: #D7F264 !important;
-  color: #09282B !important;
-  border-radius: 9999px !important;
-  font-weight: 600 !important;
-  padding: 16px 24px !important;
-  border: none !important;
-}
-.b24-form-btn-main:hover { background: #C0E046 !important; }
 
 /* ========== SWIPER ========== */
 .swiper-button-next, .swiper-button-prev {

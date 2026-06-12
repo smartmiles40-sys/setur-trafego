@@ -4,16 +4,18 @@ import { ArrowDown, Check, ClipboardList } from 'lucide-react'
 import { expedicao } from '../data/expedicao'
 import VideoGate from '../components/VideoGate'
 import ConsentimentoCookies from '../components/ConsentimentoCookies'
-
-const FORM_SRC = 'https://setuforeuvouviagens.bitrix24.site/crm_form_bcup9/'
+import FormularioLead from '../components/FormularioLead'
 
 /**
  * Etapa 2 do funil — página enxuta, zero distração:
  *
  * 1. VSL travado (headline + player + mini barra de loading).
  * 2. Após 1 MINUTO realmente assistido (unlockSeconds=60 do VideoGate): o
- *    formulário do Bitrix surge LOGO ABAIXO do vídeo (inline, sem popup) e a
+ *    formulário próprio multi-etapas surge LOGO ABAIXO do vídeo (inline) e a
  *    página ROLA SOZINHA até ele — o vídeo continua na tela, acima.
+ *
+ * VERSÃO DE TRÁFEGO: o iframe do Bitrix virou o FormularioLead (padrão
+ * PADRONIZACAO FORMULARIO LP — UTMs, lead_id, dataLayer, /api/save-lead).
  *
  * REGRA DURA (diretoria): todo acesso recomeça do zero — o vídeo recarrega e
  * o formulário volta a ficar bloqueado. Nada é persistido (persist=false).
@@ -101,35 +103,16 @@ export default function ProximaEtapa() {
           </motion.div>
 
           {/* ============ FORMULÁRIO INLINE — abaixo do vídeo ============
-              PRÉ-CARREGAMENTO: o iframe é montado JÁ na abertura da página, então o
-              Bitrix carrega enquanto a pessoa assiste ao vídeo. Até liberar, o bloco
-              fica COLAPSADO (altura 0 + invisível) — o mesmo iframe persiste, sem
-              recarregar. Resultado: ao liberar e rolar até aqui, o form já está
-              pronto, sem tela branca (que faria a pessoa desistir).
-              A tela rola sozinha até aqui. Chamada visual forte deixa explícito que é
-              pra PREENCHER, sem a pessoa precisar caçar nada. */}
-          <div
-            ref={formRef}
-            aria-hidden={!liberado}
-            className={
-              liberado
-                ? 'mt-12 md:mt-16 scroll-mt-6'
-                : 'pointer-events-none fixed top-0 left-0 w-full max-w-3xl'
-            }
-            // Travado: o bloco fica TOTALMENTE renderizado (opacity/visibility
-            // normais), só EMPURRADO pra fora da tela pela esquerda. O Chrome NÃO
-            // carrega iframe sob opacity:0 / display:none / height:0 / visibility:
-            // hidden — então essas técnicas adiam o Bitrix. Deslocar via transform
-            // mantém o iframe "visível" pro carregador (carrega já na abertura) e
-            // some da vista. translateX negativo = sai pela esquerda, sem criar
-            // barra de rolagem horizontal.
-            style={liberado ? undefined : { transform: 'translateX(-150vw)' }}
-          >
-            <motion.div
-              initial={false}
-              animate={liberado ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            >
+              O formulário próprio renderiza na hora (não é iframe), então não
+              precisa mais do truque de pré-carregamento fora da tela: ele só
+              monta quando o vídeo libera. A tela rola sozinha até aqui. */}
+          {liberado && (
+            <div ref={formRef} className="mt-12 md:mt-16 scroll-mt-6">
+              <motion.div
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
                 {/* Selo "liberado" + chamada */}
                 <div className="text-center mb-6">
                   <span className="inline-flex items-center gap-2 rounded-full bg-lime px-4 py-1.5 text-dark-teal text-xs font-bold tracking-wide uppercase">
@@ -156,23 +139,21 @@ export default function ProximaEtapa() {
                           Preencha sua inscrição
                         </p>
                         <p className="flex items-center gap-1 text-lime/90 text-[11.5px] font-medium">
-                          Só seus dados — leva 1 minutinho
+                          Etapa rápida — leva 1 minutinho
                           <ArrowDown className="h-3 w-3 animate-bounce" aria-hidden />
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Formulário do Bitrix — inline, sem popup */}
-                  <iframe
-                    src={FORM_SRC}
-                    title={`Formulário Expedição ${expedicao.nome} ${expedicao.ano}`}
-                    className="w-full block bg-off-white"
-                    style={{ minHeight: '820px', border: 0 }}
-                  />
+                  {/* Formulário próprio multi-etapas — inline, sem popup */}
+                  <div className="p-2 sm:p-4 md:p-6">
+                    <FormularioLead />
+                  </div>
                 </div>
-            </motion.div>
-          </div>
+              </motion.div>
+            </div>
+          )}
         </div>
       </main>
 

@@ -1,4 +1,13 @@
-# Se Tu For, Eu Vou — Site Unificado
+# Se Tu For, Eu Vou — Versão de TRÁFEGO
+
+> **Cópia do site unificado dedicada a campanhas de tráfego pago.**
+> Diferença principal: as LPs de expedição usam **formulário próprio
+> multi-etapas** (padrão PADRONIZACAO FORMULARIO LP) no lugar do iframe do
+> Bitrix — com captura de UTMs, lead_id único, eventos no dataLayer pro GTM,
+> página de obrigado por LP e backend serverless em `/api/save-lead`
+> (encaminha cada lead pro webhook configurado em `WEBHOOK_URL` na Vercel).
+> O site oficial continua no repo `setur-unificado`.
+
 
 Portal + expedições + pacotes da agência, **tudo em um domínio só**
 (`setuforeuvouviagens.com.br`). Cada destino mora numa subpasta — o que conserta

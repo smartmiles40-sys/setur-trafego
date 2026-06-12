@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { expedicao } from '../data/expedicao'
+import FormularioLead from './FormularioLead'
 
 export default function Formulario() {
   return (
@@ -111,13 +112,13 @@ export default function Formulario() {
       </div>
 
       {/* ============ CARD FORMULÁRIO ============ */}
-      <div className="relative container-x max-w-3xl pb-24 md:pb-32">
+      <div className="relative container-x max-w-3xl pb-24 md:pb-32 form-section-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-off-white rounded-[2.5rem] shadow-card-lg p-6 md:p-14 relative overflow-hidden border border-dark-teal/5"
+          className="bg-off-white rounded-[2.5rem] shadow-card-lg p-6 md:p-14 relative overflow-hidden border border-dark-teal/5 form-section-wrap"
         >
           <div className="absolute top-0 left-0 w-32 h-32 incan-pattern opacity-30 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-32 h-32 incan-pattern opacity-30 pointer-events-none rotate-180" />
@@ -134,16 +135,9 @@ export default function Formulario() {
             </p>
           </div>
 
-          {/* Link PÚBLICO do Bitrix24 (crm_form_*) — o link interno /sites/site/ força login */}
-          <div className="relative w-full rounded-2xl overflow-hidden bg-off-white border border-dark-teal/10">
-            <iframe
-              src="https://setuforeuvouviagens.bitrix24.site/crm_form_bf30s/"
-              title="Formulário Expedição Costa Amalfitana 2027"
-              className="w-full block"
-              style={{ minHeight: '780px', border: 0 }}
-              loading="lazy"
-            />
-          </div>
+          {/* Formulário próprio multi-etapas (substitui o iframe Bitrix —
+              versão de TRÁFEGO: UTMs, lead_id e eventos dataLayer pro GTM) */}
+          <FormularioLead />
 
           <p className="relative text-center text-xs text-dark-teal/50 mt-6">
             Atendimento humano · Resposta rápida em horário comercial

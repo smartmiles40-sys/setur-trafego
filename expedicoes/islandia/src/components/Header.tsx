@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Menu, X, Music, VolumeX, ArrowLeft } from 'lucide-react'
+import { Menu, X, Music, VolumeX } from 'lucide-react'
 
 const menu = [
   { label: 'Incluso', href: '#incluso' },
@@ -33,14 +33,6 @@ export default function Header({ musicPlaying, toggleMusic }: HeaderProps) {
       >
         <nav className="max-w-6xl mx-auto bg-soft-green/95 backdrop-blur-md border border-dark-teal/10 rounded-full px-5 py-3 flex items-center justify-between shadow-card">
           <div className="flex items-center gap-3">
-            <a
-              href="/"
-              aria-label="Voltar para o site principal"
-              className="inline-flex items-center gap-1 rounded-full border border-dark-teal/15 bg-dark-teal/5 px-2.5 py-1.5 text-[11px] font-semibold text-dark-teal/60 transition-colors hover:border-dark-teal/30 hover:text-dark-teal"
-            >
-              <ArrowLeft size={12} strokeWidth={2.5} />
-              <span className="hidden xs:inline">Portal</span>
-            </a>
             <a href="#" className="flex items-center gap-1.5 group">
               <span className="font-serif font-bold text-dark-teal text-lg md:text-xl tracking-tight">
                 SE TU FOR, EU VOU!
@@ -85,15 +77,6 @@ export default function Header({ musicPlaying, toggleMusic }: HeaderProps) {
         {mobileOpen && (
           <div className="lg:hidden mt-3 bg-soft-green/95 backdrop-blur-md border border-dark-teal/10 rounded-3xl shadow-card p-5 max-w-6xl mx-auto">
             <ul className="flex flex-col divide-y divide-dark-teal/10">
-              <li>
-                <a
-                  href="/"
-                  className="flex items-center gap-2 py-3 text-dark-teal/70 font-medium"
-                >
-                  <ArrowLeft size={15} strokeWidth={2.5} />
-                  Voltar ao site principal
-                </a>
-              </li>
               {menu.map((m) => (
                 <li key={m.href}>
                   <a

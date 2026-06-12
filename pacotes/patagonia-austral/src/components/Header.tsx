@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -30,14 +30,6 @@ export default function Header() {
         )}
       >
         <div className="flex items-center gap-3">
-          <a
-            href="/"
-            aria-label="Voltar para o site principal"
-            className="inline-flex items-center gap-1 rounded-full border border-current/15 px-2.5 py-1.5 text-[11px] font-semibold opacity-60 transition-all hover:opacity-100 hover:border-current/30"
-          >
-            <ArrowLeft size={12} strokeWidth={2.5} />
-            <span>Portal</span>
-          </a>
           <a href="#topo" className="font-serif text-base font-bold leading-none md:text-lg">
           Se Tu For, Eu Vou
           <span className="ml-1 align-top text-[10px] italic opacity-70">Viagens</span>

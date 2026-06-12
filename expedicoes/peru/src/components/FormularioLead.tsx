@@ -14,7 +14,9 @@ import { expedicao } from '../data/expedicao'
  * este arquivo é IDÊNTICO em todas as expedições.
  */
 
-const SAVE_LEAD_URL = '/api/save-lead'
+// TESTE — Expedição Peru envia o lead direto pro webhook do Make (bypass /api/save-lead).
+// Funciona local e em produção sem depender da função serverless. Reverter pra '/api/save-lead' depois do teste.
+const SAVE_LEAD_URL = 'https://hook.us1.make.com/zgcu4xdcq4eva6l35rdubdtd3hta8wwp'
 
 // slug da LP a partir do base do Vite ('/italia/' → 'italia')
 const SLUG = (import.meta.env.BASE_URL || '/').replace(/\//g, '') || 'lp'

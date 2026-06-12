@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -15 20 30" width="200" height="300">
+  <!-- Sombra elongada (van comprida) -->
+  <ellipse cx="0" cy="1.5" rx="7" ry="13.5" fill="#0f172a" opacity="0.14"/>
+
+  <!-- Espelhos retrovisores (laterais frente) -->
+  <rect x="-7" y="-10.5" width="2.2" height="1.6" rx="0.4"
+        fill="#1e293b" stroke="#fff" stroke-width="0.25"/>
+  <rect x="4.8" y="-10.5" width="2.2" height="1.6" rx="0.4"
+        fill="#1e293b" stroke="#fff" stroke-width="0.25"/>
+
+  <!-- Pneus monstro: 4 cantos, salientes alem do corpo (super jeep mod) -->
+  <g fill="#0a0a0a">
+    <rect x="-7.5" y="-8.5" width="3.2" height="5.5" rx="1.4"/>
+    <rect x="4.3"  y="-8.5" width="3.2" height="5.5" rx="1.4"/>
+    <rect x="-7.5" y="3"    width="3.2" height="5.5" rx="1.4"/>
+    <rect x="4.3"  y="3"    width="3.2" height="5.5" rx="1.4"/>
+  </g>
+
+  <!-- Corpo da van (long box, cantos suaves, borda branca) -->
+  <rect x="-5" y="-12.5" width="10" height="25" rx="2.5"
+        fill="#0f172a" stroke="#ffffff" stroke-width="0.45"/>
+
+  <!-- Farois frontais -->
+  <circle cx="-2.8" cy="-11.2" r="1" fill="#fde68a"/>
+  <circle cx="2.8"  cy="-11.2" r="1" fill="#fde68a"/>
+
+  <!-- Para-brisa (curvo) -->
+  <path d="M -4,-9.8
+           Q 0,-10.3 4,-9.8
+           L 3.5,-6.3
+           Q 0,-5.9 -3.5,-6.3 Z"
+        fill="#7dd3fc" opacity="0.95"/>
+
+  <!-- Teto comprido (cabine + bagageiro) -->
+  <rect x="-4.2" y="-6.2" width="8.4" height="17.5" rx="1"
+        fill="#1e293b"/>
+
+  <!-- LIGHT BAR (assinatura de veiculo de expedicao na neve) -->
+  <rect x="-3.8" y="-5.8" width="7.6" height="1" rx="0.3" fill="#334155"/>
+  <g fill="#fde68a">
+    <rect x="-3.4" y="-5.6" width="1" height="0.6" rx="0.15"/>
+    <rect x="-1.9" y="-5.6" width="1" height="0.6" rx="0.15"/>
+    <rect x="-0.5" y="-5.6" width="1" height="0.6" rx="0.15"/>
+    <rect x="0.9"  y="-5.6" width="1" height="0.6" rx="0.15"/>
+    <rect x="2.4"  y="-5.6" width="1" height="0.6" rx="0.15"/>
+  </g>
+
+  <!-- Barras longitudinais do roof rack (sutis) -->
+  <line x1="-3.5" y1="-4" x2="-3.5" y2="10.5" stroke="#94a3b8" stroke-width="0.35" opacity="0.7"/>
+  <line x1="3.5"  y1="-4" x2="3.5"  y2="10.5" stroke="#94a3b8" stroke-width="0.35" opacity="0.7"/>
+
+  <!-- 3 cross-bars do roof rack (espacadas) -->
+  <line x1="-4" y1="-1"  x2="4" y2="-1"  stroke="#94a3b8" stroke-width="0.3" opacity="0.55"/>
+  <line x1="-4" y1="3.5" x2="4" y2="3.5" stroke="#94a3b8" stroke-width="0.3" opacity="0.55"/>
+  <line x1="-4" y1="8"   x2="4" y2="8"   stroke="#94a3b8" stroke-width="0.3" opacity="0.55"/>
+
+  <!-- Vidro traseiro -->
+  <path d="M -3.7,10.5
+           Q 0,10.9 3.7,10.5
+           L 3.9,12.2
+           Q 0,12.5 -3.9,12.2 Z"
+        fill="#1e3a4d" opacity="0.7"/>
+</svg>

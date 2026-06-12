@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rota Expedição Tailândia 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ocean: #b8deef;
+    --land: #ffffff;
+    --land-stroke: #c9d5df;
+    --grid: #dbe8f2;
+    --route-flight: #09282B;
+    --label: #0f172a;
+    --ui-border: #d7e2ea;
+    --ui-shadow: rgba(15, 23, 42, 0.12);
+  }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--ocean);
+    color: var(--label);
+    overflow: hidden;
+  }
+  #wrap { position: relative; width: 100%; height: 100%; }
+  #map { display: block; width: 100%; height: 100%; }
+  .badge {
+    position: absolute;
+    background: rgba(255,255,255,0.93);
+    border: 1px solid var(--ui-border);
+    border-radius: 999px;
+    box-shadow: 0 12px 28px var(--ui-shadow);
+    backdrop-filter: blur(6px);
+    font-size: 12px;
+    color: #334155;
+    padding: 8px 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .badge strong { color: #0f172a; font-weight: 700; }
+  .badge.top-left { top: 14px; left: 14px; }
+  .badge.bottom-right { bottom: 14px; right: 14px; display: flex; gap: 14px; align-items: center; }
+  .badge.bottom-left {
+    bottom: 14px; left: 14px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #475569;
+    font-weight: 600;
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; }
+  .legend-line { display: inline-block; width: 28px; height: 3px; border-radius: 999px; }
+  .legend-line.dashed { background: repeating-linear-gradient(to right, var(--route-flight) 0 6px, transparent 6px 10px); }
+  .legend-line.solid { background: #1F7A8C; }
+  .marker-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    fill: var(--label);
+    paint-order: stroke;
+    stroke: rgba(255,255,255,0.85);
+    stroke-width: 4px;
+  }
+  .route-shadow { fill: none; stroke: rgba(15,23,42,0.08); stroke-width: 4.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .route-line { fill: none; stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .route-line.dashed { stroke-width: 2.6; stroke-dasharray: 8 10; animation: dash 12s linear infinite; }
+  .marker-circle { vector-effect: non-scaling-stroke; }
+  @keyframes dash { to { stroke-dashoffset: -200; } }
+  .vehicle { transition: opacity 0.55s ease; }
+  @media (max-width: 480px) {
+    .badge { font-size: 11px; padding: 7px 11px; }
+    .badge.bottom-right { gap: 9px; }
+    .legend-line { width: 18px; }
+    .legend-item { font-size: 10.5px; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <svg id="map" role="img" aria-label="Mapa mundi com rota da expedição Tailândia"></svg>
+  <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
+  <div class="badge bottom-left">Brasil → Bangkok → Chiang Mai → Chiang Rai → Krabi → Phi Phi → Brasil</div>
+  <div class="badge bottom-right">
+    <span class="legend-item"><span class="legend-line dashed"></span>Voos</span>
+    <span class="legend-item"><span class="legend-line solid"></span>Transfer · barco</span>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>if (typeof d3 === 'undefined') document.write('<script src="https://unpkg.com/d3@7/dist/d3.min.js"><\/script>');</script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script>if (typeof topojson === 'undefined') document.write('<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"><\/script>');</script>
+<script>
+  const width = 1000;
+  const height = 500;
+
+  const svg = d3.select('#map')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMidYMid slice');
+
+  const mapLayer = svg.append('g').attr('class', 'map-layer');
+
+  const projection = d3.geoEquirectangular()
+    .translate([width / 2, height / 2])
+    .scale(width / (2 * Math.PI));
+
+  const path = d3.geoPath(projection);
+  const graticule = d3.geoGraticule10();
+
+  mapLayer.append('path').datum({ type: 'Sphere' }).attr('fill', 'var(--ocean)').attr('d', path);
+  mapLayer.append('path').datum(graticule).attr('fill', 'none').attr('stroke', 'var(--grid)').attr('stroke-width', 0.6).attr('opacity', 0.7).attr('d', path);
+
+  const S = {
+    sao:       { name: 'São Paulo',  lat: -23.4356, lon: -46.4731, color: '#09282B', labelOffset: [-38, 20] },
+    bangkok:   { name: 'Bangkok',    lat:  13.7563, lon: 100.5018, color: '#D4AC0D', labelOffset: [14, 16] },
+    chiangMai: { name: 'Chiang Mai', lat:  18.7883, lon:  98.9853, color: '#1F7A8C', labelOffset: [-66, -10] },
+    chiangRai: { name: 'Chiang Rai', lat:  19.9105, lon:  99.8406, color: '#BFD850', labelOffset: [14, -10] },
+    krabi:     { name: 'Krabi',      lat:   8.0863, lon:  98.9063, color: '#E67E22', labelOffset: [14, 4] },
+    phiPhi:    { name: 'Phi Phi',    lat:   7.7367, lon:  98.7700, color: '#3498DB', labelOffset: [-56, 16] },
+  };
+
+  const stops = Object.values(S);
+
+  // Cada segmento: stroke + dashed (voo). A classificação do veículo fica nas fases (phaseDefs).
+  const segments = [
+    { from: S.sao,       to: S.bangkok,   stroke: '#09282B', dashed: true },  // 0 voo internacional
+    { from: S.bangkok,   to: S.chiangMai, stroke: '#1F7A8C', dashed: true },  // 1 voo doméstico
+    { from: S.chiangMai, to: S.chiangRai, stroke: '#BFD850' },                // 2 van (ida)
+    { from: S.chiangRai, to: S.chiangMai, stroke: '#1F7A8C' },                // 3 van (volta)
+    { from: S.chiangMai, to: S.krabi,     stroke: '#E67E22', dashed: true },  // 4 voo doméstico
+    { from: S.krabi,     to: S.phiPhi,    stroke: '#3498DB' },                // 5 barco/ferry
+    { from: S.phiPhi,    to: S.bangkok,   stroke: '#D4AC0D', dashed: true },  // 6 voo doméstico
+    { from: S.bangkok,   to: S.sao,       stroke: '#09282B', dashed: true },  // 7 voo internacional
+  ];
+
+  const buildLine = (from, to, steps = 48) => {
+    const interp = d3.geoInterpolate([from.lon, from.lat], [to.lon, to.lat]);
+    const coords = [];
+    for (let s = 0; s <= steps; s++) coords.push(interp(s / steps));
+    return { type: 'LineString', coordinates: coords };
+  };
+
+  const segmentLines = segments.map(seg => ({ ...seg, line: buildLine(seg.from, seg.to) }));
+
+  const earthRadiusKm = 6371;
+  const totalDistance = segments.reduce((sum, seg) => sum + d3.geoDistance([seg.from.lon, seg.from.lat], [seg.to.lon, seg.to.lat]) * earthRadiusKm, 0);
+
+  const distEl = document.getElementById('distance');
+  if (distEl) {
+    const rounded = Math.round(totalDistance / 100) * 100;
+    distEl.textContent = `~${new Intl.NumberFormat('pt-BR').format(rounded)} km`;
+  }
+
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  const SCALE = {
+    flight: isMobile ? 2.2 : 1.6,
+    ground: isMobile ? 4.5 : 6.5,
+  };
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json').catch(() => d3.json('https://unpkg.com/world-atlas@2/land-110m.json')).then(world => {
+    const land = topojson.feature(world, world.objects.land);
+    mapLayer.append('path').datum(land).attr('fill', 'var(--land)').attr('stroke', 'var(--land-stroke)').attr('stroke-width', 0.8).attr('d', path);
+
+    segmentLines.forEach(seg => {
+      mapLayer.append('path').datum(seg.line).attr('class', 'route-shadow').attr('d', path);
+      mapLayer.append('path').datum(seg.line)
+        .attr('class', 'route-line' + (seg.dashed ? ' dashed' : ''))
+        .attr('stroke', seg.stroke)
+        .attr('d', path);
+    });
+
+    const markerLayer = mapLayer.append('g').attr('class', 'marker-layer');
+    const marker = markerLayer.selectAll('g').data(stops).enter().append('g');
+    marker.append('circle').attr('class', 'marker-circle').attr('r', 7).attr('fill', 'white').attr('stroke', d => d.color).attr('stroke-width', 2.5);
+    marker.append('circle').attr('r', 2.5).attr('fill', d => d.color);
+    marker.filter(d => d.labelOffset).append('text').attr('class', 'marker-label')
+      .attr('x', d => d.labelOffset[0]).attr('y', d => d.labelOffset[1]).text(d => d.name);
+    const markerProjected = stops.map(d => { const [x, y] = projection([d.lon, d.lat]); return { x, y }; });
+
+    // ===== Fases sequenciais (uma por trecho, na ordem da viagem) =====
+    // vehicle: 'plane' = voo | 'van' = transfer terrestre | 'boat' = barco/ferry
+    const phaseDefs = [
+      { seg: 0, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Bangkok (voo internacional)
+      { seg: 1, vehicle: 'plane', scale: SCALE.flight, duration: 2600 }, // Bangkok → Chiang Mai (voo)
+      { seg: 2, vehicle: 'van',   scale: SCALE.ground, duration: 3800 }, // Chiang Mai → Chiang Rai (van)
+      { seg: 3, vehicle: 'van',   scale: SCALE.ground, duration: 3800 }, // Chiang Rai → Chiang Mai (van)
+      { seg: 4, vehicle: 'plane', scale: SCALE.flight, duration: 3600 }, // Chiang Mai → Krabi (voo)
+      { seg: 5, vehicle: 'boat',  scale: SCALE.ground, duration: 4200 }, // Krabi → Phi Phi (barco)
+      { seg: 6, vehicle: 'plane', scale: SCALE.flight, duration: 3200 }, // Phi Phi → Bangkok (voo)
+      { seg: 7, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Bangkok → GRU (voo internacional)
+    ];
+
+    phaseDefs.forEach(p => {
+      p.pathNode = mapLayer.append('path').datum(segmentLines[p.seg].line).attr('d', path).attr('fill', 'none').attr('stroke', 'none').node();
+      p.length = p.pathNode.getTotalLength();
+    });
+
+    // ----- Avião (voos) -----
+    const planeGroup = mapLayer.append('g').attr('class', 'vehicle plane-group').style('pointer-events', 'none');
+    planeGroup.append('path')
+      .attr('d', 'M0,-14 L2,-8 L2,-3 L13,2 L13,4 L2,5 L2,9 L5,12 L5,13.5 L0,12.5 L-5,13.5 L-5,12 L-2,9 L-2,5 L-13,4 L-13,2 L-2,-3 L-2,-8 Z')
+      .attr('fill', '#0f172a').attr('stroke', '#fff').attr('stroke-width', 1.2).attr('stroke-linejoin', 'round');
+
+    // ----- Van / transfer terrestre (top-down, frente para cima) -----
+    const vanGroup = mapLayer.append('g').attr('class', 'vehicle van-group').style('pointer-events', 'none');
+    vanGroup.style('display', 'none');
+    vanGroup.append('path')
+      .attr('d', 'M-6,-12 Q-7,-12 -7,-9 L-7,11 Q-7,13 -5,13 L5,13 Q7,13 7,11 L7,-9 Q7,-12 6,-12 Z')
+      .attr('fill', '#0f172a').attr('stroke', '#fff').attr('stroke-width', 1.2).attr('stroke-linejoin', 'round');
+    vanGroup.append('path').attr('d', 'M-4.5,-8 L4.5,-8 L3.5,-3 L-3.5,-3 Z').attr('fill', '#D7F264');
+    vanGroup.append('rect').attr('x', -4).attr('y', 2).attr('width', 8).attr('height', 6).attr('rx', 1.5).attr('fill', '#1F7A8C').attr('opacity', 0.55);
+
+    // ----- Barco / ferry (top-down longtail, proa para cima) -----
+    const boatGroup = mapLayer.append('g').attr('class', 'vehicle boat-group').style('pointer-events', 'none');
+    boatGroup.style('display', 'none');
+    boatGroup.append('path')
+      .attr('d', 'M0,-15 L4.5,-6 L4.5,11 Q4.5,15 0,15 Q-4.5,15 -4.5,11 L-4.5,-6 Z')
+      .attr('fill', '#0f172a').attr('stroke', '#fff').attr('stroke-width', 1.2).attr('stroke-linejoin', 'round');
+    boatGroup.append('ellipse').attr('cx', 0).attr('cy', 3).attr('rx', 2.2).attr('ry', 6).attr('fill', '#D7F264').attr('opacity', 0.85);
+
+    const vehicleGroups = { plane: planeGroup, van: vanGroup, boat: boatGroup };
+
+    // ===== Loop de animação =====
+    const totalDuration = phaseDefs.reduce((s, p) => s + p.duration, 0);
+    const angleDelta = 4;
+    const seamJump = 60;
+    let start = performance.now();
+    let currentScale = SCALE.flight;
+
+    const animate = now => {
+      const t = (now - start) % totalDuration;
+      let acc = 0, phase = phaseDefs[0], localT = 0;
+      for (const p of phaseDefs) {
+        if (t < acc + p.duration) { phase = p; localT = (t - acc) / p.duration; break; }
+        acc += p.duration;
+      }
+
+      const lengthAt = localT * phase.length;
+      const point = phase.pathNode.getPointAtLength(lengthAt);
+      const ahead = phase.pathNode.getPointAtLength(Math.min(lengthAt + angleDelta, phase.length));
+      let dx = ahead.x - point.x, dy = ahead.y - point.y;
+      if (Math.hypot(dx, dy) > seamJump) {
+        const back = phase.pathNode.getPointAtLength(Math.max(lengthAt - angleDelta, 0));
+        dx = point.x - back.x; dy = point.y - back.y;
+      }
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+
+      // tween suave da escala (lerp) — zoom-in nos trechos terrestres/ilhas
+      currentScale += (phase.scale - currentScale) * 0.05;
+
+      const tx = width / 2 - point.x * currentScale;
+      const ty = height / 2 - point.y * currentScale;
+      mapLayer.attr('transform', `translate(${tx},${ty}) scale(${currentScale})`);
+
+      // Contra-escala: marcadores e veículos mantêm tamanho de tela constante
+      const inv = SCALE.flight / currentScale;
+      marker.attr('transform', (_, i) => `translate(${markerProjected[i].x}, ${markerProjected[i].y}) scale(${inv})`);
+
+      Object.entries(vehicleGroups).forEach(([kind, g]) => {
+        if (kind === phase.vehicle) {
+          g.style('display', null).attr('transform', `translate(${point.x},${point.y}) rotate(${angle}) scale(${inv})`);
+        } else {
+          g.style('display', 'none');
+        }
+      });
+
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  });
+</script>
+</body>
+</html>

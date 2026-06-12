@@ -1,0 +1,25 @@
+# dependências (cada projeto reinstala no build)
+node_modules/
+**/node_modules/
+
+# saídas de build
+dist/
+**/dist/
+
+# logs e temporários
+*.log
+*.err
+**/vite-dev.*
+*.tsbuildinfo
+**/*.tsbuildinfo
+tmp/
+
+# Vercel
+.vercel
+
+# sistema
+.DS_Store
+Thumbs.db
+
+# backups de mídia (originais antes da recompressão) — não versionar/deployar
+_backup-midia/

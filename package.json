@@ -1,0 +1,10 @@
+{
+  "name": "setur-unificado",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Site unificado da agência Se Tu For, Eu Vou — portal + expedições + pacotes em um domínio só.",
+  "scripts": {
+    "build": "node build-all.mjs"
+  }
+}

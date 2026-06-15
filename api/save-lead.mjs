@@ -10,12 +10,33 @@
 //  Vercel → Deployment → Functions → Logs) como rede de segurança
 //  enquanto o WEBHOOK_URL não estiver configurado.
 //
-//  Config (Vercel → Settings → Environment Variables):
-//    WEBHOOK_URL = https://sua-automacao.com/webhook/lead   (opcional)
-//  Se a env var não estiver definida, cai no WEBHOOK_URL_PADRAO abaixo
-//  (webhook de produção do n8n). O n8n roteia por expedicao/form_name.
+//  Roteamento por expedição: cada LP tem seu próprio webhook de produção
+//  no n8n. O destino é escolhido pelo slug do lead (campo `slug`, ou
+//  derivado de `form_name` = "expedicao-<slug>-<ano>").
+//
+//  Override global opcional (Vercel → Env Vars): WEBHOOK_URL força TODAS as
+//  expedições para um único webhook — útil só para debug.
 
-const WEBHOOK_URL_PADRAO = 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook/b8609d13-e5cf-4c0d-a303-847693b16a42'
+const N8N_BASE = 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook'
+
+// slug da expedição → webhook de PRODUÇÃO no n8n
+const WEBHOOKS = {
+  peru: `${N8N_BASE}/b8609d13-e5cf-4c0d-a303-847693b16a42`,
+  islandia: `${N8N_BASE}/3651e821-7180-4438-a7ad-71c078be6ddb`,
+  amazonia: `${N8N_BASE}/a4c71301-6164-413c-be56-d3234d945bed`,
+  egito: `${N8N_BASE}/316d650c-bb1a-45f6-8650-5b893b3b27a2`,
+  'japao-china': `${N8N_BASE}/bfb77872-8308-41f7-b6ae-de7a42bf9525`,
+  tailandia: `${N8N_BASE}/8c0bbdd3-e636-431f-bd98-4e9cb1ee495e`,
+  'turquia-grecia': `${N8N_BASE}/fbb6f273-fb0b-4266-a027-1dc9f46067a1`,
+  italia: `${N8N_BASE}/d38ff655-6f6d-4da5-8529-a082c3ec2c1f`,
+}
+
+/** slug explícito do payload, ou derivado de form_name ("expedicao-<slug>-<ano>"). */
+function slugDoLead(lead) {
+  if (lead.slug) return String(lead.slug)
+  const m = String(lead.form_name || '').match(/^expedicao-(.+)-\d{4}$/)
+  return m ? m[1] : ''
+}
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
 
@@ -63,7 +84,9 @@ export default async function handler(req, res) {
   // Rede de segurança: todo lead fica nos logs da função
   console.log('[lead]', JSON.stringify(lead))
 
-  const webhookUrl = process.env.WEBHOOK_URL || WEBHOOK_URL_PADRAO
+  // Override global (debug) > webhook da expedição pelo slug
+  const slug = slugDoLead(lead)
+  const webhookUrl = process.env.WEBHOOK_URL || WEBHOOKS[slug]
   if (webhookUrl) {
     try {
       const ctrl = new AbortController()
@@ -82,7 +105,7 @@ export default async function handler(req, res) {
       console.error('[webhook] falhou:', err && err.message)
     }
   } else {
-    console.warn('[webhook] WEBHOOK_URL não configurado — lead apenas nos logs')
+    console.warn(`[webhook] sem destino para slug="${slug}" — lead apenas nos logs`)
   }
 
   res.status(200).json({ ok: true })

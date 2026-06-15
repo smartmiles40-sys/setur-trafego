@@ -14,18 +14,7 @@ import { expedicao } from '../data/expedicao'
  * este arquivo é IDÊNTICO em todas as expedições.
  */
 
-// TESTE — Expedição Peru envia o lead direto pro webhook do n8n (bypass /api/save-lead).
-// Funciona local e em produção sem depender da função serverless. Reverter pra '/api/save-lead' depois do teste.
-//
-// Dois endpoints, mesmo workflow/ID no n8n:
-//   [0] PRODUÇÃO  (/webhook/)      — sempre ativo enquanto o workflow estiver "Active".
-//                                    É o que decide o sucesso do envio (redirect pro obrigado).
-//   [1] TESTE     (/webhook-test/) — só responde quando você clica "Listen for test event"
-//                                    no editor. Enviado em paralelo, best-effort: falha dele
-//                                    (404 com workflow parado) NÃO bloqueia o lead.
-const N8N_WEBHOOK_ID = 'b8609d13-e5cf-4c0d-a303-847693b16a42'
-const SAVE_LEAD_URL = `https://n8n-mowr.srv1758620.hstgr.cloud/webhook/${N8N_WEBHOOK_ID}`
-const SAVE_LEAD_URL_TESTE = `https://n8n-mowr.srv1758620.hstgr.cloud/webhook-test/${N8N_WEBHOOK_ID}`
+const SAVE_LEAD_URL = '/api/save-lead'
 
 // slug da LP a partir do base do Vite ('/italia/' → 'italia')
 const SLUG = (import.meta.env.BASE_URL || '/').replace(/\//g, '') || 'lp'
@@ -205,17 +194,11 @@ export default function FormularioLead() {
 
       setEnviando(true)
       try {
-        const corpo = JSON.stringify(payload)
-        const opcoes = {
+        const resp = await fetch(SAVE_LEAD_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: corpo,
-        }
-        // Teste é best-effort: dispara em paralelo e engole o erro (404 quando o
-        // workflow não está "ouvindo" no editor não pode travar o lead).
-        fetch(SAVE_LEAD_URL_TESTE, opcoes).catch(() => {})
-        // Produção é quem decide o sucesso do envio.
-        const resp = await fetch(SAVE_LEAD_URL, opcoes)
+          body: JSON.stringify(payload),
+        })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
         pushDataLayer('form_submit', { lead_id: leadId, ...utmsRef.current })
         sessionStorage.removeItem(LEAD_ID_KEY)

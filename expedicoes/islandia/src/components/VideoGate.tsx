@@ -204,9 +204,9 @@ export default function VideoGate({
 
   return (
     <>
-      {/* VSL — vídeo vertical centralizado */}
-      <div className="relative mx-auto mb-8 max-w-sm">
-        <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-dark-teal shadow-card-lg border border-dark-teal/10">
+      {/* VSL — vídeo horizontal (16/9) centralizado */}
+      <div className="relative mx-auto mb-8 max-w-3xl">
+        <div className="relative aspect-video rounded-2xl overflow-hidden bg-dark-teal shadow-card-lg border border-dark-teal/10">
           <video
             ref={videoRef}
             src={videoSrc}

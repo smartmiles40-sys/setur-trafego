@@ -12,6 +12,10 @@
 //
 //  Config (Vercel → Settings → Environment Variables):
 //    WEBHOOK_URL = https://sua-automacao.com/webhook/lead   (opcional)
+//  Se a env var não estiver definida, cai no WEBHOOK_URL_PADRAO abaixo
+//  (webhook de produção do n8n). O n8n roteia por expedicao/form_name.
+
+const WEBHOOK_URL_PADRAO = 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook/b8609d13-e5cf-4c0d-a303-847693b16a42'
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
 
@@ -59,7 +63,7 @@ export default async function handler(req, res) {
   // Rede de segurança: todo lead fica nos logs da função
   console.log('[lead]', JSON.stringify(lead))
 
-  const webhookUrl = process.env.WEBHOOK_URL
+  const webhookUrl = process.env.WEBHOOK_URL || WEBHOOK_URL_PADRAO
   if (webhookUrl) {
     try {
       const ctrl = new AbortController()

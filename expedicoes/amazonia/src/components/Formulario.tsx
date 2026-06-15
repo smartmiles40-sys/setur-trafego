@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import { expedicao } from '../data/expedicao'
-import FormularioLead from './FormularioLead'
 
+// Funil em DUAS PÁGINAS (decisão do Bruno, 2026-06-10): aqui na LP fica só o
+// botão de redirecionamento; o vídeo + formulário moram na proxima-etapa.html,
+// que libera o formulário após 1 min assistido e re-trava a cada acesso.
 export default function Formulario() {
   return (
     <section
@@ -105,35 +108,42 @@ export default function Formulario() {
         </div>
       </div>
 
-      {/* ============ CARD FORMULÁRIO ============ */}
-      <div className="relative container-x max-w-3xl pb-24 md:pb-32 form-section-container">
+      {/* ============ CARD — convite pro próximo passo (página do vídeo) ============ */}
+      <div className="relative container-x max-w-3xl pb-24 md:pb-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-off-white rounded-[2.5rem] shadow-card-lg p-6 md:p-14 relative overflow-hidden border border-dark-teal/5 form-section-wrap"
+          className="bg-off-white rounded-[2.5rem] shadow-card-lg p-6 md:p-14 relative overflow-hidden border border-dark-teal/5"
         >
           <div className="absolute top-0 left-0 w-32 h-32 incan-pattern opacity-30 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-32 h-32 incan-pattern opacity-30 pointer-events-none rotate-180" />
 
-          <div className="relative text-center mb-8 md:mb-10">
+          <div className="relative text-center">
             <h3 className="font-serif text-[clamp(1.75rem,4vw,3rem)] font-bold leading-[1.1] tracking-tight text-dark-teal mb-5 max-w-2xl mx-auto">
               Pronto(a) para conhecer {expedicao.formularioHeadlineDestino}{' '}
-              <span className="serif-italic font-normal">com mais tranquilidade?</span>
+              <span className="serif-italic font-normal">de pertinho?</span>
             </h3>
             <div className="mx-auto h-[2px] bg-lime w-20 mb-6" />
-            <p className="text-dark-teal/75 max-w-2xl mx-auto text-base leading-relaxed">
-              Preencha o formulário abaixo e nosso time entra em contato para alinharmos
-              perfis, expectativas e os próximos passos da sua expedição.
+            <p className="text-dark-teal/75 max-w-2xl mx-auto text-base leading-relaxed mb-9">
+              Preparamos uma mensagem rápida da nossa equipe antes da inscrição —
+              é o último passo antes de garantir a sua vaga.
             </p>
+
+            <a
+              href={`${import.meta.env.BASE_URL}proxima-etapa.html`}
+              className="btn-primary shine-hover group px-8 md:px-12 py-4 md:py-5 text-base md:text-xl shadow-2xl max-w-full"
+            >
+              Estou preparado para o próximo passo
+              <ArrowRight
+                size={20}
+                className="shrink-0 transition-transform group-hover:translate-x-1"
+              />
+            </a>
           </div>
 
-          {/* Formulário próprio multi-etapas (substitui o iframe Bitrix —
-              versão de TRÁFEGO: UTMs, lead_id e eventos dataLayer pro GTM) */}
-          <FormularioLead />
-
-          <p className="relative text-center text-xs text-dark-teal/50 mt-6">
+          <p className="relative text-center text-xs text-dark-teal/50 mt-8">
             Atendimento humano · Resposta rápida em horário comercial
           </p>
         </motion.div>

@@ -4,7 +4,10 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/patagonia-chilena/',
+  // Deploy isolado (domínio próprio na Vercel) → vive na raiz do domínio.
+  // No monorepo unificado era '/patagonia-chilena/'. Tudo que dependia do prefixo usa
+  // import.meta.env.BASE_URL, então vira '/...' automaticamente aqui.
+  base: '/',
   plugins: [react()],
   resolve: {
     alias: {

@@ -3,6 +3,10 @@
 const IMG = (nome: string) => `${import.meta.env.BASE_URL}assets/egito/${nome}`
 
 export const expedicao = {
+  // slug da expedição — usado pelo formulário p/ rotear o lead ao webhook
+  // certo no n8n. Antes vinha do BASE_URL ('/egito/'); com deploy isolado
+  // (base '/') precisa ser explícito aqui.
+  slug: 'egito',
   nome: 'Egito',
   nomeUpper: 'EGITO',
   ano: 2027,

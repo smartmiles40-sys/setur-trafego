@@ -1,4 +1,8 @@
 export const expedicao = {
+  // slug da expedição — usado pelo formulário p/ rotear o lead ao webhook
+  // certo no n8n. Antes vinha do BASE_URL ('/peru/'); com deploy isolado
+  // (base '/') precisa ser explícito aqui.
+  slug: 'peru',
   nome: 'Peru',
   nomeUpper: 'PERU',
   ano: 2027,

@@ -16,8 +16,10 @@ import { expedicao } from '../data/expedicao'
 
 const SAVE_LEAD_URL = '/api/save-lead'
 
-// slug da LP a partir do base do Vite ('/italia/' → 'italia')
-const SLUG = (import.meta.env.BASE_URL || '/').replace(/\//g, '') || 'lp'
+// slug da LP: usa expedicao.slug (deploy isolado, base '/') e cai no
+// BASE_URL ('/japao-china/' → 'japao-china') no monorepo unificado.
+const SLUG =
+  expedicao.slug || (import.meta.env.BASE_URL || '/').replace(/\//g, '') || 'lp'
 const FORM_NAME = `expedicao-${SLUG}-${expedicao.ano}`
 const LEAD_ID_KEY = `${SLUG}_lead_id`
 

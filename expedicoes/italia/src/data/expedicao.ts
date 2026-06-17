@@ -3,6 +3,10 @@
 const IMG = (nome: string) => `${import.meta.env.BASE_URL}assets/italia/${nome}`
 
 export const expedicao = {
+  // slug da expedição — usado pelo formulário p/ rotear o lead ao webhook
+  // certo no n8n. Antes vinha do BASE_URL ('/italia/'); com deploy isolado
+  // (base '/') precisa ser explícito aqui.
+  slug: 'italia',
   nome: 'Costa Amalfitana',
   nomeUpper: 'COSTA AMALFITANA',
   ano: 2027,

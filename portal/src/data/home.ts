@@ -124,7 +124,7 @@ export const hero = {
       frase: 'Viagens em grupo, com tudo resolvido. A jornada também é o destino.',
       ctaLabel: 'Ver expedições',
       ctaHref: '#expedicoes',
-      imagem: 'https://setuforeuvouviagens.com.br/assets/peru-DZk1N_sD.jpg',
+      imagem: 'https://lp.setuforeuvouviagens.com.br/assets/peru-DZk1N_sD.jpg',
       video: '/720_compress_compilado.mp4',
     },
     {

@@ -3,6 +3,9 @@ export const expedicao = {
   // certo no n8n. Antes vinha do BASE_URL ('/turquia-grecia/'); com deploy
   // isolado (base '/') precisa ser explícito aqui.
   slug: 'turquia-grecia',
+  // fonte do lead — vai no payload pro n8n como `fonte`, p/ identificar a
+  // origem dessa LP no CRM/relatórios.
+  fonte: '[Turquia & Grécia] - Tráfego',
   nome: 'Turquia e Grécia',
   nomeUpper: 'TURQUIA & GRÉCIA',
   ano: 2027,

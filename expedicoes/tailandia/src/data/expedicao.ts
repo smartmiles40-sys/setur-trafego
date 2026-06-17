@@ -3,6 +3,9 @@ export const expedicao = {
   // certo no n8n. Antes vinha do BASE_URL ('/tailandia/'); com deploy isolado
   // (base '/') precisa ser explícito aqui.
   slug: 'tailandia',
+  // fonte do lead — vai no payload pro n8n como `fonte`, p/ identificar a
+  // origem dessa LP no CRM/relatórios.
+  fonte: '[Tailândia] - Tráfego',
   nome: 'Tailândia',
   nomeUpper: 'TAILÂNDIA',
   ano: 2027,

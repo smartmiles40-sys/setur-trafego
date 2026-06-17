@@ -186,6 +186,7 @@ export default function FormularioLead() {
         whatsapp: `+55${whatsapp.replace(/\D/g, '')}`,
         email: email.trim(),
         expedicao: `Expedição ${expedicao.nome} ${expedicao.ano}`,
+        fonte: expedicao.fonte,
         ...respostas,
         ...utmsRef.current,
         form_name: FORM_NAME,

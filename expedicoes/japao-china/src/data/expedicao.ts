@@ -3,6 +3,9 @@ export const expedicao = {
   // certo no n8n. Antes vinha do BASE_URL ('/japao-china/'); com deploy isolado
   // (base '/') precisa ser explícito aqui.
   slug: 'japao-china',
+  // fonte do lead — vai no payload pro n8n como `fonte`, p/ identificar a
+  // origem dessa LP no CRM/relatórios.
+  fonte: '[V4] - LP Expedição Japão',
   nome: 'Japão e China',
   nomeUpper: 'JAPÃO & CHINA',
   ano: 2027,

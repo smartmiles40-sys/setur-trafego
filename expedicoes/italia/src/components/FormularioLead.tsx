@@ -28,46 +28,65 @@ type UtmKey = (typeof UTM_KEYS)[number]
 type Utms = Record<UtmKey, string>
 
 // ---- Etapa 2: perguntas de qualificação (radios) -------------------------
-// `value` = texto legível completo (vai pro CRM assim, regra do padrão).
-const PERGUNTAS = [
+// `label` = texto legível completo (vai pro CRM assim, regra do padrão).
+// `slug`  = valor normalizado que o tracking (expedicao_lead) usa.
+type Opcao = { label: string; slug: string }
+type Pergunta = { name: string; label: string; opcoes: Opcao[] }
+
+const PERGUNTAS: Pergunta[] = [
   {
     name: 'data',
-    legenda: `A expedição acontece de ${expedicao.dataRange}. Você tem disponibilidade?`,
+    label: `A expedição acontece de ${expedicao.dataRange}. Você tem disponibilidade?`,
     opcoes: [
-      'Sim, consigo viajar nesse período',
-      'Ainda não tenho certeza',
-      'Não, mas quero saber de próximas datas',
+      { label: 'Sim, consigo viajar nesse período', slug: 'sim' },
+      { label: 'Ainda não tenho certeza', slug: 'talvez' },
+      { label: 'Não, mas quero saber de próximas datas', slug: 'nao' },
     ],
   },
   {
     name: 'companhia',
-    legenda: 'Como você pretende viajar?',
-    opcoes: ['Sozinho(a)', 'Casal', 'Família', 'Com amigos'],
+    label: 'Como você pretende viajar?',
+    opcoes: [
+      { label: 'Sozinho(a)', slug: 'sozinho' },
+      { label: 'Casal', slug: 'casal' },
+      { label: 'Família', slug: 'familia' },
+      { label: 'Com amigos', slug: 'amigos' },
+    ],
   },
   {
     name: 'perfil',
-    legenda: 'Qual o seu perfil de viajante?',
+    label: 'Qual o seu perfil de viajante?',
     opcoes: [
-      'Será minha primeira viagem internacional',
-      'Já viajei algumas vezes para fora do Brasil',
-      'Sou viajante experiente',
+      { label: 'Será minha primeira viagem internacional', slug: 'primeira' },
+      { label: 'Já viajei algumas vezes para fora do Brasil', slug: 'algumas' },
+      { label: 'Sou viajante experiente', slug: 'frequente' },
     ],
   },
   {
     name: 'investimento',
-    legenda: 'Você está preparado(a) para investir nessa experiência completa?',
-    opcoes: ['Sim, estou preparado(a)', 'Quero entender os valores primeiro'],
+    label: 'Você está preparado(a) para investir nessa experiência completa?',
+    opcoes: [
+      { label: 'Sim, estou preparado(a)', slug: 'sim' },
+      { label: 'Quero entender os valores primeiro', slug: 'talvez' },
+      { label: 'Não, está fora do meu momento agora', slug: 'nao' }, // NOVA opção
+    ],
   },
   {
     name: 'decisao',
-    legenda: 'Quando você pretende tomar a decisão?',
+    label: 'Quando você pretende tomar a decisão?',
     opcoes: [
-      'O quanto antes — quero garantir minha vaga',
-      'Nos próximos meses',
-      'Ainda estou só pesquisando',
+      { label: 'O quanto antes — quero garantir minha vaga', slug: 'agora' },
+      { label: 'Nos próximos meses', slug: 'proximos' },
+      { label: 'Ainda estou só pesquisando', slug: 'explorando' },
     ],
   },
-] as const
+]
+
+function slugDaResposta(perguntaName: string, label: string | undefined): string {
+  const p = PERGUNTAS.find((q) => q.name === perguntaName)
+  const o = p?.opcoes.find((op) => op.label === label)
+  return o?.slug ?? ''
+}
 
 // ---- Helpers --------------------------------------------------------------
 
@@ -129,9 +148,9 @@ export default function FormularioLead() {
       setErro('nome', 'Digite seu nome completo')
       ok = false
     }
-    const digitos = whatsapp.replace(/\D/g, '')
-    if (digitos.length < 10 || digitos.length > 11) {
-      setErro('whatsapp', 'Digite um WhatsApp válido com DDD')
+    const wDigits = whatsapp.replace(/\D/g, '')
+    if (wDigits.length !== 11 || wDigits[2] !== '9') {
+      setErro('whatsapp', 'Digite um celular válido com DDD (11 dígitos). Ex.: (11) 98765-4321')
       ok = false
     }
     if (!EMAIL_RE.test(email.trim())) {
@@ -184,9 +203,10 @@ export default function FormularioLead() {
         lead_id: leadId,
         nome: nome.trim(),
         whatsapp: `+55${whatsapp.replace(/\D/g, '')}`,
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         expedicao: `Expedição ${expedicao.nome} ${expedicao.ano}`,
         fonte: expedicao.fonte,
+        source_id: expedicao.sourceId,
         ...respostas,
         ...utmsRef.current,
         form_name: FORM_NAME,
@@ -203,9 +223,44 @@ export default function FormularioLead() {
           body: JSON.stringify(payload),
         })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
-        pushDataLayer('form_submit', { lead_id: leadId, ...utmsRef.current })
-        sessionStorage.removeItem(LEAD_ID_KEY)
-        window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
+        const eventId =
+          typeof crypto !== 'undefined' && crypto.randomUUID
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.random()}`
+
+        let navegou = false
+        const irParaObrigado = () => {
+          if (navegou) return
+          navegou = true
+          sessionStorage.removeItem(LEAD_ID_KEY)
+          window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
+        }
+
+        const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
+        w.dataLayer = w.dataLayer || []
+        w.dataLayer.push({
+          event: 'expedicao_lead',
+          destino: expedicao.slug,
+          event_id: eventId,
+          lead: {
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(), // SEMPRE minúsculo (chave do Store)
+            whatsapp: `+55${whatsapp.replace(/\D/g, '')}`, // E.164
+          },
+          resp: {
+            disponibilidade: slugDaResposta('data', respostas['data']),
+            companhia: slugDaResposta('companhia', respostas['companhia']),
+            perfil: slugDaResposta('perfil', respostas['perfil']),
+            investimento: slugDaResposta('investimento', respostas['investimento']),
+            timing: slugDaResposta('decisao', respostas['decisao']),
+          },
+          ...utmsRef.current,
+          eventCallback: irParaObrigado,
+          eventTimeout: 2000,
+        })
+
+        // Rede de segurança: se o GTM não chamar o callback, redireciona mesmo assim
+        setTimeout(irParaObrigado, 2000)
       } catch (err) {
         if (import.meta.env.DEV) {
           // Em dev o /api não existe (função roda só na Vercel) — segue o fluxo
@@ -324,20 +379,20 @@ export default function FormularioLead() {
         <div className="space-y-7">
           {PERGUNTAS.map((p) => (
             <fieldset key={p.name}>
-              <legend className={`input-label ${erros[p.name] ? 'radio-error-legend' : ''}`}>{p.legenda}</legend>
+              <legend className={`input-label ${erros[p.name] ? 'radio-error-legend' : ''}`}>{p.label}</legend>
               <div className="radio-group">
                 {p.opcoes.map((opcao) => (
-                  <label key={opcao} className="radio-item">
+                  <label key={opcao.slug} className="radio-item">
                     <input
                       type="radio"
                       name={p.name}
-                      value={opcao}
+                      value={opcao.label}
                       className="w-4 h-4 accent-lime"
                       required
-                      checked={respostas[p.name] === opcao}
-                      onChange={() => setRespostas((prev) => ({ ...prev, [p.name]: opcao }))}
+                      checked={respostas[p.name] === opcao.label}
+                      onChange={() => setRespostas((prev) => ({ ...prev, [p.name]: opcao.label }))}
                     />
-                    <span>{opcao}</span>
+                    <span>{opcao.label}</span>
                   </label>
                 ))}
               </div>

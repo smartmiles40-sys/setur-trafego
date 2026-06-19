@@ -69,6 +69,7 @@ export default async function handler(req, res) {
     ...body,
     lead_id: body.lead_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
     whatsapp: normalizarWhatsapp(body.whatsapp),
+    email: String(body.email || '').toLowerCase(),
     data_hora_cadastro: dataHoraSaoPaulo(),
     etapa: body.etapa || 'completo',
     formulario_completo: body.formulario_completo !== false,

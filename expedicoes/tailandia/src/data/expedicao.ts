@@ -6,6 +6,9 @@ export const expedicao = {
   // fonte do lead — vai no payload pro n8n como `fonte`, p/ identificar a
   // origem dessa LP no CRM/relatórios.
   fonte: '[Tailândia] - Tráfego',
+  // Source ID do Bitrix24 — vai no payload como source_id p/ atribuir
+  // a origem dessa LP no CRM.
+  sourceId: '24',
   nome: 'Tailândia',
   nomeUpper: 'TAILÂNDIA',
   ano: 2027,

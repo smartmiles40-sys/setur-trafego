@@ -10,6 +10,9 @@ export const expedicao = {
   // fonte do lead — vai no payload pro n8n como `fonte`, p/ identificar a
   // origem dessa LP no CRM/relatórios.
   fonte: '[Itália] - Tráfego',
+  // Source ID do Bitrix24 — vai no payload como source_id p/ atribuir
+  // a origem dessa LP no CRM.
+  sourceId: '34',
   nome: 'Costa Amalfitana',
   nomeUpper: 'COSTA AMALFITANA',
   ano: 2027,

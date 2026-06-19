@@ -6,6 +6,9 @@ export const expedicao = {
   // fonte do lead — vai no payload pro n8n como `fonte`, p/ identificar a
   // origem dessa LP no CRM/relatórios.
   fonte: '[V4] - LP Expedição Japão',
+  // Source ID do Bitrix24 — vai no payload como source_id p/ atribuir
+  // a origem dessa LP no CRM.
+  sourceId: 'UC_5FDRLJ',
   nome: 'Japão e China',
   nomeUpper: 'JAPÃO & CHINA',
   ano: 2027,
@@ -17,7 +20,7 @@ export const expedicao = {
   duracao: '16 dias',
   duracaoNumero: 16,
   duracaoNumeroLegenda:
-    '10 dias no Japão + 4 noites em Pequim, com trem-bala, Universal Studios e Muralha da China.',
+    '10 dias no Japão + 4 noites em Pequim, com trem-bala e Muralha da China.',
   duracaoExtenso: '16 dias · 14 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
@@ -44,7 +47,7 @@ export const expedicao = {
     'Este não é um roteiro para "ver tudo correndo". É uma sequência de experiências que atravessam Japão e China — da modernidade frenética de Tóquio ao silêncio milenar da Muralha — respeitando ritmo, pausas e acompanhamento constante.',
   porQueHeadlineDestino: 'Japão e China',
   opcoesDescricao:
-    'Uma imersão dupla em Japão e China: Tóquio, Monte Fuji, Osaka, Kyoto e Hiroshima, com extensão para Pequim — Muralha, Cidade Proibida e Templo do Céu. Chá com gueixa, Universal Studios, riquixá e tour privativo na Muralha inclusos.',
+    'Uma imersão dupla em Japão e China: Tóquio, Monte Fuji, Osaka, Kyoto e Hiroshima, com extensão para Pequim — Muralha, Cidade Proibida e Templo do Céu. Chá com gueixa, riquixá e tour privativo na Muralha inclusos.',
   formularioHeadlineDestino: 'Japão e China',
   faqDescricao:
     'Respostas para as principais perguntas sobre nossa Expedição Japão e China 2027.',
@@ -60,7 +63,6 @@ export const opcoesItens = [
   '4 noites em Pequim 3★/4★',
   'Trem-bala (Tóquio↔Osaka↔Hiroshima)',
   'Chá da tarde com gueixa + riquixá',
-  'Universal Studios Japan',
   'Tour privativo à Muralha da China',
 ]
 
@@ -94,12 +96,6 @@ export const incluso = [
     title: 'Chá com gueixa + riquixá',
     desc: 'Experiência cultural autêntica',
     emoji: '🍵',
-  },
-  {
-    icon: 'Sparkles',
-    title: 'Universal Studios Japan',
-    desc: 'Ingresso para o parque em Osaka',
-    emoji: '🎢',
   },
   {
     icon: 'Smartphone',
@@ -216,6 +212,22 @@ export const roteiro = [
   {
     dia: 6,
     data: '31/10',
+    cidade: 'Tóquio',
+    titulo: 'Dia Livre em Tóquio',
+    atividades: [
+      'Tempo livre para explorar Tóquio',
+      'Compras, museus ou bairros como Ginza e Shinjuku',
+      'Sugestões do líder se precisar',
+      'Última noite em Tóquio antes de seguir viagem',
+    ],
+    logistica: 'Dia livre · suporte do líder',
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/galeria-01.jpg`,
+    destaque: false,
+    veiculos: [{ emoji: '🚶', label: 'Exploração livre' }],
+  },
+  {
+    dia: 7,
+    data: '01/11',
     cidade: 'Monte Fuji → Osaka',
     titulo: 'Monte Fuji & Trem-bala',
     atividades: [
@@ -233,8 +245,8 @@ export const roteiro = [
     ],
   },
   {
-    dia: 7,
-    data: '01/11',
+    dia: 8,
+    data: '02/11',
     cidade: 'Kyoto',
     titulo: 'Fushimi Inari, Kiyomizu & Gueixa',
     atividades: [
@@ -249,8 +261,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚆', label: 'Trem Osaka ↔ Kyoto' }],
   },
   {
-    dia: 8,
-    data: '02/11',
+    dia: 9,
+    data: '03/11',
     cidade: 'Kyoto',
     titulo: 'Bambu, Pavilhão Dourado & Gion',
     atividades: [
@@ -265,8 +277,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🛺', label: 'Riquixá tradicional' }],
   },
   {
-    dia: 9,
-    data: '03/11',
+    dia: 10,
+    data: '04/11',
     cidade: 'Osaka',
     titulo: 'Castelo, Mercado & Dotonbori',
     atividades: [
@@ -279,22 +291,6 @@ export const roteiro = [
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-09.jpg`,
     destaque: false,
     veiculos: [{ emoji: '🚇', label: 'Metrô Osaka' }],
-  },
-  {
-    dia: 10,
-    data: '04/11',
-    cidade: 'Osaka',
-    titulo: 'Dia Livre em Osaka',
-    atividades: [
-      'Tempo livre para explorar',
-      'Compras, museus ou descanso',
-      'Sugestões do líder se precisar',
-      'Última noite tradicional em Osaka',
-    ],
-    logistica: 'Dia livre · suporte do líder',
-    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-10.jpg`,
-    destaque: false,
-    veiculos: [{ emoji: '🚶', label: 'Exploração livre' }],
   },
   {
     dia: 11,
@@ -319,17 +315,17 @@ export const roteiro = [
     dia: 12,
     data: '06/11',
     cidade: 'Osaka',
-    titulo: 'Universal Studios Japan',
+    titulo: 'Dia Livre em Osaka',
     atividades: [
-      'Dia inteiro no Universal Studios',
-      'Atrações Harry Potter e Mario',
-      'Shows e gastronomia do parque',
-      'Ingresso incluso',
+      'Tempo livre para explorar Osaka',
+      'Compras, museus ou descanso',
+      'Sugestões do líder se precisar',
+      'Última noite no Japão antes da China',
     ],
-    logistica: 'Ingresso Universal Studios incluso',
-    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-12.jpg`,
-    destaque: true,
-    veiculos: [{ emoji: '🎢', label: 'Universal Studios Japan' }],
+    logistica: 'Dia livre · suporte do líder',
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-10.jpg`,
+    destaque: false,
+    veiculos: [{ emoji: '🚶', label: 'Exploração livre' }],
   },
   {
     dia: 13,

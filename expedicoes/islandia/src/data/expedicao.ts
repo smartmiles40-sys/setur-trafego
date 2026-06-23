@@ -14,14 +14,14 @@ export const expedicao = {
   ano: 2027,
   dataInicio: '2027-02-13',
   dataInicioLabel: '13 de fevereiro',
-  dataFimLabel: '21 de fevereiro',
-  dataRange: '13 a 21 de fevereiro de 2027',
-  dataResumoCurto: 'Islândia · 13–21 fev 2027',
-  duracao: '9 dias',
-  duracaoNumero: 9,
+  dataFimLabel: '23 de fevereiro',
+  dataRange: '13 a 23 de fevereiro de 2027',
+  dataResumoCurto: 'Islândia · 13–23 fev 2027',
+  duracao: '11 dias',
+  duracaoNumero: 11,
   duracaoNumeroLegenda:
     '8 noites em hotéis 3★/4★ dando uma volta completa ao redor da Islândia, caçando aurora boreal.',
-  duracaoExtenso: '9 dias · 8 noites',
+  duracaoExtenso: '11 dias · 8 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
   cidades: ['Reykjavík', 'Sudoeste', 'Sul', 'Leste', 'Norte'],
@@ -34,7 +34,7 @@ export const expedicao = {
     'Uma volta completa ao redor da Islândia: do Golden Circle a Jökulsárlón, dos chifres do leste a Mývatn no norte, finalizando no termal Blue Lagoon — em veículos 4×4 modificados, com caça à aurora boreal todas as noites.',
   mapaTrajetoTexto: 'Reykjavík → Sudoeste → Sul → Leste → Norte → Blue Lagoon',
   mapaDistancia: '~ 1.500 km · volta completa',
-  mapaDistanciaCurta: '~1.500 km · 9 dias',
+  mapaDistanciaCurta: '~1.500 km · 11 dias',
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
   mapaIframeTitulo: 'Mapa interativo da rota Expedição Islândia',
   tudoResolvidoDescricao:
@@ -57,7 +57,7 @@ export const expedicao = {
 }
 
 export const opcoesItens = [
-  '9 dias de expedição',
+  '11 dias de expedição',
   'Aéreo GRU ↔ Keflavík (ida e volta)',
   'Veículos 4×4 modificados',
   'Volta completa pela Islândia',
@@ -282,6 +282,37 @@ export const roteiro = [
     destaque: true,
     veiculos: [{ emoji: '♨️', label: 'Blue Lagoon termal' }],
   },
+  // RASCUNHO — dias de retorno (revisar com o Bruno: roteiro/escala/horários)
+  {
+    dia: 10,
+    data: '22/02',
+    cidade: 'Keflavík → Brasil',
+    titulo: 'Retorno ao Brasil',
+    atividades: [
+      'Café da manhã e check-out',
+      'Transfer privativo até o aeroporto de Keflavík',
+      'Embarque no voo internacional rumo ao Brasil',
+      'Despedida da ilha do gelo e do fogo',
+    ],
+    logistica: 'Transfer Reykjavík → KEF + voo KEF → GRU',
+    imagem: `${import.meta.env.BASE_URL}assets/islandia/dia-10-retorno.jpg`,
+    destaque: false,
+    veiculos: [{ emoji: '✈️', label: 'Voo internacional KEF → GRU' }],
+  },
+  {
+    dia: 11,
+    data: '23/02',
+    cidade: 'São Paulo',
+    titulo: 'Chegada ao Brasil',
+    atividades: [
+      'Desembarque em Guarulhos (GRU)',
+      'Encerramento da expedição',
+    ],
+    logistica: 'Chegada a GRU',
+    imagem: `${import.meta.env.BASE_URL}assets/islandia/dia-01-embarque.jpg`,
+    destaque: false,
+    veiculos: [{ emoji: '✈️', label: 'Chegada GRU' }],
+  },
 ]
 
 export const porQue = {
@@ -402,6 +433,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '5511951251935',
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Islândia 2027 — 13 a 21 de fevereiro de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Islândia 2027 — 13 a 23 de fevereiro de 2027.',
 }
 export const whatsappUrl = `https://wa.me/${whatsappConfig.numero}?text=${encodeURIComponent(whatsappConfig.mensagem)}`

@@ -513,4 +513,4 @@ export const whatsappConfig = {
   numero: '5511951251935',
   mensagem: 'Olá! Quero saber mais sobre a Expedição Japão e China 2027 — 26 de outubro a 10 de novembro de 2027.',
 }
-export const whatsappUrl = `https://wa.me/${whatsappConfig.numero}?text=${encodeURIComponent(whatsappConfig.mensagem)}`
+export const whatsappUrl = `https://wa.me/message/ZEYCT3PHHMWML1`

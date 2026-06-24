@@ -457,4 +457,4 @@ export const whatsappConfig = {
   mensagem:
     'Olá! Quero saber mais sobre a Expedição Costa Amalfitana 2027 — 4 a 14 de setembro de 2027.',
 }
-export const whatsappUrl = `https://wa.me/${whatsappConfig.numero}?text=${encodeURIComponent(whatsappConfig.mensagem)}`
+export const whatsappUrl = `https://wa.me/message/FQTUCB6SW4XLH1`

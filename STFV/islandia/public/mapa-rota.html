@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rota Expedição Islândia 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ocean: #b8deef;
+    --land: #ffffff;
+    --land-stroke: #c9d5df;
+    --grid: #dbe8f2;
+    --route-flight: #09282B;
+    --label: #0f172a;
+    --ui-border: #d7e2ea;
+    --ui-shadow: rgba(15, 23, 42, 0.12);
+  }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--ocean);
+    color: var(--label);
+    overflow: hidden;
+  }
+  #wrap { position: relative; width: 100%; height: 100%; }
+  #map { display: block; width: 100%; height: 100%; }
+  .badge {
+    position: absolute;
+    background: rgba(255,255,255,0.93);
+    border: 1px solid var(--ui-border);
+    border-radius: 999px;
+    box-shadow: 0 12px 28px var(--ui-shadow);
+    backdrop-filter: blur(6px);
+    font-size: 12px;
+    color: #334155;
+    padding: 8px 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .badge strong { color: #0f172a; font-weight: 700; }
+  .badge.top-left { top: 14px; left: 14px; }
+  .badge.bottom-right { bottom: 14px; right: 14px; display: flex; gap: 14px; align-items: center; }
+  .badge.bottom-left {
+    bottom: 14px; left: 14px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #475569;
+    font-weight: 600;
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; }
+  .legend-line { display: inline-block; width: 28px; height: 3px; border-radius: 999px; }
+  .legend-line.dashed { background: repeating-linear-gradient(to right, var(--route-flight) 0 6px, transparent 6px 10px); }
+  .legend-line.solid { background: #1F7A8C; }
+  .marker-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    fill: var(--label);
+    paint-order: stroke;
+    stroke: rgba(255,255,255,0.85);
+    stroke-width: 4px;
+  }
+  .route-shadow { fill: none; stroke: rgba(15,23,42,0.08); stroke-width: 4.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .route-line { fill: none; stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .route-line.dashed { stroke-width: 2.6; stroke-dasharray: 8 10; animation: dash 12s linear infinite; }
+  .marker-circle { vector-effect: non-scaling-stroke; }
+  @keyframes dash { to { stroke-dashoffset: -200; } }
+  .vehicle { transition: opacity 0.55s ease; }
+  .vehicle.hidden { opacity: 0; pointer-events: none; }
+  @media (max-width: 480px) {
+    .badge { font-size: 11px; padding: 7px 11px; }
+    .badge.bottom-right { gap: 9px; }
+    .legend-line { width: 18px; }
+    .legend-item { font-size: 10.5px; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <svg id="map" role="img" aria-label="Mapa mundi com rota da expedição Islândia"></svg>
+  <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
+  <div class="badge bottom-left">Brasil → Reykjavík → Volta da Islândia → Brasil</div>
+  <div class="badge bottom-right">
+    <span class="legend-item"><span class="legend-line dashed"></span>Voo internacional</span>
+    <span class="legend-item"><span class="legend-line solid"></span>4×4 na Islândia</span>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>if (typeof d3 === 'undefined') document.write('<script src="https://unpkg.com/d3@7/dist/d3.min.js"><\/script>');</script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script>if (typeof topojson === 'undefined') document.write('<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"><\/script>');</script>
+<script>
+  const width = 1000;
+  const height = 500;
+
+  const svg = d3.select('#map')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMidYMid slice');
+
+  const mapLayer = svg.append('g').attr('class', 'map-layer');
+
+  const projection = d3.geoEquirectangular()
+    .translate([width / 2, height / 2])
+    .scale(width / (2 * Math.PI));
+
+  const path = d3.geoPath(projection);
+  const graticule = d3.geoGraticule10();
+
+  mapLayer.append('path').datum({ type: 'Sphere' }).attr('fill', 'var(--ocean)').attr('d', path);
+  mapLayer.append('path').datum(graticule).attr('fill', 'none').attr('stroke', 'var(--grid)').attr('stroke-width', 0.6).attr('opacity', 0.7).attr('d', path);
+
+  const S = {
+    sao:        { name: 'São Paulo',     lat: -23.4356, lon: -46.4731, color: '#09282B', labelOffset: [-38, 20] },
+    kef:        { name: 'Keflavík',      lat:  63.985,  lon: -22.6056, color: '#D4AC0D' },
+    reykjavik:  { name: 'Reykjavík',     lat:  64.1466, lon: -21.9426, color: '#1F7A8C', labelOffset: [-30, -14] },
+    golden:     { name: 'Golden Circle', lat:  64.3104, lon: -20.3022, color: '#BFD850' },
+    vik:        { name: 'Vík',           lat:  63.4194, lon: -19.0061, color: '#3498DB', labelOffset: [10, 16] },
+    jokul:      { name: 'Jökulsárlón',   lat:  64.0784, lon: -16.1796, color: '#E67E22', labelOffset: [12, 4] },
+    hofn:       { name: 'Höfn',          lat:  64.2538, lon: -15.2092, color: '#8E44AD' },
+    myvatn:     { name: 'Mývatn',        lat:  65.6391, lon: -16.9985, color: '#1ABC9C' },
+    akureyri:   { name: 'Akureyri',      lat:  65.6826, lon: -18.0901, color: '#5DADE2', labelOffset: [-50, -12] },
+    blue:       { name: 'Blue Lagoon',   lat:  63.8804, lon: -22.4495, color: '#D4AC0D' },
+  };
+
+  const stops = Object.values(S);
+
+  // phase: 'flight-out' = avião GRU→KEF | 'ground' = 4×4 dentro da Islândia | 'flight-back' = avião KEF→GRU
+  const segments = [
+    { from: S.sao,       to: S.kef,       stroke: '#09282B', dashed: true, phase: 'flight-out' },
+    { from: S.kef,       to: S.reykjavik, stroke: '#D4AC0D', phase: 'ground' },
+    { from: S.reykjavik, to: S.golden,    stroke: '#1F7A8C', phase: 'ground' },
+    { from: S.golden,    to: S.vik,       stroke: '#BFD850', phase: 'ground' },
+    { from: S.vik,       to: S.jokul,     stroke: '#3498DB', phase: 'ground' },
+    { from: S.jokul,     to: S.hofn,      stroke: '#E67E22', phase: 'ground' },
+    { from: S.hofn,      to: S.myvatn,    stroke: '#8E44AD', phase: 'ground' },
+    { from: S.myvatn,    to: S.akureyri,  stroke: '#1ABC9C', phase: 'ground' },
+    { from: S.akureyri,  to: S.blue,      stroke: '#5DADE2', phase: 'ground' },
+    { from: S.blue,      to: S.sao,       stroke: '#09282B', dashed: true, phase: 'flight-back' },
+  ];
+
+  const buildLine = (from, to, steps = 48) => {
+    const interp = d3.geoInterpolate([from.lon, from.lat], [to.lon, to.lat]);
+    const coords = [];
+    for (let s = 0; s <= steps; s++) coords.push(interp(s / steps));
+    return { type: 'LineString', coordinates: coords };
+  };
+
+  const segmentLines = segments.map(seg => ({ ...seg, line: buildLine(seg.from, seg.to) }));
+
+  const earthRadiusKm = 6371;
+  const totalDistance = segments.reduce((sum, seg) => sum + d3.geoDistance([seg.from.lon, seg.from.lat], [seg.to.lon, seg.to.lat]) * earthRadiusKm, 0);
+
+  const distEl = document.getElementById('distance');
+  if (distEl) {
+    const rounded = Math.round(totalDistance / 100) * 100;
+    distEl.textContent = `~${new Intl.NumberFormat('pt-BR').format(rounded)} km`;
+  }
+
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  const SCALE = {
+    flight: isMobile ? 2.2 : 1.6,
+    ground: isMobile ? 5.5 : 8.5,
+  };
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json').catch(() => d3.json('https://unpkg.com/world-atlas@2/land-110m.json')).then(world => {
+    const land = topojson.feature(world, world.objects.land);
+    mapLayer.append('path').datum(land).attr('fill', 'var(--land)').attr('stroke', 'var(--land-stroke)').attr('stroke-width', 0.8).attr('d', path);
+
+    segmentLines.forEach(seg => {
+      mapLayer.append('path').datum(seg.line).attr('class', 'route-shadow').attr('d', path);
+      mapLayer.append('path').datum(seg.line)
+        .attr('class', 'route-line' + (seg.dashed ? ' dashed' : ''))
+        .attr('stroke', seg.stroke)
+        .attr('d', path);
+    });
+
+    const markerLayer = mapLayer.append('g').attr('class', 'marker-layer');
+    const marker = markerLayer.selectAll('g').data(stops).enter().append('g');
+    marker.append('circle').attr('class', 'marker-circle').attr('r', 7).attr('fill', 'white').attr('stroke', d => d.color).attr('stroke-width', 2.5);
+    marker.append('circle').attr('r', 2.5).attr('fill', d => d.color);
+    marker.filter(d => d.labelOffset).append('text').attr('class', 'marker-label')
+      .attr('x', d => d.labelOffset[0]).attr('y', d => d.labelOffset[1]).text(d => d.name);
+    const markerProjected = stops.map(d => { const [x, y] = projection([d.lon, d.lat]); return { x, y }; });
+
+    // ===== Fases sequenciais da animação =====
+    const phases = [
+      { name: 'flight-out',  vehicle: 'plane', duration: 7000,  scale: SCALE.flight },
+      { name: 'ground',      vehicle: 'car',   duration: 18000, scale: SCALE.ground },
+      { name: 'flight-back', vehicle: 'plane', duration: 7000,  scale: SCALE.flight },
+    ];
+
+    phases.forEach(p => {
+      const segs = segmentLines.filter(s => s.phase === p.name);
+      const phaseLine = { type: 'LineString', coordinates: segs.flatMap(s => s.line.coordinates) };
+      p.pathNode = mapLayer.append('path').datum(phaseLine).attr('d', path).attr('fill', 'none').attr('stroke', 'none').node();
+      p.length = p.pathNode.getTotalLength();
+    });
+
+    // ----- Avião (apenas voos internacionais) -----
+    const planeGroup = mapLayer.append('g').attr('class', 'vehicle plane-group').style('pointer-events', 'none');
+    planeGroup.append('path')
+      .attr('d', 'M0,-14 L2,-8 L2,-3 L13,2 L13,4 L2,5 L2,9 L5,12 L5,13.5 L0,12.5 L-5,13.5 L-5,12 L-2,9 L-2,5 L-13,4 L-13,2 L-2,-3 L-2,-8 Z')
+      .attr('fill', '#0f172a').attr('stroke', '#fff').attr('stroke-width', 1.2).attr('stroke-linejoin', 'round');
+
+    // ----- Super Jeep 4×4 (top-down) — SVG INLINE (sem arquivo externo, à prova de 404) -----
+    const carGroup = mapLayer.append('g').attr('class', 'vehicle car-group').style('pointer-events', 'none');
+    carGroup.style('display', 'none');
+    carGroup.html(`
+      <ellipse cx="0" cy="1.5" rx="7" ry="13.5" fill="#0f172a" opacity="0.14"/>
+      <rect x="-7" y="-10.5" width="2.2" height="1.6" rx="0.4" fill="#1e293b" stroke="#fff" stroke-width="0.25"/>
+      <rect x="4.8" y="-10.5" width="2.2" height="1.6" rx="0.4" fill="#1e293b" stroke="#fff" stroke-width="0.25"/>
+      <g fill="#0a0a0a">
+        <rect x="-7.5" y="-8.5" width="3.2" height="5.5" rx="1.4"/>
+        <rect x="4.3"  y="-8.5" width="3.2" height="5.5" rx="1.4"/>
+        <rect x="-7.5" y="3"    width="3.2" height="5.5" rx="1.4"/>
+        <rect x="4.3"  y="3"    width="3.2" height="5.5" rx="1.4"/>
+      </g>
+      <rect x="-5" y="-12.5" width="10" height="25" rx="2.5" fill="#0f172a" stroke="#ffffff" stroke-width="0.45"/>
+      <circle cx="-2.8" cy="-11.2" r="1" fill="#fde68a"/>
+      <circle cx="2.8"  cy="-11.2" r="1" fill="#fde68a"/>
+      <path d="M -4,-9.8 Q 0,-10.3 4,-9.8 L 3.5,-6.3 Q 0,-5.9 -3.5,-6.3 Z" fill="#7dd3fc" opacity="0.95"/>
+      <rect x="-4.2" y="-6.2" width="8.4" height="17.5" rx="1" fill="#1e293b"/>
+      <rect x="-3.8" y="-5.8" width="7.6" height="1" rx="0.3" fill="#334155"/>
+      <g fill="#fde68a">
+        <rect x="-3.4" y="-5.6" width="1" height="0.6" rx="0.15"/>
+        <rect x="-1.9" y="-5.6" width="1" height="0.6" rx="0.15"/>
+        <rect x="-0.5" y="-5.6" width="1" height="0.6" rx="0.15"/>
+        <rect x="0.9"  y="-5.6" width="1" height="0.6" rx="0.15"/>
+        <rect x="2.4"  y="-5.6" width="1" height="0.6" rx="0.15"/>
+      </g>
+      <line x1="-3.5" y1="-4" x2="-3.5" y2="10.5" stroke="#94a3b8" stroke-width="0.35" opacity="0.7"/>
+      <line x1="3.5"  y1="-4" x2="3.5"  y2="10.5" stroke="#94a3b8" stroke-width="0.35" opacity="0.7"/>
+      <line x1="-4" y1="-1"  x2="4" y2="-1"  stroke="#94a3b8" stroke-width="0.3" opacity="0.55"/>
+      <line x1="-4" y1="3.5" x2="4" y2="3.5" stroke="#94a3b8" stroke-width="0.3" opacity="0.55"/>
+      <line x1="-4" y1="8"   x2="4" y2="8"   stroke="#94a3b8" stroke-width="0.3" opacity="0.55"/>
+      <path d="M -3.7,10.5 Q 0,10.9 3.7,10.5 L 3.9,12.2 Q 0,12.5 -3.9,12.2 Z" fill="#1e3a4d" opacity="0.7"/>
+    `);
+
+    // ===== Loop de animação =====
+    const totalDuration = phases.reduce((s, p) => s + p.duration, 0);
+    const angleDelta = 4;
+    const seamJump = 60;
+    let start = performance.now();
+    let currentScale = SCALE.flight;
+
+    const animate = now => {
+      const t = (now - start) % totalDuration;
+      let acc = 0, phase = phases[0], localT = 0;
+      for (const p of phases) {
+        if (t < acc + p.duration) { phase = p; localT = (t - acc) / p.duration; break; }
+        acc += p.duration;
+      }
+
+      const lengthAt = localT * phase.length;
+      const point = phase.pathNode.getPointAtLength(lengthAt);
+      const ahead = phase.pathNode.getPointAtLength(Math.min(lengthAt + angleDelta, phase.length));
+      let dx = ahead.x - point.x, dy = ahead.y - point.y;
+      if (Math.hypot(dx, dy) > seamJump) {
+        const back = phase.pathNode.getPointAtLength(Math.max(lengthAt - angleDelta, 0));
+        dx = point.x - back.x; dy = point.y - back.y;
+      }
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+
+      // tween suave da escala (lerp)
+      currentScale += (phase.scale - currentScale) * 0.05;
+
+      const tx = width / 2 - point.x * currentScale;
+      const ty = height / 2 - point.y * currentScale;
+      mapLayer.attr('transform', `translate(${tx},${ty}) scale(${currentScale})`);
+
+      // Contra-escala: marcadores e veículos mantêm tamanho de tela constante
+      const inv = SCALE.flight / currentScale;
+      marker.attr('transform', (_, i) => `translate(${markerProjected[i].x}, ${markerProjected[i].y}) scale(${inv})`);
+
+      // boost: carro um pouco maior que o avião na tela (ele é o foco da fase)
+      const vehScale = inv * (phase.vehicle === 'car' ? 1.0 : 1);
+      if (phase.vehicle === 'plane') {
+        planeGroup.style('display', null).attr('transform', `translate(${point.x},${point.y}) rotate(${angle}) scale(${vehScale})`);
+        carGroup.style('display', 'none');
+      } else {
+        carGroup.style('display', null).attr('transform', `translate(${point.x},${point.y}) rotate(${angle}) scale(${vehScale})`);
+        planeGroup.style('display', 'none');
+      }
+
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  });
+</script>
+</body>
+</html>

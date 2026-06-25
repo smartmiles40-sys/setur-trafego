@@ -30,7 +30,7 @@ export default function Hero() {
         aria-hidden
       >
         <motion.span
-          initial={{ opacity: 0, scale: 1.1 }}
+          initial={{ opacity: 0.06, scale: 1.06 }}
           animate={{ opacity: 0.06, scale: 1 }}
           transition={{ duration: 2.2, ease: 'easeOut', delay: 0.4 }}
           className="num-stamp-solid text-off-white"

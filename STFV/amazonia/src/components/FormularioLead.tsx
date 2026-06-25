@@ -134,6 +134,9 @@ export default function FormularioLead() {
       const v = params.get(k)
       if (v) utmsRef.current[k] = v
     })
+    // STFV: marca a versão sem vídeo no utm_content — diferencia do V4 no
+    // CRM e no disparo de conversão (expedicao_lead). Força "STFV" sempre.
+    utmsRef.current.utm_content = 'STFV'
   }, [])
 
   const setErro = useCallback((campo: string, msg: string) => {

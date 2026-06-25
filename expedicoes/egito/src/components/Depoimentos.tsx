@@ -100,7 +100,10 @@ function TestimonialCard({ d }: { d: typeof depoimentos[number] }) {
           src={d.avatar}
           alt={d.nome}
           className="w-12 h-12 rounded-full object-cover bg-lime/20 border-2 border-white shadow"
+          width={48}
+          height={48}
           loading="lazy"
+          decoding="async"
           onError={(e) => {
             const target = e.target as HTMLImageElement
             target.style.display = 'none'

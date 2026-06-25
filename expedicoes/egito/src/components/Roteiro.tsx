@@ -95,7 +95,10 @@ export default function Roteiro() {
                     src={dia.imagem}
                     alt={dia.titulo}
                     className="w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.08]"
+                    width={900}
+                    height={600}
                     loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       const t = e.target as HTMLImageElement
                       t.src = expedicao.heroImage

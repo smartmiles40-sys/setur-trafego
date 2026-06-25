@@ -83,7 +83,10 @@ export default function Opcoes() {
                       src={img.src}
                       alt={img.alt}
                       className="w-full h-full object-cover"
+                      width={400}
+                      height={500}
                       loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
                         target.style.opacity = '0.3'

@@ -1,6 +1,8 @@
 // Paths das imagens locais (public/assets/egito/...). BASE_URL garante o
 // prefixo correto da subpasta no monorepo (ex.: /egito/).
 const IMG = (nome: string) => `${import.meta.env.BASE_URL}assets/egito/${nome}`
+// Imagens otimizadas em WebP (~66% menores que os JPGs originais). O hero-piramides.jpg
+// permanece no /public só para og:image (compatibilidade com scrapers de redes sociais).
 
 export const expedicao = {
   // slug da expedição — usado pelo formulário p/ rotear o lead ao webhook
@@ -31,7 +33,7 @@ export const expedicao = {
   cidades: ['Cairo', 'Aswan', 'Luxor', 'Hurghada', 'Dubai'],
   cidadesPrincipaisLinha: 'Cairo · Cruzeiro no Nilo · Luxor · Hurghada · Dubai',
   bandeira: '🇪🇬',
-  heroImage: IMG('hero-piramides.jpg'),
+  heroImage: IMG('hero-piramides.webp'),
   slogan:
     'Viva os mistérios e maravilhas do Egito Antigo,\ncom cruzeiro 5★ pelo Nilo e o brilho de Dubai.',
   mapaDescricao:
@@ -123,11 +125,11 @@ export const incluso = [
 ]
 
 export const galeria = [
-  { src: IMG('hero-piramides.jpg'), alt: 'Pirâmides de Gizé · Cairo' },
-  { src: IMG('cruzeiro-nilo.jpg'), alt: 'Cruzeiro 5★ no Nilo' },
-  { src: IMG('dia-07-luxor.jpg'), alt: 'Templo de Luxor' },
-  { src: IMG('dia-10-iate.jpg'), alt: 'Mar Vermelho · Hurghada' },
-  { src: IMG('dia-12-dubai.jpg'), alt: 'Burj Khalifa · Dubai' },
+  { src: IMG('hero-piramides.webp'), alt: 'Pirâmides de Gizé · Cairo' },
+  { src: IMG('cruzeiro-nilo.webp'), alt: 'Cruzeiro 5★ no Nilo' },
+  { src: IMG('dia-07-luxor.webp'), alt: 'Templo de Luxor' },
+  { src: IMG('dia-10-iate.webp'), alt: 'Mar Vermelho · Hurghada' },
+  { src: IMG('dia-12-dubai.webp'), alt: 'Burj Khalifa · Dubai' },
 ]
 
 export const naoIncluso = [
@@ -152,7 +154,7 @@ export const roteiro = [
       'Início da expedição',
     ],
     logistica: 'Voo internacional GRU → Cairo',
-    imagem: IMG('dia-01-embarque.jpg'),
+    imagem: IMG('dia-01-embarque.webp'),
     destaque: false,
     veiculos: [{ emoji: '✈️', label: 'Voo internacional Brasil → Egito' }],
   },
@@ -168,7 +170,7 @@ export const roteiro = [
       'Descanso para começar com energia',
     ],
     logistica: 'Transfer aeroporto → hotel 4★',
-    imagem: IMG('dia-02-faraos.jpg'),
+    imagem: IMG('dia-02-faraos.webp'),
     destaque: false,
     veiculos: [{ emoji: '🚐', label: 'Transfer privativo' }],
   },
@@ -184,7 +186,7 @@ export const roteiro = [
       'Fábrica de Papiro',
     ],
     logistica: 'As 7 Maravilhas do Mundo Antigo · guia em português',
-    imagem: IMG('dia-03-piramides.jpg'),
+    imagem: IMG('dia-03-piramides.webp'),
     destaque: true,
     veiculos: [{ emoji: '🚐', label: 'Van privativa' }],
   },
@@ -200,7 +202,7 @@ export const roteiro = [
       'Imersão na história milenar',
     ],
     logistica: 'City tour com guia + transporte privativo',
-    imagem: IMG('dia-04-cairo.jpg'),
+    imagem: IMG('dia-04-cairo.webp'),
     destaque: false,
     veiculos: [{ emoji: '🚐', label: 'Van privativa' }],
   },
@@ -216,7 +218,7 @@ export const roteiro = [
       'Todas as refeições inclusas a bordo',
     ],
     logistica: 'Voo doméstico + embarque no cruzeiro 5★',
-    imagem: IMG('dia-05-philae.jpg'),
+    imagem: IMG('dia-05-philae.webp'),
     destaque: true,
     veiculos: [
       { emoji: '✈️', label: 'Voo Cairo → Aswan' },
@@ -235,7 +237,7 @@ export const roteiro = [
       'Atividades e refeições a bordo',
     ],
     logistica: 'Navegação pelo Nilo · templos no caminho',
-    imagem: IMG('dia-06-kom-ombo.jpg'),
+    imagem: IMG('dia-06-kom-ombo.webp'),
     destaque: true,
     veiculos: [{ emoji: '🛳️', label: 'Cruzeiro pelo Nilo' }],
   },
@@ -251,7 +253,7 @@ export const roteiro = [
       'Pôr do sol sobre o Nilo',
     ],
     logistica: 'Navegação para Luxor + visita ao templo',
-    imagem: IMG('dia-07-luxor.jpg'),
+    imagem: IMG('dia-07-luxor.webp'),
     destaque: true,
     veiculos: [{ emoji: '🛳️', label: 'Cruzeiro pelo Nilo' }],
   },
@@ -267,7 +269,7 @@ export const roteiro = [
       'Transfer para Hurghada (Mar Vermelho)',
     ],
     logistica: 'Vale dos Reis + transfer terrestre a Hurghada',
-    imagem: IMG('dia-08-vale-dos-reis.jpg'),
+    imagem: IMG('dia-08-vale-dos-reis.webp'),
     destaque: true,
     veiculos: [{ emoji: '🚐', label: 'Transfer Luxor → Hurghada' }],
   },
@@ -283,7 +285,7 @@ export const roteiro = [
       'Gastronomia à vontade',
     ],
     logistica: 'Dia livre · resort all inclusive',
-    imagem: IMG('dia-09-resort.jpg'),
+    imagem: IMG('dia-09-resort.webp'),
     destaque: false,
     veiculos: [{ emoji: '🏖️', label: 'Dia livre no resort' }],
   },
@@ -299,7 +301,7 @@ export const roteiro = [
       'Banana boat e diversão no mar',
     ],
     logistica: 'Iate privativo do grupo · dia inteiro',
-    imagem: IMG('dia-10-iate.jpg'),
+    imagem: IMG('dia-10-iate.webp'),
     destaque: true,
     veiculos: [{ emoji: '🛥️', label: 'Iate privativo · Paradise Island' }],
   },
@@ -315,7 +317,7 @@ export const roteiro = [
       'Primeiro contato com a cidade',
     ],
     logistica: 'Transfer + voo Hurghada → Dubai',
-    imagem: IMG('dia-12-dubai.jpg'),
+    imagem: IMG('dia-12-dubai.webp'),
     destaque: false,
     veiculos: [
       { emoji: '🚐', label: 'Transfer ao aeroporto' },
@@ -334,7 +336,7 @@ export const roteiro = [
       'Sky Address View',
     ],
     logistica: 'City Tour completo com guia',
-    imagem: IMG('dia-12-burj-vista.jpg'),
+    imagem: IMG('dia-12-burj-vista.webp'),
     destaque: true,
     veiculos: [{ emoji: '🚐', label: 'City Tour Dubai' }],
   },
@@ -350,7 +352,7 @@ export const roteiro = [
       'Descanso a bordo',
     ],
     logistica: 'Transfer + voo internacional Dubai → GRU',
-    imagem: IMG('dia-01-embarque.jpg'),
+    imagem: IMG('dia-01-embarque.webp'),
     destaque: false,
     veiculos: [
       { emoji: '🚐', label: 'Transfer ao aeroporto' },
@@ -369,7 +371,7 @@ export const roteiro = [
       'Até a próxima aventura',
     ],
     logistica: 'Chegada a Guarulhos · fim da expedição',
-    imagem: IMG('dia-01-embarque.jpg'),
+    imagem: IMG('dia-01-embarque.webp'),
     destaque: false,
     veiculos: [{ emoji: '✈️', label: 'Chegada ao Brasil' }],
   },

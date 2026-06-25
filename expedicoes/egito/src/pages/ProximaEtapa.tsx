@@ -164,6 +164,10 @@ export default function ProximaEtapa() {
             src={`${import.meta.env.BASE_URL}Logo-circular.png`}
             alt="Se Tu For, Eu Vou! Viagens"
             className="w-9 h-9 rounded-full"
+            width={36}
+            height={36}
+            loading="lazy"
+            decoding="async"
           />
           <p className="text-off-white/60 text-xs sm:text-sm">
             © {new Date().getFullYear()} Se Tu For, Eu Vou! Viagens · Expedição{' '}

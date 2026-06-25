@@ -13,6 +13,10 @@ export default function Hero() {
             src={expedicao.heroImage}
             alt={`Expedição ${expedicao.nome}`}
             className="w-full h-full object-cover"
+            width={1920}
+            height={554}
+            fetchPriority="high"
+            decoding="async"
           />
         </div>
         {/* Multi-layer overlay for depth */}

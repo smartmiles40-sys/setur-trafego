@@ -105,6 +105,8 @@ export default function TudoResolvido() {
                 aria-hidden
                 loading="lazy"
                 decoding="async"
+                width={1920}
+                height={554}
                 className="absolute inset-0 w-full h-full object-cover"
               />
               {/* Overlay escuro para manter o texto legível */}

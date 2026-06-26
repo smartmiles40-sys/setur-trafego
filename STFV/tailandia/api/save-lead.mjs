@@ -21,14 +21,14 @@ const N8N_BASE = 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook'
 
 // slug da expedição → webhook de PRODUÇÃO no n8n
 const WEBHOOKS = {
-  peru: `${N8N_BASE}/550a6312-1cf9-4214-8580-9f2c9bf0cb57`,
-  islandia: `${N8N_BASE}/1c3719bb-93d0-483c-a6aa-c8f62ce44edf`,
-  amazonia: `${N8N_BASE}/cce8e6e8-33d7-43ef-9777-834f315cd4ca`,
-  egito: `${N8N_BASE}/5058a6aa-ec45-45af-9379-bc99dbfa1887`,
-  'japao-china': `${N8N_BASE}/2cc4cd96-eeae-46ad-aef7-9a8867cc164d`,
-  tailandia: `${N8N_BASE}/eecb5c8b-4508-4010-a481-179c807ff0f7`,
-  'turquia-grecia': `${N8N_BASE}/d510ddee-9cac-4c33-937c-9312e1e63af0`,
-  italia: `${N8N_BASE}/73dee339-299d-4b05-8c7e-1238dc6d5ceb`,
+  peru: `${N8N_BASE}/11b58934-b0d3-43f8-83ef-eeb1974333c1`,
+  islandia: `${N8N_BASE}/f5b01e9d-5135-4cbd-b6fe-bd0edaad834d`,
+  amazonia: `${N8N_BASE}/8fdcce67-e829-45ff-9f94-f07ed978c8a0`,
+  egito: `${N8N_BASE}/8c894d18-274c-4e61-b697-8a19e6f4d7c4`,
+  'japao-china': `${N8N_BASE}/612ef889-6284-4292-8a50-5bee3b815b8e`,
+  tailandia: `${N8N_BASE}/b9fc4978-7927-42c7-9dad-5eae0550049f`,
+  'turquia-grecia': `${N8N_BASE}/8674b368-80f4-4824-8d98-dbb2c915febb`,
+  italia: `${N8N_BASE}/957fa583-275d-40c0-b766-7109c8afa2fa`,
 }
 
 /** slug explícito do payload, ou derivado de form_name ("expedicao-<slug>-<ano>"). */
@@ -75,6 +75,12 @@ export default async function handler(req, res) {
     formulario_completo: body.formulario_completo !== false,
   }
   for (const k of UTM_KEYS) lead[k] = lead[k] || ''
+
+  // STFV: prefixa o nome do lead com (STFV) para distinguir a origem no Bitrix
+  // (esta versão usa o MESMO workflow do n8n das LPs principais).
+  if (lead.nome && !String(lead.nome).startsWith('(STFV)')) {
+    lead.nome = `(STFV) ${lead.nome}`
+  }
 
   // Validação mínima: sem nome E sem whatsapp não é lead
   if (!lead.nome && !lead.whatsapp) {

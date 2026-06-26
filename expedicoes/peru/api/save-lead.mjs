@@ -65,20 +65,40 @@ export default async function handler(req, res) {
 
   const body = typeof req.body === 'object' && req.body !== null ? req.body : {}
 
+  const str = (v, max) => String(v ?? '').slice(0, max)
+
+  // Allowlist: só os campos que o formulário realmente envia entram no lead
+  // (evita mass-assignment e poluição dos logs/webhook com dados arbitrários).
   const lead = {
-    ...body,
-    lead_id: body.lead_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
+    lead_id: str(body.lead_id, 80) || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
+    nome: str(body.nome, 150).trim(),
     whatsapp: normalizarWhatsapp(body.whatsapp),
-    email: String(body.email || '').toLowerCase(),
+    email: str(body.email, 120).toLowerCase().trim(),
+    expedicao: str(body.expedicao, 120),
+    fonte: str(body.fonte, 80),
+    source_id: str(body.source_id, 40),
+    // Respostas de qualificação (vocabulário controlado pelo formulário)
+    data: str(body.data, 60),
+    companhia: str(body.companhia, 60),
+    perfil: str(body.perfil, 60),
+    investimento: str(body.investimento, 60),
+    decisao: str(body.decisao, 60),
+    form_name: str(body.form_name, 80), // usado para rotear o webhook por destino
+    slug: str(body.slug, 40),
+    timestamp: str(body.timestamp, 40),
     data_hora_cadastro: dataHoraSaoPaulo(),
-    etapa: body.etapa || 'completo',
+    etapa: str(body.etapa, 30) || 'completo',
     formulario_completo: body.formulario_completo !== false,
   }
-  for (const k of UTM_KEYS) lead[k] = lead[k] || ''
+  for (const k of UTM_KEYS) lead[k] = str(body[k], 200)
 
-  // Validação mínima: sem nome E sem whatsapp não é lead
-  if (!lead.nome && !lead.whatsapp) {
-    res.status(400).json({ ok: false, error: 'lead_vazio' })
+  // Validação no servidor: nome e WhatsApp são obrigatórios e com forma mínima.
+  if (lead.nome.length < 2) {
+    res.status(400).json({ ok: false, error: 'nome_invalido' })
+    return
+  }
+  if (lead.whatsapp.length < 13) { // +55 + ao menos 10 dígitos
+    res.status(400).json({ ok: false, error: 'whatsapp_invalido' })
     return
   }
 

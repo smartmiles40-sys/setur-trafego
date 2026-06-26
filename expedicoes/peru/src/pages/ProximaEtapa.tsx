@@ -1,39 +1,51 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowDown, Check, ClipboardList } from 'lucide-react'
+import { ArrowDown, Check, ClipboardList, Lock } from 'lucide-react'
 import { expedicao } from '../data/expedicao'
-import VideoGate from '../components/VideoGate'
+import VslPlayer from '../components/VslPlayer'
 import ConsentimentoCookies from '../components/ConsentimentoCookies'
 import FormularioLead from '../components/FormularioLead'
 
 /**
  * Etapa 2 do funil — página enxuta, zero distração:
  *
- * 1. VSL travado (headline + player + mini barra de loading).
- * 2. Após 1 MINUTO realmente assistido (unlockSeconds=60 do VideoGate): o
- *    formulário próprio multi-etapas surge LOGO ABAIXO do vídeo (inline) e a
- *    página ROLA SOZINHA até ele — o vídeo continua na tela, acima.
+ * 1. VSL (player VTurb/ConverteAI).
+ * 2. O formulário fica BLOQUEADO e só é liberado depois do tempo de UNLOCK_SECONDS de PERMANÊNCIA
+ *    na página (tempo na tela, não tempo de vídeo assistido). Ao liberar, a
+ *    página rola sozinha até o formulário — o vídeo continua na tela, acima.
+ *
+ * REGRA DURA: nada é persistido — todo acesso recomeça do zero. Recarregou,
+ * espera o tempo de novo.
  *
  * VERSÃO DE TRÁFEGO: o iframe do Bitrix virou o FormularioLead (padrão
  * PADRONIZACAO FORMULARIO LP — UTMs, lead_id, dataLayer, /api/save-lead).
- *
- * REGRA DURA (diretoria): todo acesso recomeça do zero — o vídeo recarrega e
- * o formulário volta a ficar bloqueado. Nada é persistido (persist=false).
  */
+const UNLOCK_SECONDS = 50
+
 export default function ProximaEtapa() {
   const [liberado, setLiberado] = useState(false)
   const formRef = useRef<HTMLDivElement>(null)
 
-  const handleUnlockChange = useCallback((unlocked: boolean) => {
-    if (unlocked) setLiberado(true)
+  // Libera o formulário após UNLOCK_SECONDS na página (tempo de permanência, não de vídeo).
+  useEffect(() => {
+    const t = setTimeout(() => setLiberado(true), UNLOCK_SECONDS * 1000)
+    return () => clearTimeout(t)
   }, [])
 
-  // Ao liberar, a tela desce sozinha até o formulário (o vídeo fica acima).
-  // Um respiro antes do scroll deixa a seção montar/animar primeiro.
+  // Ao liberar, revela o formulário SEM tirar o vídeo da tela: rola só o
+  // suficiente pra trazer o topo do formulário pra parte de baixo da tela,
+  // deixando o vídeo (acima) continuar visível e rodando. Um respiro antes do
+  // scroll deixa a seção montar/animar primeiro.
   useEffect(() => {
     if (!liberado) return
     const t = setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const el = formRef.current
+      if (!el) return
+      const formTop = el.getBoundingClientRect().top + window.scrollY
+      // Posiciona o topo do formulário a ~60% da altura da tela: o vídeo ocupa
+      // a parte de cima (continua tocando) e o formulário entra por baixo.
+      const target = formTop - window.innerHeight * 0.6
+      window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' })
     }, 650)
     return () => clearTimeout(t)
   }, [liberado])
@@ -77,7 +89,7 @@ export default function ProximaEtapa() {
             />
           </div>
 
-          {/* Card com o VSL travado — fica na tela mesmo depois de liberar */}
+          {/* Card com o VSL (player VTurb) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -88,13 +100,7 @@ export default function ProximaEtapa() {
             <div className="absolute bottom-0 right-0 w-32 h-32 incan-pattern opacity-30 pointer-events-none rotate-180" />
 
             <div className="relative">
-              <VideoGate
-                videoSrc={`${import.meta.env.BASE_URL}assets/peru/vsl-peru.mp4`}
-                videoTitle={`Mensagem da equipe sobre a Expedição ${expedicao.nome} ${expedicao.ano}`}
-                unlockSeconds={60}
-                persist={false}
-                onUnlockChange={handleUnlockChange}
-              />
+              <VslPlayer />
             </div>
 
             <p className="relative text-center text-xs text-dark-teal/50 mt-6">
@@ -102,10 +108,24 @@ export default function ProximaEtapa() {
             </p>
           </motion.div>
 
-          {/* ============ FORMULÁRIO INLINE — abaixo do vídeo ============
-              O formulário próprio renderiza na hora (não é iframe), então não
-              precisa mais do truque de pré-carregamento fora da tela: ele só
-              monta quando o vídeo libera. A tela rola sozinha até aqui. */}
+          {/* Aviso discreto enquanto o formulário ainda está bloqueado */}
+          {!liberado && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-10 flex items-center justify-center gap-2 text-dark-teal/50 text-sm"
+            >
+              <Lock className="h-4 w-4" aria-hidden />
+              <span>
+                Assista ao vídeo — o formulário de inscrição libera em instantes.
+              </span>
+            </motion.div>
+          )}
+
+          {/* ============ FORMULÁRIO INLINE — só aparece depois do tempo de UNLOCK_SECONDS ============
+              Surge LOGO ABAIXO do vídeo (inline) e a página ROLA SOZINHA até ele;
+              o vídeo continua na tela, acima. */}
           {liberado && (
             <div ref={formRef} className="mt-12 md:mt-16 scroll-mt-6">
               <motion.div
@@ -164,6 +184,10 @@ export default function ProximaEtapa() {
             src={`${import.meta.env.BASE_URL}Logo-circular.png`}
             alt="Se Tu For, Eu Vou! Viagens"
             className="w-9 h-9 rounded-full"
+            width={36}
+            height={36}
+            loading="lazy"
+            decoding="async"
           />
           <p className="text-off-white/60 text-xs sm:text-sm">
             © {new Date().getFullYear()} Se Tu For, Eu Vou! Viagens · Expedição{' '}

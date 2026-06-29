@@ -64,7 +64,11 @@ const PERGUNTAS: Pergunta[] = [
   },
   {
     name: 'investimento',
-    label: 'Você está preparado(a) para investir nessa experiência completa?',
+    label: `O investimento nessa expedição fica entre R$ ${expedicao.faixaInvestimento.min.toLocaleString(
+      'pt-BR',
+    )} e R$ ${expedicao.faixaInvestimento.max.toLocaleString(
+      'pt-BR',
+    )}. Você está preparado(a) para investir nessa experiência completa?`,
     opcoes: [
       { label: 'Sim, estou preparado(a)', slug: 'sim' },
       { label: 'Quero entender os valores primeiro', slug: 'talvez' },
@@ -101,6 +105,16 @@ function gerarLeadId() {
   return `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
 }
 
+/** Normaliza o @ do Instagram: sem espaços, sem @ duplicado, só chars válidos */
+function mascaraInstagram(valor: string) {
+  const h = valor
+    .replace(/\s/g, '')
+    .replace(/@/g, '')
+    .replace(/[^a-zA-Z0-9._]/g, '')
+    .slice(0, 30)
+  return h ? `@${h}` : ''
+}
+
 /** Máscara de exibição: (DD) NNNNN-NNNN ou (DD) NNNN-NNNN */
 function mascaraWhatsapp(valor: string) {
   const d = valor.replace(/\D/g, '').slice(0, 11)
@@ -119,6 +133,7 @@ export default function FormularioLead() {
   const [nome, setNome] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [email, setEmail] = useState('')
+  const [instagram, setInstagram] = useState('')
   const [respostas, setRespostas] = useState<Record<string, string>>({})
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
@@ -138,7 +153,7 @@ export default function FormularioLead() {
 
   const setErro = useCallback((campo: string, msg: string) => {
     setErros((prev) => ({ ...prev, [campo]: msg }))
-    pushDataLayer('form_validation_error', { step: campo in { nome: 1, whatsapp: 1, email: 1 } ? 1 : 2, field: campo })
+    pushDataLayer('form_validation_error', { step: campo in { nome: 1, whatsapp: 1, email: 1, instagram: 1 } ? 1 : 2, field: campo })
   }, [])
 
   const validarEtapa1 = useCallback(() => {
@@ -157,8 +172,12 @@ export default function FormularioLead() {
       setErro('email', 'Digite um e-mail válido')
       ok = false
     }
+    if (instagram.replace('@', '').length < 2) {
+      setErro('instagram', 'Digite seu @ do Instagram')
+      ok = false
+    }
     return ok
-  }, [nome, whatsapp, email, setErro])
+  }, [nome, whatsapp, email, instagram, setErro])
 
   const avancarEtapa = useCallback(() => {
     if (!validarEtapa1()) return
@@ -204,6 +223,7 @@ export default function FormularioLead() {
         nome: nome.trim(),
         whatsapp: `+55${whatsapp.replace(/\D/g, '')}`,
         email: email.trim().toLowerCase(),
+        instagram: instagram,
         expedicao: `Expedição ${expedicao.nome} ${expedicao.ano}`,
         fonte: expedicao.fonte,
         source_id: expedicao.sourceId,
@@ -246,6 +266,7 @@ export default function FormularioLead() {
             nome: nome.trim(),
             email: email.trim().toLowerCase(), // SEMPRE minúsculo (chave do Store)
             whatsapp: `+55${whatsapp.replace(/\D/g, '')}`, // E.164
+            instagram: instagram,
           },
           resp: {
             disponibilidade: slugDaResposta('data', respostas['data']),
@@ -274,7 +295,7 @@ export default function FormularioLead() {
         setEnviando(false)
       }
     },
-    [respostas, nome, whatsapp, email, setErro],
+    [respostas, nome, whatsapp, email, instagram, setErro],
   )
 
   return (
@@ -364,6 +385,24 @@ export default function FormularioLead() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {erros.email && <p className="field-error">{erros.email}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="instagram" className="input-label">Instagram</label>
+            <input
+              type="text"
+              id="instagram"
+              name="instagram"
+              className={`input ${erros.instagram ? 'input-error' : ''}`}
+              required
+              inputMode="text"
+              autoCapitalize="none"
+              autoComplete="off"
+              placeholder="@seuusuario"
+              value={instagram}
+              onChange={(e) => setInstagram(mascaraInstagram(e.target.value))}
+            />
+            {erros.instagram && <p className="field-error">{erros.instagram}</p>}
           </div>
         </div>
 

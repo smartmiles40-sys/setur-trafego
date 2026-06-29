@@ -53,6 +53,14 @@ export const expedicao = {
     'Respostas para as principais perguntas sobre nossa Expedição Tailândia 2027.',
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/03/15/audio_8ba73cd728.mp3?filename=zen-meditation-amp-yoga-118041.mp3',
+  // Faixa de investimento da expedição (min–max), exibida na seção Opções
+  faixaInvestimento: { min: 24000, max: 33000 },
+  // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
+  vsl: {
+    playerId: 'vid-6a3e9b664d2b4d3fb0024448',
+    playerSrc:
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a3e9b664d2b4d3fb0024448/v4/player.js',
+  },
   iconeExpedicao: 'Palmtree' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

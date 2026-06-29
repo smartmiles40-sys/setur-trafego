@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, MapPin, Calendar, Plane, Sparkles, ArrowRight } from 'lucide-react'
+import { Wallet } from 'lucide-react'
 import { Leaf, Mountain, Snowflake, Sun, Palmtree, Compass } from 'lucide-react'
 import FloatingOrnaments from './FloatingOrnaments'
 import { expedicao, galeria, opcoesItens } from '../data/expedicao'
@@ -223,6 +224,21 @@ export default function Opcoes() {
                 </li>
               ))}
             </ul>
+
+            {/* Faixa de investimento da expedição */}
+            <div className="relative mb-8 rounded-2xl border border-dark-teal/10 bg-soft-green/60 px-5 md:px-7 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-lime/30 flex items-center justify-center flex-shrink-0">
+                  <Wallet size={18} className="text-dark-teal" />
+                </div>
+                <span className="eyebrow text-dark-teal/60">Faixa de investimento</span>
+              </div>
+              <p className="font-serif text-xl md:text-2xl font-bold text-dark-teal leading-none whitespace-nowrap">
+                R$ {expedicao.faixaInvestimento.min.toLocaleString('pt-BR')}
+                <span className="font-normal text-dark-teal/40 mx-1.5">a</span>
+                R$ {expedicao.faixaInvestimento.max.toLocaleString('pt-BR')}
+              </p>
+            </div>
 
             <a
               href="#formulario"

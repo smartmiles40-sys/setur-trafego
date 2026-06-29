@@ -74,6 +74,7 @@ export default async function handler(req, res) {
     nome: str(body.nome, 150).trim(),
     whatsapp: normalizarWhatsapp(body.whatsapp),
     email: str(body.email, 120).toLowerCase().trim(),
+    instagram: str(body.instagram, 40),
     expedicao: str(body.expedicao, 120),
     fonte: str(body.fonte, 80),
     source_id: str(body.source_id, 40),

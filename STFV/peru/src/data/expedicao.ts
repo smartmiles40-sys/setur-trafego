@@ -52,6 +52,14 @@ export const expedicao = {
     'Respostas para as principais perguntas sobre nossa Expedição Peru 2027.',
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2023/08/02/audio_7bf21c2b2f.mp3?filename=andean-flute-ambient-163334.mp3',
+  // Faixa de investimento da expedição (min–max), exibida na seção Opções
+  faixaInvestimento: { min: 13000, max: 17000 },
+  // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
+  vsl: {
+    playerId: 'vid-6a3e9b45d8a1f8a3e9eeb492',
+    playerSrc:
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a3e9b45d8a1f8a3e9eeb492/v4/player.js',
+  },
   iconeExpedicao: 'Mountain' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

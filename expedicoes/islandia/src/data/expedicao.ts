@@ -53,6 +53,8 @@ export const expedicao = {
     'Respostas para as principais perguntas sobre nossa Expedição Islândia 2027.',
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1ecd.mp3?filename=winter-ambience-snow-and-wind-21478.mp3',
+  // Faixa de investimento da expedição (min–max), exibida na seção Opções
+  faixaInvestimento: { min: 40000, max: 43000 },
   iconeExpedicao: 'Snowflake' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

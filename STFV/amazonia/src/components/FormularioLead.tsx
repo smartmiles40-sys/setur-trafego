@@ -1,20 +1,32 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
+import { ArrowDown, Check, Lock } from 'lucide-react'
 import { expedicao } from '../data/expedicao'
+import VslPlayer from './VslPlayer'
 
 /**
  * Formulário próprio multi-etapas — padrão "PADRONIZACAO FORMULARIO LP - SE TU FOR"
  * (referência: LP Expedição Japão 2027). Substitui o iframe do Bitrix.
  *
+ * VERSÃO STFV COM VÍDEO NA ETAPA 3:
+ *   Etapa 1 (contato) → Etapa 2 (perfil) → Etapa 3 (VSL). Ao ENTRAR na etapa 3,
+ *   dispara um timer de VSL_UNLOCK_SECONDS; o botão de envio fica BLOQUEADO até
+ *   o tempo acabar. Tudo na MESMA página (sem trocar de URL). A etapa 3 só existe
+ *   se a LP tiver expedicao.vsl (as 6 com vídeo); sem isso, o fluxo seria 1→2.
+ *
  * Contrato com GTM (NÃO renomear — os triggers dependem destes IDs/classes):
  *   #expedition-form, #form-step-1, #form-step-2, #form-success,
  *   #btn-next-step, #btn-prev-step, #btn-submit,
  *   #nome, #whatsapp, #email, #lead_id, #utm_*
+ *   (novos, aditivos: #form-step-3, #btn-next-step-2)
  *
  * Tudo que varia por LP vem de expedicao.ts ou do BASE_URL (slug) —
- * este arquivo é IDÊNTICO em todas as expedições.
+ * este arquivo é IDÊNTICO em todas as expedições com vídeo.
  */
 
 const SAVE_LEAD_URL = '/api/save-lead'
+
+// Tempo (s) que o lead precisa permanecer na etapa do vídeo antes de poder enviar.
+const VSL_UNLOCK_SECONDS = 60
 
 // slug da LP: usa expedicao.slug (deploy isolado, base '/') e cai no
 // BASE_URL ('/amazonia/' → 'amazonia') no monorepo unificado.
@@ -64,7 +76,11 @@ const PERGUNTAS: Pergunta[] = [
   },
   {
     name: 'investimento',
-    label: 'Você está preparado(a) para investir nessa experiência completa?',
+    label: `O investimento nessa expedição fica entre R$ ${expedicao.faixaInvestimento.min.toLocaleString(
+      'pt-BR',
+    )} e R$ ${expedicao.faixaInvestimento.max.toLocaleString(
+      'pt-BR',
+    )}. Você está preparado(a) para investir nessa experiência completa?`,
     opcoes: [
       { label: 'Sim, estou preparado(a)', slug: 'sim' },
       { label: 'Quero entender os valores primeiro', slug: 'talvez' },
@@ -110,19 +126,34 @@ function mascaraWhatsapp(valor: string) {
   return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
 }
 
+/** Normaliza o @ do Instagram: sem espaços, sem @ duplicado, só chars válidos */
+function mascaraInstagram(valor: string) {
+  const h = valor
+    .replace(/\s/g, '')
+    .replace(/@/g, '')
+    .replace(/[^a-zA-Z0-9._]/g, '')
+    .slice(0, 30)
+  return h ? `@${h}` : ''
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 // ---------------------------------------------------------------------------
 
 export default function FormularioLead() {
-  const [etapa, setEtapa] = useState<1 | 2>(1)
+  const [etapa, setEtapa] = useState<1 | 2 | 3>(1)
   const [nome, setNome] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [email, setEmail] = useState('')
+  const [instagram, setInstagram] = useState('')
   const [respostas, setRespostas] = useState<Record<string, string>>({})
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
+  // Etapa 3 (vídeo): timer que libera o envio
+  const [videoLiberado, setVideoLiberado] = useState(false)
+  const [progresso, setProgresso] = useState(0) // 0–100: enche a mini barra do botão
+  const deadlineRef = useRef<number | null>(null)
   const utmsRef = useRef<Utms>({
     utm_source: '', utm_medium: '', utm_campaign: '', utm_term: '', utm_content: '',
   })
@@ -139,9 +170,35 @@ export default function FormularioLead() {
     utmsRef.current.utm_content = 'STFV'
   }, [])
 
+  // Timer da Etapa 3: começa quando o lead ENTRA na etapa do vídeo e trava o
+  // envio por VSL_UNLOCK_SECONDS. Baseado em um deadline (timestamp), então
+  // voltar/avançar entre etapas não reinicia a contagem; ao liberar, fica liberado.
+  useEffect(() => {
+    if (etapa !== 3 || videoLiberado) return
+    if (deadlineRef.current == null) {
+      deadlineRef.current = Date.now() + VSL_UNLOCK_SECONDS * 1000
+    }
+    const tick = () => {
+      const total = VSL_UNLOCK_SECONDS * 1000
+      const ms = (deadlineRef.current ?? 0) - Date.now()
+      const s = Math.max(0, Math.ceil(ms / 1000))
+      setProgresso(Math.min(100, Math.max(0, ((total - ms) / total) * 100)))
+      if (s <= 0) {
+        setVideoLiberado(true)
+        pushDataLayer('form_video_unlocked', {
+          step: 3,
+          lead_id: sessionStorage.getItem(LEAD_ID_KEY),
+        })
+      }
+    }
+    tick()
+    const id = setInterval(tick, 250)
+    return () => clearInterval(id)
+  }, [etapa, videoLiberado])
+
   const setErro = useCallback((campo: string, msg: string) => {
     setErros((prev) => ({ ...prev, [campo]: msg }))
-    pushDataLayer('form_validation_error', { step: campo in { nome: 1, whatsapp: 1, email: 1 } ? 1 : 2, field: campo })
+    pushDataLayer('form_validation_error', { step: campo in { nome: 1, whatsapp: 1, email: 1, instagram: 1 } ? 1 : 2, field: campo })
   }, [])
 
   const validarEtapa1 = useCallback(() => {
@@ -160,8 +217,24 @@ export default function FormularioLead() {
       setErro('email', 'Digite um e-mail válido')
       ok = false
     }
+    if (instagram.replace('@', '').length < 2) {
+      setErro('instagram', 'Digite seu @ do Instagram')
+      ok = false
+    }
     return ok
-  }, [nome, whatsapp, email, setErro])
+  }, [nome, whatsapp, email, instagram, setErro])
+
+  const validarEtapa2 = useCallback(() => {
+    setErros({})
+    let ok = true
+    for (const p of PERGUNTAS) {
+      if (!respostas[p.name]) {
+        setErro(p.name, 'Escolha uma opção')
+        ok = false
+      }
+    }
+    return ok
+  }, [respostas, setErro])
 
   const avancarEtapa = useCallback(() => {
     if (!validarEtapa1()) return
@@ -175,14 +248,25 @@ export default function FormularioLead() {
     document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })
   }, [validarEtapa1])
 
-  const voltarEtapa = useCallback(() => {
-    pushDataLayer('form_step_back', { from_step: 2, to_step: 1 })
-    setEtapa(1)
+  const avancarEtapa3 = useCallback(() => {
+    if (!validarEtapa2()) return
+    const leadId = sessionStorage.getItem(LEAD_ID_KEY)
+    pushDataLayer('form_step_complete', { step: 2, lead_id: leadId })
+    setEtapa(3)
+    pushDataLayer('form_step_view', { step: 3, lead_id: leadId })
+    document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })
+  }, [validarEtapa2])
+
+  const voltarEtapa = useCallback((para: 1 | 2) => {
+    pushDataLayer('form_step_back', { from_step: para + 1, to_step: para })
+    setEtapa(para)
   }, [])
 
   const enviar = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
+      // Trava de segurança: só envia depois do vídeo liberar (botão já fica disabled)
+      if (!videoLiberado) return
       setErros({})
       setErroEnvio(false)
 
@@ -193,7 +277,10 @@ export default function FormularioLead() {
           ok = false
         }
       }
-      if (!ok) return
+      if (!ok) {
+        setEtapa(2)
+        return
+      }
 
       // Regra do padrão: NUNCA gerar lead_id novo na etapa 2
       const leadId = sessionStorage.getItem(LEAD_ID_KEY)
@@ -207,6 +294,7 @@ export default function FormularioLead() {
         nome: nome.trim(),
         whatsapp: `+55${whatsapp.replace(/\D/g, '')}`,
         email: email.trim().toLowerCase(),
+        instagram: instagram,
         expedicao: `Expedição ${expedicao.nome} ${expedicao.ano}`,
         fonte: expedicao.fonte,
         source_id: expedicao.sourceId,
@@ -249,6 +337,7 @@ export default function FormularioLead() {
             nome: nome.trim(),
             email: email.trim().toLowerCase(), // SEMPRE minúsculo (chave do Store)
             whatsapp: `+55${whatsapp.replace(/\D/g, '')}`, // E.164
+            instagram: instagram,
           },
           resp: {
             disponibilidade: slugDaResposta('data', respostas['data']),
@@ -277,8 +366,17 @@ export default function FormularioLead() {
         setEnviando(false)
       }
     },
-    [respostas, nome, whatsapp, email, setErro],
+    [respostas, nome, whatsapp, email, instagram, setErro, videoLiberado],
   )
+
+  const stepClass = (ativo: boolean, passado: boolean) =>
+    `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+      ativo
+        ? 'bg-lime text-dark-teal'
+        : passado
+          ? 'bg-dark-teal text-off-white'
+          : 'bg-dark-teal/10 text-dark-teal/50'
+    }`
 
   return (
     <form
@@ -295,30 +393,18 @@ export default function FormularioLead() {
         <input key={k} type="hidden" name={k} id={k} value={utmsRef.current[k]} readOnly />
       ))}
 
-      {/* Indicador de progresso */}
+      {/* Indicador de progresso (3 etapas) */}
       <div className="flex items-center justify-center gap-3 mb-8" aria-hidden>
-        <span
-          id="step1-indicator"
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-            etapa === 1 ? 'bg-lime text-dark-teal' : 'bg-dark-teal text-off-white'
-          }`}
-        >
-          1
-        </span>
-        <span id="step-connector" className="w-10 h-[2px] bg-dark-teal/20" />
-        <span
-          id="step2-indicator"
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-            etapa === 2 ? 'bg-lime text-dark-teal' : 'bg-dark-teal/10 text-dark-teal/50'
-          }`}
-        >
-          2
-        </span>
+        <span id="step1-indicator" className={stepClass(etapa === 1, etapa > 1)}>1</span>
+        <span className="w-10 h-[2px] bg-dark-teal/20" />
+        <span id="step2-indicator" className={stepClass(etapa === 2, etapa > 2)}>2</span>
+        <span className="w-10 h-[2px] bg-dark-teal/20" />
+        <span id="step3-indicator" className={stepClass(etapa === 3, false)}>3</span>
       </div>
 
       {/* ============ ETAPA 1 — contato ============ */}
       <div id="form-step-1" className={`form-step ${etapa === 1 ? '' : 'hidden'}`}>
-        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 1 de 2 · Dados de contato</p>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 1 de 3 · Dados de contato</p>
 
         <div className="space-y-5">
           <div>
@@ -368,6 +454,24 @@ export default function FormularioLead() {
             />
             {erros.email && <p className="field-error">{erros.email}</p>}
           </div>
+
+          <div>
+            <label htmlFor="instagram" className="input-label">Instagram</label>
+            <input
+              type="text"
+              id="instagram"
+              name="instagram"
+              className={`input ${erros.instagram ? 'input-error' : ''}`}
+              required
+              inputMode="text"
+              autoCapitalize="none"
+              autoComplete="off"
+              placeholder="@seuusuario"
+              value={instagram}
+              onChange={(e) => setInstagram(mascaraInstagram(e.target.value))}
+            />
+            {erros.instagram && <p className="field-error">{erros.instagram}</p>}
+          </div>
         </div>
 
         <button type="button" id="btn-next-step" className="btn-primary w-full mt-8" onClick={avancarEtapa}>
@@ -377,7 +481,7 @@ export default function FormularioLead() {
 
       {/* ============ ETAPA 2 — perfil ============ */}
       <div id="form-step-2" className={`form-step ${etapa === 2 ? '' : 'hidden'}`}>
-        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 2 de 2 · Seu perfil de viagem</p>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 2 de 3 · Seu perfil de viagem</p>
 
         <div className="space-y-7">
           {PERGUNTAS.map((p) => (
@@ -404,6 +508,41 @@ export default function FormularioLead() {
           ))}
         </div>
 
+        <div className="flex flex-col-reverse sm:flex-row gap-3 mt-8">
+          <button type="button" id="btn-prev-step" className="btn-outline sm:w-1/3" onClick={() => voltarEtapa(1)}>
+            Voltar
+          </button>
+          <button type="button" id="btn-next-step-2" className="btn-primary sm:flex-1" onClick={avancarEtapa3}>
+            Continuar
+          </button>
+        </div>
+      </div>
+
+      {/* ============ ETAPA 3 — vídeo (trava o envio por 1 min) ============ */}
+      <div id="form-step-3" className={`form-step ${etapa === 3 ? '' : 'hidden'}`}>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">
+          Etapa 3 de 3 · Assista ao vídeo
+        </p>
+
+        {/* Monta o player SÓ quando a Etapa 3 está visível. Se montar junto com o
+            resto do form (dentro do #form-step-3 com display:none), o VTurb
+            inicializa com tamanho 0×0 e o vídeo nunca aparece. */}
+        <div className="mb-6">{etapa === 3 && <VslPlayer />}</div>
+
+        {/* Estado do bloqueio: contagem regressiva → liberado */}
+        {!videoLiberado ? (
+          <div className="flex items-center justify-center gap-2 rounded-xl bg-soft-green/60 border border-dark-teal/10 px-4 py-3 text-dark-teal/75 text-sm">
+            <Lock className="h-4 w-4 flex-shrink-0" aria-hidden />
+            <span>Assista ao vídeo — o envio libera quando a barrinha encher.</span>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center gap-2 rounded-xl bg-lime/25 border border-lime px-4 py-3 text-dark-teal text-sm font-semibold">
+            <Check className="h-4 w-4 flex-shrink-0" strokeWidth={3} aria-hidden />
+            <span>Liberado! Agora é só enviar.</span>
+            <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden />
+          </div>
+        )}
+
         {erroEnvio && (
           <p className="field-error text-center mt-6">
             Não conseguimos enviar agora. Tente de novo em instantes — ou chame a gente no WhatsApp.
@@ -411,11 +550,42 @@ export default function FormularioLead() {
         )}
 
         <div className="flex flex-col-reverse sm:flex-row gap-3 mt-8">
-          <button type="button" id="btn-prev-step" className="btn-outline sm:w-1/3" onClick={voltarEtapa}>
+          <button type="button" id="btn-prev-step-3" className="btn-outline sm:w-1/3" onClick={() => voltarEtapa(2)}>
             Voltar
           </button>
-          <button type="submit" id="btn-submit" className="btn-primary sm:flex-1" disabled={enviando}>
-            {enviando ? 'Enviando…' : 'Quero garantir minha vaga'}
+          <button
+            type="submit"
+            id="btn-submit"
+            disabled={enviando || !videoLiberado}
+            aria-label={!videoLiberado ? 'Carregando seu acesso ao envio' : undefined}
+            role={!videoLiberado ? 'progressbar' : undefined}
+            aria-valuemin={!videoLiberado ? 0 : undefined}
+            aria-valuemax={!videoLiberado ? 100 : undefined}
+            aria-valuenow={!videoLiberado ? Math.round(progresso) : undefined}
+            className={
+              !videoLiberado
+                ? 'sm:flex-1 relative overflow-hidden rounded-full bg-dark-teal/10 px-8 py-4 cursor-default'
+                : 'btn-primary sm:flex-1'
+            }
+          >
+            {!videoLiberado ? (
+              <>
+                {/* mini barra de carregamento que enche nos 60s */}
+                <span
+                  className="absolute inset-y-0 left-0 bg-lime transition-[width] duration-200 ease-linear"
+                  style={{ width: `${progresso}%` }}
+                  aria-hidden
+                />
+                <span className="relative z-10 flex items-center justify-center gap-2 text-sm font-semibold text-dark-teal/70">
+                  <span className="h-2 w-2 rounded-full bg-dark-teal/50 animate-pulse" aria-hidden />
+                  Carregando seu acesso…
+                </span>
+              </>
+            ) : enviando ? (
+              'Enviando…'
+            ) : (
+              'Quero garantir minha vaga'
+            )}
           </button>
         </div>
       </div>

@@ -23,3 +23,9 @@ Thumbs.db
 
 # backups de mídia (originais antes da recompressão) — não versionar/deployar
 _backup-midia/
+
+# variáveis de ambiente (podem ter segredos) — NÃO versionar.
+# O .env.example (só o modelo, sem segredo) continua versionado.
+.env
+.env.local
+.env.*.local

@@ -53,6 +53,8 @@ export const expedicao = {
     'Respostas para as principais perguntas sobre nossa Expedição Japão e China 2027.',
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=japanese-amp-zen-meditation-119946.mp3',
+  // Faixa de investimento da expedição (min–max), exibida na seção Opções
+  faixaInvestimento: { min: 36000, max: 44000 },
   iconeExpedicao: 'Compass' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

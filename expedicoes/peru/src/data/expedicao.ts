@@ -54,6 +54,11 @@ export const expedicao = {
     'https://cdn.pixabay.com/download/audio/2023/08/02/audio_7bf21c2b2f.mp3?filename=andean-flute-ambient-163334.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
   faixaInvestimento: { min: 13000, max: 17000 },
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   iconeExpedicao: 'Mountain' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

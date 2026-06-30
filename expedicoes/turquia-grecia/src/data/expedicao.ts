@@ -57,6 +57,11 @@ export const expedicao = {
   // o Bruno precisa indicar uma trilha ambiente mediterrânea (ex.: Pixabay) antes de publicar.
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/03/14/audio_bf5d63a0b8.mp3?filename=rainforest-ambience-birds-and-water-21678.mp3',
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   iconeExpedicao: 'Compass' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

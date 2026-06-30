@@ -54,6 +54,11 @@ export const expedicao = {
     'https://cdn.pixabay.com/download/audio/2022/03/14/audio_bf5d63a0b8.mp3?filename=rainforest-ambience-birds-and-water-21678.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
   faixaInvestimento: { min: 6988, max: 9988 },
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   iconeExpedicao: 'Leaf' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

@@ -57,6 +57,11 @@ export const expedicao = {
     'Respostas para as principais perguntas sobre nossa Expedição Costa Amalfitana 2027.',
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/03/15/audio_8ba73cd728.mp3?filename=zen-meditation-amp-yoga-118041.mp3',
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   iconeExpedicao: 'Sun' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

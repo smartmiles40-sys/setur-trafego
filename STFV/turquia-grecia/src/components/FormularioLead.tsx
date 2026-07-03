@@ -64,7 +64,11 @@ const PERGUNTAS: Pergunta[] = [
   },
   {
     name: 'investimento',
-    label: 'Você está preparado(a) para investir nessa experiência completa?',
+    label: `O investimento nessa expedição fica entre R$ ${expedicao.faixaInvestimento.min.toLocaleString(
+      'pt-BR',
+    )} e R$ ${expedicao.faixaInvestimento.max.toLocaleString(
+      'pt-BR',
+    )}. Você está preparado(a) para investir nessa experiência completa?`,
     opcoes: [
       { label: 'Sim, estou preparado(a)', slug: 'sim' },
       { label: 'Quero entender os valores primeiro', slug: 'talvez' },

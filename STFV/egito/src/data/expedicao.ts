@@ -145,7 +145,7 @@ export const naoIncluso = [
   'Gorjetas (comuns no Egito)',
   'Chip de celular',
   'Passeios opcionais (Abu Simbel, balão, quadriciclo)',
-  'Visto egípcio (aprox. US$ 25)',
+  'Visto egípcio (aprox. US$ 30)',
   'Compras pessoais e souvenirs',
 ]
 
@@ -192,6 +192,7 @@ export const roteiro = [
       'A Esfinge — guardiã do platô',
       'Necrópole de Sakkara',
       'Fábrica de Papiro',
+      'GEM — Grand Egyptian Museum',
     ],
     logistica: 'As 7 Maravilhas do Mundo Antigo · guia em português',
     imagem: IMG('dia-03-piramides.webp'),
@@ -241,7 +242,7 @@ export const roteiro = [
     atividades: [
       'Navegação tranquila pelo Nilo',
       'Templo de Kom Ombo',
-      'Templo de Edfu',
+      'Templo de Edfu (opcional)',
       'Atividades e refeições a bordo',
     ],
     logistica: 'Navegação pelo Nilo · templos no caminho',
@@ -256,7 +257,7 @@ export const roteiro = [
     titulo: 'Luxor, a cidade dos templos',
     atividades: [
       'Navegação rumo a Luxor',
-      'Templo de Luxor e seus obeliscos',
+      'Templos de Luxor e Karnak',
       'Atividades a bordo',
       'Pôr do sol sobre o Nilo',
     ],
@@ -456,7 +457,7 @@ export const depoimentos = [
 export const faq = [
   {
     q: 'Preciso de visto para o Egito?',
-    a: 'Sim. Brasileiros precisam do visto egípcio, normalmente emitido na chegada por cerca de US$ 25 (não incluso). O passaporte deve ter validade mínima de 6 meses a partir da data de entrada. Nosso time orienta todo o processo antes do embarque.',
+    a: 'Sim. Brasileiros precisam do visto egípcio, normalmente emitido na chegada por cerca de US$ 30 (não incluso). O passaporte deve ter validade mínima de 6 meses a partir da data de entrada. Nosso time orienta todo o processo antes do embarque.',
   },
   {
     q: 'As refeições estão incluídas?',
@@ -506,7 +507,7 @@ export const gastosPessoais = {
   inclui: [
     'Refeições fora do roteiro',
     'Gorjetas (comuns e esperadas no Egito)',
-    'Visto egípcio (aprox. US$ 25)',
+    'Visto egípcio (aprox. US$ 30)',
     'Chip de celular / internet',
     'Passeios opcionais (Abu Simbel, balão, quadriciclo)',
     'Compras pessoais e souvenirs',

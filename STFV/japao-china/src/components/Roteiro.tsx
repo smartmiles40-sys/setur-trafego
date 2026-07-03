@@ -10,22 +10,22 @@ import { expedicao, roteiro } from '../data/expedicao'
 
 type Dia = (typeof roteiro)[number]
 
-// O roteiro atravessa dois países. Dias 1–12 no Japão; a partir do dia 13
-// começa a etapa da China (embarque Osaka → Pequim + 4 noites em Pequim).
+// O roteiro atravessa dois países. Dias 1–5 na China; a partir do dia 6
+// começa a etapa do Japão (voo Pequim → Osaka + 10 noites no Japão).
 const etapas = [
   {
     ordem: 'Primeira etapa',
-    pais: 'Japão',
-    bandeira: '🇯🇵',
-    cidades: 'Tóquio · Monte Fuji · Kyoto · Osaka · Hiroshima',
-    dias: roteiro.filter((d) => d.dia <= 12),
-  },
-  {
-    ordem: 'Segunda etapa',
     pais: 'China',
     bandeira: '🇨🇳',
     cidades: 'Pequim · Muralha · Cidade Proibida · Templo do Céu',
-    dias: roteiro.filter((d) => d.dia >= 13),
+    dias: roteiro.filter((d) => d.dia <= 5),
+  },
+  {
+    ordem: 'Segunda etapa',
+    pais: 'Japão',
+    bandeira: '🇯🇵',
+    cidades: 'Osaka · Kyoto · Hiroshima · Monte Fuji · Tóquio',
+    dias: roteiro.filter((d) => d.dia >= 6),
   },
 ]
 
@@ -200,11 +200,11 @@ export default function Roteiro() {
         </div>
       </div>
 
-      {/* Two-country itinerary: Japão on top, China below */}
+      {/* Two-country itinerary: China on top, Japão below */}
       <div className="relative max-w-7xl mx-auto px-4 space-y-16 md:space-y-20">
         <EtapaBlock etapa={etapas[0]} />
 
-        {/* Transition divider — flight from Japan to China */}
+        {/* Transition divider — flight from China to Japan */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -216,7 +216,7 @@ export default function Roteiro() {
           <span className="h-px flex-1 bg-gradient-to-r from-transparent to-dark-teal/20" />
           <span className="inline-flex items-center gap-2 text-dark-teal/55 text-xs font-semibold tracking-[0.18em] uppercase whitespace-nowrap">
             <Plane size={14} className="text-lime-dark" />
-            Voo Osaka → Pequim
+            Voo Pequim → Osaka
           </span>
           <span className="h-px flex-1 bg-gradient-to-l from-transparent to-dark-teal/20" />
         </motion.div>

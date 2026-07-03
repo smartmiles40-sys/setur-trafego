@@ -82,7 +82,7 @@
 <div id="wrap">
   <svg id="map" role="img" aria-label="Mapa mundi com rota da expedição Peru"></svg>
   <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
-  <div class="badge bottom-left">Brasil → Lima → Paracas → Cusco → Vale Sagrado → Machu Picchu → Vinicunca → Brasil</div>
+  <div class="badge bottom-left">Brasil → Cusco → Vale Sagrado → Machu Picchu → Vinicunca → Lima → Paracas → Brasil</div>
   <div class="badge bottom-right">
     <span class="legend-item"><span class="legend-line dashed"></span>Voos</span>
     <span class="legend-item"><span class="legend-line solid"></span>Transfer terrestre</span>
@@ -126,17 +126,16 @@
 
   // Cada segmento: stroke + dashed (voo). O veículo de cada trecho fica nas fases (phaseDefs).
   const segments = [
-    { from: S.sao,      to: S.lima,     stroke: '#09282B', dashed: true },  // 0  voo internacional
-    { from: S.lima,     to: S.paracas,  stroke: '#2980B9' },                // 1  van (ida)
-    { from: S.paracas,  to: S.lima,     stroke: '#2980B9' },                // 2  van (volta)
-    { from: S.lima,     to: S.cusco,    stroke: '#7E5BEF', dashed: true },  // 3  voo doméstico
-    { from: S.cusco,    to: S.vale,     stroke: '#1F8A70' },                // 4  van
-    { from: S.vale,     to: S.machu,    stroke: '#D35400' },                // 5  van/trem
-    { from: S.machu,    to: S.cusco,    stroke: '#D35400' },                // 6  van/trem
-    { from: S.cusco,    to: S.colorida, stroke: '#E67E22' },                // 7  van
-    { from: S.colorida, to: S.cusco,    stroke: '#E67E22' },                // 8  van
-    { from: S.cusco,    to: S.lima,     stroke: '#7E5BEF', dashed: true },  // 9  voo doméstico
-    { from: S.lima,     to: S.sao,      stroke: '#09282B', dashed: true },  // 10 voo internacional
+    { from: S.sao,      to: S.cusco,    stroke: '#09282B', dashed: true },  // 0  voo internacional (via Lima)
+    { from: S.cusco,    to: S.vale,     stroke: '#1F8A70' },                // 1  van
+    { from: S.vale,     to: S.machu,    stroke: '#D35400' },                // 2  van/trem
+    { from: S.machu,    to: S.cusco,    stroke: '#D35400' },                // 3  van/trem
+    { from: S.cusco,    to: S.colorida, stroke: '#E67E22' },                // 4  van
+    { from: S.colorida, to: S.cusco,    stroke: '#E67E22' },                // 5  van
+    { from: S.cusco,    to: S.lima,     stroke: '#7E5BEF', dashed: true },  // 6  voo doméstico
+    { from: S.lima,     to: S.paracas,  stroke: '#2980B9' },                // 7  van (ida · pernoite em Ica)
+    { from: S.paracas,  to: S.lima,     stroke: '#2980B9' },                // 8  van (volta)
+    { from: S.lima,     to: S.sao,      stroke: '#09282B', dashed: true },  // 9  voo internacional
   ];
 
   const buildLine = (from, to, steps = 48) => {
@@ -186,11 +185,11 @@
     // ===== Fases sequenciais (na ordem real da viagem) =====
     // vehicle: 'plane' = voo | 'van' = transfer terrestre
     const phaseDefs = [
-      { segs: [0],         vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Lima (voo internacional)
-      { segs: [1, 2],      vehicle: 'van',   scale: SCALE.ground, duration: 4500 }, // Lima ↔ Paracas
-      { segs: [3],         vehicle: 'plane', scale: SCALE.flight, duration: 3000 }, // Lima → Cusco (voo)
-      { segs: [4, 5, 6, 7, 8], vehicle: 'van', scale: SCALE.ground, duration: 9000 }, // Cusco · Vale Sagrado · Machu Picchu · Vinicunca
-      { segs: [9, 10],     vehicle: 'plane', scale: SCALE.flight, duration: 7000 }, // Cusco → Lima → GRU (voos)
+      { segs: [0],             vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Cusco (voo internacional via Lima)
+      { segs: [1, 2, 3, 4, 5], vehicle: 'van',   scale: SCALE.ground, duration: 9000 }, // Vale Sagrado · Machu Picchu · Vinicunca
+      { segs: [6],             vehicle: 'plane', scale: SCALE.flight, duration: 3000 }, // Cusco → Lima (voo)
+      { segs: [7, 8],          vehicle: 'van',   scale: SCALE.ground, duration: 4500 }, // Lima ↔ Paracas/Huacachina
+      { segs: [9],             vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Lima → GRU (voo internacional)
     ];
 
     phaseDefs.forEach(p => {

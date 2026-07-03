@@ -82,7 +82,7 @@
 <div id="wrap">
   <svg id="map" role="img" aria-label="Mapa mundi com rota da expedição Costa Amalfitana"></svg>
   <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
-  <div class="badge bottom-left">Brasil → Roma → Nápoles → Pompéia → Sorrento → Costa Amalfitana → Capri → Roma → Brasil</div>
+  <div class="badge bottom-left">Brasil → Nápoles → Pompéia → Sorrento → Costa Amalfitana → Capri → Roma → Brasil</div>
   <div class="badge bottom-right">
     <span class="legend-item"><span class="legend-line dashed"></span>Voos</span>
     <span class="legend-item"><span class="legend-line solid"></span>Van · barco</span>
@@ -130,16 +130,15 @@
 
   // Cada segmento: stroke + dashed (voo). A classificação do veículo fica nas fases (phaseDefs).
   const segments = [
-    { from: S.sao,      to: S.roma,     stroke: '#09282B', dashed: true },  // 0 voo internacional
-    { from: S.roma,     to: S.napoles,  stroke: '#1F7A8C' },                // 1 van Roma → Nápoles
-    { from: S.napoles,  to: S.pompeia,  stroke: '#E67E22' },                // 2 van Nápoles → Pompéia (Vesúvio ao lado)
-    { from: S.pompeia,  to: S.sorrento, stroke: '#3498DB' },                // 3 van Pompéia → Sorrento
-    { from: S.sorrento, to: S.amalfi,   stroke: '#E74C3C' },                // 4 van pela costa (Amalfi · Ravello)
-    { from: S.amalfi,   to: S.capri,    stroke: '#16A085' },                // 5 barco Amalfi → Capri
-    { from: S.capri,    to: S.positano, stroke: '#BFD850' },                // 6 barco Capri → Positano
-    { from: S.positano, to: S.sorrento, stroke: '#3498DB' },                // 7 barco de volta a Sorrento
-    { from: S.sorrento, to: S.roma,     stroke: '#D4AC0D' },                // 8 van Sorrento → Roma
-    { from: S.roma,     to: S.sao,      stroke: '#09282B', dashed: true },  // 9 voo internacional de volta
+    { from: S.sao,      to: S.napoles,  stroke: '#09282B', dashed: true },  // 0 voo internacional
+    { from: S.napoles,  to: S.pompeia,  stroke: '#E67E22' },                // 1 van Nápoles → Pompéia (Vesúvio ao lado)
+    { from: S.pompeia,  to: S.sorrento, stroke: '#3498DB' },                // 2 van Pompéia → Sorrento
+    { from: S.sorrento, to: S.amalfi,   stroke: '#E74C3C' },                // 3 van pela costa (Amalfi · Ravello)
+    { from: S.amalfi,   to: S.capri,    stroke: '#16A085' },                // 4 barco Amalfi → Capri
+    { from: S.capri,    to: S.positano, stroke: '#BFD850' },                // 5 barco Capri → Positano
+    { from: S.positano, to: S.sorrento, stroke: '#3498DB' },                // 6 barco de volta a Sorrento
+    { from: S.sorrento, to: S.roma,     stroke: '#D4AC0D' },                // 7 van Sorrento → Roma
+    { from: S.roma,     to: S.sao,      stroke: '#09282B', dashed: true },  // 8 voo internacional de volta
   ];
 
   const buildLine = (from, to, steps = 48) => {
@@ -190,16 +189,15 @@
     // ===== Fases sequenciais (uma por trecho, na ordem da viagem) =====
     // vehicle: 'plane' = voo | 'van' = trecho terrestre | 'boat' = catamarã/barco
     const phaseDefs = [
-      { seg: 0, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Roma (voo internacional)
-      { seg: 1, vehicle: 'van',   scale: SCALE.ground, duration: 3600 }, // Roma → Nápoles (translado privativo)
-      { seg: 2, vehicle: 'van',   scale: SCALE.ground, duration: 2600 }, // Nápoles → Pompéia (Vesúvio no caminho)
-      { seg: 3, vehicle: 'van',   scale: SCALE.ground, duration: 2600 }, // Pompéia → Sorrento
-      { seg: 4, vehicle: 'van',   scale: SCALE.ground, duration: 3600 }, // Sorrento → Amalfi · Ravello (tour pela costa)
-      { seg: 5, vehicle: 'boat',  scale: SCALE.ground, duration: 3600 }, // Amalfi → Capri (catamarã)
-      { seg: 6, vehicle: 'boat',  scale: SCALE.ground, duration: 2800 }, // Capri → Positano (navegação)
-      { seg: 7, vehicle: 'boat',  scale: SCALE.ground, duration: 2400 }, // Positano → Sorrento
-      { seg: 8, vehicle: 'van',   scale: SCALE.ground, duration: 3600 }, // Sorrento → Roma
-      { seg: 9, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Roma → GRU (voo internacional)
+      { seg: 0, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Nápoles (voo internacional)
+      { seg: 1, vehicle: 'van',   scale: SCALE.ground, duration: 2600 }, // Nápoles → Pompéia (Vesúvio no caminho)
+      { seg: 2, vehicle: 'van',   scale: SCALE.ground, duration: 2600 }, // Pompéia → Sorrento
+      { seg: 3, vehicle: 'van',   scale: SCALE.ground, duration: 3600 }, // Sorrento → Amalfi · Ravello (tour pela costa)
+      { seg: 4, vehicle: 'boat',  scale: SCALE.ground, duration: 3600 }, // Amalfi → Capri (catamarã)
+      { seg: 5, vehicle: 'boat',  scale: SCALE.ground, duration: 2800 }, // Capri → Positano (navegação)
+      { seg: 6, vehicle: 'boat',  scale: SCALE.ground, duration: 2400 }, // Positano → Sorrento
+      { seg: 7, vehicle: 'van',   scale: SCALE.ground, duration: 3600 }, // Sorrento → Roma
+      { seg: 8, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Roma → GRU (voo internacional)
     ];
 
     phaseDefs.forEach(p => {

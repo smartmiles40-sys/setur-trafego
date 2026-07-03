@@ -14,14 +14,14 @@ export const expedicao = {
   ano: 2027,
   dataInicio: '2027-11-06',
   dataInicioLabel: '6 de novembro',
-  dataFimLabel: '20 de novembro',
-  dataRange: '6 a 20 de novembro de 2027',
-  dataResumoCurto: 'Tailândia · 6–20 nov 2027',
-  duracao: '15 dias',
-  duracaoNumero: 15,
+  dataFimLabel: '21 de novembro',
+  dataRange: '6 a 21 de novembro de 2027',
+  dataResumoCurto: 'Tailândia · 6–21 nov 2027',
+  duracao: '16 dias',
+  duracaoNumero: 16,
   duracaoNumeroLegenda:
     '13 noites em Bangkok, Chiang Mai, Chiang Rai e ilhas de Phi Phi — entre templos, festival e natureza.',
-  duracaoExtenso: '15 dias · 13 noites',
+  duracaoExtenso: '16 dias · 13 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
   cidades: ['Bangkok', 'Chiang Mai', 'Chiang Rai', 'Phi Phi'],
@@ -33,8 +33,8 @@ export const expedicao = {
   mapaDescricao:
     'Uma travessia pela Tailândia: dos templos dourados de Bangkok à magia das lanternas em Chiang Mai, até as ilhas paradisíacas de Phi Phi — com voos domésticos, ferries e transfers resolvidos.',
   mapaTrajetoTexto: 'Bangkok → Chiang Mai → Chiang Rai → Phi Phi Islands',
-  mapaDistancia: '3 voos domésticos · 15 dias',
-  mapaDistanciaCurta: '3 voos · 15 dias',
+  mapaDistancia: '3 voos domésticos · 16 dias',
+  mapaDistanciaCurta: '3 voos · 16 dias',
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
   mapaIframeTitulo: 'Mapa interativo da rota Expedição Tailândia',
   tudoResolvidoDescricao:
@@ -64,7 +64,7 @@ export const expedicao = {
 }
 
 export const opcoesItens = [
-  '15 dias de expedição',
+  '16 dias de expedição',
   'Voos internacionais e domésticos',
   'Hotéis 3★ e 4★ com café da manhã',
   'Grand Palace, Wat Pho, Wat Arun',
@@ -375,13 +375,13 @@ export const roteiro = [
   {
     dia: 15,
     data: '20/11',
-    cidade: 'Brasil',
-    titulo: 'Volta para o Brasil',
+    cidade: 'Bangkok → Brasil',
+    titulo: 'Saída de Bangkok',
     atividades: [
       'Café da manhã e check-out do hotel',
       'Transfer privativo ao aeroporto de Bangkok',
       'Voo internacional de volta ao Brasil',
-      'Chegada em casa com a mala cheia de histórias',
+      'Despedida da Tailândia',
     ],
     logistica: 'Transfer + voo internacional Bangkok → GRU',
     imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-01.jpg`,
@@ -390,6 +390,21 @@ export const roteiro = [
       { emoji: '🚐', label: 'Transfer ao aeroporto' },
       { emoji: '✈️', label: 'Voo internacional Bangkok → Brasil' },
     ],
+  },
+  {
+    dia: 16,
+    data: '21/11',
+    cidade: 'Brasil',
+    titulo: 'Chegada ao Brasil',
+    atividades: [
+      'Desembarque em Guarulhos (GRU)',
+      'Chegada em casa com a mala cheia de histórias',
+      'Encerramento da expedição',
+    ],
+    logistica: 'Chegada a GRU',
+    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-02.jpg`,
+    destaque: false,
+    veiculos: [{ emoji: '✈️', label: 'Chegada GRU' }],
   },
 ]
 
@@ -511,6 +526,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '5511951251935',
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Tailândia 2027 — 6 a 20 de novembro de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Tailândia 2027 — 6 a 21 de novembro de 2027.',
 }
 export const whatsappUrl = `https://wa.me/message/SRCJTP7OC6KFL1`

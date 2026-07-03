@@ -82,7 +82,7 @@
 <div id="wrap">
   <svg id="map" role="img" aria-label="Mapa mundi com rota Brasil — Japão — China"></svg>
   <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
-  <div class="badge bottom-left">Brasil → Tóquio ⇄ Fuji → Osaka ⇄ Kyoto ⇄ Hiroshima → Pequim → Brasil</div>
+  <div class="badge bottom-left">Brasil → Pequim → Osaka ⇄ Kyoto ⇄ Hiroshima → Fuji → Tóquio → Brasil</div>
   <div class="badge bottom-right">
     <span class="legend-item"><span class="legend-line dashed"></span>Voos</span>
     <span class="legend-item"><span class="legend-line solid" style="background:#1F7A8C"></span>Trem-bala</span>
@@ -126,21 +126,20 @@
   const stops = Object.values(S);
 
   // Cada segmento: stroke + dashed (voo). O veículo de cada trecho fica nas fases (phaseDefs).
-  // Rota fiel ao roteiro: voo GRU→Tóquio · van Tóquio⇄Fuji (bate-volta dia 6) ·
-  // trem-bala Tóquio→Osaka · trem Osaka⇄Kyoto (dias 7-8) · trem-bala Osaka⇄Hiroshima
-  // (bate-volta dia 11, com ferry p/ Miyajima) · voo Osaka→Pequim (dia 13) · voo Pequim→GRU.
+  // Rota fiel ao roteiro: voo GRU→Pequim · voo Pequim→Osaka (dia 6) ·
+  // trem Osaka⇄Kyoto (dias 8-9) · trem-bala Osaka⇄Hiroshima (bate-volta dia 10,
+  // com ferry p/ Miyajima) · tour Monte Fuji + trem-bala rumo a Tóquio (dia 12) · voo Tóquio→GRU.
   const segments = [
-    { from: S.sao,       to: S.toquio,    stroke: '#09282B', dashed: true,    // 0  voo internacional (via Europa)
+    { from: S.sao,       to: S.pequim,    stroke: '#09282B', dashed: true,    // 0  voo internacional (via Europa)
       via: [ { lat: 38.7, lon: -9.1 }, { lat: 48.2, lon: 16.4 }, { lat: 55.0, lon: 60.0 } ] },
-    { from: S.toquio,    to: S.fuji,      stroke: '#D4AC0D' },                // 1  van — bate-volta Monte Fuji
-    { from: S.fuji,      to: S.toquio,    stroke: '#D4AC0D' },                // 2  van — retorno a Tóquio
-    { from: S.toquio,    to: S.osaka,     stroke: '#1F7A8C' },                // 3  trem-bala Tóquio → Osaka
-    { from: S.osaka,     to: S.kyoto,     stroke: '#1F7A8C' },                // 4  trem Osaka → Kyoto
-    { from: S.kyoto,     to: S.osaka,     stroke: '#1F7A8C' },                // 5  trem Kyoto → Osaka
-    { from: S.osaka,     to: S.hiroshima, stroke: '#1F7A8C' },                // 6  trem-bala Osaka → Hiroshima
-    { from: S.hiroshima, to: S.osaka,     stroke: '#1F7A8C' },                // 7  trem-bala Hiroshima → Osaka
-    { from: S.osaka,     to: S.pequim,    stroke: '#C0392B', dashed: true },  // 8  voo Osaka → Pequim
-    { from: S.pequim,    to: S.sao,       stroke: '#09282B', dashed: true,    // 9  voo internacional (via Europa)
+    { from: S.pequim,    to: S.osaka,     stroke: '#C0392B', dashed: true },  // 1  voo Pequim → Osaka
+    { from: S.osaka,     to: S.kyoto,     stroke: '#1F7A8C' },                // 2  trem Osaka → Kyoto
+    { from: S.kyoto,     to: S.osaka,     stroke: '#1F7A8C' },                // 3  trem Kyoto → Osaka
+    { from: S.osaka,     to: S.hiroshima, stroke: '#1F7A8C' },                // 4  trem-bala Osaka → Hiroshima
+    { from: S.hiroshima, to: S.osaka,     stroke: '#1F7A8C' },                // 5  trem-bala Hiroshima → Osaka
+    { from: S.osaka,     to: S.fuji,      stroke: '#D4AC0D' },                // 6  tour Monte Fuji (a caminho de Tóquio)
+    { from: S.fuji,      to: S.toquio,    stroke: '#1F7A8C' },                // 7  trem-bala rumo a Tóquio
+    { from: S.toquio,    to: S.sao,       stroke: '#09282B', dashed: true,    // 8  voo internacional (via Europa)
       via: [ { lat: 55.0, lon: 60.0 }, { lat: 48.2, lon: 16.4 }, { lat: 38.7, lon: -9.1 } ] },
   ];
 
@@ -204,11 +203,12 @@
     // ===== Fases sequenciais (na ordem real da viagem) =====
     // vehicle: 'plane' = voo | 'van' = transfer terrestre | 'train' = trem-bala
     const phaseDefs = [
-      { segs: [0],             vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Tóquio (voo internacional)
-      { segs: [1, 2],          vehicle: 'van',   scale: SCALE.ground, duration: 3000 }, // Tóquio ⇄ Monte Fuji (bate-volta)
-      { segs: [3, 4, 5, 6, 7], vehicle: 'train', scale: SCALE.ground, duration: 9000 }, // Trem-bala: Osaka · Kyoto · Hiroshima
-      { segs: [8],             vehicle: 'plane', scale: SCALE.flight, duration: 4000 }, // Osaka → Pequim (voo)
-      { segs: [9],             vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Pequim → GRU (voo internacional)
+      { segs: [0],          vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Pequim (voo internacional)
+      { segs: [1],          vehicle: 'plane', scale: SCALE.flight, duration: 4000 }, // Pequim → Osaka (voo)
+      { segs: [2, 3, 4, 5], vehicle: 'train', scale: SCALE.ground, duration: 8000 }, // Trem: Kyoto · Hiroshima (bate-voltas de Osaka)
+      { segs: [6],          vehicle: 'van',   scale: SCALE.ground, duration: 2500 }, // Osaka → Monte Fuji (tour)
+      { segs: [7],          vehicle: 'train', scale: SCALE.ground, duration: 2500 }, // Monte Fuji → Tóquio (trem-bala)
+      { segs: [8],          vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Tóquio → GRU (voo internacional)
     ];
 
     phaseDefs.forEach(p => {

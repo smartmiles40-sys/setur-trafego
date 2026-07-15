@@ -16,11 +16,11 @@ export const expedicao = {
   dataInicioLabel: '14 de outubro',
   dataFimLabel: '30 de outubro',
   dataRange: '14 a 30 de outubro de 2027',
-  dataResumoCurto: 'Japão+China · 14–30 out',
+  dataResumoCurto: 'Japão+China · 14 – 30 out',
   duracao: '17 dias',
   duracaoNumero: 17,
   duracaoNumeroLegenda:
-    '4 noites em Pequim + 10 noites no Japão, com trem-bala e Muralha da China.',
+    'Da Muralha da China ao Monte Fuji e Tóquio, com trem-bala, Cidade Proibida e chá com gueixa.',
   duracaoExtenso: '17 dias · 14 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
@@ -29,9 +29,9 @@ export const expedicao = {
   bandeira: '🇯🇵',
   heroImage: `${import.meta.env.BASE_URL}assets/japao-china/hero.jpg`,
   slogan:
-    'Atravesse dois milênios em duas culturas — do silêncio milenar\nda Muralha ao trem-bala.',
+    'Atravesse dois milênios em duas culturas — do silêncio milenar\nda Muralha às luzes elétricas de Tóquio.',
   mapaDescricao:
-    'Uma travessia por dois gigantes da Ásia: da China imperial (Pequim, Muralha, Cidade Proibida, Templo do Céu) ao Japão tradicional (Osaka, Kyoto, Hiroshima, Monte Fuji, Tóquio) — com trem-bala, voos internos e suporte de instalação de Alipay e WeChat.',
+    'Uma travessia por dois gigantes da Ásia: começamos pela China (Pequim, Muralha, Cidade Proibida, Templo do Céu) e seguimos para o Japão tradicional (Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio) — com trem-bala, voos internos e suporte de instalação de Alipay e WeChat.',
   mapaTrajetoTexto: 'Pequim → Osaka → Kyoto → Hiroshima → Monte Fuji → Tóquio',
   mapaDistancia: '3 voos + trem-bala · 17 dias',
   mapaDistanciaCurta: '3 voos + JR · 17 dias',
@@ -44,10 +44,10 @@ export const expedicao = {
   roteiroHeadlineDestino: 'Japão e China',
   roteiroHeadlineComplemento: 'em camadas.',
   roteiroDescricao:
-    'Este não é um roteiro para "ver tudo correndo". É uma sequência de experiências que atravessam China e Japão — do silêncio milenar da Muralha à modernidade frenética de Tóquio — respeitando ritmo, pausas e acompanhamento constante.',
+    'Este não é um roteiro para "ver tudo correndo". É uma sequência de experiências que atravessam China e Japão — do silêncio milenar da Muralha à modernidade elétrica de Tóquio — respeitando ritmo, pausas e acompanhamento constante.',
   porQueHeadlineDestino: 'Japão e China',
   opcoesDescricao:
-    'Uma imersão dupla em China e Japão: Pequim — Muralha, Cidade Proibida e Templo do Céu — seguida de Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio. Chá com gueixa, riquixá e tour privativo na Muralha inclusos.',
+    'Uma imersão dupla em China e Japão: começamos por Pequim — Muralha, Cidade Proibida e Templo do Céu — e seguimos para Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio. Tour privativo na Muralha, chá com gueixa e riquixá inclusos.',
   formularioHeadlineDestino: 'Japão e China',
   faqDescricao:
     'Respostas para as principais perguntas sobre nossa Expedição Japão e China 2027.',
@@ -60,15 +60,21 @@ export const expedicao = {
     handle: '@setuforeuvouviagens',
     url: 'https://www.instagram.com/setuforeuvouviagens/',
   },
+  // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
+  vsl: {
+    playerId: 'vid-6a3e9b57e172d6fc8663e6f0',
+    playerSrc:
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a3e9b57e172d6fc8663e6f0/v4/player.js',
+  },
   iconeExpedicao: 'Compass' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 
 export const opcoesItens = [
   '17 dias de expedição',
   'Voos internacionais e domésticos',
-  '4 noites em Pequim 3★/4★',
-  '6 noites Osaka + 4 noites Tóquio',
-  'Trem-bala (Shinkansen) no Japão',
+  '4 noites em Pequim + 6 em Osaka',
+  '4 noites em Tóquio 3★/4★',
+  'Trem-bala (Osaka↔Hiroshima e → Tóquio)',
   'Chá da tarde com gueixa + riquixá',
   'Tour privativo à Muralha da China',
 ]
@@ -83,7 +89,7 @@ export const incluso = [
   {
     icon: 'Train',
     title: 'Trem-bala (Shinkansen)',
-    desc: 'Osaka ↔ Hiroshima e Monte Fuji → Tóquio',
+    desc: 'Osaka ↔ Hiroshima e Osaka → Tóquio (via Monte Fuji)',
     emoji: '🚄',
   },
   {
@@ -119,11 +125,11 @@ export const incluso = [
 ]
 
 export const galeria = [
+  { src: `${import.meta.env.BASE_URL}assets/japao-china/galeria-04.jpg`, alt: 'Muralha da China' },
+  { src: `${import.meta.env.BASE_URL}assets/japao-china/galeria-05.jpg`, alt: 'Cidade Proibida · Pequim' },
   { src: `${import.meta.env.BASE_URL}assets/japao-china/galeria-01.jpg`, alt: 'Shibuya · Tóquio' },
   { src: `${import.meta.env.BASE_URL}assets/japao-china/hero.jpg`, alt: 'Monte Fuji · Pagode Chureito' },
   { src: `${import.meta.env.BASE_URL}assets/japao-china/galeria-03.jpg`, alt: 'Fushimi Inari · Kyoto' },
-  { src: `${import.meta.env.BASE_URL}assets/japao-china/galeria-04.jpg`, alt: 'Muralha da China' },
-  { src: `${import.meta.env.BASE_URL}assets/japao-china/galeria-05.jpg`, alt: 'Cidade Proibida' },
 ]
 
 export const naoIncluso = [
@@ -142,10 +148,10 @@ export const roteiro = [
     cidade: 'São Paulo → China',
     titulo: 'Embarque internacional',
     atividades: [
-      'Encontro em Guarulhos (GRU)',
-      'Suporte concierge no aeroporto',
+      'Encontro no Aeroporto de Guarulhos (GRU)',
+      'Suporte concierge no check-in',
       'Embarque internacional rumo a Pequim',
-      'Início da expedição',
+      'Início oficial da expedição',
     ],
     logistica: 'Voo internacional GRU → Pequim',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-01.jpg`,
@@ -156,14 +162,14 @@ export const roteiro = [
     dia: 2,
     data: '15/10',
     cidade: 'Pequim',
-    titulo: 'Chegada em Pequim · Noite livre',
+    titulo: 'Chegada em Pequim & noite livre',
     atividades: [
       'Recepção no aeroporto de Pequim',
       'Transfer privativo até o hotel',
-      'Suporte com Alipay e WeChat',
-      'Noite livre para explorar',
+      'Suporte com instalação de Alipay e WeChat',
+      'Noite livre para o primeiro contato com a China',
     ],
-    logistica: 'Transfer privativo + suporte apps China',
+    logistica: 'Transfer privativo + check-in + suporte apps',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-13.jpg`,
     destaque: false,
     veiculos: [{ emoji: '🚐', label: 'Transfer privativo' }],
@@ -177,12 +183,12 @@ export const roteiro = [
       'Tour privativo à Muralha da China',
       'Trecho selecionado e menos turístico',
       'Almoço regional com vista',
-      'Retorno a Pequim',
+      'Retorno a Pequim ao entardecer',
     ],
     logistica: 'Tour privativo + guia bilíngue',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/galeria-04.jpg`,
     destaque: true,
-    veiculos: [{ emoji: '🚐', label: 'Van privativa Muralha' }],
+    veiculos: [{ emoji: '🚐', label: 'Van privativa à Muralha' }],
   },
   {
     dia: 4,
@@ -190,26 +196,26 @@ export const roteiro = [
     cidade: 'Pequim',
     titulo: 'Cidade Proibida & Templo do Céu',
     atividades: [
-      'Cidade Proibida com especialista',
+      'Cidade Proibida com guia especialista',
       'Praça da Paz Celestial',
       'Templo do Céu',
-      'Jantar Pato à Pequim (opcional)',
+      'Jantar tradicional Pato à Pequim (opcional)',
     ],
     logistica: 'Guia bilíngue + ingressos inclusos',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/galeria-05.jpg`,
     destaque: true,
-    veiculos: [{ emoji: '🐉', label: 'Tour cultural Pequim' }],
+    veiculos: [{ emoji: '🐉', label: 'Tour cultural em Pequim' }],
   },
   {
     dia: 5,
     data: '18/10',
     cidade: 'Pequim',
-    titulo: 'Dia Livre em Pequim',
+    titulo: 'Dia livre em Pequim',
     atividades: [
-      'Tempo livre: compras, hutongs',
+      'Tempo livre: hutongs e mercados',
       'Gastronomia em Wangfujing',
       'Massagens e chás opcionais',
-      'Última noite na China antes do Japão',
+      'Última noite na China',
     ],
     logistica: 'Dia livre · líder à disposição',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-16.jpg`,
@@ -220,12 +226,12 @@ export const roteiro = [
     dia: 6,
     data: '19/10',
     cidade: 'Pequim → Osaka',
-    titulo: 'Despedida da China · Voo para o Japão',
+    titulo: 'Despedida da China · Chegada ao Japão',
     atividades: [
-      'Despedida de Pequim',
+      'Traslado ao aeroporto de Pequim',
       'Voo Pequim → Osaka',
-      'Recepção em Osaka e transfer ao hotel',
-      'Noite livre em Osaka',
+      'Recepção e transfer privativo em Osaka',
+      'Check-in e primeira noite no Japão',
     ],
     logistica: 'Voo Pequim → Osaka + transfer hotel',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-02.jpg`,
@@ -243,7 +249,7 @@ export const roteiro = [
       'Bairro Dotonbori à noite',
       'Compras e gastronomia local',
     ],
-    logistica: 'Guia + cartão transporte',
+    logistica: 'Guia + cartão de transporte',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-09.jpg`,
     destaque: false,
     veiculos: [{ emoji: '🚇', label: 'Metrô Osaka' }],
@@ -288,7 +294,7 @@ export const roteiro = [
     atividades: [
       'Trem-bala até Hiroshima',
       'Parque Memorial da Paz',
-      'Travessia até Ilha de Miyajima',
+      'Travessia até a Ilha de Miyajima',
       'Torii flutuante de Itsukushima',
     ],
     logistica: 'Shinkansen + ferry · bate-volta',
@@ -303,12 +309,12 @@ export const roteiro = [
     dia: 11,
     data: '24/10',
     cidade: 'Osaka',
-    titulo: 'Dia Livre em Osaka',
+    titulo: 'Dia livre em Osaka',
     atividades: [
       'Tempo livre para explorar Osaka',
       'Compras, museus ou descanso',
       'Sugestões do líder se precisar',
-      'Última noite em Osaka antes de Tóquio',
+      'Última noite em Osaka',
     ],
     logistica: 'Dia livre · suporte do líder',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-10.jpg`,
@@ -319,19 +325,19 @@ export const roteiro = [
     dia: 12,
     data: '25/10',
     cidade: 'Monte Fuji → Tóquio',
-    titulo: 'Monte Fuji & Trem-bala',
+    titulo: 'Monte Fuji & Trem-bala para Tóquio',
     atividades: [
-      'Passeio com vista do Monte Fuji',
+      'Bate-volta com vista do Monte Fuji',
       'Almoço com vista (opcional)',
-      'Trem-bala Shinkansen → Tóquio',
+      'Trem-bala Shinkansen rumo a Tóquio',
       'Check-in no hotel em Tóquio',
     ],
-    logistica: 'Trem-bala JR + transfer hotel',
+    logistica: 'Bate-volta Monte Fuji + trem-bala + hotel',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-06.jpg`,
     destaque: true,
     veiculos: [
-      { emoji: '🚐', label: 'Tour Monte Fuji' },
-      { emoji: '🚄', label: 'Shinkansen rumo a Tóquio' },
+      { emoji: '🚐', label: 'Bate-volta Monte Fuji' },
+      { emoji: '🚄', label: 'Shinkansen → Tóquio' },
     ],
   },
   {
@@ -345,7 +351,7 @@ export const roteiro = [
       'Akihabara — bairro otaku/eletrônico',
       'Cartão de transporte incluso',
     ],
-    logistica: 'Guia licenciado + cartão transporte',
+    logistica: 'Guia licenciado + cartão de transporte',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-04.jpg`,
     destaque: true,
     veiculos: [{ emoji: '🚇', label: 'Metrô + cartão JR' }],
@@ -359,7 +365,7 @@ export const roteiro = [
       'Harajuku — moda e cultura jovem',
       'Santuário Meiji em meio à floresta',
       'Shibuya Crossing — a travessia mais famosa',
-      'Noite em Shinjuku',
+      'Vida noturna e luzes de Shinjuku',
     ],
     logistica: 'Guia bilíngue + transporte público',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/galeria-01.jpg`,
@@ -370,31 +376,31 @@ export const roteiro = [
     dia: 15,
     data: '28/10',
     cidade: 'Tóquio',
-    titulo: 'Dia Livre em Tóquio',
+    titulo: 'Dia livre em Tóquio',
     atividades: [
       'Tempo livre para explorar Tóquio',
-      'Compras, museus ou bairros como Ginza e Shinjuku',
+      'Compras, museus ou bairros como Ginza',
       'Sugestões do líder se precisar',
       'Última noite no Japão',
     ],
     logistica: 'Dia livre · suporte do líder',
-    imagem: `${import.meta.env.BASE_URL}assets/japao-china/galeria-01.jpg`,
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-03.jpg`,
     destaque: false,
     veiculos: [{ emoji: '🚶', label: 'Exploração livre' }],
   },
   {
     dia: 16,
     data: '29/10',
-    cidade: 'Tóquio → Brasil',
-    titulo: 'Saída de Tóquio',
+    cidade: 'Tóquio → São Paulo',
+    titulo: 'Despedida do Japão',
     atividades: [
-      'Café da manhã e check-out',
-      'Transfer privativo ao aeroporto de Tóquio',
-      'Embarque no voo internacional',
-      'Despedida do Japão',
+      'Manhã livre para últimas compras',
+      'Traslado ao aeroporto de Tóquio',
+      'Embarque no voo de volta ao Brasil',
+      'Bagagem cheia de memórias',
     ],
     logistica: 'Voo internacional Tóquio → GRU',
-    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-03.jpg`,
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-01.jpg`,
     destaque: false,
     veiculos: [{ emoji: '✈️', label: 'Voo Tóquio → GRU' }],
   },
@@ -404,13 +410,46 @@ export const roteiro = [
     cidade: 'São Paulo',
     titulo: 'Chegada ao Brasil',
     atividades: [
-      'Desembarque em Guarulhos (GRU)',
-      'Encerramento da expedição',
+      'Chegada ao Aeroporto de Guarulhos (GRU)',
+      'Encerramento oficial da expedição',
+      'Despedida do grupo',
+      'Até a próxima jornada!',
     ],
-    logistica: 'Chegada a GRU',
-    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-01.jpg`,
+    logistica: 'Chegada em Guarulhos (GRU)',
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-02.jpg`,
     destaque: false,
-    veiculos: [{ emoji: '✈️', label: 'Chegada GRU' }],
+    veiculos: [{ emoji: '✈️', label: 'Chegada em Guarulhos (GRU)' }],
+  },
+]
+
+// Etapas do roteiro por país (China → Japão), na ordem real da viagem.
+// O componente Roteiro agrupa os dias por faixa (diaInicio..diaFim) e mostra
+// o divisor `transicao` entre uma etapa e a próxima. Array vazio = roteiro contínuo.
+export const roteiroEtapas: {
+  ordem: string
+  pais: string
+  bandeira: string
+  cidades: string
+  diaInicio: number
+  diaFim: number
+  transicao?: string
+}[] = [
+  {
+    ordem: 'Primeira etapa',
+    pais: 'China',
+    bandeira: '🇨🇳',
+    cidades: 'Pequim · Muralha · Cidade Proibida · Templo do Céu',
+    diaInicio: 1,
+    diaFim: 5,
+    transicao: 'Voo Pequim → Osaka',
+  },
+  {
+    ordem: 'Segunda etapa',
+    pais: 'Japão',
+    bandeira: '🇯🇵',
+    cidades: 'Osaka · Kyoto · Hiroshima · Monte Fuji · Tóquio',
+    diaInicio: 6,
+    diaFim: 17,
   },
 ]
 
@@ -423,7 +462,7 @@ export const porQue = {
     'Tempo perdido em logística é dia menos vivido',
   ],
   conosco: [
-    'Roteiro Japão+China consolidado e testado',
+    'Roteiro China+Japão consolidado e testado',
     'Voos, trem-bala e transfers já resolvidos',
     'Suporte para emissão do visto chinês',
     'Instalação assistida de Alipay e WeChat',
@@ -493,11 +532,11 @@ export const faq = [
   },
   {
     q: 'O trem-bala (Shinkansen) está incluso?',
-    a: 'Sim. Os trechos de trem-bala no Japão (Osaka ↔ Hiroshima e o deslocamento rumo a Tóquio) estão inclusos, com assentos reservados.',
+    a: 'Sim. Os trechos Osaka ↔ Hiroshima e o trem-bala de Osaka a Tóquio (com parada no Monte Fuji) estão inclusos, com assentos reservados.',
   },
   {
     q: 'Como funciona pagamento na China? Cartão funciona?',
-    a: 'A China opera quase 100% via Alipay e WeChat Pay — não é fácil usar cartão internacional. Nosso time ajuda na instalação e configuração desses apps antes da chegada a Pequim.',
+    a: 'A China opera quase 100% via Alipay e WeChat Pay — não é fácil usar cartão internacional. Como começamos por Pequim, nosso time ajuda na instalação e configuração desses apps já na chegada.',
   },
   {
     q: 'Como funciona o pagamento da expedição?',
@@ -508,8 +547,8 @@ export const faq = [
     a: 'Sim. Trabalhamos com parcelamento no cartão e planos personalizados. Entre em contato com nosso time para alinhar a melhor forma para você.',
   },
   {
-    q: 'Qual é o clima na China e no Japão em outubro?',
-    a: 'É outono — uma das melhores épocas. Pequim entre 8°C e 19°C com céu limpo, Japão entre 14°C e 22°C com o início da folhagem vermelha (momiji). Enviamos checklist completo do que levar.',
+    q: 'Qual é o clima no Japão e China em março/abril?',
+    a: 'É primavera — uma das melhores épocas do ano, com as cerejeiras (sakura) em flor. No Japão a temperatura fica entre 10°C e 20°C; Pequim é um pouco mais fria (5°C a 18°C). Enviamos um checklist completo do que levar.',
   },
   {
     q: 'Vou conseguir me comunicar?',
@@ -532,6 +571,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '5511951251935',
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão e China 2027 — 14 a 30 de outubro de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão e China 2027 — 28 de março a 13 de abril de 2027.',
 }
 export const whatsappUrl = `https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

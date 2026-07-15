@@ -1,8 +1,6 @@
 // Paths das imagens locais (public/assets/egito/...). BASE_URL garante o
 // prefixo correto da subpasta no monorepo (ex.: /egito/).
 const IMG = (nome: string) => `${import.meta.env.BASE_URL}assets/egito/${nome}`
-// Imagens otimizadas em WebP (~66% menores que os JPGs originais). O hero-piramides.jpg
-// permanece no /public só para og:image (compatibilidade com scrapers de redes sociais).
 
 export const expedicao = {
   // slug da expedição — usado pelo formulário p/ rotear o lead ao webhook
@@ -61,6 +59,11 @@ export const expedicao = {
     'https://cdn.pixabay.com/download/audio/2022/03/15/audio_8ba73cd728.mp3?filename=zen-meditation-amp-yoga-118041.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
   faixaInvestimento: { min: 21000, max: 27000 },
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
   vsl: {
     playerId: 'vid-6a3e994a33aff9176543d942',
@@ -211,7 +214,7 @@ export const roteiro = [
       'Imersão na história milenar',
     ],
     logistica: 'City tour com guia + transporte privativo',
-    imagem: IMG('dia-04-cairo.webp'),
+    imagem: IMG('dia-04-nmec.webp'),
     destaque: false,
     veiculos: [{ emoji: '🚐', label: 'Van privativa' }],
   },

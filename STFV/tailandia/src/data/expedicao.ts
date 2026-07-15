@@ -17,11 +17,11 @@ export const expedicao = {
   dataFimLabel: '21 de novembro',
   dataRange: '6 a 21 de novembro de 2027',
   dataResumoCurto: 'Tailândia · 6–21 nov 2027',
-  duracao: '16 dias',
-  duracaoNumero: 16,
+  duracao: '15 dias',
+  duracaoNumero: 15,
   duracaoNumeroLegenda:
     '13 noites em Bangkok, Chiang Mai, Chiang Rai e ilhas de Phi Phi — entre templos, festival e natureza.',
-  duracaoExtenso: '16 dias · 13 noites',
+  duracaoExtenso: '15 dias · 13 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
   cidades: ['Bangkok', 'Chiang Mai', 'Chiang Rai', 'Phi Phi'],
@@ -33,8 +33,8 @@ export const expedicao = {
   mapaDescricao:
     'Uma travessia pela Tailândia: dos templos dourados de Bangkok à magia das lanternas em Chiang Mai, até as ilhas paradisíacas de Phi Phi — com voos domésticos, ferries e transfers resolvidos.',
   mapaTrajetoTexto: 'Bangkok → Chiang Mai → Chiang Rai → Phi Phi Islands',
-  mapaDistancia: '3 voos domésticos · 16 dias',
-  mapaDistanciaCurta: '3 voos · 16 dias',
+  mapaDistancia: '3 voos domésticos · 15 dias',
+  mapaDistanciaCurta: '3 voos · 15 dias',
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
   mapaIframeTitulo: 'Mapa interativo da rota Expedição Tailândia',
   tudoResolvidoDescricao:
@@ -55,6 +55,11 @@ export const expedicao = {
     'https://cdn.pixabay.com/download/audio/2022/03/15/audio_8ba73cd728.mp3?filename=zen-meditation-amp-yoga-118041.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
   faixaInvestimento: { min: 24000, max: 33000 },
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
   vsl: {
     playerId: 'vid-6a3e9b664d2b4d3fb0024448',
@@ -65,7 +70,7 @@ export const expedicao = {
 }
 
 export const opcoesItens = [
-  '16 dias de expedição',
+  '15 dias de expedição',
   'Voos internacionais e domésticos',
   'Hotéis 3★ e 4★ com café da manhã',
   'Grand Palace, Wat Pho, Wat Arun',
@@ -299,7 +304,7 @@ export const roteiro = [
       'Noite de festas em Phi Phi (1 bebida inclusa)',
     ],
     logistica: 'Voo doméstico + ferry + transfer hotel',
-    imagem: `${import.meta.env.BASE_URL}assets/tailandia/hero.jpg`,
+    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-10-phiphi-welcome.jpg`,
     destaque: true,
     veiculos: [
       { emoji: '✈️', label: 'Voo Chiang Mai → Krabi' },
@@ -318,7 +323,7 @@ export const roteiro = [
       'Bar com luta de Muay Thai (1 bebida inclusa)',
     ],
     logistica: 'Atividade livre + bar Muay Thai',
-    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-11.jpg`,
+    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-11-long-beach.jpg`,
     destaque: false,
     veiculos: [{ emoji: '🛶', label: 'Long-tail boat' }],
   },
@@ -334,7 +339,7 @@ export const roteiro = [
       'Almoço a bordo',
     ],
     logistica: 'Lancha privativa do grupo · dia inteiro',
-    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-12.jpg`,
+    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-12-tour-barco-phiphi.jpg`,
     destaque: true,
     veiculos: [{ emoji: '🛥️', label: 'Lancha privativa Phi Phi' }],
   },
@@ -376,13 +381,13 @@ export const roteiro = [
   {
     dia: 15,
     data: '20/11',
-    cidade: 'Bangkok → Brasil',
+    cidade: 'Bangkok',
     titulo: 'Saída de Bangkok',
     atividades: [
       'Café da manhã e check-out do hotel',
       'Transfer privativo ao aeroporto de Bangkok',
-      'Voo internacional de volta ao Brasil',
-      'Despedida da Tailândia',
+      'Embarque no voo internacional de volta',
+      'Início da viagem de retorno ao Brasil',
     ],
     logistica: 'Transfer + voo internacional Bangkok → GRU',
     imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-01.jpg`,
@@ -398,14 +403,15 @@ export const roteiro = [
     cidade: 'Brasil',
     titulo: 'Chegada ao Brasil',
     atividades: [
-      'Desembarque em Guarulhos (GRU)',
-      'Chegada em casa com a mala cheia de histórias',
+      'Chegada em Guarulhos (GRU)',
+      'Desembarque e reencontro com a família',
       'Encerramento da expedição',
+      'Mala cheia de histórias',
     ],
-    logistica: 'Chegada a GRU',
-    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-02.jpg`,
+    logistica: 'Chegada em GRU',
+    imagem: `${import.meta.env.BASE_URL}assets/tailandia/dia-01.jpg`,
     destaque: false,
-    veiculos: [{ emoji: '✈️', label: 'Chegada GRU' }],
+    veiculos: [{ emoji: '✈️', label: 'Chegada em GRU' }],
   },
 ]
 

@@ -35,7 +35,7 @@ export const expedicao = {
   slogan:
     'Viva a dolce vita entre os vilarejos da Costa Amalfitana,\ncom Capri, Pompéia e o melhor do sul da Itália.',
   mapaDescricao:
-    'Uma travessia pelo sul da Itália: Nápoles, as ruínas de Pompéia e a vinícola aos pés do Vesúvio, Sorrento como base na península, a costa por terra e por mar — Amalfi, Ravello, Positano e Capri — e o arremate em Roma. Com voos, traslados privativos e barcos resolvidos.',
+    'Uma travessia pelo sul da Itália: de Roma a Nápoles, as ruínas de Pompéia e a vinícola aos pés do Vesúvio, Sorrento como base na península, a costa por terra e por mar — Amalfi, Ravello, Positano e Capri — e o arremate em Roma. Com voos, traslados privativos e barcos resolvidos.',
   mapaTrajetoTexto: 'Nápoles → Pompéia → Sorrento → Costa Amalfitana → Capri → Roma',
   mapaDistancia: 'Voos + van privativa + barco · 11 dias',
   mapaDistanciaCurta: 'Voos + costa · 11 dias',
@@ -159,7 +159,7 @@ export const roteiro = [
       'Embarque internacional rumo à Itália',
       'Pernoite a bordo',
     ],
-    logistica: 'Voo internacional GRU → Nápoles',
+    logistica: 'Voo internacional GRU → Roma',
     imagem: IMG('dia-01-embarque.jpg'),
     destaque: false,
     veiculos: [{ emoji: '✈️', label: 'Voo internacional Brasil → Itália' }],
@@ -170,15 +170,15 @@ export const roteiro = [
     cidade: 'Nápoles',
     titulo: 'Chegada em Nápoles',
     atividades: [
-      'Desembarque em Nápoles',
+      'Desembarque em Nápoles (NAP)',
       'Traslado privativo ao hotel',
-      'Noite livre napolitana',
+      'Primeira noite napolitana',
       'Pizza e massa fresca para começar bem',
     ],
     logistica: 'Traslado privativo aeroporto → hotel',
     imagem: IMG('dia-02-napoles.jpg'),
     destaque: false,
-    veiculos: [{ emoji: '🚐', label: 'Traslado privativo em Nápoles' }],
+    veiculos: [{ emoji: '🚐', label: 'Traslado privativo ao hotel' }],
   },
   {
     dia: 3,

@@ -54,6 +54,11 @@ export const expedicao = {
     'https://cdn.pixabay.com/download/audio/2022/03/14/audio_bf5d63a0b8.mp3?filename=rainforest-ambience-birds-and-water-21678.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
   faixaInvestimento: { min: 6988, max: 9988 },
+  // Instagram da agência (mesmo @ para todas as expedições)
+  instagram: {
+    handle: '@setuforeuvouviagens',
+    url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
   // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
   vsl: {
     playerId: 'vid-6a3e9a7469f3e258e2cf86c6',

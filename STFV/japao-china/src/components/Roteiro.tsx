@@ -6,28 +6,10 @@ import FloatingOrnaments from './FloatingOrnaments'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { expedicao, roteiro } from '../data/expedicao'
+import { expedicao, roteiro, roteiroEtapas } from '../data/expedicao'
 
 type Dia = (typeof roteiro)[number]
-
-// O roteiro atravessa dois países. Dias 1–5 na China; a partir do dia 6
-// começa a etapa do Japão (voo Pequim → Osaka + 10 noites no Japão).
-const etapas = [
-  {
-    ordem: 'Primeira etapa',
-    pais: 'China',
-    bandeira: '🇨🇳',
-    cidades: 'Pequim · Muralha · Cidade Proibida · Templo do Céu',
-    dias: roteiro.filter((d) => d.dia <= 5),
-  },
-  {
-    ordem: 'Segunda etapa',
-    pais: 'Japão',
-    bandeira: '🇯🇵',
-    cidades: 'Osaka · Kyoto · Hiroshima · Monte Fuji · Tóquio',
-    dias: roteiro.filter((d) => d.dia >= 6),
-  },
-]
+type Etapa = (typeof roteiroEtapas)[number]
 
 function DiaCard({ dia, i }: { dia: Dia; i: number }) {
   return (
@@ -100,7 +82,33 @@ function DiaCard({ dia, i }: { dia: Dia; i: number }) {
   )
 }
 
-function EtapaBlock({ etapa }: { etapa: (typeof etapas)[number] }) {
+function RoteiroSwiper({ dias }: { dias: Dia[] }) {
+  return (
+    <Swiper
+      modules={[Navigation, Pagination]}
+      spaceBetween={24}
+      slidesPerView={1.15}
+      centeredSlides
+      centeredSlidesBounds
+      navigation
+      pagination={{ clickable: true }}
+      breakpoints={{
+        640: { slidesPerView: 1.5, spaceBetween: 24, centeredSlides: true, centeredSlidesBounds: true },
+        1024: { slidesPerView: 2.3, spaceBetween: 28, centeredSlides: true, centeredSlidesBounds: true },
+        1280: { slidesPerView: 3, spaceBetween: 32, centeredSlides: false },
+      }}
+      className="pb-14 !overflow-visible"
+    >
+      {dias.map((dia, i) => (
+        <SwiperSlide key={dia.dia}>
+          <DiaCard dia={dia} i={i} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  )
+}
+
+function EtapaBlock({ etapa, dias }: { etapa: Etapa; dias: Dia[] }) {
   return (
     <div className="relative">
       {/* Country header */}
@@ -121,7 +129,7 @@ function EtapaBlock({ etapa }: { etapa: (typeof etapas)[number] }) {
               {etapa.pais}
             </h3>
             <span className="text-dark-teal/45 text-xs font-semibold tracking-wide">
-              {etapa.dias.length} dias
+              {dias.length} dias
             </span>
           </div>
           <p className="text-dark-teal/55 text-xs md:text-sm mt-2 tracking-wide truncate">
@@ -130,32 +138,34 @@ function EtapaBlock({ etapa }: { etapa: (typeof etapas)[number] }) {
         </div>
       </motion.div>
 
-      <Swiper
-        modules={[Navigation, Pagination]}
-        spaceBetween={24}
-        slidesPerView={1.15}
-        centeredSlides
-        centeredSlidesBounds
-        navigation
-        pagination={{ clickable: true }}
-        breakpoints={{
-          640: { slidesPerView: 1.5, spaceBetween: 24, centeredSlides: true, centeredSlidesBounds: true },
-          1024: { slidesPerView: 2.3, spaceBetween: 28, centeredSlides: true, centeredSlidesBounds: true },
-          1280: { slidesPerView: 3, spaceBetween: 32, centeredSlides: false },
-        }}
-        className="pb-14 !overflow-visible"
-      >
-        {etapa.dias.map((dia, i) => (
-          <SwiperSlide key={dia.dia}>
-            <DiaCard dia={dia} i={i} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <RoteiroSwiper dias={dias} />
     </div>
   )
 }
 
+function TransicaoDivider({ label }: { label: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+      className="flex items-center gap-4 max-w-3xl mx-auto px-1"
+      aria-hidden="true"
+    >
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent to-dark-teal/20" />
+      <span className="inline-flex items-center gap-2 text-dark-teal/55 text-xs font-semibold tracking-[0.18em] uppercase whitespace-nowrap">
+        <Plane size={14} className="text-lime-dark" />
+        {label}
+      </span>
+      <span className="h-px flex-1 bg-gradient-to-l from-transparent to-dark-teal/20" />
+    </motion.div>
+  )
+}
+
 export default function Roteiro() {
+  const temEtapas = roteiroEtapas.length > 0
+
   return (
     <section
       id="roteiro"
@@ -200,29 +210,27 @@ export default function Roteiro() {
         </div>
       </div>
 
-      {/* Two-country itinerary: China on top, Japão below */}
-      <div className="relative max-w-7xl mx-auto px-4 space-y-16 md:space-y-20">
-        <EtapaBlock etapa={etapas[0]} />
-
-        {/* Transition divider — flight from China to Japan */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="flex items-center gap-4 max-w-3xl mx-auto px-1"
-          aria-hidden="true"
-        >
-          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-dark-teal/20" />
-          <span className="inline-flex items-center gap-2 text-dark-teal/55 text-xs font-semibold tracking-[0.18em] uppercase whitespace-nowrap">
-            <Plane size={14} className="text-lime-dark" />
-            Voo Pequim → Osaka
-          </span>
-          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-dark-teal/20" />
-        </motion.div>
-
-        <EtapaBlock etapa={etapas[1]} />
-      </div>
+      {temEtapas ? (
+        /* Itinerário em etapas (ex.: China → Japão), na ordem real da viagem */
+        <div className="relative max-w-7xl mx-auto px-4 space-y-16 md:space-y-20">
+          {roteiroEtapas.map((etapa, idx) => {
+            const dias = roteiro.filter((d) => d.dia >= etapa.diaInicio && d.dia <= etapa.diaFim)
+            return (
+              <div key={etapa.pais} className="space-y-16 md:space-y-20">
+                <EtapaBlock etapa={etapa} dias={dias} />
+                {etapa.transicao && idx < roteiroEtapas.length - 1 && (
+                  <TransicaoDivider label={etapa.transicao} />
+                )}
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        /* Itinerário contínuo (destino único) */
+        <div className="relative max-w-7xl mx-auto px-4">
+          <RoteiroSwiper dias={roteiro} />
+        </div>
+      )}
     </section>
   )
 }

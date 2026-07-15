@@ -1,8 +1,6 @@
 // Paths das imagens locais (public/assets/egito/...). BASE_URL garante o
 // prefixo correto da subpasta no monorepo (ex.: /egito/).
 const IMG = (nome: string) => `${import.meta.env.BASE_URL}assets/egito/${nome}`
-// Imagens otimizadas em WebP (~66% menores que os JPGs originais). O hero-piramides.jpg
-// permanece no /public só para og:image (compatibilidade com scrapers de redes sociais).
 
 export const expedicao = {
   // slug da expedição — usado pelo formulário p/ rotear o lead ao webhook
@@ -65,6 +63,12 @@ export const expedicao = {
   instagram: {
     handle: '@setuforeuvouviagens',
     url: 'https://www.instagram.com/setuforeuvouviagens/',
+  },
+  // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
+  vsl: {
+    playerId: 'vid-6a3e994a33aff9176543d942',
+    playerSrc:
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a3e994a33aff9176543d942/v4/player.js',
   },
   iconeExpedicao: 'Sun' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
@@ -210,7 +214,7 @@ export const roteiro = [
       'Imersão na história milenar',
     ],
     logistica: 'City tour com guia + transporte privativo',
-    imagem: IMG('dia-04-cairo.webp'),
+    imagem: IMG('dia-04-nmec.webp'),
     destaque: false,
     veiculos: [{ emoji: '🚐', label: 'Van privativa' }],
   },

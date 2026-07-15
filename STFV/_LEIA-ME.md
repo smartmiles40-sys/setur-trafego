@@ -1,11 +1,11 @@
 # STFV — Expedições com VÍDEO DENTRO do formulário (2ª hospedagem)
 
 > Cópia da pasta `../expedicoes` (a "V4") para subir uma **segunda hospedagem na
-> Vercel** e rodar um funil diferente. Mesma estrutura, mesmo tracking — **muda a
-> URL** e o **formato do funil de vídeo**, pra comparar os dois no relatório.
+> Vercel**. Mesma estrutura — **muda a URL** e as **marcações de tracking**.
 >
-> ⚠️ Histórico: esta pasta nasceu como "STFV sem vídeo". Desde **2026-06-29** o vídeo
-> voltou, mas **dentro do formulário** (Etapa 3) — não mais numa página separada.
+> ⚠️ Histórico: esta pasta nasceu como "STFV sem vídeo". Em **2026-06-29** o vídeo
+> voltou, mas **dentro do formulário** (Etapa 3). Em **2026-07-15** esse funil venceu
+> o A/B e a V4 passou a usá-lo também — as duas pastas agora rodam o mesmo formato.
 
 ## O funil da STFV (atualizado em 2026-06-29)
 Nas **6 LPs que têm VSL** (amazonia, egito, islandia, japao-china, peru, tailandia), o
@@ -22,10 +22,21 @@ formulário fica **direto na página** e agora tem **3 etapas**:
 As 2 LPs **sem VSL** (italia, turquia-grecia) seguem com o formulário de **2 etapas**
 (sem vídeo), intocadas.
 
-### Diferença para a V4 (`../expedicoes`)
-A V4 trava o form num **funil de 2 páginas** (`proxima-etapa.html` com o VSL).
-Na STFV o vídeo é a **Etapa 3 do formulário inline**. Então o A/B agora é:
-**V4 (vídeo em página separada) × STFV (vídeo dentro do formulário)**.
+### Diferença para a V4 (`../expedicoes`) — atualizado em 2026-07-15
+**O A/B acabou: este funil venceu.** Em 2026-07-15 a V4 (`../expedicoes`) adotou o mesmo
+formato (vídeo na Etapa 3 do formulário inline) e a `proxima-etapa.html` dela foi removida.
+
+Hoje as duas pastas rodam o **mesmo funil**; o que as separa é só **tracking + URL**:
+
+| | `../expedicoes` (V4) | `STFV` (esta) |
+|---|---|---|
+| `utm_content` | o que vier da URL | forçado `'STFV'` |
+| nome do lead | como o lead digitou | prefixado `(STFV)` |
+| `site` no payload | `'trafego'` | `'stfv'` |
+
+⚠️ Se for mexer no `FormularioLead.tsx` de uma pasta e copiar pra outra, **cuide dessas
+marcações** — se o `utm_content = 'STFV'` vazar pra V4, os leads dela são contados como
+STFV no CRM e o relatório quebra.
 
 ### Peças que mudam por LP (data-driven)
 - `src/data/expedicao.ts`: `faixaInvestimento { min, max }` e `vsl { playerId, playerSrc }`.

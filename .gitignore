@@ -24,6 +24,11 @@ Thumbs.db
 # backups de mídia (originais antes da recompressão) — não versionar/deployar
 _backup-midia/
 
+# bundle local de revisão (servidor na rede pra revisão interna) — não versionar
+_review-dist/
+_serve-review.mjs
+_servidor-revisao.cmd
+
 # variáveis de ambiente (podem ter segredos) — NÃO versionar.
 # O .env.example (só o modelo, sem segredo) continua versionado.
 .env

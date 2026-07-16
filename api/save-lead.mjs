@@ -88,26 +88,94 @@ export default async function handler(req, res) {
   // Override global (debug) > webhook da expedição pelo slug
   const slug = slugDoLead(lead)
   const webhookUrl = process.env.WEBHOOK_URL || WEBHOOKS[slug]
-  if (webhookUrl) {
+  const slugOk = Boolean(webhookUrl)
+
+  // ── Canal 1: webhook do n8n (roteado por slug) ──────────────────────────────
+  const enviarN8n = async () => {
+    if (!webhookUrl) {
+      console.warn(`[webhook] sem destino para slug="${slug}" — coberto pelo ledger`)
+      return
+    }
+    const ctrl = new AbortController()
+    const timeout = setTimeout(() => ctrl.abort(), 7000)
     try {
-      const ctrl = new AbortController()
-      const timeout = setTimeout(() => ctrl.abort(), 8000)
       const resp = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(lead),
         signal: ctrl.signal,
       })
-      clearTimeout(timeout)
       if (!resp.ok) console.error('[webhook] status', resp.status)
-    } catch (err) {
-      // Webhook fora do ar NÃO pode perder o lead nem travar o usuário:
-      // o lead já está nos logs; respondemos ok mesmo assim.
-      console.error('[webhook] falhou:', err && err.message)
+    } finally {
+      clearTimeout(timeout)
     }
-  } else {
-    console.warn(`[webhook] sem destino para slug="${slug}" — lead apenas nos logs`)
   }
+
+  // ── Canal 2: ledger no Supabase, gravado por CÓDIGO (independe do n8n) ───────
+  // Captura 100% dos leads — inclusive slug sem rota (ex.: "japao") ou n8n fora
+  // do ar. É a fonte de verdade que a conciliação de 3h confere contra o Bitrix.
+  // Falha aqui NUNCA trava o usuário nem perde o lead: só vira log.
+  const gravarLedger = async () => {
+    const SB_URL = process.env.SUPABASE_LEADS_URL
+    const SB_KEY = process.env.SUPABASE_LEADS_KEY
+    if (!SB_URL || !SB_KEY) {
+      console.warn('[ledger] SUPABASE_LEADS_URL/KEY ausentes — lead só no n8n/logs')
+      return
+    }
+    const ctrl = new AbortController()
+    const timeout = setTimeout(() => ctrl.abort(), 7000)
+    try {
+      const resp = await fetch(`${SB_URL.replace(/\/$/, '')}/rest/v1/site_leads`, {
+        method: 'POST',
+        headers: {
+          apikey: SB_KEY,
+          Authorization: `Bearer ${SB_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({
+          lead_id: lead.lead_id,
+          site: 'trafego',
+          slug,
+          slug_ok: slugOk,
+          form_name: lead.form_name || '',
+          nome: lead.nome || '',
+          whatsapp: lead.whatsapp || '',
+          email: lead.email || '',
+          instagram: lead.instagram || '',
+          expedicao: lead.expedicao || '',
+          fonte: lead.fonte || '',
+          source_id: lead.source_id || '',
+          resp_data: lead.data || '',
+          resp_companhia: lead.companhia || '',
+          resp_perfil: lead.perfil || '',
+          resp_investimento: lead.investimento || '',
+          resp_decisao: lead.decisao || '',
+          utm_source: lead.utm_source || '',
+          utm_medium: lead.utm_medium || '',
+          utm_campaign: lead.utm_campaign || '',
+          utm_term: lead.utm_term || '',
+          utm_content: lead.utm_content || '',
+          data_hora_cadastro: lead.data_hora_cadastro || '',
+          raw: lead,
+        }),
+        signal: ctrl.signal,
+      })
+      // 409 = lead_id repetido (re-submit) = já capturado, não é erro.
+      if (!resp.ok && resp.status !== 409) {
+        const txt = await resp.text().catch(() => '')
+        console.error('[ledger] status', resp.status, txt)
+      }
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
+  // Os dois canais correm em PARALELO: nenhum atrasa o outro, e o ledger captura
+  // mesmo que o n8n falhe.
+  const [rN8n, rLedger] = await Promise.allSettled([enviarN8n(), gravarLedger()])
+  if (rN8n.status === 'rejected') console.error('[webhook] falhou:', rN8n.reason && rN8n.reason.message)
+  if (rLedger.status === 'rejected') console.error('[ledger] falhou:', rLedger.reason && rLedger.reason.message)
 
   res.status(200).json({ ok: true })
 }

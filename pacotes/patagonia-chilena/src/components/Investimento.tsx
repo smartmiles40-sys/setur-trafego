@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
-import { expedicao, investimento, pagamentos, WHATSAPP } from "../data/expedicao";
+import { investimento, pagamentos, WHATSAPP } from "../data/expedicao";
 import { cn } from "@/lib/utils";
 
 const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
-  `Olá! Tenho interesse em reservar a experiência ${expedicao.nome} (6 dias). Pode me passar as condições?`
+  `Quero seguir os próximos passos`
 )}`;
 
 export default function Investimento() {

@@ -57,7 +57,7 @@ export const redesSociais: RedeSocial[] = [
     label: 'WhatsApp',
     descricao: 'Fale direto com a gente — atendimento humano.',
     // Mensagem pré-preenchida: a pessoa já chega se apresentando.
-    href: `https://wa.me/${whatsappNumero}?text=${encodeURIComponent('Vim do site e quero mais informações.')}`,
+    href: `https://wa.me/${whatsappNumero}?text=${encodeURIComponent('Quero seguir os próximos passos')}`,
     icone: MessageCircle,
   },
   {

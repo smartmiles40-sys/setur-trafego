@@ -100,7 +100,7 @@ export const pagamentos = [
 
 // Link de reserva no WhatsApp — reutilizado pelos CTAs da página.
 export const waReservaUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
-  `Olá! Tenho interesse em reservar a experiência ${expedicao.nome} (6 dias). Pode me passar as condições?`
+  `Quero seguir os próximos passos`
 )}`;
 
 // Bloco de encerramento (último antes do rodapé).

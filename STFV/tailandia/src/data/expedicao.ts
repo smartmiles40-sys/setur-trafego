@@ -529,4 +529,4 @@ export const whatsappConfig = {
   numero: '5511951251935',
   mensagem: 'Olá! Quero saber mais sobre a Expedição Tailândia 2027 — 6 a 21 de novembro de 2027.',
 }
-export const whatsappUrl = `https://wa.me/message/SRCJTP7OC6KFL1`
+export const whatsappUrl = `https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

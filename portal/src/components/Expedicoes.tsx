@@ -5,6 +5,10 @@ import type { Expedicao, StatusExpedicao } from '../data/expedicoes'
 import { reveal, revealEyebrow, revealCard, staggerContainer, viewportOnce } from '../lib/motion'
 import RevealImagem from './RevealImagem'
 
+// Comunidade do WhatsApp — destino dos cards de edições esgotadas (avisos das
+// próximas turmas + lista de espera); converte o interesse mesmo sem vaga.
+const COMUNIDADE_WHATSAPP = 'https://chat.whatsapp.com/Cfj2kHRCGjs0LbQN4z7knG'
+
 const statusInfo: Record<StatusExpedicao, { label: string; classe: string }> = {
   ativa: { label: 'Vagas abertas', classe: 'bg-lime text-dark-teal' },
   esgotada: { label: 'Esgotada', classe: 'bg-off-white/15 text-off-white/70 border border-off-white/20' },
@@ -93,15 +97,25 @@ export default function Expedicoes() {
 // ----------------------------------------------------------------------------
 export function CardExpedicao({ e, eager }: { e: Expedicao; eager: boolean }) {
   const ativa = e.status === 'ativa'
-  const temLink = e.link && e.link !== '#' && e.link !== '#avisar'
+  const esgotada = e.status === 'esgotada'
+  // Cards esgotados levam para a comunidade do WhatsApp; os demais usam o link
+  // da própria LP.
+  const destino = esgotada ? COMUNIDADE_WHATSAPP : e.link
+  const temLink = !!destino && destino !== '#' && destino !== '#avisar'
   const info = statusInfo[e.status]
   return (
     <motion.a
       variants={revealCard}
-      href={temLink ? e.link : undefined}
-      target={temLink && e.link.startsWith('http') ? '_blank' : undefined}
+      href={temLink ? destino : undefined}
+      target={temLink && destino.startsWith('http') ? '_blank' : undefined}
       rel="noopener noreferrer"
-      aria-label={temLink ? `Explorar expedição ${e.destino} ${e.ano}` : undefined}
+      aria-label={
+        esgotada
+          ? `${e.destino} ${e.ano} — turma esgotada. Entrar na comunidade do WhatsApp`
+          : temLink
+            ? `Explorar expedição ${e.destino} ${e.ano}`
+            : undefined
+      }
       className={`group block rounded-[2.5rem] overflow-hidden bg-dark-teal-light border border-off-white/10 shadow-card-lg
         transition-[transform,border-color,box-shadow] duration-base ease-out-quart ${
         temLink
@@ -166,9 +180,13 @@ export function CardExpedicao({ e, eager }: { e: Expedicao; eager: boolean }) {
               className="transition-transform duration-base ease-out-quart group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
             />
           </span>
-        ) : e.status === 'esgotada' ? (
-          <span className="inline-flex items-center gap-2 text-off-white/40 text-sm">
-            Edição encerrada
+        ) : esgotada ? (
+          <span className="inline-flex items-center gap-2 text-lime font-semibold text-sm">
+            Entrar na comunidade
+            <ArrowRight
+              size={16}
+              className="transition-transform duration-base ease-out-quart group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
+            />
           </span>
         ) : ativa ? (
           <span className="inline-flex items-center gap-2 text-lime text-sm">

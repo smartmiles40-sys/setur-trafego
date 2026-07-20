@@ -159,7 +159,7 @@ export const expedicoes: Expedicao[] = [
     resumo: 'Capadócia, Santorini e o melhor de dois mundos.',
     imagem: 'https://setur-trafego.vercel.app/assets/turkey-greece-CRQORUZB.jpg',
     link: 'https://lps3.setuforeuvouviagens.com.br/',
-    status: 'ativa',
+    status: 'esgotada',
     hora: 'meio-dia',
   },
 

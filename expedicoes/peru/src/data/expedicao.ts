@@ -8,7 +8,7 @@ export const expedicao = {
   fonte: '[Peru] - Tráfego',
   // Source ID do Bitrix24 — vai no payload como source_id p/ atribuir
   // a origem dessa LP no CRM.
-  sourceId: 'UC_2TKBBXv',
+  sourceId: 'UC_2TKBBX',
   nome: 'Peru',
   nomeUpper: 'PERU',
   ano: 2027,

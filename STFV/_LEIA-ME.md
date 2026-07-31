@@ -19,8 +19,13 @@ formulário fica **direto na página** e agora tem **3 etapas**:
    progresso** que enche até liberar. O vídeo dá **autoplay** sozinho. Tudo na MESMA
    página (sem `proxima-etapa.html`).
 
-As 2 LPs **sem VSL** (italia, turquia-grecia) seguem com o formulário de **2 etapas**
-(sem vídeo), intocadas.
+A **italia** (Costa Amalfitana) também tem VSL desde **2026-07-31**, mas com o vídeo
+**no meio** do funil: **Etapa 1** contato (sem Instagram) → **Etapa 2 vídeo** (o timer
+de 1 min trava o botão *Continuar*, não o envio) → **Etapa 3** perfil de viagem. Mesma
+mecânica (VslPlayer + barrinha + `form_video_unlocked`), só muda a ordem.
+
+A LP **sem VSL** (turquia-grecia) segue com o formulário de **2 etapas** (sem vídeo),
+intocada.
 
 ### Diferença para a V4 (`../expedicoes`) — atualizado em 2026-07-15
 **O A/B acabou: este funil venceu.** Em 2026-07-15 a V4 (`../expedicoes`) adotou o mesmo
@@ -30,9 +35,13 @@ Hoje as duas pastas rodam o **mesmo funil**; o que as separa é só **tracking +
 
 | | `../expedicoes` (V4) | `STFV` (esta) |
 |---|---|---|
-| `utm_content` | o que vier da URL | forçado `'STFV'` |
-| nome do lead | como o lead digitou | prefixado `(STFV)` |
+| `utm_content` | o que vier da URL (fallback `'v4'`) | forçado `'STFV'` |
+| nome do lead | como o lead digitou | **como o lead digitou** |
 | `site` no payload | `'trafego'` | `'stfv'` |
+
+> O nome do lead **não é mais prefixado com `(STFV)`** (removido a pedido do Bruno):
+> chegava sujo no Bitrix. A separação STFV × V4 continua inteira pelo `utm_content`
+> e pela coluna `site` do ledger — não recolocar o prefixo.
 
 ⚠️ Se for mexer no `FormularioLead.tsx` de uma pasta e copiar pra outra, **cuide dessas
 marcações** — se o `utm_content = 'STFV'` vazar pra V4, os leads dela são contados como

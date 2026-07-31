@@ -62,6 +62,12 @@ export const expedicao = {
     handle: '@setuforeuvouviagens',
     url: 'https://www.instagram.com/setuforeuvouviagens/',
   },
+  // VSL (vídeo VTurb/ConverteAI) — Etapa 2 do formulário trava o avanço por 1 min
+  vsl: {
+    playerId: 'vid-6a6cbb211515ef14bd61e4a5',
+    playerSrc:
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a6cbb211515ef14bd61e4a5/v4/player.js',
+  },
   iconeExpedicao: 'Sun' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

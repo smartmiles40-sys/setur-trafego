@@ -61,9 +61,9 @@ export const expedicao = {
   },
   // VSL (vídeo VTurb/ConverteAI) — Etapa 3 do formulário trava o envio por 1 min
   vsl: {
-    playerId: 'vid-6a3e9b45d8a1f8a3e9eeb492',
+    playerId: 'vid-6a6cc2121515ef14bd61eb17',
     playerSrc:
-      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a3e9b45d8a1f8a3e9eeb492/v4/player.js',
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a6cc2121515ef14bd61eb17/v4/player.js',
   },
   iconeExpedicao: 'Mountain' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }

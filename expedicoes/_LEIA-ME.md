@@ -16,7 +16,12 @@ formulário fica **direto na página**, em **3 etapas**:
    de **1 min**; o botão de envio fica bloqueado com uma mini barra de progresso até
    liberar. O vídeo dá autoplay sozinho. Tudo na MESMA página.
 
-As 2 LPs **sem VSL** (italia, turquia-grecia) seguem com o formulário de **2 etapas**.
+A **italia** (Costa Amalfitana) também tem VSL desde **2026-07-31**, mas com o vídeo
+**no meio** do funil: **Etapa 1** contato (sem Instagram) → **Etapa 2 vídeo** (o timer
+de 1 min trava o botão *Continuar*, não o envio) → **Etapa 3** perfil de viagem. Mesma
+mecânica (VslPlayer + barrinha + `form_video_unlocked`), só muda a ordem.
+
+A LP **sem VSL** (turquia-grecia) segue com o formulário de **2 etapas**.
 
 > **Mudança de 2026-07-15:** antes a V4 usava um funil de **2 páginas** — a LP tinha só um
 > botão que levava pra `proxima-etapa.html`, onde ficavam o vídeo e o formulário. Esse
@@ -34,8 +39,9 @@ As 2 LPs **sem VSL** (italia, turquia-grecia) seguem com o formulário de **2 et
 ## Versão irmã: `../STFV`
 A pasta `../STFV` é uma **cópia desta**, com o **mesmo funil**, servindo uma **segunda
 hospedagem na Vercel** (outra URL). Depois que a V4 adotou o funil da STFV, o que separa
-as duas é só **tracking**: a STFV força `utm_content = 'STFV'`, prefixa o nome do lead com
-`(STFV)` e manda `site: 'stfv'` — a V4 manda `site: 'trafego'` e não marca nada.
+as duas é só **tracking**: a STFV força `utm_content = 'STFV'` e manda `site: 'stfv'` —
+a V4 manda `site: 'trafego'` e usa `'v4'` como fallback do `utm_content`. O nome do lead
+vai igual nas duas (a STFV já **não** prefixa mais com `(STFV)`).
 Detalhes em `../STFV/_LEIA-ME.md`.
 
 > ⚠️ **VTurb tem trava de domínio.** O vídeo só toca em **domínios autorizados** no painel

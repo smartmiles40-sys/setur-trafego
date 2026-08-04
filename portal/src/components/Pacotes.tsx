@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Clock, MapPin } from 'lucide-react'
 import { pacotes } from '../data/home'
 import { reveal, revealEyebrow, revealCard, staggerContainer, viewportOnce } from '../lib/motion'
+import { comAtribuicao } from '../lib/tracking'
 import RevealImagem from './RevealImagem'
 
 export default function Pacotes() {
@@ -42,11 +43,14 @@ export default function Pacotes() {
         >
           {pacotes.map((p) => {
             const temLink = p.link && p.link !== '#'
+            // Repassa UTMs/click ids do portal pro destino (só nos nossos
+            // domínios; link de WhatsApp passa intacto).
+            const destino = temLink ? comAtribuicao(p.link) : undefined
             return (
               <motion.a
                 key={p.id}
                 variants={revealCard}
-                href={temLink ? p.link : undefined}
+                href={destino}
                 target={temLink && p.link.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer"
                 aria-label={temLink ? `Ver pacote ${p.titulo}` : undefined}

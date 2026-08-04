@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { expedicoes } from '../data/expedicoes'
 import type { Expedicao, StatusExpedicao } from '../data/expedicoes'
 import { reveal, revealEyebrow, revealCard, staggerContainer, viewportOnce } from '../lib/motion'
+import { comAtribuicao } from '../lib/tracking'
 import RevealImagem from './RevealImagem'
 
 // Comunidade do WhatsApp — destino dos cards de edições esgotadas (avisos das
@@ -98,9 +99,13 @@ export default function Expedicoes() {
 export function CardExpedicao({ e, eager }: { e: Expedicao; eager: boolean }) {
   const ativa = e.status === 'ativa'
   const esgotada = e.status === 'esgotada'
-  // Cards esgotados levam para a comunidade do WhatsApp; os demais usam o link
-  // da própria LP.
-  const destino = esgotada ? COMUNIDADE_WHATSAPP : e.link
+  // Cards que apontam para a comunidade do WhatsApp: as edições esgotadas e as
+  // "em breve" marcadas com `comunidade` (captura o interesse antes de a turma
+  // abrir). Os demais usam o link da própria LP.
+  const paraComunidade = esgotada || e.comunidade === true
+  // `comAtribuicao` repassa as UTMs/click ids do portal pra LP (sem isso, quem
+  // chega taggeado aqui e clica no card vira lead sem origem).
+  const destino = paraComunidade ? COMUNIDADE_WHATSAPP : comAtribuicao(e.link)
   const temLink = !!destino && destino !== '#' && destino !== '#avisar'
   const info = statusInfo[e.status]
   return (
@@ -112,9 +117,11 @@ export function CardExpedicao({ e, eager }: { e: Expedicao; eager: boolean }) {
       aria-label={
         esgotada
           ? `${e.destino} ${e.ano} — turma esgotada. Entrar na comunidade do WhatsApp`
-          : temLink
-            ? `Explorar expedição ${e.destino} ${e.ano}`
-            : undefined
+          : paraComunidade
+            ? `${e.destino} ${e.ano} — em breve. Entrar na comunidade do WhatsApp para saber da próxima turma`
+            : temLink
+              ? `Explorar expedição ${e.destino} ${e.ano}`
+              : undefined
       }
       className={`group block rounded-[2.5rem] overflow-hidden bg-dark-teal-light border border-off-white/10 shadow-card-lg
         transition-[transform,border-color,box-shadow] duration-base ease-out-quart ${
@@ -180,7 +187,7 @@ export function CardExpedicao({ e, eager }: { e: Expedicao; eager: boolean }) {
               className="transition-transform duration-base ease-out-quart group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
             />
           </span>
-        ) : esgotada ? (
+        ) : paraComunidade ? (
           <span className="inline-flex items-center gap-2 text-lime font-semibold text-sm">
             Entrar na comunidade
             <ArrowRight

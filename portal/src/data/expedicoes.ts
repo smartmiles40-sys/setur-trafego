@@ -27,6 +27,10 @@ export interface Expedicao {
   link: string;
   status: StatusExpedicao;
   hora: HoraDoDia;
+  // Quando true, o card leva para a comunidade do WhatsApp em vez do `link`
+  // (usado nas edições "em breve" ainda sem LP: captura o interesse antes de a
+  // turma abrir). Edições esgotadas já vão para a comunidade automaticamente.
+  comunidade?: boolean;
 }
 
 export const expedicoes: Expedicao[] = [
@@ -286,6 +290,7 @@ export const expedicoes: Expedicao[] = [
     link: '#avisar',
     status: 'em-breve',
     hora: 'manha',
+    comunidade: true,
   },
 ];
 

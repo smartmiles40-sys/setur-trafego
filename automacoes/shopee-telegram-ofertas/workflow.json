@@ -1,0 +1,182 @@
+{
+  "name": "Shopee Ofertas -> Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9,13,18 * * *"
+            }
+          ]
+        }
+      },
+      "id": "node-schedule",
+      "name": "Agendar (9h/13h/18h)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ====== CREDENCIAIS SHOPEE (cole aqui depois da aprovacao) ======\nconst APP_ID = '<SEU_APP_ID>';   // dica: melhor usar $env.SHOPEE_APP_ID\nconst SECRET = '<SEU_SECRET>';   // dica: melhor usar $env.SHOPEE_SECRET\n// ================================================================\n\nconst timestamp = Math.floor(Date.now() / 1000);\n\n// \"Produtos em alta / mais vendidos\" -> sortType: 2 (Most sold)\n// listType: 0=Recomendado 1=Maior comissao 2=Top performance\nconst query = '{ productOfferV2(sortType: 2, page: 1, limit: 30) { nodes { itemId productName priceMin priceMax priceDiscountRate sales ratingStar commissionRate commission imageUrl shopName offerLink productLink } pageInfo { page limit hasNextPage } } }';\n\nconst payload = JSON.stringify({ query });\n\n// Assinatura = SHA256(AppId + Timestamp + Payload + Secret)\nconst signBase = APP_ID + timestamp + payload + SECRET;\n\nreturn [{ json: { appId: APP_ID, timestamp, payload, signBase } }];"
+      },
+      "id": "node-prep",
+      "name": "Preparar requisicao",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hash",
+        "type": "SHA256",
+        "value": "={{ $json.signBase }}",
+        "dataPropertyName": "signature",
+        "encoding": "hex"
+      },
+      "id": "node-crypto",
+      "name": "Assinar (SHA256)",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open-api.affiliate.shopee.com.br/graphql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=SHA256 Credential={{ $json.appId }}, Timestamp={{ $json.timestamp }}, Signature={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {}
+      },
+      "id": "node-http",
+      "name": "Shopee GraphQL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const resp = $input.first().json;\nconst lista = (resp && resp.data && resp.data.productOfferV2 && resp.data.productOfferV2.nodes) || [];\nif (!lista.length) {\n  throw new Error('Shopee nao retornou ofertas. Resposta: ' + JSON.stringify(resp).slice(0, 600));\n}\n\n// Memoria entre execucoes: nao repetir itens ja postados\nconst store = $getWorkflowStaticData('global');\nstore.posted = store.posted || [];\n\nconst frescos = lista.filter(n => !store.posted.includes(n.itemId));\nconst pool = frescos.length ? frescos : lista;\n\n// Dentre os disponiveis, prioriza a MAIOR comissao pra voce\npool.sort((a, b) => (parseFloat(b.commissionRate) || 0) - (parseFloat(a.commissionRate) || 0));\nconst p = pool[0];\n\nstore.posted.push(p.itemId);\nif (store.posted.length > 500) store.posted = store.posted.slice(-500);\n\nconst preco = (p.priceMin === p.priceMax)\n  ? ('R$ ' + p.priceMin)\n  : ('R$ ' + p.priceMin + ' - R$ ' + p.priceMax);\nconst desconto = p.priceDiscountRate ? ('🔥 ' + p.priceDiscountRate + '% OFF') : '';\n\nconst caption = [\n  '🛍️ <b>' + p.productName + '</b>',\n  '',\n  desconto,\n  '💰 ' + preco,\n  '⭐ ' + (p.ratingStar || '-') + '   |   📦 ' + (p.sales || 0) + ' vendidos',\n  '',\n  '👉 <a href=\"' + p.offerLink + '\">COMPRAR NA SHOPEE</a>'\n].filter(Boolean).join('\\n');\n\nreturn [{ json: { caption, imageUrl: p.imageUrl, offerLink: p.offerLink, itemId: p.itemId } }];"
+      },
+      "id": "node-pick",
+      "name": "Escolher oferta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "<CHAT_ID_DO_GRUPO>",
+        "binaryData": false,
+        "file": "={{ $json.imageUrl }}",
+        "additionalFields": {
+          "caption": "={{ $json.caption }}",
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "node-telegram",
+      "name": "Postar no grupo",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1340,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Agendar (9h/13h/18h)": {
+      "main": [
+        [
+          {
+            "node": "Preparar requisicao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar requisicao": {
+      "main": [
+        [
+          {
+            "node": "Assinar (SHA256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assinar (SHA256)": {
+      "main": [
+        [
+          {
+            "node": "Shopee GraphQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shopee GraphQL": {
+      "main": [
+        [
+          {
+            "node": "Escolher oferta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escolher oferta": {
+      "main": [
+        [
+          {
+            "node": "Postar no grupo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

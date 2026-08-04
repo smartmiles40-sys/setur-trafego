@@ -29,6 +29,9 @@ const WEBHOOKS = {
   tailandia: `${N8N_BASE}/b9fc4978-7927-42c7-9dad-5eae0550049f`,
   'turquia-grecia': `${N8N_BASE}/8674b368-80f4-4824-8d98-dbb2c915febb`,
   italia: `${N8N_BASE}/957fa583-275d-40c0-b766-7109c8afa2fa`,
+  // ⚠️ PENDENTE: criar o workflow n8n da China e adicionar aqui a URL do
+  // webhook para o slug 'china' ANTES de publicar (ver NAO-PUBLICAR.md).
+  // china: `${N8N_BASE}/<uuid-do-webhook>`,
 }
 
 /** slug explícito do payload, ou derivado de form_name ("expedicao-<slug>-<ano>"). */
@@ -79,6 +82,7 @@ export default async function handler(req, res) {
     nome: str(body.nome, 150).trim(),
     whatsapp: normalizarWhatsapp(body.whatsapp),
     email: str(body.email, 120).toLowerCase().trim(),
+    instagram: str(body.instagram, 40),
     expedicao: str(body.expedicao, 120),
     fonte: str(body.fonte, 80),
     source_id: str(body.source_id, 40),
@@ -160,7 +164,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           lead_id: lead.lead_id,
-          site: 'stfv',
+          site: 'trafego',
           slug,
           slug_ok: slugOk,
           form_name: lead.form_name || '',

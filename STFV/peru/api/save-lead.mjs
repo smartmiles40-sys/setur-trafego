@@ -39,6 +39,11 @@ function slugDoLead(lead) {
 }
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+// Click ids: única âncora quando a campanha não manda UTM (autotagging do Google
+// manda só gclid). Vão pro n8n junto com as UTMs. No ledger eles entram dentro
+// de `raw` — NÃO como coluna própria, pra não quebrar o insert do site_leads.
+const CLICK_KEYS = ['utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid']
+const TRACK_KEYS = [...UTM_KEYS, ...CLICK_KEYS]
 
 /** Payload/CRM sempre recebem +55 + dígitos (ex.: +5542984265706). */
 function normalizarWhatsapp(valor) {
@@ -91,13 +96,7 @@ export default async function handler(req, res) {
     etapa: str(body.etapa, 30) || 'completo',
     formulario_completo: body.formulario_completo !== false,
   }
-  for (const k of UTM_KEYS) lead[k] = str(body[k], 200)
-
-  // STFV: prefixa o nome do lead com (STFV) para distinguir a origem no Bitrix
-  // (esta versão usa o MESMO workflow do n8n das LPs principais).
-  if (lead.nome && !String(lead.nome).startsWith('(STFV)')) {
-    lead.nome = `(STFV) ${lead.nome}`
-  }
+  for (const k of TRACK_KEYS) lead[k] = str(body[k], 200)
 
   // Validação no servidor: nome e WhatsApp são obrigatórios e com forma mínima.
   if (lead.nome.length < 2) {

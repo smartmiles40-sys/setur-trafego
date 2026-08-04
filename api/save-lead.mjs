@@ -39,6 +39,11 @@ function slugDoLead(lead) {
 }
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+// Click ids: única âncora quando a campanha não manda UTM (autotagging do Google
+// manda só gclid). Vão pro n8n junto com as UTMs. No ledger eles entram dentro
+// de `raw` — NÃO como coluna própria, pra não quebrar o insert do site_leads.
+const CLICK_KEYS = ['utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid']
+const TRACK_KEYS = [...UTM_KEYS, ...CLICK_KEYS]
 
 /** Payload/CRM sempre recebem +55 + dígitos (ex.: +5542984265706). */
 function normalizarWhatsapp(valor) {
@@ -74,7 +79,7 @@ export default async function handler(req, res) {
     etapa: body.etapa || 'completo',
     formulario_completo: body.formulario_completo !== false,
   }
-  for (const k of UTM_KEYS) lead[k] = lead[k] || ''
+  for (const k of TRACK_KEYS) lead[k] = lead[k] || ''
 
   // Validação mínima: sem nome E sem whatsapp não é lead
   if (!lead.nome && !lead.whatsapp) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { expedicao } from '../data/expedicao'
 
 /**
@@ -24,8 +24,27 @@ const FORM_NAME = `expedicao-${SLUG}-${expedicao.ano}`
 const LEAD_ID_KEY = `${SLUG}_lead_id`
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const
-type UtmKey = (typeof UTM_KEYS)[number]
-type Utms = Record<UtmKey, string>
+// Click ids: única âncora de atribuição quando a campanha não taggeia UTM — o
+// autotagging do Google, por exemplo, manda SÓ gclid. Seguem no payload do lead.
+const CLICK_KEYS = ['utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid'] as const
+const TRACK_KEYS = [...UTM_KEYS, ...CLICK_KEYS] as const
+type TrackKey = (typeof TRACK_KEYS)[number]
+type Track = Record<TrackKey, string>
+
+const TRACK_VAZIO = TRACK_KEYS.reduce((acc, k) => ({ ...acc, [k]: '' }), {} as Track)
+
+// First-touch por aba: a atribuição sobrevive a recarga e a navegação interna.
+// Antes vivia só na URL da página + num ref, então qualquer pulo zerava.
+const TRACK_STORAGE_KEY = `${SLUG}_track`
+
+function lerTrackSalvo(): Track {
+  try {
+    const bruto = sessionStorage.getItem(TRACK_STORAGE_KEY)
+    return bruto ? { ...TRACK_VAZIO, ...JSON.parse(bruto) } : { ...TRACK_VAZIO }
+  } catch {
+    return { ...TRACK_VAZIO } // sessionStorage bloqueado (aba privada)
+  }
+}
 
 // ---- Etapa 2: perguntas de qualificação (radios) -------------------------
 // `label` = texto legível completo (vai pro CRM assim, regra do padrão).
@@ -127,20 +146,27 @@ export default function FormularioLead() {
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
-  const utmsRef = useRef<Utms>({
-    utm_source: '', utm_medium: '', utm_campaign: '', utm_term: '', utm_content: '',
-  })
+  const [track, setTrack] = useState<Track>(TRACK_VAZIO)
 
-  // Captura UTMs da URL no mount (papel do scripts-critical.js no padrão)
+  // Captura a atribuição no mount: mescla o que já está salvo na aba com o que
+  // veio na URL. First-touch — quem chegou primeiro manda, a URL só preenche
+  // campo vazio.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
-    UTM_KEYS.forEach((k) => {
+    const proximo = lerTrackSalvo()
+    TRACK_KEYS.forEach((k) => {
       const v = params.get(k)
-      if (v) utmsRef.current[k] = v
+      if (v && !proximo[k]) proximo[k] = v.slice(0, 200)
     })
+    try {
+      sessionStorage.setItem(TRACK_STORAGE_KEY, JSON.stringify(proximo))
+    } catch {
+      /* aba privada: segue só em memória */
+    }
     // STFV: marca a versão sem vídeo no utm_content — diferencia do V4 no
     // CRM e no disparo de conversão (expedicao_lead). Força "STFV" sempre.
-    utmsRef.current.utm_content = 'STFV'
+    // Derivado, não persistido (o storage guarda a atribuição real).
+    setTrack({ ...proximo, utm_content: 'STFV' })
   }, [])
 
   const setErro = useCallback((campo: string, msg: string) => {
@@ -215,7 +241,7 @@ export default function FormularioLead() {
         fonte: expedicao.fonte,
         source_id: expedicao.sourceId,
         ...respostas,
-        ...utmsRef.current,
+        ...track,
         form_name: FORM_NAME,
         timestamp: new Date().toISOString(),
         etapa: 'completo',
@@ -261,7 +287,7 @@ export default function FormularioLead() {
             investimento: slugDaResposta('investimento', respostas['investimento']),
             timing: slugDaResposta('decisao', respostas['decisao']),
           },
-          ...utmsRef.current,
+          ...track,
           eventCallback: irParaObrigado,
           eventTimeout: 2000,
         })
@@ -281,7 +307,7 @@ export default function FormularioLead() {
         setEnviando(false)
       }
     },
-    [respostas, nome, whatsapp, email, setErro],
+    [respostas, nome, whatsapp, email, setErro, track],
   )
 
   return (
@@ -295,8 +321,8 @@ export default function FormularioLead() {
     >
       {/* Hidden: lead_id + UTMs (contrato com GTM/backend) */}
       <input type="hidden" name="lead_id" id="lead_id" value={sessionStorage.getItem(LEAD_ID_KEY) ?? ''} readOnly />
-      {UTM_KEYS.map((k) => (
-        <input key={k} type="hidden" name={k} id={k} value={utmsRef.current[k]} readOnly />
+      {TRACK_KEYS.map((k) => (
+        <input key={k} type="hidden" name={k} id={k} value={track[k]} readOnly />
       ))}
 
       {/* Indicador de progresso */}

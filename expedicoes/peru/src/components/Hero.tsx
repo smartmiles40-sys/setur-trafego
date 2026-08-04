@@ -111,10 +111,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 1.1 }}
-            href="#formulario"
+            href="#roteiro"
             className="btn-primary text-base md:text-xl px-6 md:px-14 py-4 md:py-5 shadow-2xl group max-w-[calc(100vw-2rem)]"
           >
-            Quero seguir o próximo passo
+            Quero ver o roteiro
             <ArrowRight
               size={20}
               className="transition-transform group-hover:translate-x-1"

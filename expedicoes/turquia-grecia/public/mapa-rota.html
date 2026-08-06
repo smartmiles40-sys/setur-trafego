@@ -104,7 +104,7 @@
 
   const projection = d3.geoEquirectangular()
     .translate([width / 2, height / 2])
-    .scale(width / (2 * Math.PI));
+    .scale(460);
 
   const path = d3.geoPath(projection);
   const graticule = d3.geoGraticule10();
@@ -131,15 +131,16 @@
   const segments = [
     { from: S.sao,       to: S.istambul,  stroke: '#09282B', dashed: true },  // 0  voo internacional
     { from: S.istambul,  to: S.capadocia, stroke: '#E67E22', dashed: true },  // 1  voo doméstico
-    { from: S.capadocia, to: S.pamukkale, stroke: '#1ABC9C' },                // 2  van
-    { from: S.pamukkale, to: S.kusadasi,  stroke: '#1F7A8C' },                // 3  van
-    { from: S.kusadasi,  to: S.patmos,    stroke: '#BFD850' },                // 4  barco (cruzeiro)
-    { from: S.patmos,    to: S.creta,     stroke: '#8E44AD' },                // 5  barco
-    { from: S.creta,     to: S.santorini, stroke: '#8E44AD' },                // 6  barco
-    { from: S.santorini, to: S.atenas,    stroke: '#27AE60' },                // 7  barco
-    { from: S.atenas,    to: S.mykonos,   stroke: '#27AE60' },                // 8  barco
-    { from: S.mykonos,   to: S.istambul,  stroke: '#D4AC0D', dashed: true },  // 9  voo Grécia → Turquia
-    { from: S.istambul,  to: S.sao,       stroke: '#09282B', dashed: true },  // 10 voo internacional
+    { from: S.capadocia, to: S.kusadasi,  stroke: '#E67E22', dashed: true },  // 2  voo (Capadócia → Kusadasi)
+    { from: S.kusadasi,  to: S.patmos,    stroke: '#BFD850' },                // 3  barco (embarque em Kusadasi)
+    { from: S.patmos,    to: S.creta,     stroke: '#8E44AD' },                // 4  barco
+    { from: S.creta,     to: S.santorini, stroke: '#8E44AD' },                // 5  barco
+    { from: S.santorini, to: S.atenas,    stroke: '#27AE60' },                // 6  barco
+    { from: S.atenas,    to: S.mykonos,   stroke: '#27AE60' },                // 7  barco
+    { from: S.mykonos,   to: S.kusadasi,  stroke: '#1F7A8C' },                // 8  barco (retorno ao porto)
+    { from: S.kusadasi,  to: S.pamukkale, stroke: '#1ABC9C' },                // 9  van (Kusadasi → Pamukkale)
+    { from: S.pamukkale, to: S.istambul,  stroke: '#1F7A8C' },                // 10 van (Pamukkale → Istambul)
+    { from: S.istambul,  to: S.sao,       stroke: '#09282B', dashed: true },  // 11 voo internacional
   ];
 
   const buildLine = (from, to, steps = 48) => {
@@ -189,11 +190,13 @@
     // ===== Fases sequenciais (na ordem real da viagem) =====
     // vehicle: 'plane' = voo | 'van' = transfer terrestre | 'boat' = barco/cruzeiro
     const phaseDefs = [
-      { segs: [0],               vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Istambul (voo internacional)
-      { segs: [1],               vehicle: 'plane', scale: SCALE.flight, duration: 2800 }, // Istambul → Capadócia (voo)
-      { segs: [2, 3],            vehicle: 'van',   scale: SCALE.ground, duration: 4500 }, // Capadócia → Pamukkale → Kusadasi
-      { segs: [4, 5, 6, 7, 8],   vehicle: 'boat',  scale: SCALE.ground, duration: 9000 }, // Cruzeiro Egeu (Patmos · Creta · Santorini · Atenas · Mykonos)
-      { segs: [9, 10],           vehicle: 'plane', scale: SCALE.flight, duration: 8000 }, // Mykonos → Istambul → GRU (voos)
+      { segs: [0],                  vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Istambul (voo internacional)
+      { segs: [1],                  vehicle: 'plane', scale: SCALE.flight, duration: 2800 }, // Istambul → Capadócia (voo)
+      { segs: [2],                  vehicle: 'plane', scale: SCALE.flight, duration: 3500 }, // Capadócia → Kusadasi (voo)
+      { segs: [3, 4, 5, 6, 7, 8],   vehicle: 'boat',  scale: SCALE.ground, duration: 9000 }, // Cruzeiro Egeu + retorno a Kusadasi (Patmos · Creta · Santorini · Atenas · Mykonos)
+      { segs: [9],                  vehicle: 'van',   scale: SCALE.ground, duration: 2600 }, // Kusadasi → Pamukkale
+      { segs: [10],                 vehicle: 'van',   scale: SCALE.ground, duration: 4000 }, // Pamukkale → Istambul (van)
+      { segs: [11],                 vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Istambul → GRU (voo internacional)
     ];
 
     phaseDefs.forEach(p => {

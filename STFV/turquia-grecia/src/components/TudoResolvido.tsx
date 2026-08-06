@@ -86,9 +86,18 @@ export default function TudoResolvido() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="col-span-2 md:col-span-2 md:row-span-2 relative bg-gradient-to-br from-dark-teal via-dark-teal-light to-dark-teal rounded-3xl p-6 md:p-8 overflow-hidden min-h-[240px] md:min-h-[340px] incan-pattern"
+              className="col-span-2 md:col-span-2 md:row-span-2 relative bg-dark-teal rounded-3xl p-6 md:p-8 overflow-hidden min-h-[240px] md:min-h-[340px]"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-dark-teal/60" />
+              {/* Mesma imagem da Hero */}
+              <img
+                src={expedicao.heroImage}
+                alt={`Expedição ${expedicao.nome}`}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Overlay para legibilidade do texto */}
+              <div className="absolute inset-0 bg-gradient-to-br from-dark-teal/75 via-dark-teal/55 to-dark-teal/85" />
               <div className="relative h-full flex flex-col justify-between">
                 <p className="eyebrow text-lime opacity-90">A expedição</p>
                 <div>

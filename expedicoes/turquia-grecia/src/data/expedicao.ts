@@ -64,6 +64,16 @@ export const expedicao = {
     handle: '@setuforeuvouviagens',
     url: 'https://www.instagram.com/setuforeuvouviagens/',
   },
+  // VSL (vídeo VTurb/ConverteAI) — Etapa 2 do formulário trava o avanço por 1 min.
+  // orientacao 'vertical': este vídeo foi gravado em 9:16 (celular), diferente das
+  // outras LPs (16:9). O VslPlayer usa isso pra montar o placeholder na proporção
+  // certa — sem ele o player abre em 16:9 e o vídeo fica com tarja preta dos lados.
+  vsl: {
+    playerId: 'vid-6a79dfa17a9d4ddb29b8cdd6',
+    playerSrc:
+      'https://scripts.converteai.net/f972c0cf-928d-4614-95cd-e71e2faac7be/players/6a79dfa17a9d4ddb29b8cdd6/v4/player.js',
+    orientacao: 'vertical',
+  },
   iconeExpedicao: 'Compass' as 'Leaf' | 'Mountain' | 'Snowflake' | 'Sun' | 'Palmtree' | 'Compass',
 }
 

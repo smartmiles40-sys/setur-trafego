@@ -55,6 +55,8 @@
       color: rgba(9, 40, 43, 0.5); font-size: 14px; text-decoration: none;
     }
     .voltar:hover { color: #09282B; }
+    .aviso { margin-top: 16px; font-size: 14px; color: rgba(9, 40, 43, 0.55); }
+    .aviso[hidden] { display: none; }
     .marca { margin-top: 36px; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(9, 40, 43, 0.4); }
   </style>
 </head>
@@ -69,11 +71,63 @@
       Nosso time vai analisar seu perfil e entrar em contato pelo WhatsApp
       para alinharmos os próximos passos da sua expedição. Fica de olho no celular!
     </p>
-    <a class="btn" href="https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos">
+    <a class="btn" id="btn-whatsapp" href="https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos">
       Chamar no WhatsApp agora
     </a>
+    <p class="aviso" id="aviso-redirect" hidden>
+      Abrindo seu WhatsApp em <b id="contagem">3</b>…
+    </p>
     <a class="voltar" href="./">← Voltar para a página da expedição</a>
     <div class="marca">Se Tu For, Eu Vou! · Viagens</div>
   </main>
+  <script>
+    /**
+     * Leva o lead direto pro WhatsApp depois do envio do formulário.
+     * O countdown existe pra dar tempo do GTM/Stape disparar a conversão desta
+     * página antes de sair dela — é aqui que a conversão é contada.
+     * A mensagem personalizada vem do FormularioLead pelo sessionStorage
+     * (mesma origem); sem ela, cai na mensagem padrão.
+     */
+    (function () {
+      var NUMERO = '5511951251935';
+      var MSG_PADRAO = 'Quero seguir os próximos passos';
+      var MSG_KEY = 'stfv_wa_msg';
+      var FEITO_KEY = 'stfv_wa_redirecionado';
+      var SEGUNDOS = 3;
+
+      var storageOk = true;
+      function ler(chave) {
+        try { return sessionStorage.getItem(chave); } catch (e) { storageOk = false; return null; }
+      }
+
+      var msgSalva = ler(MSG_KEY);
+      var jaRedirecionou = ler(FEITO_KEY);
+      var url = 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(msgSalva || MSG_PADRAO);
+
+      var btn = document.getElementById('btn-whatsapp');
+      if (btn) btn.href = url;
+
+      // Só redireciona sozinho quem acabou de enviar o formulário (tem mensagem
+      // salva), e uma vez só — senão voltar do WhatsApp vira laço. Em aba privada
+      // o sessionStorage estoura: aí redireciona mesmo assim, com a msg padrão.
+      if ((!msgSalva && storageOk) || jaRedirecionou) return;
+      try { sessionStorage.setItem(FEITO_KEY, '1'); } catch (e) {}
+
+      var aviso = document.getElementById('aviso-redirect');
+      var contagem = document.getElementById('contagem');
+      if (aviso) aviso.hidden = false;
+
+      var restante = SEGUNDOS;
+      var timer = setInterval(function () {
+        restante -= 1;
+        if (contagem) contagem.textContent = restante;
+        if (restante <= 0) {
+          clearInterval(timer);
+          // replace: voltar do WhatsApp cai na LP, não nesta página
+          window.location.replace(url);
+        }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

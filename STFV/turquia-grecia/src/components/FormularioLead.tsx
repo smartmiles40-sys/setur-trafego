@@ -135,6 +135,26 @@ function mascaraWhatsapp(valor: string) {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
+// ---- Redirecionamento pro WhatsApp ----------------------------------------
+// A obrigado.html é um HTML estático compartilhado: ela não conhece a LP nem o
+// lead. Então o formulário deixa a mensagem já montada no sessionStorage (mesma
+// origem) e a obrigado.html só monta o wa.me e manda o lead pra lá. As chaves
+// são FIXAS (sem slug) porque o outro lado é HTML puro, sem acesso ao bundle.
+const WHATSAPP_MSG_KEY = 'stfv_wa_msg'
+const WHATSAPP_REDIRECT_KEY = 'stfv_wa_redirecionado'
+
+function guardarMensagemWhatsapp(nomeLead: string) {
+  const msg = `Olá! Sou ${nomeLead.trim()} e acabei de preencher o formulário da Expedição ${expedicao.nome} ${expedicao.ano}. Quero seguir os próximos passos.`
+  try {
+    sessionStorage.setItem(WHATSAPP_MSG_KEY, msg)
+    // envio novo = pode redirecionar de novo (a trava existe pra quem volta do
+    // WhatsApp não cair num laço)
+    sessionStorage.removeItem(WHATSAPP_REDIRECT_KEY)
+  } catch {
+    /* aba privada: a obrigado.html redireciona com a mensagem padrão */
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export default function FormularioLead() {
@@ -266,6 +286,7 @@ export default function FormularioLead() {
           if (navegou) return
           navegou = true
           sessionStorage.removeItem(LEAD_ID_KEY)
+          guardarMensagemWhatsapp(nome)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
         }
 
@@ -299,6 +320,7 @@ export default function FormularioLead() {
           // Em dev o /api não existe (função roda só na Vercel) — segue o fluxo
           console.warn('[dev] save-lead indisponível, simulando sucesso:', err)
           sessionStorage.removeItem(LEAD_ID_KEY)
+          guardarMensagemWhatsapp(nome)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
           return
         }

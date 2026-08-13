@@ -43,7 +43,7 @@ export interface RedeSocial {
   icone: LucideIcon;
 }
 
-export const whatsappNumero = '5511951251935';
+export const whatsappNumero = '551148636051';
 
 export const redesSociais: RedeSocial[] = [
   {

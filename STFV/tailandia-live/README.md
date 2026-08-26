@@ -202,6 +202,62 @@ LPs de expedição, senão o custo por lead das duas campanhas se mistura.
 
 ---
 
+## 5b. Conversão no Meta (PENDENTE — sem isso a campanha otimiza às cegas)
+
+**Medido em produção em 26/08:** o Pixel (id `2183251135850367`) é inicializado
+pelo GTM e cria o cookie `_fbp`, mas **o navegador não envia evento nenhum** ao
+Meta — nem um `PageView` disparado à mão sai. O transporte é **server-side**:
+
+```
+página → dataLayer → GTM (web) → container Stape → Conversions API do Meta
+```
+
+Quem conta a conversão, portanto, é uma **tag no GTM** acionada por um evento do
+dataLayer. O container hoje escuta `expedicao_lead` (as LPs de expedição). Esta
+LP manda **`live_lead`** — nome que ele não conhece. Resultado: a Meta vê a
+visita e nunca a conversão.
+
+### O que fazer no GTM (container GTM-W48Q7JG9)
+
+1. **Acionador** → Novo → *Evento personalizado*
+   - Nome do evento: `live_lead` (exato, diferencia maiúsculas)
+   - Dispara em: todos os eventos personalizados
+2. **Tag** → abra a tag de conversão que hoje dispara no `expedicao_lead` →
+   *Copiar* → renomeie (ex.: "Meta - Lead - Live") → troque o acionador pelo que
+   você acabou de criar. Não mexa em mais nada: as variáveis do dataLayer
+   continuam valendo (estrutura abaixo).
+3. Se a tag manda **Event ID** para deduplicar com a CAPI, aponte para a
+   variável do dataLayer **`event_id`** (esta LP já envia; é o mesmo `lead_id`).
+4. **Preview** apontando para a URL da LP, envie um lead de teste e confira no
+   *Gerenciador de Eventos do Meta → Testar eventos* se chega como **Lead**.
+
+### O que a LP entrega no dataLayer
+
+```js
+{
+  event: 'live_lead',
+  lead_id: '<uuid>',
+  event_id: '<mesmo uuid>',        // use este na deduplicação
+  destino: 'tailandia-live',
+  posicao: 'hero' | 'fim',         // qual formulário converteu
+  lead: { nome, email, whatsapp },  // whatsapp em E.164, email minúsculo
+  form_name: 'live-tailandia-live-2027',
+  utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+  gclid, fbclid, utm_id, gbraid, wbraid
+}
+```
+
+> A estrutura de `lead` é a mesma do `expedicao_lead` (menos o `instagram`, que
+> esta LP não pede) — então as variáveis que a tag antiga já usa funcionam.
+
+> ⚠️ **Domínio.** Em `*.vercel.app` não dá para verificar o domínio no Business
+> Manager (não é seu), e sem verificação não há Aggregated Event Measurement — a
+> atribuição no público iOS fica degradada. Antes de investir em mídia, aponte um
+> subdomínio próprio (ex.: `live.setuforeuvouviagens.com.br`), que herda a
+> verificação do domínio principal.
+
+---
+
 ## 6. Rodar e publicar
 
 ```bash

@@ -67,20 +67,22 @@ function pushDataLayer(event: string, data?: Record<string, unknown>) {
 }
 
 /**
- * Conversão no Pixel do Meta, disparada DIRETO daqui.
+ * Conversão no Pixel do Meta — hoje é só uma REDE DE SEGURANÇA, não o canal.
  *
- * O Pixel já é carregado pelo GTM (server-side, via Stape) — mas o container
- * só tem trigger para `expedicao_lead`, o evento das LPs de expedição. Esta LP
- * manda `live_lead`, um nome que ele não conhece: sem esta chamada, o Meta vê
- * a visita e nunca a conversão, e a campanha otimiza às cegas.
+ * Medido em produção (26/08): o Pixel é inicializado pelo GTM e cria o `_fbp`,
+ * mas o navegador NÃO envia eventos para o Meta — nem um `PageView` manual sai.
+ * O transporte é server-side: GTM → container Stape → Conversions API. Ou seja,
+ * quem conta a conversão é uma TAG NO GTM acionada pelo evento do dataLayer, e
+ * o container só tem trigger para `expedicao_lead` (as LPs de expedição).
  *
- * `eventID = lead_id` é de propósito: é a chave de deduplicação do Meta. Se um
- * dia o mesmo lead também for enviado pela Conversions API (pelo n8n, que já
- * recebe o lead_id), o Meta junta os dois em vez de contar duas conversões.
+ * Enquanto o trigger de `live_lead` não existir no GTM, o Meta não registra o
+ * lead desta LP — ver README, seção "Conversão no Meta".
  *
- * ⚠️ Se você criar a tag de Lead no GTM para o evento `live_lead`, use o mesmo
- * `event_id` (o `lead_id` está no dataLayer) — ou remova esta chamada. Duas
- * tags com ids diferentes = lead contado em dobro.
+ * Esta chamada fica porque não custa nada e cobre o caso de um dia existir um
+ * Pixel web puro nesta página. `eventID = lead_id` é a chave de deduplicação do
+ * Meta: mesmo que o evento chegue pelos dois caminhos (navegador e CAPI), ele
+ * conta uma vez só — desde que a tag do GTM use o mesmo id (está no dataLayer
+ * como `event_id`).
  */
 function dispararLeadNoMeta(leadId: string) {
   const w = window as unknown as { fbq?: (...args: unknown[]) => void }

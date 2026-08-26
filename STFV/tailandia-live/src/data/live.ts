@@ -167,7 +167,12 @@ export const live = {
    * mas GA4 e Google Ads contariam a conversão em dobro.
    */
   tracking: {
-    emitirEventoLegado: true,
+    // DESLIGADO: o teste em produção mostrou que NENHUMA tag do container escuta
+    // `expedicao_lead` — o único hit no envio era o `form_start` automático do
+    // GA4. A conversão vem do PAGEVIEW da /obrigado.html (ver o comentário
+    // dentro daquele arquivo). Só ligue se um dia existir mesmo uma tag por
+    // evento no GTM.
+    emitirEventoLegado: false,
   },
 
   heroImage: `${import.meta.env.BASE_URL}assets/tailandia/hero.jpg`,

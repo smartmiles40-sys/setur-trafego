@@ -211,6 +211,18 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
 
       dispararLeadNoMeta(leadId)
       registrarEnvio({ nome: nomeOk, email: emailOk })
+
+      // A conversão do Meta é contada no PAGEVIEW da /obrigado.html — não por
+      // evento do dataLayer (medido em 26/08: nenhuma tag escuta os eventos de
+      // lead; o trigger é a URL, e vale também em .vercel.app). Por isso o lead
+      // passa por lá antes da comunidade. A obrigado.html mostra a confirmação,
+      // conta 3s (tempo do GTM/Stape despachar) e leva ao WhatsApp.
+      try {
+        sessionStorage.setItem(`${SLUG}_comunidade`, live.comunidade.url)
+      } catch {
+        /* aba anônima: a obrigado.html cai no link padrão dela */
+      }
+      window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
     },
     [posicao],
   )

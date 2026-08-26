@@ -1,12 +1,13 @@
 # Isca da LIVE — Expedição Tailândia 2027
 
-LP de campanha (não é a LP da expedição). Uma tela só: **hero com vídeo →
-formulário → dois destinos**, e os **depoimentos** logo abaixo como prova social.
+LP de campanha (não é a LP da expedição): captura o inscrito e o joga na
+comunidade.
 
 ```
-anúncio  →  LP  →  vídeo (VSL VTurb)  →  formulário (nome, WhatsApp, e-mail)
-                                       ├─ Passo 1 · COMUNIDADE do WhatsApp  (prioridade)
-                                       └─ Passo 2 · convite da live no Google Agenda
+anúncio → LP → vídeo (VSL VTurb) → formulário (nome, WhatsApp, e-mail)
+                                 → redirect automático para a COMUNIDADE do WhatsApp
+                                    (e, por trás, o n8n manda o convite do Meet
+                                     para o e-mail dela — ela não clica em nada)
 ```
 
 **Ordem da página:** hero (promessa + contagem + vídeo + formulário) → **depoimentos**
@@ -31,7 +32,7 @@ Tudo num arquivo só: **`src/data/live.ts`**. Nenhum componente precisa ser toca
 |---|---|---|
 | ~~`evento.inicioISO`~~ | ✅ **27/08/2026, 19h30 (BRT)** — live de amanhã | — |
 | `evento.duracaoMinutos` | duração (padrão 90) | você |
-| ~~`evento.meetUrl`~~ | ✅ preenchido: `meet.google.com/ksd-cfcn-jvr` | — |
+| ~~`evento.meetUrl`~~ | ✅ preenchido: `meet.google.com/mhk-hgkn-azm` | — |
 | `comunidade.url` | convite da comunidade/grupo do WhatsApp | WhatsApp → Comunidade → Convidar por link |
 | `vsl.playerId` / `vsl.playerSrc` | o vídeo | painel da ConverteAI (VTurb) |
 | `depoimentoVideo.youtubeId` | ✅ preenchido: Shorts `R7nfZV9OLCU` na seção de depoimentos | — |

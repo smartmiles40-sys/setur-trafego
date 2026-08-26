@@ -9,9 +9,16 @@ LP → /api/save-lead → webhook n8n ─┬─ cria o EVENTO no Google Agenda c
                                       o negócio na coluna da Comunidade
 ```
 
-Os dois ramos correm em paralelo: um falhar não derruba o outro (todos os nós
-externos estão com *continue on error*), e o ledger no Supabase já guardou o
-lead de qualquer forma.
+Os dois ramos correm em paralelo e o ledger no Supabase já guardou o lead de
+qualquer forma.
+
+> ⚠️ Os nós externos estão com **On Error = stop workflow** de propósito
+> ENQUANTO o workflow está sendo configurado: assim uma execução com problema
+> aparece **vermelha** em *Executions*. Com "continue on error" (o estado
+> anterior), tudo falhava em silêncio, a execução ficava verde e nada
+> acontecia — foi exatamente o que aconteceu no primeiro teste. Depois de
+> validado, volte os nós para *continue* para que um erro do Calendar não
+> derrube o ramo do Bitrix.
 
 Arquivo para importar: **`live-inscricao.workflow.json`**
 (n8n → Workflows → *Import from File*).
@@ -38,18 +45,18 @@ Todos apontam para a **mesma sala do Meet**, então na prática é uma live só.
 |---|---|
 | Nó **Convite no Google Agenda** | credencial *Google Calendar OAuth2* + `PREENCHA_EMAIL_DO_CALENDARIO` |
 | Nós do **Bitrix** (3) | `PREENCHA_BITRIX_WEBHOOK_BASE` — o webhook REST (`https://SEU.bitrix24.com.br/rest/<user>/<token>`) |
-| Nó **Negócio na coluna da Comunidade** | `PREENCHA_CATEGORY_ID` e `PREENCHA_STAGE_ID` |
+| ~~Nó **Negócio na coluna da Comunidade**~~ | ✅ preenchido: funil **25**, coluna **`C25:UC_9TC1LI`** |
 
-Para descobrir funil e coluna, chame no navegador:
+Os ids já estão no JSON. Se um dia precisar conferir/trocar, chame no navegador:
 
 ```
 PREENCHA_BITRIX_WEBHOOK_BASE/crm.dealcategory.list.json
 PREENCHA_BITRIX_WEBHOOK_BASE/crm.dealcategory.stage.list.json?id=<CATEGORY_ID>
 ```
 
-O `STAGE_ID` vem no formato `C<categoria>:<etapa>` (ex.: `C7:NEW`). ⚠️ Cuidado
-com a pegadinha já documentada do funil 25: o nome da coluna na tela **não**
-corresponde ao id óbvio — confie no retorno da API, não no rótulo.
+O `STAGE_ID` vem no formato `C<categoria>:<etapa>`. ⚠️ No funil 25 os rótulos da
+tela **não** correspondem aos ids óbvios (`C25:NEW` é "Ajuste", não "Novo
+lead") — confie no retorno da API, nunca no nome que aparece no board.
 
 Depois de ativar, copie a **URL de produção** do webhook e coloque na Vercel
 como `WEBHOOK_LIVE_URL` (projeto da LP). Sem isso o lead só fica no ledger e
@@ -64,9 +71,9 @@ Uma credencial que hoje só serve Sheets **não** basta: o escopo é outro.
 
 ### Plano B, se a credencial não ficar pronta a tempo
 
-A inscrição **não quebra**: a LP já entrega os caminhos manuais no checklist
-("Adicionar ao Google Agenda" e `.ics`), e o link da live também vai na
-comunidade do WhatsApp. Duas saídas rápidas:
+A inscrição **não quebra** — o lead é capturado e a pessoa entra na comunidade
+do mesmo jeito, e é lá que o link da live é divulgado. O que falta é só o
+convite na agenda. Duas saídas rápidas:
 
 1. **Só Bitrix agora, Calendar depois** — desconecte o nó do Calendar, ative o
    workflow, e ligue o convite quando a credencial estiver pronta. As inscrições
@@ -92,7 +99,7 @@ curl -X POST 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook/live-tailandia-ins
     "evento_titulo": "Live: Expedição Tailândia 2027 · Se Tu For, Eu Vou",
     "evento_inicio": "2026-08-27T19:30:00-03:00",
     "evento_duracao_min": 90,
-    "evento_meet_url": "https://meet.google.com/ksd-cfcn-jvr",
+    "evento_meet_url": "https://meet.google.com/mhk-hgkn-azm",
     "convidar_email": "voce@suaempresa.com",
     "comunidade_url": "https://chat.whatsapp.com/...",
     "utm_source": "teste"

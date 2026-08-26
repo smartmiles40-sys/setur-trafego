@@ -62,7 +62,7 @@ export const live = {
     inicioISO: '2026-08-27T19:30:00-03:00',
     duracaoMinutos: 90,
 
-    meetUrl: 'https://meet.google.com/ksd-cfcn-jvr',
+    meetUrl: 'https://meet.google.com/mhk-hgkn-azm',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

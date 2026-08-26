@@ -3,7 +3,7 @@ import { CalendarDays, Video } from 'lucide-react'
 import ContagemRegressiva from './ContagemRegressiva'
 import FormularioLive from './FormularioLive'
 import { live } from '../data/live'
-import { rotuloCompleto } from '../lib/calendario'
+import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 
 /**
  * Segundo ponto de inscrição, logo depois dos depoimentos e antes do roteiro.
@@ -18,7 +18,7 @@ export default function ChamadaFinal() {
   return (
     <section
       id="inscricao"
-      className="grain-subtle relative overflow-hidden bg-dark-teal px-4 py-20 md:py-28"
+      className="grain-subtle relative overflow-hidden bg-dark-teal px-4 py-14 md:py-28"
     >
       {/* Marca d'água do ano, como no hero */}
       <div
@@ -44,10 +44,11 @@ export default function ChamadaFinal() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="eyebrow-center mb-6 gap-2 rounded-full bg-lime/15 px-4 py-1.5 text-lime ring-1 ring-lime/35"
+          className="eyebrow-center mb-5 gap-2 rounded-full bg-lime/15 px-3 py-1.5 text-lime ring-1 ring-lime/35 md:mb-6 md:px-4"
         >
-          <Video size={13} aria-hidden />
-          Live gratuita · ao vivo no Google Meet
+          <Video size={12} aria-hidden className="flex-shrink-0" />
+          <span className="md:hidden">Live gratuita · Google Meet</span>
+          <span className="hidden md:inline">Live gratuita · ao vivo no Google Meet</span>
         </motion.div>
 
         <motion.h2
@@ -55,7 +56,7 @@ export default function ChamadaFinal() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl font-serif text-[clamp(1.9rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight text-off-white"
+          className="max-w-3xl font-serif text-[clamp(1.5rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight text-off-white"
         >
           A próxima história dessas{' '}
           <span className="serif-italic font-normal text-lime">pode ser a sua.</span>
@@ -66,11 +67,12 @@ export default function ChamadaFinal() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-9 mt-7 flex flex-col items-center gap-4 md:flex-row md:gap-6"
+          className="mb-7 mt-6 flex flex-col items-center gap-3 md:mb-9 md:mt-7 md:flex-row md:gap-6"
         >
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-off-white/85 md:text-base">
-            <CalendarDays size={16} className="text-lime" aria-hidden />
-            {rotuloCompleto()}
+          <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-off-white/85 md:text-base">
+            <CalendarDays size={15} className="flex-shrink-0 text-lime" aria-hidden />
+            <span className="md:hidden">{rotuloSemFuso()}</span>
+            <span className="hidden md:inline">{rotuloCompleto()}</span>
           </span>
           <ContagemRegressiva />
         </motion.div>

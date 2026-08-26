@@ -24,10 +24,10 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-lime hover:bg-lime-dark text-dark-teal font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:shadow-lime-glow hover:scale-[1.02] active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 bg-lime hover:bg-lime-dark text-dark-teal font-semibold px-6 py-3.5 md:px-8 md:py-4 rounded-full transition-all duration-300 hover:shadow-lime-glow hover:scale-[1.02] active:scale-[0.98];
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-dark-teal/20 text-dark-teal font-semibold px-8 py-4 rounded-full transition-all hover:border-dark-teal hover:bg-dark-teal/5;
+    @apply inline-flex items-center justify-center gap-2 border-2 border-dark-teal/20 text-dark-teal font-semibold px-6 py-3.5 md:px-8 md:py-4 rounded-full transition-all hover:border-dark-teal hover:bg-dark-teal/5;
   }
   .section {
     @apply py-20 md:py-32 px-4;
@@ -60,10 +60,10 @@
     @apply relative;
   }
   .input-label {
-    @apply block text-sm font-semibold text-dark-teal mb-2;
+    @apply block text-[13px] md:text-sm font-semibold text-dark-teal mb-1.5 md:mb-2;
   }
   .input {
-    @apply w-full rounded-xl border border-dark-teal/15 bg-off-white px-4 py-3.5 text-dark-teal placeholder:text-dark-teal/35 outline-none transition-colors focus:border-lime-dark focus:ring-2 focus:ring-lime/40;
+    @apply w-full rounded-xl border border-dark-teal/15 bg-off-white px-4 py-3 md:py-3.5 text-dark-teal placeholder:text-dark-teal/35 outline-none transition-colors focus:border-lime-dark focus:ring-2 focus:ring-lime/40;
   }
   .radio-group {
     @apply flex flex-col gap-2 mt-3;

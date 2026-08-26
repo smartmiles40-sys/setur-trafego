@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { ArrowRight, Check, MessageCircle } from 'lucide-react'
 import { live } from '../data/live'
-import { rotuloCompleto } from '../lib/calendario'
+import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/envio'
 
 /**
@@ -251,7 +251,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
   return (
     <form
       id={id('live-form')}
-      className="rounded-3xl bg-white p-6 md:p-8 shadow-card-lg text-left"
+      className="rounded-3xl bg-white p-5 md:p-8 shadow-card-lg text-left"
       action="#"
       method="POST"
       noValidate
@@ -263,18 +263,25 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         <input key={k} type="hidden" name={k} id={id(k)} value={track[k]} readOnly />
       ))}
 
-      <div className="mb-6 text-center">
-        <p className="font-display text-2xl md:text-3xl font-bold leading-tight text-dark-teal">
+      <div className="mb-5 text-center md:mb-6">
+        <p className="font-display text-xl md:text-3xl font-bold leading-tight text-dark-teal">
           {posicao === 'hero' ? 'Garanta sua vaga na live' : 'Ficou com vontade de ir?'}
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-dark-teal/65">
-          {posicao === 'hero'
-            ? `${rotuloCompleto()} · ao vivo pelo Google Meet`
-            : `Na live a gente abre o roteiro inteiro, os valores e as vagas — ${rotuloCompleto()}.`}
+        <p className="mt-1.5 text-[13px] leading-relaxed text-dark-teal/65 md:mt-2 md:text-sm">
+          <span className="md:hidden">
+            {posicao === 'hero'
+              ? `${rotuloSemFuso()} · ao vivo pelo Google Meet`
+              : `O roteiro inteiro, os valores e as vagas — ${rotuloSemFuso()}.`}
+          </span>
+          <span className="hidden md:inline">
+            {posicao === 'hero'
+              ? `${rotuloCompleto()} · ao vivo pelo Google Meet`
+              : `Na live a gente abre o roteiro inteiro, os valores e as vagas — ${rotuloCompleto()}.`}
+          </span>
         </p>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-4 md:space-y-5">
         <div>
           <label htmlFor={id('nome')} className="input-label">
             Nome completo
@@ -340,14 +347,14 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
       <button
         type="submit"
         id={id('btn-submit')}
-        className="btn-primary mt-7 w-full"
+        className="btn-primary mt-6 w-full md:mt-7"
         disabled={enviando}
       >
         {enviando ? 'Enviando…' : 'Quero participar da live'}
         {!enviando && <ArrowRight size={18} />}
       </button>
 
-      <p className="mt-4 text-center text-[11px] leading-relaxed text-dark-teal/45">
+      <p className="mt-3 text-center text-[10px] leading-relaxed text-dark-teal/45 md:mt-4 md:text-[11px]">
         Ao enviar, você recebe o convite da live e os avisos da expedição por e-mail e WhatsApp.
         Pode sair quando quiser.
       </p>
@@ -416,17 +423,17 @@ function LevandoParaComunidade({
   return (
     <div
       id={id('live-success')}
-      className="rounded-3xl bg-white p-6 md:p-8 shadow-card-lg text-center"
+      className="rounded-3xl bg-white p-5 md:p-8 shadow-card-lg text-center"
     >
-      <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-lime">
+      <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-lime md:h-14 md:w-14">
         <Check size={28} strokeWidth={3} className="text-dark-teal" />
       </span>
 
-      <p className="mt-4 font-display text-2xl font-bold leading-tight text-dark-teal md:text-3xl">
+      <p className="mt-3 font-display text-xl font-bold leading-tight text-dark-teal md:mt-4 md:text-3xl">
         Inscrição confirmada, {primeiroNome}!
       </p>
 
-      <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-dark-teal/70">
+      <p className="mx-auto mt-2 max-w-md text-[13px] leading-relaxed text-dark-teal/70 md:mt-3 md:text-sm">
         Estamos te levando para a nossa comunidade no WhatsApp — é por lá que o link da live é
         enviado.
       </p>
@@ -435,13 +442,13 @@ function LevandoParaComunidade({
         id={id('btn-comunidade')}
         href={live.comunidade.url}
         onClick={() => pushDataLayer('live_comunidade_click', { destino: SLUG, posicao })}
-        className="btn-primary mt-6 w-full"
+        className="btn-primary mt-5 w-full md:mt-6"
       >
         <MessageCircle size={18} />
         {!jaFoi && restante > 0 ? `Entrar na comunidade agora (${restante})` : 'Entrar na comunidade'}
       </a>
 
-      <p className="mt-5 text-xs leading-relaxed text-dark-teal/55">
+      <p className="mt-4 text-[11px] leading-relaxed text-dark-teal/55 md:mt-5 md:text-xs">
         O convite da live vai para <span className="font-semibold">{dados.email}</span> — ele entra
         na sua agenda com lembrete. {rotuloCompleto()}.
       </p>

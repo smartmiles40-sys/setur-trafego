@@ -20,14 +20,14 @@ export default function Depoimentos() {
           depoimento em vídeo e os canais para conferir. Larguras explícitas nas
           duas últimas — com `auto`, o filho pede 100% da coluna e a coluna se
           mede pelo filho, e o resultado é largura 0. */}
-      <div className="container-x relative mb-14 grid items-center gap-10 md:mb-20 lg:grid-cols-[1fr_300px_270px] lg:gap-8">
+      <div className="container-x relative mb-10 grid items-center gap-8 md:mb-20 md:gap-10 lg:grid-cols-[1fr_300px_270px] lg:gap-8">
         <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="eyebrow text-lime mb-6"
+            className="eyebrow text-lime mb-4 md:mb-6"
           >
             Depoimentos
           </motion.div>
@@ -37,7 +37,7 @@ export default function Depoimentos() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-[clamp(1.9rem,3.6vw,3rem)] font-bold leading-[1.05] tracking-tight text-off-white mb-5"
+            className="font-serif text-[clamp(1.5rem,3.6vw,3rem)] font-bold leading-[1.05] tracking-tight text-off-white mb-5"
           >
             Algumas experiências{' '}
             <span className="serif-italic font-normal text-lime">
@@ -50,21 +50,21 @@ export default function Depoimentos() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="text-off-white/75 max-w-2xl text-base md:text-lg leading-relaxed"
+            className="text-off-white/75 max-w-2xl text-sm md:text-lg leading-relaxed"
           >
             Quem viaja com a Se Tu For, Eu Vou não fala só de lugares visitados. Fala de
             cuidado, segurança, tranquilidade e das conexões criadas pelo caminho.
           </motion.p>
 
           {/* Rating summary */}
-          <div className="mt-10 flex items-center gap-4 flex-wrap">
+          <div className="mt-6 flex items-center gap-3 flex-wrap md:mt-10 md:gap-4">
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} size={18} className="fill-lime text-lime" />
               ))}
             </div>
-            <span className="font-serif text-off-white text-2xl md:text-3xl font-bold">5.0</span>
-            <div className="text-off-white/60 text-sm">
+            <span className="font-serif text-off-white text-xl md:text-3xl font-bold">5.0</span>
+            <div className="text-off-white/60 text-xs md:text-sm">
               <span className="block leading-tight">Baseado em avaliações reais</span>
               <span className="block leading-tight">de viajantes da expedição</span>
             </div>
@@ -120,14 +120,14 @@ export default function Depoimentos() {
 
 function TestimonialCard({ d }: { d: typeof depoimentos[number] }) {
   return (
-    <div className="bg-off-white text-dark-teal rounded-3xl p-6 md:p-7 flex-shrink-0 w-[300px] sm:w-[340px] md:w-[420px] shadow-card-lg relative border border-off-white/20">
-      <Quote size={36} className="absolute top-5 right-5 text-lime/80 fill-lime/30" />
+    <div className="bg-off-white text-dark-teal rounded-2xl md:rounded-3xl p-5 md:p-7 flex-shrink-0 w-[260px] sm:w-[340px] md:w-[420px] shadow-card-lg relative border border-off-white/20">
+      <Quote size={28} className="absolute top-4 right-4 text-lime/80 fill-lime/30 md:top-5 md:right-5 md:h-9 md:w-9" />
 
       <div className="flex items-center gap-3 mb-4">
         <img
           src={d.avatar}
           alt={d.nome}
-          className="w-12 h-12 rounded-full object-cover bg-lime/20 border-2 border-white shadow"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover bg-lime/20 border-2 border-white shadow"
           loading="lazy"
           onError={(e) => {
             const target = e.target as HTMLImageElement
@@ -146,7 +146,7 @@ function TestimonialCard({ d }: { d: typeof depoimentos[number] }) {
           </div>
         </div>
       </div>
-      <p className="text-[14px] md:text-[15px] text-dark-teal/85 leading-relaxed line-clamp-5">
+      <p className="text-[13px] md:text-[15px] text-dark-teal/85 leading-relaxed line-clamp-5">
         "{d.texto}"
       </p>
     </div>

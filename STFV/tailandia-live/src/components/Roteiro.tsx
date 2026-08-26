@@ -16,14 +16,14 @@ export default function Roteiro() {
     >
       <FloatingOrnaments variant="light" density="medium" />
       {/* Editorial header */}
-      <div className="container-x mb-14 md:mb-20 relative">
+      <div className="container-x mb-10 md:mb-20 relative">
         <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="eyebrow text-dark-teal mb-6"
+            className="eyebrow text-dark-teal mb-4 md:mb-6"
           >
             Roteiro
           </motion.div>
@@ -32,7 +32,7 @@ export default function Roteiro() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-[clamp(2rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-tight text-dark-teal mb-6"
+            className="font-serif text-[clamp(1.5rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-tight text-dark-teal mb-6"
           >
             Uma jornada pensada para você viver {expedicao.roteiroHeadlineDestino}{' '}
             <span className="serif-italic font-normal">{expedicao.roteiroHeadlineComplemento}</span>
@@ -42,11 +42,11 @@ export default function Roteiro() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-dark-teal/75 max-w-2xl text-base md:text-lg leading-relaxed mb-3"
+            className="text-dark-teal/75 max-w-2xl text-sm md:text-lg leading-relaxed mb-3"
           >
             {expedicao.roteiroDescricao}
           </motion.p>
-          <p className="text-dark-teal/70 text-sm inline-flex items-center gap-2">
+          <p className="text-dark-teal/70 text-xs md:text-sm inline-flex items-center gap-2">
             <Star size={14} className="fill-lime-dark text-lime-dark" />
             Os dias marcados são emblemáticos da expedição
           </p>
@@ -56,7 +56,7 @@ export default function Roteiro() {
       {/* Carousel com a tarja "{nome} — Expedição {ano}" acima */}
       <div className="relative max-w-7xl mx-auto px-4">
         <div className="flex items-baseline justify-between mb-6 md:mb-8 px-1">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-dark-teal tracking-tight">
+          <h3 className="font-serif text-base md:text-2xl font-bold text-dark-teal tracking-tight">
             {expedicao.nome} <span className="text-dark-teal/40 mx-2">—</span>{' '}
             <span className="serif-italic font-normal">Expedição {expedicao.ano}</span>
           </h3>
@@ -90,7 +90,7 @@ export default function Roteiro() {
                 className="group bg-white rounded-[2rem] overflow-hidden shadow-card hover:shadow-card-lg transition-all duration-500 h-full flex flex-col relative"
               >
                 {/* Image hero */}
-                <div className="relative h-[360px] md:h-[440px] overflow-hidden">
+                <div className="relative h-[260px] md:h-[440px] overflow-hidden">
                   <img
                     src={dia.imagem}
                     alt={dia.titulo}
@@ -120,19 +120,19 @@ export default function Roteiro() {
                   </div>
 
                   {/* Title over image */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-10">
                     <div className="flex items-center gap-1.5 text-xs text-off-white/90 mb-2">
                       <MapPin size={12} />
                       <span className="tracking-wide">{dia.cidade}</span>
                     </div>
-                    <h4 className="font-serif font-bold text-off-white text-2xl md:text-3xl leading-[1.1] drop-shadow-lg">
+                    <h4 className="font-serif font-bold text-off-white text-lg md:text-3xl leading-[1.15] drop-shadow-lg">
                       {dia.titulo}
                     </h4>
                   </div>
                 </div>
 
-                <div className="p-6 flex-1 flex flex-col bg-white">
-                  <ul className="text-sm md:text-base text-dark-teal/85 space-y-2 mb-5 flex-1">
+                <div className="p-5 md:p-6 flex-1 flex flex-col bg-white">
+                  <ul className="text-[13px] md:text-base text-dark-teal/85 space-y-1.5 md:space-y-2 mb-4 md:mb-5 flex-1">
                     {dia.atividades.map((a) => (
                       <li key={a} className="flex gap-2.5 leading-snug">
                         <span className="text-lime-dark mt-1 flex-shrink-0">—</span>
@@ -144,7 +144,7 @@ export default function Roteiro() {
                     <p className="text-[10px] text-dark-teal/50 uppercase font-bold tracking-[0.25em] mb-1">
                       Logística
                     </p>
-                    <p className="text-sm text-dark-teal/85">{dia.logistica}</p>
+                    <p className="text-[13px] md:text-sm text-dark-teal/85">{dia.logistica}</p>
                   </div>
                 </div>
               </motion.article>
@@ -162,7 +162,7 @@ export default function Roteiro() {
           transition={{ duration: 0.7 }}
           className="mt-4 flex flex-col items-center gap-3 text-center"
         >
-          <p className="text-dark-teal/70 text-sm md:text-base">
+          <p className="text-dark-teal/70 text-[13px] md:text-base">
             É esse roteiro que a gente abre ao vivo, dia a dia, respondendo suas perguntas.
           </p>
           <a href="#inscricao" className="btn-primary">

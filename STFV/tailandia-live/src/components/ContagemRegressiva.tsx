@@ -36,16 +36,16 @@ export default function ContagemRegressiva() {
   ]
 
   return (
-    <div className="flex items-stretch gap-2.5" role="timer" aria-live="off">
+    <div className="flex items-stretch gap-1.5 md:gap-2.5" role="timer" aria-live="off">
       {blocos.map((b) => (
         <div
           key={b.rotulo}
-          className="min-w-[68px] rounded-2xl border border-off-white/15 bg-off-white/10 px-3 py-2.5 text-center backdrop-blur-sm"
+          className="min-w-[54px] rounded-xl border border-off-white/15 bg-off-white/10 px-2.5 py-2 text-center backdrop-blur-sm md:min-w-[68px] md:rounded-2xl md:px-3 md:py-2.5"
         >
-          <span className="block font-display text-2xl font-bold leading-none text-off-white md:text-3xl">
+          <span className="block font-display text-lg font-bold leading-none text-off-white md:text-3xl">
             {String(b.valor).padStart(2, '0')}
           </span>
-          <span className="mt-1 block text-[10px] uppercase tracking-[0.18em] text-off-white/55">
+          <span className="mt-0.5 block text-[9px] uppercase tracking-[0.12em] text-off-white/55 md:mt-1 md:text-[10px] md:tracking-[0.18em]">
             {b.rotulo}
           </span>
         </div>

@@ -4,7 +4,7 @@ import Clouds from './Clouds'
 import ContagemRegressiva from './ContagemRegressiva'
 import Inscricao from './Inscricao'
 import { live } from '../data/live'
-import { rotuloCompleto } from '../lib/calendario'
+import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 
 /**
  * Primeira (e praticamente única) tela da isca: promessa da live, contagem
@@ -18,7 +18,7 @@ export default function HeroLive() {
   return (
     <section
       id="live"
-      className="grain-subtle relative overflow-hidden pb-20 pt-24 md:pb-28 md:pt-32"
+      className="grain-subtle relative overflow-hidden pb-14 pt-20 md:pb-28 md:pt-32"
     >
       {/* Foto de fundo com Ken Burns */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -54,17 +54,18 @@ export default function HeroLive() {
 
       <Clouds />
 
-      <div className="container-x relative z-10 w-full">
+      <div className="container-x relative z-10 w-full px-4">
         <div className="flex flex-col items-center text-center">
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="eyebrow-center mb-7 gap-2 rounded-full bg-lime/15 px-4 py-1.5 text-lime ring-1 ring-lime/35"
+            className="eyebrow-center mb-5 gap-2 rounded-full bg-lime/15 px-3 py-1.5 text-lime ring-1 ring-lime/35 md:mb-7 md:px-4"
           >
-            <Video size={13} aria-hidden />
-            Live gratuita · ao vivo no Google Meet
+            <Video size={12} aria-hidden className="flex-shrink-0" />
+            <span className="md:hidden">Live gratuita · Google Meet</span>
+            <span className="hidden md:inline">Live gratuita · ao vivo no Google Meet</span>
           </motion.div>
 
           {/* Título */}
@@ -74,7 +75,7 @@ export default function HeroLive() {
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                className="serif-italic inline-block text-[clamp(1.9rem,5vw,3.4rem)] font-normal leading-none text-off-white/95"
+                className="serif-italic inline-block text-[clamp(1.35rem,4.6vw,3.4rem)] font-normal leading-none text-off-white/95"
               >
                 Um encontro ao vivo sobre a Expedição
               </motion.span>
@@ -85,7 +86,7 @@ export default function HeroLive() {
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
-                className="inline-block text-[clamp(3.4rem,12vw,9rem)] font-black leading-[0.95] tracking-[-0.035em]"
+                className="inline-block text-[clamp(2.5rem,10vw,9rem)] font-black leading-[0.95] tracking-[-0.035em]"
               >
                 {live.expedicao.nomeUpper}{' '}
                 <span className="text-lime">{live.expedicao.ano}</span>
@@ -97,7 +98,7 @@ export default function HeroLive() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
-            className="mb-6 mt-6 h-[2px] w-24 origin-center bg-lime md:w-32"
+            className="mb-5 mt-5 h-[2px] w-16 origin-center bg-lime md:mb-6 md:mt-6 md:w-32"
           />
 
           {/* Promessa */}
@@ -105,7 +106,7 @@ export default function HeroLive() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.95 }}
-            className="mb-7 max-w-2xl font-display text-lg leading-snug text-off-white md:text-xl"
+            className="mb-6 max-w-2xl font-display text-sm leading-snug text-off-white md:mb-7 md:text-xl"
           >
             {live.promessa}
           </motion.p>
@@ -116,11 +117,12 @@ export default function HeroLive() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 1.1 }}
-            className="mb-8 flex flex-col items-center gap-4 md:flex-row md:gap-6"
+            className="mb-7 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:gap-6"
           >
-            <span className="inline-flex items-center gap-2 text-sm font-semibold text-off-white/85 md:text-base">
-              <CalendarDays size={16} className="text-lime" aria-hidden />
-              {rotuloCompleto()}
+            <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-off-white/85 md:text-base">
+              <CalendarDays size={15} className="flex-shrink-0 text-lime" aria-hidden />
+              <span className="md:hidden">{rotuloSemFuso()}</span>
+              <span className="hidden md:inline">{rotuloCompleto()}</span>
             </span>
             <ContagemRegressiva />
           </motion.div>
@@ -143,12 +145,12 @@ export default function HeroLive() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.5 }}
-            className="mt-12 flex flex-wrap justify-center gap-2.5"
+            className="mt-9 flex flex-wrap justify-center gap-2 md:mt-12 md:gap-2.5"
           >
             {live.topicos.map((t) => (
               <li
                 key={t}
-                className="rounded-full border border-off-white/25 bg-off-white/10 px-4 py-1.5 text-xs text-off-white/95 backdrop-blur-sm md:text-sm"
+                className="rounded-full border border-off-white/25 bg-off-white/10 px-3 py-1 text-[11px] text-off-white/95 backdrop-blur-sm md:px-4 md:py-1.5 md:text-sm"
               >
                 {t}
               </li>

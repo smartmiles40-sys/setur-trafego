@@ -44,21 +44,21 @@ export default function Footer() {
         </span>
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-6 py-16 md:py-20">
+      <div className="relative max-w-6xl mx-auto px-6 py-12 md:py-20">
         {/* Farewell */}
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-9 md:mb-16">
           <div className="eyebrow-center text-lime justify-center mb-5">
             Te esperamos
           </div>
-          <p className="font-display text-2xl md:text-4xl leading-snug text-off-white max-w-2xl mx-auto">
+          <p className="font-display text-xl md:text-4xl leading-snug text-off-white max-w-2xl mx-auto">
             Se Tu For, Eu Vou!{' '}
             <span className="serif-italic font-normal text-lime">Viagens</span>
           </p>
         </div>
 
-        <div className="h-px bg-off-white/10 mb-12" />
+        <div className="h-px bg-off-white/10 mb-9 md:mb-12" />
 
-        <div className="grid md:grid-cols-3 gap-10 items-start">
+        <div className="grid md:grid-cols-3 gap-7 md:gap-10 items-start">
           <div>
             <div className="font-display text-xl md:text-2xl font-bold leading-tight mb-2">
               SE TU FOR, EU VOU!{' '}

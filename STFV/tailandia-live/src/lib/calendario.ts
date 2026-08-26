@@ -55,7 +55,12 @@ export function rotuloHora(): string {
   return formatar({ hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h')
 }
 
-/** "quinta-feira, 10 de setembro · 20h00 (horário de Brasília)" */
+/** "quinta-feira, 27 de agosto · 19h30" — versão curta, para telas estreitas */
+export function rotuloSemFuso(): string {
+  return `${rotuloDataLonga()} · ${rotuloHora()}`
+}
+
+/** "quinta-feira, 27 de agosto · 19h30 (horário de Brasília)" */
 export function rotuloCompleto(): string {
   return `${rotuloDataLonga()} · ${rotuloHora()} (horário de Brasília)`
 }

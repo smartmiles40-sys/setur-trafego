@@ -148,6 +148,28 @@ export const live = {
     liberarAposSegundos: 0,
   },
 
+  /**
+   * ---- Tracking ------------------------------------------------------------
+   * `emitirEventoLegado`: além do `live_lead`, empurra também **`expedicao_lead`**
+   * no dataLayer — o evento que o GTM já escuta para as LPs de expedição.
+   *
+   * Por que existe: medido em produção, o Pixel do Meta não envia nada pelo
+   * navegador (o transporte é GTM → Stape → CAPI). Quem conta a conversão é a
+   * tag do GTM, e o container não conhece `live_lead`. Emitindo o nome antigo, a
+   * tag que já existe dispara e a campanha passa a receber a conversão sem
+   * precisar mexer no GTM.
+   *
+   * O preço: a live entra no mesmo balde das LPs de expedição nos relatórios.
+   * Dá para separar pelo parâmetro `destino`, que vai como `tailandia-live`.
+   *
+   * ⚠️ **Desligue (false) no dia em que criar o trigger de `live_lead` no GTM.**
+   * Com os dois ligados, o Meta ainda conta uma vez só (o `event_id` deduplica),
+   * mas GA4 e Google Ads contariam a conversão em dobro.
+   */
+  tracking: {
+    emitirEventoLegado: true,
+  },
+
   heroImage: `${import.meta.env.BASE_URL}assets/tailandia/hero.jpg`,
 
   instagram: {

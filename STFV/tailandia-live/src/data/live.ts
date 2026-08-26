@@ -107,11 +107,12 @@ export const live = {
     },
   },
 
-  // ---- Comunidade do WhatsApp (destino prioritário) ------------------------
+  // ---- Comunidade do WhatsApp (ÚNICO destino depois do envio) --------------
   comunidade: {
-    // PREENCHER — link de convite da comunidade/grupo
-    // (ex.: https://chat.whatsapp.com/XXXXXXXXXXXXXXXXX)
-    url: 'https://chat.whatsapp.com/PREENCHER',
+    // Link de convite do grupo. Sem os parâmetros `?amv=...&ilr=...&p=i&s=sh`
+    // que o WhatsApp cola ao usar "compartilhar": eles são do app de quem
+    // compartilhou, não do convite — o que identifica o grupo é só o código.
+    url: 'https://chat.whatsapp.com/GApX2oeJUl3HeS4elpqbUq',
     nome: 'Comunidade Se Tu For, Eu Vou',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

@@ -66,6 +66,41 @@ function pushDataLayer(event: string, data?: Record<string, unknown>) {
   w.dataLayer.push({ event, form_name: FORM_NAME, ...data })
 }
 
+/**
+ * Conversão no Pixel do Meta, disparada DIRETO daqui.
+ *
+ * O Pixel já é carregado pelo GTM (server-side, via Stape) — mas o container
+ * só tem trigger para `expedicao_lead`, o evento das LPs de expedição. Esta LP
+ * manda `live_lead`, um nome que ele não conhece: sem esta chamada, o Meta vê
+ * a visita e nunca a conversão, e a campanha otimiza às cegas.
+ *
+ * `eventID = lead_id` é de propósito: é a chave de deduplicação do Meta. Se um
+ * dia o mesmo lead também for enviado pela Conversions API (pelo n8n, que já
+ * recebe o lead_id), o Meta junta os dois em vez de contar duas conversões.
+ *
+ * ⚠️ Se você criar a tag de Lead no GTM para o evento `live_lead`, use o mesmo
+ * `event_id` (o `lead_id` está no dataLayer) — ou remova esta chamada. Duas
+ * tags com ids diferentes = lead contado em dobro.
+ */
+function dispararLeadNoMeta(leadId: string) {
+  const w = window as unknown as { fbq?: (...args: unknown[]) => void }
+  // Sem Pixel na página (adblock, consentimento recusado) não há o que fazer.
+  if (typeof w.fbq !== 'function') return
+  try {
+    w.fbq(
+      'track',
+      'Lead',
+      {
+        content_name: `Live ${live.expedicao.nome} ${live.expedicao.ano}`,
+        content_category: 'live',
+      },
+      { eventID: leadId },
+    )
+  } catch {
+    /* o Pixel é de terceiro: um erro dele nunca pode travar a inscrição */
+  }
+}
+
 function gerarLeadId() {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
   return `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
@@ -151,11 +186,13 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
       // depois (ver LevandoParaComunidade), então o GTM tem tempo de disparar.
       pushDataLayer('live_lead', {
         lead_id: leadId,
+        event_id: leadId, // mesma chave usada no Pixel — permite deduplicar com a CAPI
         destino: SLUG,
         posicao, // qual dos dois formulários converteu
         lead: { nome: nomeOk, email: emailOk, whatsapp: whatsappOk },
         ...atrib,
       })
+      dispararLeadNoMeta(leadId)
       registrarEnvio({ nome: nomeOk, email: emailOk })
     },
     [posicao],

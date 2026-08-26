@@ -63,11 +63,21 @@ export default function ChamadaFinal() {
         </motion.h2>
 
         <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="mt-7 w-full max-w-xl md:mt-9"
+        >
+          <FormularioLive posicao="fim" />
+        </motion.div>
+
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-7 mt-6 flex flex-col items-center gap-3 md:mb-9 md:mt-7 md:flex-row md:gap-6"
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-7 flex flex-col items-center gap-3 md:mt-8 md:flex-row md:gap-6"
         >
           <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-off-white/85 md:text-base">
             <CalendarDays size={15} className="flex-shrink-0 text-lime" aria-hidden />
@@ -77,15 +87,6 @@ export default function ChamadaFinal() {
           <ContagemRegressiva />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="w-full max-w-xl"
-        >
-          <FormularioLive posicao="fim" />
-        </motion.div>
       </div>
     </section>
   )

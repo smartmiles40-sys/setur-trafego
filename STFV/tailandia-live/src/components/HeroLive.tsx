@@ -111,13 +111,24 @@ export default function HeroLive() {
             {live.promessa}
           </motion.p>
 
-          {/* Data + contagem regressiva — lado a lado no desktop para o vídeo
-              subir na tela; empilhados no celular. */}
+          {/* Vídeo + formulário */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 1.1 }}
+            className="w-full"
+          >
+            <Inscricao />
+          </motion.div>
+
+          {/* Data + contagem regressiva DEPOIS do formulário: assim ele sobe na
+              tela e aparece sem rolagem no celular. A urgência funciona melhor
+              logo abaixo do campo de envio do que empurrando ele para baixo. */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.1 }}
-            className="mb-7 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:gap-6"
+            transition={{ duration: 0.9, delay: 1.3 }}
+            className="mt-7 flex flex-col items-center gap-3 md:mt-8 md:flex-row md:gap-6"
           >
             <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-off-white/85 md:text-base">
               <CalendarDays size={15} className="flex-shrink-0 text-lime" aria-hidden />
@@ -125,16 +136,6 @@ export default function HeroLive() {
               <span className="hidden md:inline">{rotuloCompleto()}</span>
             </span>
             <ContagemRegressiva />
-          </motion.div>
-
-          {/* Vídeo + formulário */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.25 }}
-            className="w-full"
-          >
-            <Inscricao />
           </motion.div>
 
           {/* Os atalhos para roteiro/depoimentos ficam no Header — sempre à

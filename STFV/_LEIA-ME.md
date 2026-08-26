@@ -24,8 +24,10 @@ A **italia** (Costa Amalfitana) também tem VSL desde **2026-07-31**, mas com o 
 de 1 min trava o botão *Continuar*, não o envio) → **Etapa 3** perfil de viagem. Mesma
 mecânica (VslPlayer + barrinha + `form_video_unlocked`), só muda a ordem.
 
-A LP **sem VSL** (turquia-grecia) segue com o formulário de **2 etapas** (sem vídeo),
-intocada.
+A **turquia-grecia** ganhou VSL em **2026-08-26**, copiada da V4: vídeo na **Etapa 2 de 3**
+(mesma ordem da itália) e o VTurb gravado em **9:16 vertical** — por isso o `expedicao.vsl`
+dela tem `orientacao: 'vertical'`, que o VslPlayer usa pra reservar o placeholder em 9:16.
+A única diferença para a V4 continua sendo o `utm_content: 'STFV'`.
 
 ### Diferença para a V4 (`../expedicoes`) — atualizado em 2026-07-15
 **O A/B acabou: este funil venceu.** Em 2026-07-15 a V4 (`../expedicoes`) adotou o mesmo
@@ -53,6 +55,22 @@ STFV no CRM e o relatório quebra.
 - `src/components/FormularioLead.tsx`: idêntico nas 6; a Etapa 3 só monta quando fica
   visível (se montar escondido, o VTurb inicializa 0×0 e o vídeo não aparece).
 - `index.html`: `preconnect`/`dns-prefetch` do ConverteAI (acelera o 1º frame do vídeo).
+
+## `tailandia-live` — NÃO é uma LP de expedição
+
+A pasta `tailandia-live/` é uma **isca de campanha** para a live no Google Meet
+sobre a Expedição Tailândia: hero com vídeo → formulário (nome, WhatsApp,
+e-mail) → comunidade do WhatsApp + convite no Google Agenda → depoimentos. Só
+isso: sem roteiro, mapa, FAQ ou preço.
+
+Ela **não** compartilha o `FormularioLead.tsx` nem o `expedicao.ts` das LPs
+(o formulário é outro, de 3 campos, e o gate é o FIM do vídeo, não um timer de
+1 min). Não sincronize arquivos entre ela e as LPs de expedição. Toda a
+configuração dela vive em `tailandia-live/src/data/live.ts`; o passo a passo
+está no `tailandia-live/README.md`.
+
+O webhook dela também é outro (`WEBHOOK_LIVE_URL`), para os inscritos caírem
+numa coluna própria no Bitrix — a da comunidade.
 
 ## Deploy na Vercel (1 projeto por LP, isolado)
 Para cada destino, crie um projeto novo na Vercel apontando o **Root Directory** para

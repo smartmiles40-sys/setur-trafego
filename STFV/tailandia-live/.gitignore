@@ -1,0 +1,4 @@
+
+# variaveis locais (webhook do n8n, chaves do ledger)
+.env.local
+.env

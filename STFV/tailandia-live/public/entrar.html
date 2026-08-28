@@ -39,6 +39,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
+  <!-- A foto do fundo e' o maior elemento da tela: preload pra ela pintar cedo
+       em vez de aparecer depois que a pagina ja montou. -->
+  <link rel="preload" as="image" href="/assets/japao/hero.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="/Logo-circular.png" />
   <meta name="theme-color" content="#09282B" />
 
@@ -58,12 +61,58 @@
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
       padding: 24px 20px;
-      /* brilho suave atrás do conteúdo, no lugar da foto do hero: mantém o clima
-         da marca sem custar uma imagem grande na hora da pressa */
-      background-image:
-        radial-gradient(900px 520px at 78% 18%, rgba(215, 242, 100, 0.10), transparent 62%),
-        radial-gradient(700px 460px at 12% 82%, rgba(215, 242, 100, 0.06), transparent 60%);
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* ---- fundo: a mesma foto do hero da LP, com Ken Burns ----
+       A foto entra como <img> (e nao background-image) de proposito: assim ela
+       aceita fetchpriority/preload e o navegador a trata como imagem de
+       verdade. O dark-teal por cima em 3 camadas e' o que garante contraste do
+       texto — sem ele o branco some no ceu claro da foto. */
+    .fundo {
+      position: fixed; inset: 0; z-index: 0;
+      overflow: hidden;
+      background: var(--teal); /* cor de base enquanto a foto nao chega */
+    }
+    .fundo img {
+      width: 100%; height: 100%; object-fit: cover;
+      animation: ken-burns 28s ease-in-out infinite;
+    }
+    /* Retrato corta so uma faixa estreita da foto, e o centro dela e' a cidade
+       e as arvores — a parte que mais some debaixo do overlay. Puxando o corte
+       para o pagode: e' o elemento inconfundivelmente japones da imagem e o
+       vermelho aguenta o escurecimento. No desktop nao mexe: la cabem o Fuji e
+       o pagode juntos. */
+    @media (max-width: 899px) {
+      .fundo img { object-position: 70% 42%; }
+    }
+    @keyframes ken-burns {
+      0%   { transform: scale(1) translate(0, 0); }
+      50%  { transform: scale(1.12) translate(-2%, -2%); }
+      100% { transform: scale(1) translate(0, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fundo img { animation: none; }
+    }
+    .fundo::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(9,40,43,0.55), rgba(9,40,43,0.72) 45%, rgba(9,40,43,0.93)),
+        linear-gradient(to right, rgba(9,40,43,0.45), rgba(9,40,43,0.05) 50%, rgba(9,40,43,0.45));
+    }
+    /* No celular a tela inteira e' o gradiente, entao o conteudo cai bem no
+       trecho mais escuro e a foto some. Aqui ele e' mais leve — o texto continua
+       legivel porque o cartao do formulario tem fundo proprio e a coluna de
+       texto e' curta. */
+    @media (max-width: 899px) {
+      .fundo::after {
+        background:
+          linear-gradient(to bottom, rgba(9,40,43,0.42), rgba(9,40,43,0.58) 45%, rgba(9,40,43,0.82));
+      }
+    }
+    /* o conteudo sobe acima do fundo */
+    .wrap { position: relative; z-index: 1; }
 
     .wrap {
       width: 100%; max-width: 1040px;
@@ -128,8 +177,10 @@
 
     /* ---- cartão do formulário ---- */
     .card {
-      background: rgba(255, 255, 255, 0.045);
-      border: 1px solid rgba(248, 246, 247, 0.14);
+      /* mais opaco do que o normal porque agora ha uma FOTO atras: cartao
+         translucido demais sobre foto vira sopa e o formulario perde leitura */
+      background: rgba(9, 40, 43, 0.80);
+      border: 1px solid rgba(248, 246, 247, 0.18);
       border-radius: 24px;
       padding: 26px 22px;
       box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
@@ -216,6 +267,10 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://load.stape-japao.setuforeuvouviagens.com.br/ns.html?id=GTM-W48Q7JG9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
+  <div class="fundo" aria-hidden="true">
+    <img src="/assets/japao/hero.jpg" alt="" fetchpriority="high" decoding="async" />
+  </div>
 
   <div class="wrap">
     <section>

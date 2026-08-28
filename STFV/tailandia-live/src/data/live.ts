@@ -166,11 +166,12 @@ export const live = {
     // que o WhatsApp cola ao usar "compartilhar": eles são do app de quem
     // compartilhou, não do convite — o que identifica o grupo é só o código.
     //
-    // ⚠️ Por ora é a MESMA comunidade da live da Tailândia (o grupo é da
-    // agência, não do destino). Se você criar um grupo só do Japão, troque
-    // aqui — é o único lugar onde esse link aparece.
-    url: 'https://chat.whatsapp.com/GApX2oeJUl3HeS4elpqbUq',
-    nome: 'Comunidade Se Tu For, Eu Vou',
+    // Grupo PRÓPRIO desta live (28/08/2026) — não é mais o grupo geral da
+    // agência que a live da Tailândia usava. Se trocar, troque também o
+    // `PADRAO` da public/obrigado.html: é o link de emergência de quem cai lá
+    // com o sessionStorage vazio (aba anônima).
+    url: 'https://chat.whatsapp.com/FKeALeIRtGV8m97bdjiigt',
+    nome: 'Live - Japão & China',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',
   },

@@ -1,3 +1,17 @@
+> ## ⚠️ QUAL WORKFLOW É QUAL (28/08/2026)
+>
+> São **dois** workflows ativos, **dois** webhooks e **duas** planilhas. Cruzar
+> os dois é o erro fácil de cometer e difícil de perceber:
+>
+> | Form | Onde | Workflow | Env var | Planilha |
+> |---|---|---|---|---|
+> | 1 — inscrição | LP (`/`) | `inscricao-live-planilha.workflow.json` | `WEBHOOK_LIVE_URL` | **Inscritos** (base do disparo no ManyChat) |
+> | 2 — entrada | `/entrar` | `entrada-live.workflow.json` | `WEBHOOK_ENTRAR_URL` | **Entradas** (quem apareceu de verdade) |
+>
+> O `live-inscricao.workflow.json` (convite no Google Agenda + Bitrix) está
+> **FORA DE USO**: o convite morreu quando o e-mail saiu do formulário, e o
+> Bruno optou por planilha em vez de Bitrix. Ficou no repo para quando quiser.
+
 > ## ⚠️ DESATUALIZADO NA PARTE DO GOOGLE CALENDAR (28/08/2026)
 >
 > O formulário da LP passou a pedir **só o nome** — sem e-mail, sem WhatsApp.

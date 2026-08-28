@@ -78,12 +78,17 @@ export default async function handler(req, res) {
   }
   for (const k of TRACK_KEYS) lead[k] = str(body[k], 200)
 
-  // Validação no servidor: só o NOME. Desde 28/08/2026 o formulário tem um campo
-  // só — sem e-mail e sem WhatsApp (ver o cabeçalho de src/data/live.ts). Os
-  // campos continuam na allowlist acima, mas chegam vazios: manter a forma do
-  // payload evita quebrar o n8n e o ledger, que já leem essas chaves.
+  // Validação no servidor: nome e WhatsApp. O e-mail NÃO é mais exigido — saiu
+  // do formulário em 28/08/2026 e com ele o convite no Google Agenda. O
+  // WhatsApp saiu junto e VOLTOU no mesmo dia: é ele que alimenta o disparo do
+  // ManyChat em cima da lista de inscritos, e é a chave para cruzar esta lista
+  // com a de quem entrou de fato na sala (/entrar).
   if (lead.nome.length < 2) {
     res.status(400).json({ ok: false, error: 'nome_invalido' })
+    return
+  }
+  if (lead.whatsapp.length < 13) { // +55 + ao menos 10 dígitos
+    res.status(400).json({ ok: false, error: 'whatsapp_invalido' })
     return
   }
 

@@ -21,12 +21,31 @@ LP de campanha (não é a LP da expedição): captura o inscrito e o joga na
 comunidade.
 
 ```
-anúncio → LP → vídeo (VSL VTurb) → formulário (SÓ O NOME)
+anúncio → LP → vídeo (VSL VTurb) → formulário (nome + WhatsApp)
                                  → redirect automático para a COMUNIDADE do WhatsApp
                                     (é lá que o link da live e os avisos saem)
 ```
 
-**Formulário de um campo só:** pede o nome e mais nada. Ver a seção 3.
+**Formulário:** nome + WhatsApp. Sem e-mail. Ver a seção 3.
+
+> ### As DUAS listas (28/08/2026)
+>
+> Esta LP e a `/entrar` alimentam **planilhas separadas**, de propósito:
+>
+> | | Form 1 — inscrição | Form 2 — entrada |
+> |---|---|---|
+> | Onde | esta LP (`/`) | `/entrar` (seção 8) |
+> | Quando | vem do anúncio, dias antes | no dia, na hora da live |
+> | Para quê | base do **disparo no ManyChat** | saber **quem apareceu** |
+> | Planilha | *Inscritos* | *Entradas* |
+> | Env var | `WEBHOOK_LIVE_URL` | `WEBHOOK_ENTRAR_URL` |
+> | Workflow | `automacoes/inscricao-live-planilha.workflow.json` | `automacoes/entrada-live.workflow.json` |
+>
+> Os dois pedem WhatsApp, e é ele que permite cruzar as listas: quem se
+> inscreveu e não apareceu é exatamente quem vale um follow-up.
+>
+> ⚠️ São dois webhooks e duas planilhas. Trocar um pelo outro não dá erro — as
+> duas listas simplesmente se misturam numa só.
 
 **Ordem da página:** hero (promessa + contagem + vídeo + formulário) → **depoimentos**
 (texto + nota, Shorts, canais para conferir) → **o formulário de novo**
@@ -107,20 +126,19 @@ antes de a aba trocar de site (mesmo motivo do countdown da `obrigado.html` das
 outras LPs). O botão fica visível como plano B: alguns navegadores bloqueiam
 navegação automática.
 
-**Não há mais convite no Google Agenda.** Desde 28/08/2026 o formulário pede
-apenas o NOME (decisão do Bruno: menor atrito possível). Sem o e-mail do lead
-não há quem convidar — quem entrega a live passou a ser a **comunidade do
-WhatsApp**, e é de lá que o link e os lembretes têm que sair.
+**Não há mais convite no Google Agenda.** Em 28/08/2026 o formulário perdeu o
+e-mail e o WhatsApp (menor atrito possível); no mesmo dia o **WhatsApp voltou**,
+porque o disparo no ManyChat é feito em cima desta lista e disparo precisa de
+contato. O e-mail continua fora — e sem ele não há quem convidar no Google
+Agenda. Quem entrega a live passou a ser a **comunidade do WhatsApp**, e é de lá
+que o link e os lembretes têm que sair.
 
 O que isso custa, para ninguém se surpreender depois:
 
 - o nó do Google Calendar do workflow ficou **sem `convidar_email`** — ou ele sai
   do fluxo, ou vira um evento único só para a equipe;
-- o negócio no Bitrix nasce **só com o nome**: sem telefone não há `findbycomm`,
-  então cada inscrito vira contato novo (a SDR pega o contato na conversa do
-  grupo);
-- o formulário não tem mais os campos `#whatsapp` e `#email`; variável do GTM
-  que leia esses ids passa a vir vazia.
+- o formulário não tem mais o campo `#email`; variável do GTM que leia esse id
+  passa a vir vazia. O `#whatsapp` continua existindo.
 
 Uma trava por aba (`<slug>_wa_redirecionado`) impede o laço de quem volta do
 WhatsApp para a LP: nesse caso aparece a confirmação com o botão, sem redirect
@@ -141,6 +159,7 @@ Calendar precisa** — não é preciso configurar data em dois lugares:
 {
   "lead_id": "uuid",
   "nome": "Maria Aparecida Souza",
+  "whatsapp": "+5511987654321",      // E.164, sempre — é a chave do ManyChat
   "slug": "japao-live",
   "origem": "live",
   "expedicao": "Expedição Japão 2027",
@@ -220,9 +239,9 @@ importar `Instagram`/`Youtube` de lá quebra o build.
 | `live_comunidade_click` | clicou no botão da comunidade (em vez de esperar) |
 | `live_comunidade_redirect` | o redirect automático para a comunidade disparou |
 
-Ids estáveis para os triggers: `#live-form`, `#nome`, `#lead_id`, `#utm_*`,
-`#btn-submit`, `#live-success`, `#btn-comunidade`.
-(`#whatsapp` e `#email` não existem mais — o formulário tem um campo só.)
+Ids estáveis para os triggers: `#live-form`, `#nome`, `#whatsapp`, `#lead_id`,
+`#utm_*`, `#btn-submit`, `#live-success`, `#btn-comunidade`.
+(`#email` não existe mais.)
 
 A conversão da live é o `live_lead` — **não** reaproveite o `expedicao_lead` das
 LPs de expedição, senão o custo por lead das duas campanhas se mistura.
@@ -267,7 +286,7 @@ visita e nunca a conversão.
   event_id: '<mesmo uuid>',        // use este na deduplicação
   destino: 'japao-live',
   posicao: 'hero' | 'fim',         // qual formulário converteu
-  lead: { nome },                  // o formulário só pede o nome
+  lead: { nome, whatsapp },        // whatsapp em E.164
   form_name: 'live-japao-live-2027',
   utm_source, utm_medium, utm_campaign, utm_term, utm_content,
   gclid, fbclid, utm_id, gbraid, wbraid

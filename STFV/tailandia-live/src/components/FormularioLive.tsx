@@ -12,16 +12,21 @@ import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/envio'
 
 /**
- * Formulário da isca da live — UM CAMPO SÓ: o nome.
+ * Formulário da INSCRIÇÃO da live — nome + WhatsApp.
  *
- * Não é o formulário das LPs de expedição (aquele qualifica o lead em 3 etapas).
- * Aqui o objetivo é um só: o menor atrito possível até a comunidade.
+ * Não é o formulário das LPs de expedição (aquele qualifica o lead em 3 etapas),
+ * nem o da porta da live (public/entrar.html). Este é o "form 1": vem do
+ * anúncio, e o destino é a comunidade no WhatsApp.
  *
- * Sem e-mail e sem WhatsApp (decisão do Bruno, 28/08/2026). Quem entrega a live
- * é a **comunidade no WhatsApp**, para onde a pessoa é levada logo depois — é
- * lá que o link e os avisos saem. Consequência assumida: não há mais convite no
- * Google Agenda (ele precisava do e-mail do lead como convidado), e o negócio
- * no Bitrix nasce só com o nome. Ver o cabeçalho de src/data/live.ts.
+ * Histórico dos campos, porque isto foi e voltou no mesmo dia (28/08/2026):
+ * e-mail e WhatsApp saíram de manhã, pelo menor atrito possível; o **WhatsApp
+ * voltou** à tarde porque o Bruno dispara no ManyChat em cima desta lista, e
+ * disparo precisa de contato. O e-mail continua fora — e com ele continua fora
+ * o convite no Google Agenda, que dependia dele.
+ *
+ * Esta lista vai para uma PLANILHA PRÓPRIA, separada da lista de quem entrou de
+ * fato na sala (essa é a do /entrar). Duas planilhas de propósito: inscritos ×
+ * presentes. O telefone é o que permite cruzar as duas.
  *
  * Depois do envio, UM destino só: a comunidade, com redirect automático em
  * poucos segundos.
@@ -31,10 +36,9 @@ import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/env
  * sair do ar na hora — ninguém manda o lead duas vezes. Os ids são prefixados
  * por instância para não duplicar id no DOM; a instância do hero mantém os ids
  * canônicos, que são o contrato com o GTM:
- *   #live-form, #nome, #lead_id, #utm_*, #btn-submit, #live-success,
- *   #btn-comunidade
- * (#whatsapp e #email deixaram de existir quando o formulário virou de um campo
- *  — se houver variável do GTM lendo esses ids, ela agora vem vazia.)
+ *   #live-form, #nome, #whatsapp, #lead_id, #utm_*, #btn-submit,
+ *   #live-success, #btn-comunidade
+ * (#email não existe mais — variável do GTM que leia esse id vem vazia.)
  */
 
 const SAVE_LEAD_URL = '/api/save-lead'
@@ -106,6 +110,15 @@ function dispararLeadNoMeta(leadId: string) {
   }
 }
 
+/** Máscara de exibição: (DD) NNNNN-NNNN */
+function mascaraWhatsapp(valor: string) {
+  const d = valor.replace(/\D/g, '').slice(0, 11)
+  if (d.length <= 2) return d
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
+}
+
 function gerarLeadId() {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
   return `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
@@ -142,6 +155,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
   const id = (base: string) => `${base}${sufixo}`
 
   const [nome, setNome] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
@@ -175,7 +189,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
   )
 
   const concluir = useCallback(
-    (nomeOk: string, leadId: string, atrib: Track) => {
+    (nomeOk: string, whatsappOk: string, leadId: string, atrib: Track) => {
       // Conversão. O redirect para a comunidade só acontece alguns segundos
       // depois (ver LevandoParaComunidade), então o GTM tem tempo de disparar.
       pushDataLayer('live_lead', {
@@ -183,7 +197,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         event_id: leadId, // mesma chave usada no Pixel — permite deduplicar com a CAPI
         destino: SLUG,
         posicao, // qual dos dois formulários converteu
-        lead: { nome: nomeOk }, // o formulário só pede o nome
+        lead: { nome: nomeOk, whatsapp: whatsappOk }, // whatsapp em E.164
         ...atrib,
       })
       // Mesmo evento das LPs de expedição, para a tag que JÁ existe no GTM
@@ -196,7 +210,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
           event_id: leadId, // mesmo id do live_lead: o Meta deduplica
           destino: SLUG,
           origem: 'live',
-          lead: { nome: nomeOk },
+          lead: { nome: nomeOk, whatsapp: whatsappOk },
           ...atrib,
         })
       }
@@ -225,10 +239,17 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
       setErros({})
       setErroEnvio(false)
 
+      let ok = true
       if (nome.trim().length < 3) {
         setErro('nome', 'Digite seu nome completo')
-        return
+        ok = false
       }
+      const wDigits = whatsapp.replace(/\D/g, '')
+      if (wDigits.length !== 11 || wDigits[2] !== '9') {
+        setErro('whatsapp', 'Digite um celular válido com DDD (11 dígitos). Ex.: (11) 98765-4321')
+        ok = false
+      }
+      if (!ok) return
 
       let leadId = ''
       try {
@@ -241,9 +262,11 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         leadId = gerarLeadId()
       }
 
+      const whatsappE164 = `+55${wDigits}`
       const payload = {
         lead_id: leadId,
         nome: nome.trim(),
+        whatsapp: whatsappE164,
         slug: SLUG,
         expedicao: `Expedição ${live.expedicao.nome} ${live.expedicao.ano}`,
         fonte: live.fonte,
@@ -273,12 +296,12 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
           body: JSON.stringify(payload),
         })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
-        concluir(nome.trim(), leadId, track)
+        concluir(nome.trim(), whatsappE164, leadId, track)
       } catch (err) {
         if (import.meta.env.DEV) {
           // Em dev o /api não existe (a função roda só na Vercel) — segue o fluxo
           console.warn('[dev] save-lead indisponível, simulando sucesso:', err)
-          concluir(nome.trim(), leadId, track)
+          concluir(nome.trim(), whatsappE164, leadId, track)
           return
         }
         setErroEnvio(true)
@@ -286,7 +309,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         setEnviando(false)
       }
     },
-    [nome, track, setErro, concluir, posicao],
+    [nome, whatsapp, track, setErro, concluir, posicao],
   )
 
   if (enviado) return <LevandoParaComunidade dados={enviado} posicao={posicao} sufixo={sufixo} />
@@ -340,6 +363,26 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
           onChange={(e) => setNome(e.target.value)}
         />
         {erros.nome && <p className="field-error">{erros.nome}</p>}
+      </div>
+
+      <div className="mt-4 md:mt-5">
+        <label htmlFor={id('whatsapp')} className="input-label">
+          WhatsApp com DDD
+        </label>
+        <input
+          type="tel"
+          id={id('whatsapp')}
+          name="whatsapp"
+          className={`input ${erros.whatsapp ? 'input-error' : ''}`}
+          required
+          maxLength={15}
+          inputMode="numeric"
+          autoComplete="tel-national"
+          placeholder="(11) 98765-4321"
+          value={whatsapp}
+          onChange={(e) => setWhatsapp(mascaraWhatsapp(e.target.value))}
+        />
+        {erros.whatsapp && <p className="field-error">{erros.whatsapp}</p>}
       </div>
 
       {erroEnvio && (

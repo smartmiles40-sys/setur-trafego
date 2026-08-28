@@ -111,12 +111,15 @@ export default function Roteiro() {
                     </div>
                   )}
 
+                  {/* Só "Dia N": a live apresenta a expedição sem fixar turma,
+                      e as duas turmas de 2027 têm o mesmo roteiro em datas
+                      diferentes. Se um dia a live vender uma turma específica,
+                      volte o campo `data` em src/data/expedicao.ts e o selo do
+                      dia do mês aqui. */}
                   <div className="absolute top-4 left-4 bg-off-white/95 backdrop-blur-sm text-dark-teal rounded-full px-3 py-1.5 shadow flex items-center gap-2 z-10">
                     <span className="text-[10px] font-bold tracking-[0.2em] uppercase">
                       Dia {dia.dia}
                     </span>
-                    <span className="w-1 h-1 rounded-full bg-dark-teal/40" />
-                    <span className="text-xs font-semibold">{dia.data}</span>
                   </div>
 
                   {/* Title over image */}

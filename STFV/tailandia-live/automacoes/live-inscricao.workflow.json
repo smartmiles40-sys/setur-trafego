@@ -1,10 +1,10 @@
 {
-  "name": "Live Tailândia — inscrição (convite + Bitrix)",
+  "name": "Live Japão — inscrição (convite + Bitrix)",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "live-tailandia-inscricao",
+        "path": "live-japao-inscricao",
         "responseMode": "onReceived",
         "options": {}
       },
@@ -16,12 +16,12 @@
         -460,
         300
       ],
-      "webhookId": "live-tailandia-inscricao",
+      "webhookId": "live-japao-inscricao",
       "notes": "A URL de produção deste webhook é o que entra na env WEBHOOK_LIVE_URL da Vercel. Responde na hora (onReceived): o /api/save-lead tem timeout de 7s e não pode esperar o Calendar/Bitrix."
     },
     {
       "parameters": {
-        "jsCode": "// Normaliza o inscrito e calcula o fim do evento.\n// O payload vem do /api/save-lead da LP (ver README da LP, seção 4).\nconst itens = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n\n  const nome = String(b.nome || '').trim();\n  const partes = nome.split(/\\s+/);\n  const primeiroNome = partes[0] || 'Inscrito';\n  const sobrenome = partes.slice(1).join(' ');\n\n  const inicio = b.evento_inicio || '';\n  const duracao = Number(b.evento_duracao_min) || 90;\n  const fim = inicio ? new Date(new Date(inicio).getTime() + duracao * 60000).toISOString() : '';\n\n  itens.push({\n    json: {\n      lead_id: String(b.lead_id || ''),\n      nome,\n      primeiro_nome: primeiroNome,\n      sobrenome,\n      email: String(b.email || b.convidar_email || '').toLowerCase().trim(),\n      whatsapp: String(b.whatsapp || ''),\n      fonte: b.fonte || '[Tailândia] - Live Comunidade',\n      source_id: b.source_id || '',\n      slug: b.slug || 'tailandia-live',\n      posicao: b.posicao || '',\n      evento_titulo: b.evento_titulo || 'Live: Expedição Tailândia 2027',\n      evento_inicio: inicio,\n      evento_fim: fim,\n      evento_meet_url: b.evento_meet_url || '',\n      comunidade_url: b.comunidade_url || '',\n      utm_source: b.utm_source || '',\n      utm_medium: b.utm_medium || '',\n      utm_campaign: b.utm_campaign || '',\n      utm_content: b.utm_content || '',\n      gclid: b.gclid || '',\n      fbclid: b.fbclid || '',\n      data_hora_cadastro: b.data_hora_cadastro || '',\n    },\n  });\n}\n\nreturn itens;"
+        "jsCode": "// Normaliza o inscrito e calcula o fim do evento.\n// O payload vem do /api/save-lead da LP (ver README da LP, seção 4).\nconst itens = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n\n  const nome = String(b.nome || '').trim();\n  const partes = nome.split(/\\s+/);\n  const primeiroNome = partes[0] || 'Inscrito';\n  const sobrenome = partes.slice(1).join(' ');\n\n  const inicio = b.evento_inicio || '';\n  const duracao = Number(b.evento_duracao_min) || 90;\n  const fim = inicio ? new Date(new Date(inicio).getTime() + duracao * 60000).toISOString() : '';\n\n  itens.push({\n    json: {\n      lead_id: String(b.lead_id || ''),\n      nome,\n      primeiro_nome: primeiroNome,\n      sobrenome,\n      email: String(b.email || b.convidar_email || '').toLowerCase().trim(),\n      whatsapp: String(b.whatsapp || ''),\n      fonte: b.fonte || '[Japão] - Live',\n      source_id: b.source_id || 'LIVE_JAPAO',\n      slug: b.slug || 'japao-live',\n      posicao: b.posicao || '',\n      evento_titulo: b.evento_titulo || 'Live: Expedição Japão 2027',\n      evento_inicio: inicio,\n      evento_fim: fim,\n      evento_meet_url: b.evento_meet_url || '',\n      comunidade_url: b.comunidade_url || '',\n      utm_source: b.utm_source || '',\n      utm_medium: b.utm_medium || '',\n      utm_campaign: b.utm_campaign || '',\n      utm_content: b.utm_content || '',\n      gclid: b.gclid || '',\n      fbclid: b.fbclid || '',\n      data_hora_cadastro: b.data_hora_cadastro || '',\n    },\n  });\n}\n\nreturn itens;"
       },
       "id": "code-live-1",
       "name": "Normalizar inscrito",
@@ -159,7 +159,7 @@
         "url": "=PREENCHA_BITRIX_WEBHOOK_BASE/crm.deal.add.json",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ (() => { const l = $('Normalizar inscrito').item.json; const r = $json.result; const contactId = Array.isArray(r?.CONTACT) ? r.CONTACT[0] : r; const comments = ['[INSCRITO NA LIVE] ' + l.evento_titulo, 'Quando: ' + l.evento_inicio, 'E-mail: ' + (l.email || '-'), 'WhatsApp: ' + (l.whatsapp || '-'), 'Formulario: ' + (l.posicao === 'fim' ? 'fim da pagina' : 'topo da pagina'), 'Origem: ' + [l.utm_source, l.utm_medium, l.utm_campaign, l.utm_content].filter(Boolean).join(' / '), 'lead_id: ' + l.lead_id].join('\\n'); const fields = { TITLE: 'Live Tailandia — ' + l.nome, CONTACT_ID: contactId, CATEGORY_ID: '25', STAGE_ID: 'C25:UC_9TC1LI', OPENED: 'Y', COMMENTS: comments }; if (l.source_id) fields.SOURCE_ID = l.source_id; return { fields, params: { REGISTER_SONET_EVENT: 'Y' } }; })() }}",
+        "jsonBody": "={{ (() => { const l = $('Normalizar inscrito').item.json; const r = $json.result; const contactId = Array.isArray(r?.CONTACT) ? r.CONTACT[0] : r; const comments = ['[INSCRITO NA LIVE] ' + l.evento_titulo, 'Quando: ' + l.evento_inicio, 'E-mail: ' + (l.email || '-'), 'WhatsApp: ' + (l.whatsapp || '-'), 'Formulario: ' + (l.posicao === 'fim' ? 'fim da pagina' : 'topo da pagina'), 'Origem: ' + [l.utm_source, l.utm_medium, l.utm_campaign, l.utm_content].filter(Boolean).join(' / '), 'lead_id: ' + l.lead_id].join('\\n'); const fields = { TITLE: 'Live Japao — ' + l.nome, CONTACT_ID: contactId, CATEGORY_ID: '25', STAGE_ID: 'C25:UC_9TC1LI', OPENED: 'Y', COMMENTS: comments }; if (l.source_id) fields.SOURCE_ID = l.source_id; return { fields, params: { REGISTER_SONET_EVENT: 'Y' } }; })() }}",
         "options": {}
       },
       "id": "bx-deal-1",

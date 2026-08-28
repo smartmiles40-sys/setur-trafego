@@ -7,7 +7,7 @@ import Footer from './components/Footer'
 import ConsentimentoCookies from './components/ConsentimentoCookies'
 
 /**
- * Isca da live da Expedição Tailândia.
+ * Isca da live da Expedição Japão (com extensão China).
  *
  * Ordem pensada para o funil: hero (promessa + vídeo + formulário) → prova
  * social (depoimentos) → o formulário DE NOVO, no calor dos depoimentos → o

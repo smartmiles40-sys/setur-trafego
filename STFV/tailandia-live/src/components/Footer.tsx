@@ -81,7 +81,7 @@ export default function Footer() {
               Expedição {expedicao.nome} {expedicao.ano}
             </p>
             <p className="text-off-white/85 text-lg font-display">
-              {expedicao.dataRange}
+              {expedicao.resumoExpedicao}
             </p>
             <p className="text-off-white/50 text-sm mt-1">
               {expedicao.saidaCurta}

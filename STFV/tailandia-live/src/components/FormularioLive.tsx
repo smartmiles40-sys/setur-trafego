@@ -197,7 +197,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
       // Mesmo evento das LPs de expedição, para a tag que JÁ existe no GTM
       // disparar (ver live.tracking.emitirEventoLegado). Mesma forma do payload
       // de lá — só sem `resp`, porque esta LP não qualifica o lead. O `destino`
-      // vai como 'tailandia-live', que é o que separa a live nos relatórios.
+      // vai como 'japao-live', que é o que separa esta live nos relatórios.
       if (live.tracking.emitirEventoLegado) {
         pushDataLayer('expedicao_lead', {
           lead_id: leadId,

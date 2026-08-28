@@ -35,7 +35,7 @@ convite dedicado com os lembretes.
 
 Todos apontam para a **mesma sala do Meet**, então na prática é uma live só.
 
-> Crie um **calendário dedicado** (ex.: "Live Tailândia — inscritos") em vez de
+> Crie um **calendário dedicado** (ex.: "Live Japão — inscritos") em vez de
 > usar a agenda principal: são N eventos no mesmo horário, e você não quer isso
 > na sua agenda do dia a dia. O `calendar` do nó recebe o e-mail/ID dele.
 
@@ -87,16 +87,16 @@ convite na agenda. Duas saídas rápidas:
 Com o workflow ativo, dispare um POST de mentira (troque a URL e o e-mail):
 
 ```bash
-curl -X POST 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook/live-tailandia-inscricao' \
+curl -X POST 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook/live-japao-inscricao' \
   -H 'Content-Type: application/json' \
   -d '{
     "lead_id": "teste-1",
     "nome": "Teste da Silva",
     "whatsapp": "+5511987654321",
     "email": "voce@suaempresa.com",
-    "slug": "tailandia-live",
-    "fonte": "[Tailândia] - Live Comunidade",
-    "evento_titulo": "Live: Expedição Tailândia 2027 · Se Tu For, Eu Vou",
+    "slug": "japao-live",
+    "fonte": "[Japão] - Live",
+    "evento_titulo": "Live: Expedição Japão 2027 · Se Tu For, Eu Vou",
     "evento_inicio": "2026-08-27T19:30:00-03:00",
     "evento_duracao_min": 90,
     "evento_meet_url": "https://meet.google.com/mhk-hgkn-azm",

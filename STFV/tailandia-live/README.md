@@ -1,4 +1,21 @@
-# Isca da LIVE — Expedição Tailândia 2027
+# Isca da LIVE — Expedição Japão 2027 (com extensão China)
+
+> ### ⚠️ A PASTA SE CHAMA `tailandia-live`, MAS A LP É DO JAPÃO
+>
+> Não é engano e não renomeie. Em 28/08/2026 esta LP substituiu, **por cima**,
+> a isca da live da Tailândia — que já tinha acabado (a live foi 27/08). O nome
+> da pasta ficou porque o **Root Directory do projeto na Vercel aponta para ela**:
+> mantendo o caminho, o deploy é só um commit em cima, sem mexer em painel,
+> domínio ou env var. Renomear a pasta quebra o build do projeto.
+>
+> Quem manda na identidade do lead é o **slug `japao-live`** (em
+> `src/data/live.ts`), não o nome da pasta. É ele que vai para o CRM, para o
+> ledger e para o dataLayer.
+>
+> **Decisão do Bruno:** esta live NÃO fixa turma — fala da expedição (roteiro,
+> inclusos, como funciona) sem prometer 28/03–13/04 nem 14–30/10. Por isso não
+> há data de expedição na página, e o carrossel do roteiro mostra só
+> "Dia 1, Dia 2…".
 
 LP de campanha (não é a LP da expedição): captura o inscrito e o joga na
 comunidade.
@@ -12,7 +29,7 @@ anúncio → LP → vídeo (VSL VTurb) → formulário (nome, WhatsApp, e-mail)
 
 **Ordem da página:** hero (promessa + contagem + vídeo + formulário) → **depoimentos**
 (texto + nota, Shorts, canais para conferir) → **o formulário de novo**
-(`ChamadaFinal`, no calor dos depoimentos) → **roteiro** (carrossel de 16 dias,
+(`ChamadaFinal`, no calor dos depoimentos) → **roteiro** (carrossel de 17 dias,
 fechando com um botão que sobe de volta para a inscrição) → rodapé. Os atalhos
 *Roteiro* e *Depoimentos* ficam no **header**, sempre à mão.
 
@@ -114,15 +131,15 @@ Calendar precisa** — não é preciso configurar data em dois lugares:
   "nome": "Maria Aparecida Souza",
   "whatsapp": "+5511987654321",      // E.164, sempre
   "email": "maria.souza@exemplo.com",// sempre minúsculo
-  "slug": "tailandia-live",
+  "slug": "japao-live",
   "origem": "live",
-  "expedicao": "Expedição Tailândia 2027",
-  "fonte": "[Tailândia] - Live Comunidade",
-  "source_id": "",
+  "expedicao": "Expedição Japão 2027",
+  "fonte": "[Japão] - Live",
+  "source_id": "LIVE_JAPAO",   // ⚠️ conferir se existe no Bitrix
 
   // → nó "Google Calendar: create event"
-  "evento_titulo": "Live: Expedição Tailândia 2027 · Se Tu For, Eu Vou",
-  "evento_inicio": "2026-08-27T19:30:00-03:00",
+  "evento_titulo": "Live: Expedição Japão 2027 · Se Tu For, Eu Vou",
+  "evento_inicio": "2026-08-30T19:30:00-03:00",
   "evento_duracao_min": 90,
   "evento_meet_url": "https://meet.google.com/...",
   "convidar_email": "maria.souza@exemplo.com",   // vai como attendee
@@ -133,8 +150,8 @@ Calendar precisa** — não é preciso configurar data em dois lugares:
   "utm_content": "LIVE",            // fallback quando o anúncio não taggeia
   "gclid": "", "fbclid": "", "utm_id": "", "gbraid": "", "wbraid": "",
 
-  "form_name": "live-tailandia-live-2027",
-  "data_hora_cadastro": "26/08/2026 13:04:11",
+  "form_name": "live-japao-live-2027",
+  "data_hora_cadastro": "28/08/2026 13:04:11",
   "etapa": "live"
 }
 ```
@@ -238,10 +255,10 @@ visita e nunca a conversão.
   event: 'live_lead',
   lead_id: '<uuid>',
   event_id: '<mesmo uuid>',        // use este na deduplicação
-  destino: 'tailandia-live',
+  destino: 'japao-live',
   posicao: 'hero' | 'fim',         // qual formulário converteu
   lead: { nome, email, whatsapp },  // whatsapp em E.164, email minúsculo
-  form_name: 'live-tailandia-live-2027',
+  form_name: 'live-japao-live-2027',
   utm_source, utm_medium, utm_campaign, utm_term, utm_content,
   gclid, fbclid, utm_id, gbraid, wbraid
 }
@@ -267,9 +284,34 @@ npm run build
 npm run preview
 ```
 
-**Vercel (deploy isolado, igual às outras LPs STFV):** projeto novo com
-**Root Directory = `STFV/tailandia-live`**. O `vercel.json` já traz
-`buildCommand`, `installCommand` e `outputDirectory`.
+**Vercel — não há nada a fazer no painel.** Esta LP fica no projeto que já
+existe, no mesmo caminho de sempre:
+
+| | |
+|---|---|
+| Projeto | `stfv_tailandia_live` — `prj_AWzeQXm2KR8Eb3pr5pEQlul8jN27` |
+| Root Directory | `STFV/tailandia-live` — **inalterado**, é esta pasta |
+| Domínio | **`live.setuforeuvouviagens.com.br`** (já apontado nele) |
+
+Deploy = **push na main**. O projeto builda esta pasta e publica no domínio.
+Domínio, env vars e a verificação do domínio no Meta continuam no lugar, sem
+janela fora do ar — foi por isso que a LP do Japão veio para cá em vez de morar
+numa pasta com o nome dela.
+
+O subdomínio `live.` é filho do domínio principal, então herda a verificação no
+Business Manager — o que a live da Tailândia nunca conseguiu enquanto esteve em
+`*.vercel.app` (sem verificação não há Aggregated Event Measurement, e a
+atribuição no público iOS fica degradada).
+
+⚠️ **A env var `WEBHOOK_LIVE_URL` do projeto ainda aponta para o workflow da
+Tailândia** — trocar pelo webhook do Japão (`live-japao-inscricao`), senão os
+inscritos do Japão caem no fluxo da live antiga. É a ÚNICA coisa que precisa
+mudar no painel.
+
+⚠️ **O `.env.local` desta pasta se perdeu** na troca de conteúdo (era ignorado
+pelo git). Para voltar a testar o envio de verdade no `npm run dev`, copie os
+valores das env vars do projeto na Vercel para um `.env.local` novo — o
+`.env.example` lista quais são.
 
 Env vars do projeto:
 
@@ -285,8 +327,8 @@ painel da ConverteAI** para o vídeo tocar.
 
 ## 7. O que esta LP NÃO tem (de propósito)
 
-Mapa, FAQ, preço, seção de opções, música de fundo. O **roteiro** entrou em
-26/08 (pedido do Bruno) reaproveitando `Roteiro.tsx` + o array `roteiro` da LP
-da expedição — por isso o `swiper` voltou às dependências e o CSS dele ao
+Mapa, FAQ, preço, seção de opções, música de fundo. O **roteiro** reaproveita
+`Roteiro.tsx` + o array `roteiro` da LP da expedição (`../japao-china`), sem o
+campo `data` de cada dia — por isso o `swiper` voltou às dependências e o CSS dele ao
 `index.css`. As demais seções continuam prontas em
-`../tailandia/src/components/` se um dia forem necessárias.
+`../japao-china/src/components/` se um dia forem necessárias.

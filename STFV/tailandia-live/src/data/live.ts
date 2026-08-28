@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- *  CONFIGURAÇÃO DA ISCA — LIVE DA EXPEDIÇÃO TAILÂNDIA
+ *  CONFIGURAÇÃO DA ISCA — LIVE DA EXPEDIÇÃO JAPÃO
  * ============================================================================
  *
  *  Esta LP é uma ISCA de campanha, não a LP da expedição. O funil é:
@@ -13,35 +13,60 @@
  *  em componente nenhum para trocar data da live, link do Meet, comunidade
  *  ou vídeo.
  *
+ *  ⚠️ DECISÃO DO BRUNO (28/08/2026): esta live NÃO fixa turma. Fala da
+ *     expedição (roteiro, o que está incluso, como funciona) sem prometer
+ *     28/03–13/04 nem 14–30/10 — as duas turmas de 2027 seguem existindo, mas
+ *     quem escolhe é a pessoa na conversa depois. Por isso não há data de
+ *     expedição em lugar nenhum da página, e o carrossel do roteiro mostra
+ *     "Dia 1, Dia 2..." sem o dia do mês.
+ *
  *  ⚠️ Os campos marcados com "PREENCHER" precisam do valor real antes de subir.
  * ============================================================================
  */
 
 export const live = {
   // slug do lead — roteia o webhook em /api/save-lead e separa esta base das
-  // LPs de expedição no CRM/ledger. NÃO reaproveitar o slug 'tailandia'.
-  slug: 'tailandia-live',
+  // LPs de expedição no CRM/ledger. NÃO reaproveitar o slug 'japao-china'
+  // (LP de tráfego da expedição) nem 'tailandia-live' (a outra live).
+  slug: 'japao-live',
 
-  // Como o lead aparece no Bitrix. A coluna/etapa exclusiva da comunidade é
-  // decidida no n8n a partir daqui.
-  fonte: '[Tailândia] - Live Comunidade',
-  sourceId: '', // opcional: Source ID do Bitrix, se você criar um só para a live
+  // Como o lead aparece no Bitrix.
+  //
+  // `fonte` é o NOME da origem (o texto que você lê no card do Bitrix).
+  // `sourceId` é o CÓDIGO dessa mesma origem (o STATUS_ID) — é ele que o
+  // Bitrix aceita no campo SOURCE_ID do negócio, NÃO o ID numérico interno.
+  //
+  // ⚠️ CONFERIR NO BITRIX antes de subir: a origem "[Japão] - Live" com o
+  // STATUS_ID abaixo precisa EXISTIR cadastrada no portal. O padrão do portal
+  // é LIVE_<DESTINO> (LIVE_TAILANDIA, LIVE_ITALIA, LIVE_EGITO...), então
+  // LIVE_JAPAO é o nome esperado — mas mandar um STATUS_ID inexistente não dá
+  // erro: o negócio nasce sem origem e some no meio de "Site", sem dar para
+  // medir o custo por lead da live.
+  //
+  // Não confundir com a LP de tráfego do Japão, que usa '[Japão] - Tráfego' /
+  // 'UC_5FDRLJ'. São origens diferentes de propósito: misturar as duas apaga a
+  // diferença entre quem veio do anúncio e quem veio da live.
+  fonte: '[Japão] - Live',
+  sourceId: 'LIVE_JAPAO', // PREENCHER/CONFERIR no Bitrix
 
   // ---- A expedição que a live apresenta ------------------------------------
   expedicao: {
-    nome: 'Tailândia',
-    nomeUpper: 'TAILÂNDIA',
+    nome: 'Japão',
+    nomeUpper: 'JAPÃO',
     ano: 2027,
-    dataRange: '6 a 21 de novembro de 2027',
+    // Sem data de turma (ver a decisão no topo do arquivo). Este é o resumo
+    // que aparece no rodapé no lugar onde as outras LPs mostram o período.
+    resumoExpedicao: '17 dias · Japão com extensão China',
     saidaCurta: 'Encontro em Guarulhos (GRU)',
   },
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: o roteiro dos 15 dias, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora e meia ao vivo com quem organiza a expedição: o roteiro dos 17 dias pelo Japão, a extensão China, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',
+    'Extensão China explicada',
     'Valores e formas de pagamento',
     'Como funciona o acompanhamento',
     'Perguntas ao vivo',
@@ -49,24 +74,31 @@ export const live = {
 
   // ---- A live --------------------------------------------------------------
   evento: {
-    titulo: 'Live: Expedição Tailândia 2027 · Se Tu For, Eu Vou',
+    titulo: 'Live: Expedição Japão 2027 · Se Tu For, Eu Vou',
 
     /**
-     * PREENCHER — data e hora de início, no fuso de São Paulo.
+     * Data e hora de início, no fuso de São Paulo.
      * Formato ISO com offset explícito: 'AAAA-MM-DDTHH:MM:00-03:00'
      * (o -03:00 é o horário de Brasília; não existe mais horário de verão).
      * Tudo na página — contagem regressiva, rótulo da data, convite do Google
      * Agenda e o .ics — é derivado DAQUI. Não há data escrita à mão em
      * nenhum outro lugar.
+     *
+     * ⚠️ CONFERIR: o Bruno pediu "domingo às 19h30" em 28/08/2026 (sexta), e
+     * aqui está o domingo SEGUINTE — 30/08/2026. Se a live for outro domingo
+     * (06/09, 13/09...), troque só esta linha: a página inteira acompanha.
      */
-    inicioISO: '2026-08-27T19:30:00-03:00',
+    inicioISO: '2026-08-30T19:30:00-03:00',
     duracaoMinutos: 90,
 
-    meetUrl: 'https://meet.google.com/mhk-hgkn-azm',
+    // PREENCHER — sala do Google Meet desta live (crie uma NOVA, não reaproveite
+    // a da Tailândia). Vazio aqui = o convite que o n8n cria chega sem link da
+    // sala, e a pessoa não tem por onde entrar.
+    meetUrl: '',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:
-      'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar a Expedição Tailândia 2027: roteiro completo, datas, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',
+      'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar a Expedição Japão 2027, com extensão China: roteiro completo dos 17 dias, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',
   },
 
   /**
@@ -74,6 +106,9 @@ export const live = {
    * Aparece ao lado do texto na seção de depoimentos. Só o ID do vídeo — o que
    * vem depois de /shorts/ ou de ?v= na URL do YouTube.
    * Deixe `youtubeId` vazio para esconder o bloco.
+   *
+   * É o mesmo Short da live da Tailândia de propósito: o depoimento é sobre a
+   * agência, não sobre o destino. Se surgir um de quem foi ao Japão, troque.
    */
   depoimentoVideo: {
     youtubeId: 'R7nfZV9OLCU',
@@ -112,6 +147,10 @@ export const live = {
     // Link de convite do grupo. Sem os parâmetros `?amv=...&ilr=...&p=i&s=sh`
     // que o WhatsApp cola ao usar "compartilhar": eles são do app de quem
     // compartilhou, não do convite — o que identifica o grupo é só o código.
+    //
+    // ⚠️ Por ora é a MESMA comunidade da live da Tailândia (o grupo é da
+    // agência, não do destino). Se você criar um grupo só do Japão, troque
+    // aqui — é o único lugar onde esse link aparece.
     url: 'https://chat.whatsapp.com/GApX2oeJUl3HeS4elpqbUq',
     nome: 'Comunidade Se Tu For, Eu Vou',
     descricao:
@@ -126,6 +165,9 @@ export const live = {
    *
    * ⚠️ VTurb tem trava de domínio: libere o domínio desta LP no painel da
    * ConverteAI, senão o player fica preto sem dar erro.
+   *
+   * ⚠️ NÃO reaproveite o player da LP de tráfego do Japão: aquele vídeo vende
+   * a expedição, este precisa convidar para a live.
    */
   vsl: {
     playerId: '',
@@ -153,29 +195,16 @@ export const live = {
    * `emitirEventoLegado`: além do `live_lead`, empurra também **`expedicao_lead`**
    * no dataLayer — o evento que o GTM já escuta para as LPs de expedição.
    *
-   * Por que existe: medido em produção, o Pixel do Meta não envia nada pelo
-   * navegador (o transporte é GTM → Stape → CAPI). Quem conta a conversão é a
-   * tag do GTM, e o container não conhece `live_lead`. Emitindo o nome antigo, a
-   * tag que já existe dispara e a campanha passa a receber a conversão sem
-   * precisar mexer no GTM.
-   *
-   * O preço: a live entra no mesmo balde das LPs de expedição nos relatórios.
-   * Dá para separar pelo parâmetro `destino`, que vai como `tailandia-live`.
-   *
-   * ⚠️ **Desligue (false) no dia em que criar o trigger de `live_lead` no GTM.**
-   * Com os dois ligados, o Meta ainda conta uma vez só (o `event_id` deduplica),
-   * mas GA4 e Google Ads contariam a conversão em dobro.
+   * DESLIGADO, pelo mesmo motivo medido na live da Tailândia: NENHUMA tag do
+   * container escuta `expedicao_lead` (no envio só sai o `form_start`
+   * automático do GA4). Quem conta a conversão é o PAGEVIEW da /obrigado.html.
+   * Só ligue se um dia existir mesmo uma tag por evento no GTM.
    */
   tracking: {
-    // DESLIGADO: o teste em produção mostrou que NENHUMA tag do container escuta
-    // `expedicao_lead` — o único hit no envio era o `form_start` automático do
-    // GA4. A conversão vem do PAGEVIEW da /obrigado.html (ver o comentário
-    // dentro daquele arquivo). Só ligue se um dia existir mesmo uma tag por
-    // evento no GTM.
     emitirEventoLegado: false,
   },
 
-  heroImage: `${import.meta.env.BASE_URL}assets/tailandia/hero.jpg`,
+  heroImage: `${import.meta.env.BASE_URL}assets/japao/hero.jpg`,
 
   instagram: {
     handle: '@setuforeuvouviagens',

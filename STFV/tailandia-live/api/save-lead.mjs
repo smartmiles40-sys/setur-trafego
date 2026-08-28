@@ -1,4 +1,4 @@
-//  /api/save-lead — backend do formulário da ISCA DA LIVE (Tailândia).
+//  /api/save-lead — backend do formulário da ISCA DA LIVE (Japão).
 //
 //  Mesmo desenho do /api/save-lead das LPs de expedição, com uma diferença
 //  deliberada: aqui existe UM destino só — o webhook exclusivo da live. Assim
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
     fonte: str(body.fonte, 80),
     source_id: str(body.source_id, 40),
     origem: str(body.origem, 20) || 'live',
-    slug: str(body.slug, 40) || 'tailandia-live',
+    slug: str(body.slug, 40) || 'japao-live',
     // Dados do evento — é com isto que o n8n cria/atualiza o convite no Google
     // Agenda e coloca `convidar_email` como convidado.
     evento_titulo: str(body.evento_titulo, 160),

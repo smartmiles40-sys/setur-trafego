@@ -21,11 +21,12 @@ LP de campanha (não é a LP da expedição): captura o inscrito e o joga na
 comunidade.
 
 ```
-anúncio → LP → vídeo (VSL VTurb) → formulário (nome, WhatsApp, e-mail)
+anúncio → LP → vídeo (VSL VTurb) → formulário (SÓ O NOME)
                                  → redirect automático para a COMUNIDADE do WhatsApp
-                                    (e, por trás, o n8n manda o convite do Meet
-                                     para o e-mail dela — ela não clica em nada)
+                                    (é lá que o link da live e os avisos saem)
 ```
+
+**Formulário de um campo só:** pede o nome e mais nada. Ver a seção 3.
 
 **Ordem da página:** hero (promessa + contagem + vídeo + formulário) → **depoimentos**
 (texto + nota, Shorts, canais para conferir) → **o formulário de novo**
@@ -106,9 +107,20 @@ antes de a aba trocar de site (mesmo motivo do countdown da `obrigado.html` das
 outras LPs). O botão fica visível como plano B: alguns navegadores bloqueiam
 navegação automática.
 
-**O convite do Google Meet não aparece na tela.** Ele é criado pelo n8n com o
-e-mail dela como convidada e chega por e-mail — ela não aceita nem clica em
-nada aqui. A tela só avisa que o convite está a caminho.
+**Não há mais convite no Google Agenda.** Desde 28/08/2026 o formulário pede
+apenas o NOME (decisão do Bruno: menor atrito possível). Sem o e-mail do lead
+não há quem convidar — quem entrega a live passou a ser a **comunidade do
+WhatsApp**, e é de lá que o link e os lembretes têm que sair.
+
+O que isso custa, para ninguém se surpreender depois:
+
+- o nó do Google Calendar do workflow ficou **sem `convidar_email`** — ou ele sai
+  do fluxo, ou vira um evento único só para a equipe;
+- o negócio no Bitrix nasce **só com o nome**: sem telefone não há `findbycomm`,
+  então cada inscrito vira contato novo (a SDR pega o contato na conversa do
+  grupo);
+- o formulário não tem mais os campos `#whatsapp` e `#email`; variável do GTM
+  que leia esses ids passa a vir vazia.
 
 Uma trava por aba (`<slug>_wa_redirecionado`) impede o laço de quem volta do
 WhatsApp para a LP: nesse caso aparece a confirmação com o botão, sem redirect
@@ -129,20 +141,17 @@ Calendar precisa** — não é preciso configurar data em dois lugares:
 {
   "lead_id": "uuid",
   "nome": "Maria Aparecida Souza",
-  "whatsapp": "+5511987654321",      // E.164, sempre
-  "email": "maria.souza@exemplo.com",// sempre minúsculo
   "slug": "japao-live",
   "origem": "live",
   "expedicao": "Expedição Japão 2027",
   "fonte": "[Japão] - Live",
   "source_id": "LIVE_JAPAO",   // ⚠️ conferir se existe no Bitrix
 
-  // → nó "Google Calendar: create event"
+  // dados do evento (o convite por e-mail acabou — ver seção 3)
   "evento_titulo": "Live: Expedição Japão 2027 · Se Tu For, Eu Vou",
   "evento_inicio": "2026-08-30T19:30:00-03:00",
   "evento_duracao_min": 90,
   "evento_meet_url": "https://meet.google.com/...",
-  "convidar_email": "maria.souza@exemplo.com",   // vai como attendee
   "comunidade_url": "https://chat.whatsapp.com/...",
 
   // atribuição
@@ -160,10 +169,10 @@ Calendar precisa** — não é preciso configurar data em dois lugares:
 
 O que o workflow faz:
 
-1. **Google Calendar → Create Event** (ou *Add attendee* num evento fixo):
-   `start = evento_inicio`, `end = start + evento_duracao_min`,
-   `attendees = [convidar_email]`, `sendUpdates = all` — é isso que faz o
-   convite chegar no e-mail dela com lembrete.
+1. ~~**Google Calendar → Create Event** com o lead como convidado~~ — **morreu
+   junto com o campo de e-mail** (28/08/2026). O nó continua no JSON do
+   workflow, mas sem `convidar_email` não tem attendee: ou remova o nó, ou
+   deixe um evento único da equipe, e avise a turma pela comunidade.
 2. **Bitrix** → criar o contato/negócio **na coluna exclusiva da comunidade**
    (a decisão de etapa sai do `fonte`/`origem`).
 3. Opcional: mandar o link da comunidade por WhatsApp para quem não clicou.
@@ -211,8 +220,9 @@ importar `Instagram`/`Youtube` de lá quebra o build.
 | `live_comunidade_click` | clicou no botão da comunidade (em vez de esperar) |
 | `live_comunidade_redirect` | o redirect automático para a comunidade disparou |
 
-Ids estáveis para os triggers: `#live-form`, `#nome`, `#whatsapp`, `#email`,
-`#lead_id`, `#utm_*`, `#btn-submit`, `#live-success`, `#btn-comunidade`.
+Ids estáveis para os triggers: `#live-form`, `#nome`, `#lead_id`, `#utm_*`,
+`#btn-submit`, `#live-success`, `#btn-comunidade`.
+(`#whatsapp` e `#email` não existem mais — o formulário tem um campo só.)
 
 A conversão da live é o `live_lead` — **não** reaproveite o `expedicao_lead` das
 LPs de expedição, senão o custo por lead das duas campanhas se mistura.
@@ -257,7 +267,7 @@ visita e nunca a conversão.
   event_id: '<mesmo uuid>',        // use este na deduplicação
   destino: 'japao-live',
   posicao: 'hero' | 'fim',         // qual formulário converteu
-  lead: { nome, email, whatsapp },  // whatsapp em E.164, email minúsculo
+  lead: { nome },                  // o formulário só pede o nome
   form_name: 'live-japao-live-2027',
   utm_source, utm_medium, utm_campaign, utm_term, utm_content,
   gclid, fbclid, utm_id, gbraid, wbraid

@@ -13,7 +13,8 @@ import { live } from '../data/live'
  * cai de novo no checklist, não no formulário vazio.
  */
 
-export type Enviado = { nome: string; email: string }
+/** Só o nome: o formulário da live não pede mais e-mail nem WhatsApp. */
+export type Enviado = { nome: string }
 
 const CHAVE = `${live.slug}_enviado`
 

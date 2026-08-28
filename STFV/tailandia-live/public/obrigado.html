@@ -84,7 +84,7 @@
     <a class="btn" id="btn-comunidade" href="https://chat.whatsapp.com/GApX2oeJUl3HeS4elpqbUq">
       Entrar na comunidade agora <span id="contagem"></span>
     </a>
-    <p class="aviso" id="aviso-email">O convite da live também vai para o seu e-mail.</p>
+    <p class="aviso" id="aviso-email">O link da live é enviado na comunidade do WhatsApp.</p>
     <div class="marca">Se Tu For, Eu Vou! · Viagens</div>
   </main>
 
@@ -108,19 +108,6 @@
         document.getElementById('titulo').textContent =
           'Inscrição confirmada, ' + String(dados.nome).trim().split(' ')[0] + '!';
       }
-      if (dados && dados.email) {
-        document.getElementById('aviso-email').textContent =
-          'O convite da live também vai para ' + dados.email + '.';
-      }
-
-      var btn = document.getElementById('btn-comunidade');
-      btn.href = destino;
-
-      // Trava: quem volta do WhatsApp para esta página não pode ser reenviado
-      // num laço — vê só o botão.
-      var JA = SLUG + '_wa_redirecionado';
-      if (ler(JA) === '1') return;
-      try { sessionStorage.setItem(JA, '1'); } catch (e) {}
 
       var restante = SEGUNDOS;
       var span = document.getElementById('contagem');

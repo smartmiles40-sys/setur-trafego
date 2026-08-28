@@ -78,18 +78,12 @@ export default async function handler(req, res) {
   }
   for (const k of TRACK_KEYS) lead[k] = str(body[k], 200)
 
-  // Validação no servidor: nome, WhatsApp e e-mail. O e-mail é obrigatório aqui
-  // (diferente das LPs de expedição) porque é ele que recebe o convite da live.
+  // Validação no servidor: só o NOME. Desde 28/08/2026 o formulário tem um campo
+  // só — sem e-mail e sem WhatsApp (ver o cabeçalho de src/data/live.ts). Os
+  // campos continuam na allowlist acima, mas chegam vazios: manter a forma do
+  // payload evita quebrar o n8n e o ledger, que já leem essas chaves.
   if (lead.nome.length < 2) {
     res.status(400).json({ ok: false, error: 'nome_invalido' })
-    return
-  }
-  if (lead.whatsapp.length < 13) { // +55 + ao menos 10 dígitos
-    res.status(400).json({ ok: false, error: 'whatsapp_invalido' })
-    return
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(lead.email)) {
-    res.status(400).json({ ok: false, error: 'email_invalido' })
     return
   }
 

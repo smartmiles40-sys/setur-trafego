@@ -1,3 +1,11 @@
+> ## ⚠️ DESATUALIZADO NA PARTE DO GOOGLE CALENDAR (28/08/2026)
+>
+> O formulário da LP passou a pedir **só o nome** — sem e-mail, sem WhatsApp.
+> Logo **não existe mais `convidar_email`** e o nó do Google Calendar não tem
+> quem convidar. O aviso da live tem que sair pela comunidade do WhatsApp.
+> O resto deste passo a passo (webhook, Bitrix, teste por curl) continua válido,
+> lembrando que o contato do Bitrix nasce só com o nome.
+
 # Automação da live — convite no Google Agenda + Bitrix
 
 O que este workflow faz, para cada pessoa que se inscreve na LP:

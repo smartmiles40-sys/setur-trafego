@@ -92,6 +92,27 @@ export default function HeroLive() {
                 <span className="text-lime">{live.expedicao.ano}</span>
               </motion.span>
             </div>
+
+            {/* "com extensão China" em corpo menor e minúsculas, EMBAIXO: o
+                destino principal segue sendo o Japão e a China aparece como
+                extensão — mesmo tratamento da LP da expedição.
+
+                O <div> externo é obrigatório: .kinetic-mask-wrapper é
+                inline-block com vertical-align:top, então sem um bloco em volta
+                este texto encosta no canto superior direito do "JAPÃO 2027" em
+                vez de começar uma linha nova. */}
+            <div>
+              <div className="kinetic-mask-wrapper mt-1 md:mt-2">
+                <motion.span
+                  initial={{ y: '110%' }}
+                  animate={{ y: '0%' }}
+                  transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+                  className="serif-italic inline-block text-[clamp(0.95rem,3.2vw,2.1rem)] font-normal leading-none tracking-[0.04em] text-off-white/70"
+                >
+                  {live.expedicao.complementoNome}
+                </motion.span>
+              </div>
+            </div>
           </h1>
 
           <motion.div

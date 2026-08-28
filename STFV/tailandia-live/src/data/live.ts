@@ -20,6 +20,19 @@
  *     expedição em lugar nenhum da página, e o carrossel do roteiro mostra
  *     "Dia 1, Dia 2..." sem o dia do mês.
  *
+ *  ⚠️ FORMULÁRIO DE UM CAMPO SÓ (decisão do Bruno, 28/08/2026): pede apenas o
+ *     NOME. Sem e-mail e sem WhatsApp — o menor atrito possível, porque quem
+ *     entrega a live é a comunidade do WhatsApp, para onde a pessoa é levada
+ *     logo depois.
+ *
+ *     O que isso custa, para ninguém se surpreender depois:
+ *       · **acabou o convite no Google Agenda** — ele dependia do e-mail do
+ *         lead como convidado. O nó do Google Calendar no workflow do n8n não
+ *         tem mais quem convidar; o aviso da live tem que sair na comunidade.
+ *       · o negócio no Bitrix nasce só com o nome: sem telefone não há
+ *         findbycomm, então cada inscrito vira um contato novo (a SDR pega o
+ *         telefone na conversa do grupo).
+ *
  *  ⚠️ Os campos marcados com "PREENCHER" precisam do valor real antes de subir.
  * ============================================================================
  */
@@ -53,6 +66,11 @@ export const live = {
   expedicao: {
     nome: 'Japão',
     nomeUpper: 'JAPÃO',
+    // Complemento do nome: aparece SEMPRE abaixo do "JAPÃO", em corpo menor e
+    // minúsculas — o destino principal continua sendo o Japão e a China entra
+    // como extensão. Mesmo padrão da LP da expedição (regra do Bruno: "pode
+    // deixar a china sempre frisando com extensão China").
+    complementoNome: 'com extensão China',
     ano: 2027,
     // Sem data de turma (ver a decisão no topo do arquivo). Este é o resumo
     // que aparece no rodapé no lugar onde as outras LPs mostram o período.

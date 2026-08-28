@@ -62,6 +62,11 @@ export default async function handler(req, res) {
     source_id: str(body.source_id, 40),
     origem: str(body.origem, 20) || 'live',
     slug: str(body.slug, 40) || 'japao-live',
+    // Qual das duas instâncias do formulário converteu ('hero' | 'fim'). O
+    // navegador sempre mandou, mas isto aqui é uma allowlist: sem a chave, o
+    // campo era descartado em silêncio e a coluna "Formulario" da planilha
+    // dizia "topo da pagina" para todo mundo.
+    posicao: str(body.posicao, 10),
     // Dados do evento — é com isto que o n8n cria/atualiza o convite no Google
     // Agenda e coloca `convidar_email` como convidado.
     evento_titulo: str(body.evento_titulo, 160),

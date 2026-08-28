@@ -14,7 +14,7 @@
       "typeVersion": 2,
       "position": [-160, 300],
       "webhookId": "entrada-live-japao",
-      "notes": "URL de producao deste no vai na env var WEBHOOK_ENTRAR_URL do projeto na Vercel. NAO reaproveitar o webhook da inscricao (live-japao-inscricao): sao listas diferentes."
+      "notes": "URL de producao deste no vai na env var WEBHOOK_ENTRAR_URL do projeto na Vercel. NAO reaproveitar o webhook da inscricao (inscricao-live-japao): sao listas diferentes."
     },
     {
       "parameters": {
@@ -53,7 +53,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [300, 300],
-      "notes": "PREENCHER documentId (cole a URL da planilha) e confira o nome da aba. O cabecalho da aba tem que ser EXATAMENTE: Data/hora | Nome | WhatsApp | Live | Origem | gclid | fbclid | lead_id -- o autoMapInputData casa por nome de coluna, e coluna que nao existe no cabecalho e' descartada em silencio.",
+      "notes": "Aponte para a planilha de ENTRADAS e confira o nome da aba. Ligue tambem a opcao 'Use Append'. O cabecalho da aba tem que ser EXATAMENTE: Data/hora | Nome | WhatsApp | Live | Origem | gclid | fbclid | lead_id -- o autoMapInputData casa por nome de coluna, e coluna que nao existe no cabecalho e' descartada em silencio.",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "PREENCHER_ID_DA_CREDENCIAL",

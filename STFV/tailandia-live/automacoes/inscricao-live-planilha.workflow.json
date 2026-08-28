@@ -53,7 +53,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [300, 300],
-      "notes": "PREENCHER documentId com a planilha de INSCRITOS (NAO a de entradas). Cabecalho exato da aba: Data/hora | Nome | WhatsApp | Live | Formulario | Origem | gclid | fbclid | lead_id -- o autoMapInputData casa por nome de coluna, e coluna que nao existe no cabecalho e' descartada em silencio.",
+      "notes": "Aponte para a planilha de INSCRITOS (NAO a de entradas). Ligue tambem a opcao 'Use Append'. Cabecalho exato da aba: Data/hora | Nome | WhatsApp | Live | Formulario | Origem | gclid | fbclid | lead_id -- o autoMapInputData casa por nome de coluna, e coluna que nao existe no cabecalho e' descartada em silencio.",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "PREENCHER_ID_DA_CREDENCIAL",

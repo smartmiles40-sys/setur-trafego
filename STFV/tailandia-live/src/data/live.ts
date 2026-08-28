@@ -170,7 +170,7 @@ export const live = {
     // agência que a live da Tailândia usava. Se trocar, troque também o
     // `PADRAO` da public/obrigado.html: é o link de emergência de quem cai lá
     // com o sessionStorage vazio (aba anônima).
-    url: 'https://chat.whatsapp.com/FKeALeIRtGV8m97bdjiigt',
+    url: 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK',
     nome: 'Live - Japão & China',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

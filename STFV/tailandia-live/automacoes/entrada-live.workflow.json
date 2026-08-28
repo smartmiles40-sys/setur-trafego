@@ -1,0 +1,79 @@
+{
+  "name": "Entrada da live — planilha (Japão 2027)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "entrada-live-japao",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-entrada",
+      "name": "Webhook — entrada da live",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-160, 300],
+      "webhookId": "entrada-live-japao",
+      "notes": "URL de producao deste no vai na env var WEBHOOK_ENTRAR_URL do projeto na Vercel. NAO reaproveitar o webhook da inscricao (live-japao-inscricao): sao listas diferentes."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Uma linha da planilha por pessoa que entrou.\n//\n// O payload vem de /api/entrar-live (ver o arquivo para a lista de campos).\n// Aqui so achatamos e damos nomes de COLUNA legiveis: o cabecalho da planilha\n// tem que bater exatamente com estas chaves.\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n\n  const nome = String(b.nome || '').trim();\n  const whatsapp = String(b.whatsapp || '');\n\n  // Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n  // +5511987654321 em notacao cientifica.\n  const whatsappCelula = whatsapp ? `'${whatsapp}` : '';\n\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      'Data/hora': b.data_hora_entrada || '',\n      'Nome': nome,\n      'WhatsApp': whatsappCelula,\n      'Live': b.evento_titulo || '',\n      'Origem': origem,\n      'gclid': b.gclid || '',\n      'fbclid': b.fbclid || '',\n      'lead_id': b.lead_id || '',\n    },\n  });\n}\n\nreturn linhas;"
+      },
+      "id": "normalizar",
+      "name": "Montar a linha",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [60, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "PREENCHER_URL_DA_PLANILHA"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Entradas"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "matchingColumns": [],
+          "value": {}
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "id": "sheets-append",
+      "name": "Google Sheets — append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [300, 300],
+      "notes": "PREENCHER documentId (cole a URL da planilha) e confira o nome da aba. O cabecalho da aba tem que ser EXATAMENTE: Data/hora | Nome | WhatsApp | Live | Origem | gclid | fbclid | lead_id -- o autoMapInputData casa por nome de coluna, e coluna que nao existe no cabecalho e' descartada em silencio.",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PREENCHER_ID_DA_CREDENCIAL",
+          "name": "Google Sheets (Se Tu For)"
+        }
+      },
+      "onError": "stopWorkflow"
+    }
+  ],
+  "connections": {
+    "Webhook — entrada da live": {
+      "main": [[{ "node": "Montar a linha", "type": "main", "index": 0 }]]
+    },
+    "Montar a linha": {
+      "main": [[{ "node": "Google Sheets — append", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

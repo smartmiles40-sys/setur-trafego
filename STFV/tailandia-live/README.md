@@ -342,3 +342,66 @@ Mapa, FAQ, preço, seção de opções, música de fundo. O **roteiro** reaprove
 campo `data` de cada dia — por isso o `swiper` voltou às dependências e o CSS dele ao
 `index.css`. As demais seções continuam prontas em
 `../japao-china/src/components/` se um dia forem necessárias.
+
+---
+
+## 8. A porta da live — `/entrar`
+
+Página SEPARADA da LP, criada em 28/08/2026 a pedido do Bruno (modelo:
+`entrarlive.inovvatur.com.br`). Serve para **o dia da live**: é o link que você
+manda no grupo na hora de abrir a sala.
+
+```
+link no grupo → /entrar → nome + WhatsApp → POST /api/entrar-live
+              → n8n grava a linha na PLANILHA (Google Sheets)
+              → redirect direto para a sala
+```
+
+Não confundir com a LP (`/`), que é a **inscrição** vinda do anúncio e termina
+na comunidade. São duas listas diferentes, de propósito: quem se inscreveu × quem
+apareceu.
+
+| Peça | Arquivo |
+|---|---|
+| A página | `public/entrar.html` — HTML puro, sem build |
+| O endpoint | `api/entrar-live.mjs` — esconde o webhook numa env var |
+| A rota `/entrar` | `vercel.json` → rewrite para `/entrar.html` |
+| O workflow | `automacoes/entrada-live.workflow.json` |
+
+**Por que HTML puro:** esta página abre no momento de maior pressa do funil,
+quase toda em 4G no celular. Um arquivo só, sem bundle para baixar.
+
+**Por que rewrite e não `cleanUrls`:** `cleanUrls` renomearia TODAS as páginas —
+inclusive a `/obrigado.html`, que é o gatilho da conversão no GTM. O rewrite
+atende `/entrar` sem tocar no resto.
+
+### O que preencher
+
+1. ~~`SALA_URL`~~ — **já preenchida** (28/08/2026):
+   `https://meet.google.com/nub-mmfn-edw`, no topo do `<script>` de
+   `public/entrar.html` **e** em `evento.meetUrl` de `src/data/live.ts`.
+   ⚠️ São DOIS lugares e eles precisam continuar iguais: trocar um e esquecer o
+   outro não dá erro — a pessoa entra numa sala e o convite aponta para outra.
+   (Se um dia zerar o `SALA_URL`, a página não quebra: captura normalmente e
+   mostra "a sala abre no horário da live" em vez de redirecionar.)
+2. **A planilha:** crie uma aba `Entradas` com o cabeçalho EXATO
+   `Data/hora | Nome | WhatsApp | Live | Origem | gclid | fbclid | lead_id`.
+   O nó do Sheets casa por nome de coluna; coluna que não existe no cabeçalho é
+   descartada **em silêncio**.
+3. **Importe** `automacoes/entrada-live.workflow.json` no n8n, preencha a URL da
+   planilha e a credencial do Google Sheets, ative, e cole a URL de produção do
+   webhook na env var **`WEBHOOK_ENTRAR_URL`** do projeto na Vercel.
+
+### Decisões que valem saber
+
+- **O redirect não espera a resposta do servidor.** Ninguém fica preso na porta
+  porque o n8n demorou. O `fetch` vai com `keepalive`, então o navegador termina
+  de mandar mesmo com a aba trocando de site.
+- **Se o webhook falhar, a pessoa entra na live do mesmo jeito** e o registro
+  fica só no log da função (`[entrada-live]`) — dá para recuperar a lista à mão.
+  A live é o produto; a planilha é consequência.
+- **O WhatsApp vai para a planilha com apóstrofo na frente** (`'+5511...`).
+  Sem isso o Sheets come o `+` e transforma o número em notação científica.
+- **O selo "AO VIVO AGORA" é derivado da data**, não escrito à mão: antes da
+  hora mostra a data, durante mostra "ao vivo", depois mostra "live encerrada".
+  A data está em `INICIO_ISO`, no mesmo `<script>`.

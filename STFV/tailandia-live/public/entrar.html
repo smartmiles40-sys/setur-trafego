@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Tag Manager (mesmo container das outras páginas desta LP) -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://load.stape-japao.setuforeuvouviagens.com.br/7e5pyoponlz.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','1q=EwhTKCQiVCdOVD9YOihAVgxRXEFBSR0eRx8LGwUJFgIfGRgABRkQER0JABxeDBYdVA4c');</script>
+    <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Entrar na live · Expedição Japão 2027 | Se Tu For, Eu Vou</title>
+
+  <!--
+    ===========================================================================
+     PÁGINA DE ENTRADA DA LIVE  —  live.setuforeuvouviagens.com.br/entrar
+    ===========================================================================
+
+    NÃO é a LP de inscrição (essa é a "/", que joga o lead na comunidade).
+    Esta é a PORTA da sala: o link que você manda no grupo na hora da live.
+
+      pessoa clica no link do grupo → esta página → nome + WhatsApp
+        → POST /api/entrar-live → n8n grava a linha na PLANILHA
+        → redirect direto para a sala da live
+
+    Por que é HTML puro e não parte do app React: esta página abre no momento
+    de maior pressa do funil, quase toda em 4G no celular, e não pode depender
+    de bundle nenhum. Um arquivo só, sem build.
+
+    O `/entrar` sem `.html` vem de um rewrite no vercel.json. É REWRITE, não
+    redirect, de propósito: um redirect trocaria a URL e a `/obrigado.html` —
+    que é o gatilho da conversão no GTM — não pode ser renomeada.
+
+    ⚠️ O link da sala mora em DOIS lugares (aqui em SALA_URL e em
+    `src/data/live.ts` → `evento.meetUrl`, que vai no payload do n8n). Trocar um
+    e esquecer o outro não dá erro: a pessoa entra num lugar e o convite aponta
+    para outro. Trocou aqui, troque lá.
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
+  <link rel="icon" type="image/png" href="/Logo-circular.png" />
+  <meta name="theme-color" content="#09282B" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --teal: #09282B;
+      --teal-2: #0E3A3E;
+      --lime: #D7F264;
+      --lime-dark: #C0E046;
+      --off: #F8F6F7;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--teal);
+      color: var(--off);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px 20px;
+      /* brilho suave atrás do conteúdo, no lugar da foto do hero: mantém o clima
+         da marca sem custar uma imagem grande na hora da pressa */
+      background-image:
+        radial-gradient(900px 520px at 78% 18%, rgba(215, 242, 100, 0.10), transparent 62%),
+        radial-gradient(700px 460px at 12% 82%, rgba(215, 242, 100, 0.06), transparent 60%);
+    }
+
+    .wrap {
+      width: 100%; max-width: 1040px;
+      display: grid; grid-template-columns: 1fr; gap: 28px;
+      align-items: center;
+    }
+    @media (min-width: 900px) {
+      .wrap { grid-template-columns: 1fr 420px; gap: 56px; }
+    }
+
+    /* ---- coluna da esquerda ---- */
+    .selo {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(215, 242, 100, 0.14);
+      border: 1px solid rgba(215, 242, 100, 0.38);
+      color: var(--lime);
+      border-radius: 999px; padding: 7px 14px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .ponto {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--lime); flex: 0 0 auto;
+    }
+    .selo.ao-vivo .ponto { animation: pulso 1.6s ease-in-out infinite; }
+    @keyframes pulso {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(215, 242, 100, 0.55); }
+      50%      { opacity: .65; box-shadow: 0 0 0 7px rgba(215, 242, 100, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .selo.ao-vivo .ponto { animation: none; }
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 6vw, 3.4rem);
+      font-weight: 900; line-height: 1.04; letter-spacing: -0.03em;
+    }
+    h1 .lime { color: var(--lime); }
+    h1 .compl {
+      display: block;
+      font-size: clamp(0.95rem, 2.6vw, 1.5rem);
+      font-weight: 400; letter-spacing: 0.02em;
+      color: rgba(248, 246, 247, 0.62);
+      margin-top: 8px;
+    }
+    .risco { width: 64px; height: 2px; background: var(--lime); margin: 22px 0; }
+    .chamada {
+      font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+      line-height: 1.6; color: rgba(248, 246, 247, 0.88);
+      max-width: 46ch;
+    }
+    .quando {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-top: 22px; padding: 11px 16px;
+      border: 1px solid rgba(248, 246, 247, 0.18);
+      background: rgba(248, 246, 247, 0.06);
+      border-radius: 14px;
+      font-size: 13px; color: rgba(248, 246, 247, 0.82);
+    }
+    .quando strong { color: var(--off); font-weight: 700; }
+
+    /* ---- cartão do formulário ---- */
+    .card {
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(248, 246, 247, 0.14);
+      border-radius: 24px;
+      padding: 26px 22px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(6px);
+    }
+    @media (min-width: 900px) { .card { padding: 32px 28px; } }
+    .card h2 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; }
+    .card .sub { margin-top: 6px; font-size: 13px; line-height: 1.55; color: rgba(248, 246, 247, 0.6); }
+
+    .campo { margin-top: 18px; }
+    label {
+      display: block; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.02em; color: rgba(248, 246, 247, 0.78); margin-bottom: 7px;
+    }
+    input {
+      width: 100%;
+      background: rgba(9, 40, 43, 0.55);
+      border: 1px solid rgba(248, 246, 247, 0.2);
+      border-radius: 13px;
+      padding: 14px 15px;
+      color: var(--off);
+      font-family: inherit; font-size: 16px; /* 16px evita o zoom automático do iOS */
+      transition: border-color .18s, box-shadow .18s;
+    }
+    input::placeholder { color: rgba(248, 246, 247, 0.34); }
+    input:focus {
+      outline: none;
+      border-color: var(--lime);
+      box-shadow: 0 0 0 3px rgba(215, 242, 100, 0.18);
+    }
+    input.erro { border-color: #FF8A8A; }
+    .ddi { display: flex; gap: 9px; }
+    .ddi .prefixo {
+      flex: 0 0 auto; display: flex; align-items: center;
+      padding: 0 14px;
+      background: rgba(9, 40, 43, 0.55);
+      border: 1px solid rgba(248, 246, 247, 0.2);
+      border-radius: 13px;
+      font-size: 14px; font-weight: 600; color: rgba(248, 246, 247, 0.72);
+    }
+    .msg-erro { display: none; margin-top: 6px; font-size: 12px; color: #FF8A8A; }
+    .msg-erro.on { display: block; }
+
+    button {
+      width: 100%; margin-top: 22px;
+      background: var(--lime); color: var(--teal);
+      border: none; border-radius: 999px;
+      padding: 16px 22px;
+      font-family: inherit; font-size: 15px; font-weight: 800;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background .18s, transform .18s;
+    }
+    button:hover:not(:disabled) { background: var(--lime-dark); transform: translateY(-1px); }
+    button:disabled { opacity: .62; cursor: default; }
+    .rodape-form {
+      margin-top: 12px; text-align: center;
+      font-size: 11.5px; color: rgba(248, 246, 247, 0.5); line-height: 1.5;
+    }
+    .marca {
+      margin-top: 22px; text-align: center;
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(248, 246, 247, 0.28);
+    }
+
+    /* ---- estado pós-envio ---- */
+    #indo { display: none; text-align: center; padding: 8px 0 4px; }
+    #indo.on { display: block; }
+    #form-bloco.off { display: none; }
+    .check {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--lime); color: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; font-size: 27px; font-weight: 800;
+    }
+    #indo h2 { margin-bottom: 8px; }
+    .link-sala {
+      display: inline-block; margin-top: 18px;
+      color: var(--lime); font-weight: 700; font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://load.stape-japao.setuforeuvouviagens.com.br/ns.html?id=GTM-W48Q7JG9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+  <div class="wrap">
+    <section>
+      <span class="selo" id="selo"><span class="ponto"></span><span id="selo-txt">Live gratuita</span></span>
+
+      <h1>
+        Expedição <span class="lime">Japão 2027</span>
+        <span class="compl">com extensão China</span>
+      </h1>
+
+      <div class="risco"></div>
+
+      <p class="chamada">
+        <!-- "ao lado" nao serve: no celular o formulario fica ABAIXO, nao ao lado.
+             Texto neutro de layout. -->
+        Preencha seus dados para liberar sua entrada. A gente abre o roteiro dia a dia,
+        a extensão China, os valores e responde suas perguntas ao vivo.
+      </p>
+
+      <div class="quando">
+        <span aria-hidden>🗓️</span>
+        <span id="quando-txt">Transmissão ao vivo</span>
+      </div>
+    </section>
+
+    <main class="card">
+      <div id="form-bloco">
+        <h2>Entrar na live</h2>
+        <p class="sub">Leva 10 segundos. Você entra direto na sala.</p>
+
+        <form id="entrar-form" novalidate>
+          <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Seu nome" />
+            <p class="msg-erro" id="erro-nome">Digite seu nome.</p>
+          </div>
+
+          <div class="campo">
+            <label for="whatsapp">WhatsApp com DDD</label>
+            <div class="ddi">
+              <span class="prefixo">🇧🇷 +55</span>
+              <input type="tel" id="whatsapp" name="whatsapp" inputmode="numeric"
+                     autocomplete="tel-national" maxlength="15" placeholder="(11) 98765-4321" />
+            </div>
+            <p class="msg-erro" id="erro-whatsapp">Digite um celular válido com DDD.</p>
+          </div>
+
+          <button type="submit" id="btn-entrar">Quero participar</button>
+          <p class="rodape-form" id="rodape-form">Sem custo · entrada imediata na transmissão</p>
+        </form>
+      </div>
+
+      <div id="indo">
+        <div class="check">✓</div>
+        <h2 id="indo-titulo">Tudo certo!</h2>
+        <p class="sub" id="indo-sub">Estamos te levando para a sala da live…</p>
+        <a class="link-sala" id="link-sala" href="#">Entrar agora</a>
+      </div>
+
+      <p class="marca">Se Tu For, Eu Vou! Viagens</p>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* =====================================================================
+         O QUE VOCÊ PRECISA MEXER AQUI  —  as 2 primeiras linhas, só.
+         ===================================================================== */
+
+      // A sala da live (Google Meet). Vazio = a página captura normalmente e
+      // mostra "a sala abre no horário da live" em vez de redirecionar — ela
+      // nunca fica quebrada esperando o link.
+      // ⚠️ É o MESMO link de `evento.meetUrl` em src/data/live.ts. Trocou aqui,
+      // troque lá: sem isso a pessoa entra num lugar e o convite aponta pra
+      // outro, e nada acusa o erro.
+      var SALA_URL = 'https://meet.google.com/nub-mmfn-edw';
+
+      // Início da live, no fuso de Brasília. É daqui que sai o selo
+      // "AO VIVO AGORA" e a frase da data — sem ninguém editar texto na mão.
+      var INICIO_ISO = '2026-08-30T19:30:00-03:00';
+      var DURACAO_MIN = 90;
+
+      /* ===================================================================== */
+
+      var ENDPOINT = '/api/entrar-live';
+      var SLUG = 'japao-live';
+      // Segundos antes de trocar de site: dá tempo do GTM/Stape despachar o
+      // evento antes de a aba ir embora (mesma razão do countdown da
+      // /obrigado.html).
+      var SEGUNDOS = 2;
+
+      var inicio = new Date(INICIO_ISO);
+      var fim = new Date(inicio.getTime() + DURACAO_MIN * 60000);
+
+      function dataLayerPush(evento, extra) {
+        window.dataLayer = window.dataLayer || [];
+        var o = { event: evento, form_name: 'entrada-' + SLUG, destino: SLUG };
+        for (var k in extra) { if (Object.prototype.hasOwnProperty.call(extra, k)) o[k] = extra[k]; }
+        window.dataLayer.push(o);
+      }
+
+      /* ---- selo e frase da data, derivados de INICIO_ISO ---- */
+      function rotulo() {
+        try {
+          return new Intl.DateTimeFormat('pt-BR', {
+            weekday: 'long', day: '2-digit', month: 'long',
+            hour: '2-digit', minute: '2-digit',
+            timeZone: 'America/Sao_Paulo',
+          }).format(inicio).replace(' às ', ', ');
+        } catch (e) {
+          return 'domingo, 30 de agosto, 19:30';
+        }
+      }
+      (function pintarQuando() {
+        var agora = new Date();
+        var selo = document.getElementById('selo');
+        var seloTxt = document.getElementById('selo-txt');
+        var quando = document.getElementById('quando-txt');
+        if (agora >= inicio && agora <= fim) {
+          selo.className = 'selo ao-vivo';
+          seloTxt.textContent = 'Ao vivo agora';
+          quando.innerHTML = 'A transmissão <strong>já começou</strong> — entre agora';
+        } else if (agora > fim) {
+          seloTxt.textContent = 'Live encerrada';
+          quando.innerHTML = 'Esta transmissão já aconteceu. Deixe seus dados que a gente te avisa da próxima.';
+        } else {
+          seloTxt.textContent = 'Live gratuita · Google Meet';
+          quando.innerHTML = 'Transmissão ao vivo · <strong>' + rotulo() + '</strong> (horário de Brasília)';
+        }
+      })();
+
+      /* ---- máscara do WhatsApp: (DD) NNNNN-NNNN ---- */
+      var campoWhats = document.getElementById('whatsapp');
+      campoWhats.addEventListener('input', function () {
+        var d = campoWhats.value.replace(/\D/g, '').slice(0, 11);
+        var v = d;
+        if (d.length > 2 && d.length <= 6) v = '(' + d.slice(0, 2) + ') ' + d.slice(2);
+        else if (d.length > 6 && d.length <= 10) v = '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+        else if (d.length > 10) v = '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+        campoWhats.value = v;
+      });
+
+      /* ---- atribuição: guarda as UTMs/click ids que vieram na URL ---- */
+      function atribuicao() {
+        var chaves = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+                      'utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid'];
+        var p = new URLSearchParams(window.location.search);
+        var o = {};
+        for (var i = 0; i < chaves.length; i++) {
+          o[chaves[i]] = (p.get(chaves[i]) || '').slice(0, 200);
+        }
+        // Sem UTM nenhuma, marca a origem para a planilha não ficar cega.
+        if (!o.utm_content) o.utm_content = 'ENTRADA_LIVE';
+        return o;
+      }
+
+      function idDaVisita() {
+        try {
+          var k = SLUG + '_entrada_id';
+          var v = sessionStorage.getItem(k);
+          if (!v) {
+            v = (window.crypto && crypto.randomUUID)
+              ? crypto.randomUUID()
+              : 'ent_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+            sessionStorage.setItem(k, v);
+          }
+          return v;
+        } catch (e) {
+          return 'ent_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        }
+      }
+
+      function erro(campo, ligado) {
+        document.getElementById(campo).classList.toggle('erro', ligado);
+        document.getElementById('erro-' + campo).classList.toggle('on', ligado);
+      }
+
+      function irParaSala() {
+        var link = document.getElementById('link-sala');
+        document.getElementById('form-bloco').className = 'off';
+        document.getElementById('indo').className = 'on';
+
+        if (!SALA_URL) {
+          // Sem link configurado a página NÃO finge que deu tudo certo: avisa.
+          document.getElementById('indo-titulo').textContent = 'Presença confirmada!';
+          document.getElementById('indo-sub').textContent =
+            'A sala abre no horário da live — deixe esta página aberta ou volte por aqui.';
+          link.style.display = 'none';
+          return;
+        }
+
+        link.href = SALA_URL;
+        link.addEventListener('click', function () { dataLayerPush('live_sala_click'); });
+        window.setTimeout(function () {
+          dataLayerPush('live_sala_redirect');
+          window.location.href = SALA_URL;
+        }, SEGUNDOS * 1000);
+      }
+
+      document.getElementById('entrar-form').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+
+        var nome = document.getElementById('nome').value.trim();
+        var digitos = campoWhats.value.replace(/\D/g, '');
+        var nomeOk = nome.length >= 3;
+        var whatsOk = digitos.length === 11 && digitos.charAt(2) === '9';
+
+        erro('nome', !nomeOk);
+        erro('whatsapp', !whatsOk);
+        if (!nomeOk || !whatsOk) {
+          dataLayerPush('form_validation_error', { field: !nomeOk ? 'nome' : 'whatsapp' });
+          return;
+        }
+
+        var btn = document.getElementById('btn-entrar');
+        btn.disabled = true;
+        btn.textContent = 'Entrando…';
+
+        var id = idDaVisita();
+        var corpo = { lead_id: id, event_id: id, nome: nome, whatsapp: '+55' + digitos,
+                      slug: SLUG, origem: 'entrada-live',
+                      evento_titulo: 'Live: Expedição Japão 2027 · Se Tu For, Eu Vou',
+                      evento_inicio: INICIO_ISO };
+        var atr = atribuicao();
+        for (var k in atr) { if (Object.prototype.hasOwnProperty.call(atr, k)) corpo[k] = atr[k]; }
+
+        dataLayerPush('live_entrada', { lead_id: id, event_id: id, lead: { nome: nome, whatsapp: corpo.whatsapp } });
+
+        // keepalive: o navegador termina de mandar mesmo se a aba trocar de
+        // site no meio — é o que garante a linha na planilha de quem entra
+        // rápido. E o redirect NÃO espera a resposta: ninguém pode ficar preso
+        // na porta porque o n8n demorou.
+        try {
+          fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(corpo),
+            keepalive: true,
+          }).catch(function () {});
+        } catch (e) { /* nunca travar a entrada por causa do envio */ }
+
+        irParaSala();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -109,10 +109,10 @@ export const live = {
     inicioISO: '2026-08-30T19:30:00-03:00',
     duracaoMinutos: 90,
 
-    // PREENCHER — sala do Google Meet desta live (crie uma NOVA, não reaproveite
-    // a da Tailândia). Vazio aqui = o convite que o n8n cria chega sem link da
-    // sala, e a pessoa não tem por onde entrar.
-    meetUrl: '',
+    // Sala do Google Meet desta live.
+    // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
+    // que redireciona pra cá). Trocou lá, troque aqui.
+    meetUrl: 'https://meet.google.com/nub-mmfn-edw',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

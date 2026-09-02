@@ -1,0 +1,199 @@
+{
+  "name": "Lives — inscritos e entradas (PADRAO, serve todas as LPs)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "inscricao-live",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Webhook — inscricao (PADRAO)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-320, -368],
+      "webhookId": "inscricao-live",
+      "notes": "ESTA e' a URL que vai na env var WEBHOOK_LIVE_URL de TODA LP de live. Sem destino no path de proposito: quem separa uma live da outra e' a coluna Destino (o campo slug do payload). CUIDADO: e' OUTRO webhook e OUTRA planilha do 'entrada-live'."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "inscricao-live-japao",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Webhook — inscricao (LEGADO)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-320, -208],
+      "webhookId": "inscricao-live-japao",
+      "notes": "Path antigo, mantido so' para nao perder lead durante a troca: quem ainda estiver com a env var velha na Vercel continua caindo aqui, no MESMO destino. Pode apagar depois de confirmar que WEBHOOK_LIVE_URL aponta para /inscricao-live e que chegou lead por la."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Uma linha da planilha por INSCRITO — de QUALQUER live.\n//\n// Este workflow e' o PADRAO: a MESMA URL de webhook serve todas as LPs de\n// live. O que separa uma live da outra nao e' um workflow por destino, e' a\n// coluna \"Destino\" (o campo `slug` do payload).\n//\n// ⚠️ Nomes das chaves = nomes das COLUNAS. O no do Sheets mapeia por NOME, e\n// coluna que nao existe no cabecalho da linha 1 e' DESCARTADA EM SILENCIO --\n// nao da erro, o dado simplesmente some. Cabecalho exato esperado:\n//\n//   Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n  const txt = (v) => String(v ?? '').trim();\n\n  const whatsapp = txt(b.whatsapp);\n  // Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n  // +5511987654321 em notacao cientifica. E telefone quebrado nao dispara no\n  // ManyChat.\n  const whatsappCelula = whatsapp ? `'${whatsapp}` : '';\n\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      'Data/hora': txt(b.data_hora_cadastro),\n      // 'japao-live' | 'peru-live' | ...\n      // ⚠️ E' por esta coluna que voce FILTRA antes de disparar no ManyChat.\n      // Sem filtro, quem se inscreveu no Peru recebe o aviso da live do Japao.\n      'Destino': txt(b.slug) || 'desconhecido',\n      'Nome': txt(b.nome),\n      // Cada live escolhe os campos que pede (live.formulario nas LPs): a do\n      // Japao pede WhatsApp, a do Peru pede e-mail. A coluna que a live NAO\n      // pediu vem vazia -- isso e' esperado, nao e' falha de captura.\n      'WhatsApp': whatsappCelula,\n      'E-mail': txt(b.email).toLowerCase(),\n      'Live': txt(b.evento_titulo),\n      'Formulario': b.posicao === 'fim' ? 'fim da pagina' : 'topo da pagina',\n      'Origem': origem,\n      'gclid': txt(b.gclid),\n      'fbclid': txt(b.fbclid),\n      'lead_id': txt(b.lead_id),\n    },\n  });\n}\n\nreturn linhas;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Montar a linha — inscritos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-32, -288]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            { "id": "Data/hora", "displayName": "Data/hora", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Destino", "displayName": "Destino", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Nome", "displayName": "Nome", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "WhatsApp", "displayName": "WhatsApp", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "E-mail", "displayName": "E-mail", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Live", "displayName": "Live", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Formulario", "displayName": "Formulario", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Origem", "displayName": "Origem", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "gclid", "displayName": "gclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "fbclid", "displayName": "fbclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "lead_id", "displayName": "lead_id", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": { "useAppend": true }
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Planilha INSCRITOS",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [256, -288],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "3Pz5up7dEtcK5nim", "name": "Google Sheets account" }
+      },
+      "notes": "Planilha de INSCRITOS (base do disparo no ManyChat). Cabecalho EXATO da linha 1: Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id -- as colunas Destino e E-mail sao NOVAS (02/09/2026): sem elas no cabecalho, a live do inscrito e o e-mail dos inscritos do Peru somem sem erro. 'Use Append' LIGADO: sem isso o n8n procura a 1a linha vazia em vez de usar o append da API, e escreve num buraco se alguma linha do meio estiver vazia."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "entrada-live",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000005",
+      "name": "Webhook — entrada (PADRAO)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-320, 48],
+      "webhookId": "entrada-live",
+      "notes": "ESTA e' a URL que vai na env var WEBHOOK_ENTRAR_URL. Aqui caem os PRESENTES (form do /entrar), nao os inscritos. NAO reaproveitar o webhook da inscricao: sao listas diferentes, e cruzar as duas nao da erro -- so mistura tudo numa lista so."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "entrada-live-japao",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000006",
+      "name": "Webhook — entrada (LEGADO)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-320, 208],
+      "webhookId": "entrada-live-japao",
+      "notes": "Path antigo, mantido so' durante a troca da env var. Pode apagar depois de confirmar que WEBHOOK_ENTRAR_URL aponta para /entrada-live."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Uma linha da planilha por pessoa que ENTROU na sala — de QUALQUER live.\n//\n// O payload vem de /api/entrar-live. Mesma ideia do de cima: uma URL so' para\n// todas as lives, separadas pela coluna \"Destino\".\n//\n// ⚠️ Cabecalho exato esperado na linha 1 (SEM a coluna Formulario, que so'\n// existe na planilha de inscritos):\n//\n//   Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n  const txt = (v) => String(v ?? '').trim();\n\n  const whatsapp = txt(b.whatsapp);\n  // Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n  // +5511987654321 em notacao cientifica.\n  const whatsappCelula = whatsapp ? `'${whatsapp}` : '';\n\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      // `data_hora_entrada` e' o campo do /api/entrar-live. O fallback para\n      // `data_hora_cadastro` existe porque um payload de INSCRICAO disparado\n      // aqui por engano (ou por pin de teste) deixaria a coluna vazia, e uma\n      // linha sem data e' inutil para cruzar inscritos x presentes.\n      'Data/hora': txt(b.data_hora_entrada) || txt(b.data_hora_cadastro),\n      'Destino': txt(b.slug) || 'desconhecido',\n      'Nome': txt(b.nome),\n      'WhatsApp': whatsappCelula,\n      'E-mail': txt(b.email).toLowerCase(),\n      'Live': txt(b.evento_titulo),\n      'Origem': origem,\n      'gclid': txt(b.gclid),\n      'fbclid': txt(b.fbclid),\n      'lead_id': txt(b.lead_id),\n    },\n  });\n}\n\nreturn linhas;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000007",
+      "name": "Montar a linha — entradas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-32, 128]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            { "id": "Data/hora", "displayName": "Data/hora", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Destino", "displayName": "Destino", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Nome", "displayName": "Nome", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "WhatsApp", "displayName": "WhatsApp", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "E-mail", "displayName": "E-mail", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Live", "displayName": "Live", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "Origem", "displayName": "Origem", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "gclid", "displayName": "gclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "fbclid", "displayName": "fbclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
+            { "id": "lead_id", "displayName": "lead_id", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": { "useAppend": true }
+      },
+      "id": "a1000000-0000-4000-8000-000000000008",
+      "name": "Planilha ENTRADAS",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [256, 128],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "3Pz5up7dEtcK5nim", "name": "Google Sheets account" }
+      },
+      "notes": "Planilha de ENTRADAS (quem apareceu de verdade). Cabecalho EXATO da linha 1: Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id -- SEM a coluna Formulario, que so' existe na de inscritos. Destino e E-mail sao novas (02/09/2026). 'Use Append' LIGADO."
+    }
+  ],
+  "connections": {
+    "Webhook — inscricao (PADRAO)": {
+      "main": [[{ "node": "Montar a linha — inscritos", "type": "main", "index": 0 }]]
+    },
+    "Webhook — inscricao (LEGADO)": {
+      "main": [[{ "node": "Montar a linha — inscritos", "type": "main", "index": 0 }]]
+    },
+    "Montar a linha — inscritos": {
+      "main": [[{ "node": "Planilha INSCRITOS", "type": "main", "index": 0 }]]
+    },
+    "Webhook — entrada (PADRAO)": {
+      "main": [[{ "node": "Montar a linha — entradas", "type": "main", "index": 0 }]]
+    },
+    "Webhook — entrada (LEGADO)": {
+      "main": [[{ "node": "Montar a linha — entradas", "type": "main", "index": 0 }]]
+    },
+    "Montar a linha — entradas": {
+      "main": [[{ "node": "Planilha ENTRADAS", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "91aa63e4f74d7cbe350736303e89cc11603c939156428dd97f3f611c857dbb64"
+  }
+}

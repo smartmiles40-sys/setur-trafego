@@ -136,18 +136,22 @@ export const livePeru: ConfigLive = {
   },
 
   /**
-   * ---- Comunidade do WhatsApp ---------------------------------------------
-   * ⚠️ PREENCHER — grupo PRÓPRIO da live do Peru. Enquanto estiver vazio a
-   * página NÃO redireciona ninguém: mostra a confirmação e para ali (a
-   * alternativa seria mandar o inscrito do Peru para o grupo do Japão, que é
-   * pior). Trocou aqui? Troque também o `PADRAO` de public/obrigado.html, que
-   * é o link de emergência de quem cai lá com o sessionStorage vazio.
+   * ---- Comunidade do WhatsApp (destino depois do envio) --------------------
+   * Grupo PRÓPRIO da live do Peru (Bruno, 02/09/2026). Com ele preenchido a
+   * página volta a redirecionar automaticamente em 3s depois do envio — que é
+   * o mesmo comportamento da live do Japão.
+   *
+   * ⚠️ Trocou aqui? Troque também o mapa `PADRAO_POR_LIVE` de
+   * public/obrigado.html — é o link de emergência de quem cai lá com o
+   * sessionStorage vazio (aba anônima). Deixar os dois fora de sincronia manda
+   * a aba anônima para o grupo errado, e isso não dá erro nenhum.
    *
    * O link vai SEM os parâmetros `?amv=...&ilr=...&p=i&s=sh` que o WhatsApp
-   * cola no "compartilhar" — eles são do app de quem compartilhou.
+   * cola no "compartilhar" — eles são do app de quem compartilhou, não do
+   * convite; o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: '', // PREENCHER: https://chat.whatsapp.com/XXXXXXXX
+    url: 'https://chat.whatsapp.com/JGzOfTsgNsm0HlCawBArCQ',
     nome: 'Live - Peru 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

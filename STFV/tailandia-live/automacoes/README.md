@@ -1,16 +1,49 @@
-> ## ⚠️ QUAL WORKFLOW É QUAL (28/08/2026)
+> ## ✅ UM WORKFLOW SÓ, PADRÃO, PARA TODAS AS LIVES (02/09/2026)
 >
-> São **dois** workflows ativos, **dois** webhooks e **duas** planilhas. Cruzar
-> os dois é o erro fácil de cometer e difícil de perceber:
+> **`lives-planilhas.workflow.json`** substitui os dois workflows anteriores
+> (`inscricao-live-planilha` e `entrada-live`, apagados — estão no histórico do
+> git). Ele traz os **dois** fluxos, com **dois** webhooks e **duas** planilhas:
 >
-> | Form | Onde | Workflow | Env var | Planilha |
+> | Form | Onde | Path do webhook | Env var na Vercel | Planilha |
 > |---|---|---|---|---|
-> | 1 — inscrição | LP (`/`) | `inscricao-live-planilha.workflow.json` | `WEBHOOK_LIVE_URL` | **Inscritos** (base do disparo no ManyChat) |
-> | 2 — entrada | `/entrar` | `entrada-live.workflow.json` | `WEBHOOK_ENTRAR_URL` | **Entradas** (quem apareceu de verdade) |
+> | 1 — inscrição | LP da live (`/`, `/peru`, …) | **`/webhook/inscricao-live`** | `WEBHOOK_LIVE_URL` | **Inscritos** (base do ManyChat) |
+> | 2 — entrada | `/entrar` | **`/webhook/entrada-live`** | `WEBHOOK_ENTRAR_URL` | **Entradas** (quem apareceu) |
 >
-> O `live-inscricao.workflow.json` (convite no Google Agenda + Bitrix) está
-> **FORA DE USO**: o convite morreu quando o e-mail saiu do formulário, e o
-> Bruno optou por planilha em vez de Bitrix. Ficou no repo para quando quiser.
+> **O que mudou e por quê:** os paths perderam o `-japao`. Antes era um workflow
+> por destino, o que não escala — cada live nova exigia duplicar tudo. Agora a
+> **mesma URL serve todas as LPs de live**, e quem separa uma da outra é a
+> coluna **`Destino`** (o campo `slug` do payload: `japao-live`, `peru-live`…).
+>
+> ⚠️ **É POR ESSA COLUNA QUE VOCÊ FILTRA ANTES DE DISPARAR NO MANYCHAT.** Sem o
+> filtro, quem se inscreveu na live do Peru recebe o aviso da live do Japão.
+> Esse é o preço de ter uma lista só — e é o único cuidado que ela exige.
+>
+> ### Antes de ativar: acertar o cabeçalho das planilhas
+>
+> O nó do Sheets mapeia **por nome de coluna**, e coluna que não existe na linha
+> 1 é **descartada em silêncio** — não dá erro, o dado só some. Duas colunas são
+> novas (`Destino` e `E-mail`), então a linha 1 precisa virar exatamente isto:
+>
+> **Inscritos:**
+> `Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id`
+>
+> **Entradas** (sem `Formulario`, que só existe na de inscritos):
+> `Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id`
+>
+> Sem a coluna `E-mail`, **os inscritos da live do Peru chegam sem contato
+> nenhum** — aquela LP pede nome + e-mail, não WhatsApp.
+>
+> ### Os paths antigos continuam funcionando
+>
+> O workflow mantém `inscricao-live-japao` e `entrada-live-japao` como webhooks
+> **LEGADO**, ligados nos mesmos nós. Assim nenhum lead se perde no intervalo
+> entre ativar o workflow e trocar as env vars na Vercel. Pode apagar os dois
+> nós depois de confirmar que chegou lead pelo path novo.
+>
+> O `live-inscricao.workflow.json` (convite no Google Agenda + Bitrix) segue
+> **FORA DE USO**: o convite morreu quando o e-mail saiu do formulário do Japão,
+> e o Bruno optou por planilha em vez de Bitrix. Ficou no repo para quando
+> quiser.
 
 > ## ⚠️ DESATUALIZADO NA PARTE DO GOOGLE CALENDAR (28/08/2026)
 >

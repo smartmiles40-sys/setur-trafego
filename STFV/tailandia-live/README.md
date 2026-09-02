@@ -55,10 +55,17 @@ anúncio → LP → vídeo (VSL VTurb) → formulário (nome + WhatsApp)
 > | Para quê | base do **disparo no ManyChat** | saber **quem apareceu** |
 > | Planilha | *Inscritos* | *Entradas* |
 > | Env var | `WEBHOOK_LIVE_URL` | `WEBHOOK_ENTRAR_URL` |
-> | Workflow | `automacoes/inscricao-live-planilha.workflow.json` | `automacoes/entrada-live.workflow.json` |
+> | Path do webhook | `/webhook/inscricao-live` | `/webhook/entrada-live` |
+> | Workflow | `automacoes/lives-planilhas.workflow.json` (os DOIS fluxos no mesmo arquivo) ||
 >
-> Os dois pedem WhatsApp, e é ele que permite cruzar as listas: quem se
-> inscreveu e não apareceu é exatamente quem vale um follow-up.
+> O `/entrar` pede WhatsApp, e a LP pede o que a live dela escolher — no Japão
+> é WhatsApp, e é ele que permite cruzar as listas: quem se inscreveu e não
+> apareceu é exatamente quem vale um follow-up. Na live do Peru a LP pede
+> e-mail, então esse cruzamento não existe lá.
+>
+> ⚠️ **Um workflow só serve TODAS as lives** (desde 02/09/2026): os paths não
+> têm mais destino, e quem separa é a coluna `Destino` da planilha. Filtrar por
+> ela antes de disparar no ManyChat é obrigatório.
 >
 > ⚠️ São dois webhooks e duas planilhas. Trocar um pelo outro não dá erro — as
 > duas listas simplesmente se misturam numa só.
@@ -402,7 +409,7 @@ apareceu.
 | A página | `public/entrar.html` — HTML puro, sem build |
 | O endpoint | `api/entrar-live.mjs` — esconde o webhook numa env var |
 | A rota `/entrar` | `vercel.json` → rewrite para `/entrar.html` |
-| O workflow | `automacoes/entrada-live.workflow.json` |
+| O workflow | `automacoes/lives-planilhas.workflow.json` (metade de baixo) |
 
 **Por que HTML puro:** esta página abre no momento de maior pressa do funil,
 quase toda em 4G no celular. Um arquivo só, sem bundle para baixar.
@@ -421,10 +428,10 @@ atende `/entrar` sem tocar no resto.
    (Se um dia zerar o `SALA_URL`, a página não quebra: captura normalmente e
    mostra "a sala abre no horário da live" em vez de redirecionar.)
 2. **A planilha:** crie uma aba `Entradas` com o cabeçalho EXATO
-   `Data/hora | Nome | WhatsApp | Live | Origem | gclid | fbclid | lead_id`.
+   `Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id`.
    O nó do Sheets casa por nome de coluna; coluna que não existe no cabeçalho é
    descartada **em silêncio**.
-3. **Importe** `automacoes/entrada-live.workflow.json` no n8n, preencha a URL da
+3. **Importe** `automacoes/lives-planilhas.workflow.json` no n8n, preencha a URL da
    planilha e a credencial do Google Sheets, ative, e cole a URL de produção do
    webhook na env var **`WEBHOOK_ENTRAR_URL`** do projeto na Vercel.
 

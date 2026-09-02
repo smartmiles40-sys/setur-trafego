@@ -103,10 +103,20 @@
 
       var SLUG = param('live') || 'japao-live';
       // Link de emergência de quem cai aqui com o sessionStorage vazio (aba
-      // anônima). É o grupo do JAPÃO — por isso só vale para o Japão: mandar o
-      // inscrito do Peru para lá seria pior do que não mandar para lugar nenhum.
-      // Trocou o grupo em src/data/live-japao.ts? Troque aqui também.
-      var PADRAO = SLUG === 'japao-live' ? 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK' : '';
+      // anônima, onde o formulário não conseguiu gravar nada).
+      //
+      // ⚠️ CADA LIVE COM O SEU GRUPO. Cair no grupo errado é pior do que não
+      // cair em grupo nenhum — por isso live que não estiver neste mapa fica
+      // sem redirect, e a página vira só a confirmação.
+      //
+      // Estes links são cópia dos `comunidade.url` de src/data/live-*.ts.
+      // Trocou lá, troque aqui: fora de sincronia não dá erro nenhum, só manda
+      // a aba anônima para o lugar errado.
+      var PADRAO_POR_LIVE = {
+        'japao-live': 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK',
+        'peru-live': 'https://chat.whatsapp.com/JGzOfTsgNsm0HlCawBArCQ'
+      };
+      var PADRAO = PADRAO_POR_LIVE[SLUG] || '';
       var SEGUNDOS = 3;
 
       // A página é noindex e dura 3 segundos, mas o título aparece na aba e no

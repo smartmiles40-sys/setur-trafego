@@ -21,16 +21,18 @@ import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/env
  * ⚠️ OS CAMPOS MUDAM POR LIVE — quem manda é `live.formulario` (ver
  * src/data/live-japao.ts e src/data/live-peru.ts). Hoje:
  *   Japão (/)     → nome + WhatsApp
- *   Peru  (/peru) → nome + e-mail
+ *   Peru  (/peru) → nome + WhatsApp
  * O nome é o único campo sempre presente. Não é preferência de layout: o
  * WhatsApp é o que permite disparar ManyChat e cruzar inscritos × presentes; o
  * e-mail é o que permite ao n8n convidar a pessoa no Google Agenda. Cada live
  * escolhe o que a automação dela vai usar.
  *
- * Histórico, porque isto foi e voltou no mesmo dia (28/08/2026): e-mail e
- * WhatsApp saíram de manhã da live do Japão, pelo menor atrito possível; o
- * WhatsApp voltou à tarde por causa do ManyChat. O e-mail voltou em 02/09/2026,
- * mas só para a live do Peru.
+ * Histórico, porque isto já foi e voltou: e-mail e WhatsApp saíram de manhã da
+ * live do Japão (28/08/2026), pelo menor atrito possível; o WhatsApp voltou à
+ * tarde por causa do ManyChat. A live do Peru nasceu em 02/09/2026 pedindo
+ * e-mail e, no mesmo dia, trocou o e-mail pelo WhatsApp. Hoje as duas lives
+ * pedem os MESMOS campos — mas continuam configuráveis por live, e nenhum
+ * componente assume isso.
  *
  * Esta lista vai para uma PLANILHA PRÓPRIA, separada da lista de quem entrou de
  * fato na sala (essa é a do /entrar). Duas planilhas de propósito: inscritos ×

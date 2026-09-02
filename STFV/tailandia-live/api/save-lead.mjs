@@ -96,11 +96,14 @@ export default async function handler(req, res) {
   // este projeto pedem campos diferentes (ver src/data/live-*.ts):
   //   Japão (/)     → nome + WhatsApp  (é ele que alimenta o ManyChat e cruza
   //                                     inscritos × presentes do /entrar)
-  //   Peru  (/peru) → nome + e-mail    (é ele que permite ao n8n convidar a
-  //                                     pessoa no Google Agenda)
+  //   Peru  (/peru) → nome + WhatsApp  (desde 02/09/2026; antes pedia e-mail,
+  //                                     que era o que permitia ao n8n convidar
+  //                                     a pessoa no Google Agenda)
   //
-  // Exigir os dois quebraria uma das páginas; não exigir nenhum deixaria entrar
-  // lead sem como falar com a pessoa — que é lead perdido, não lead barato.
+  // As duas pedem WhatsApp HOJE, mas a regra continua sendo por FORMA DE
+  // CONTATO de propósito: exigir os dois quebraria qualquer live que peça um
+  // campo só, e não exigir nenhum deixaria entrar lead sem como falar com a
+  // pessoa — que é lead perdido, não lead barato.
   // Como a checagem é por FORMA DE CONTATO e não por slug, acrescentar uma
   // terceira live não mexe aqui.
   if (lead.nome.length < 2) {

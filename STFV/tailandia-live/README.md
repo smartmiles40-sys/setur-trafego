@@ -5,7 +5,7 @@
 > | URL | Live | Dados | Roteiro | Formulário |
 > |---|---|---|---|---|
 > | `live.setuforeuvouviagens.com.br/` | Japão (ext. China) | `src/data/live-japao.ts` | `roteiro-japao.ts` (17 dias) | nome + WhatsApp |
-> | `live.setuforeuvouviagens.com.br/peru` | Peru 2027 | `src/data/live-peru.ts` | `roteiro-peru.ts` (9 dias) | nome + e-mail |
+> | `live.setuforeuvouviagens.com.br/peru` | Peru 2027 | `src/data/live-peru.ts` | `roteiro-peru.ts` (9 dias) | nome + WhatsApp |
 >
 > **As duas usam a MESMA página** (`src/App.tsx`) — mesmo hero, mesmos
 > depoimentos, mesmo carrossel de roteiro, mesmo rodapé. Nenhum componente sabe
@@ -520,20 +520,28 @@ E fora do arquivo:
    alternativa (cair no grupo do Japão) seria pior. Assim que o grupo existir,
    preencha o campo e o redirect de 3s volta a funcionar sozinho.
 
-### Formulário: nome + e-mail (e o que isso custa)
+### Formulário: as duas lives pedem nome + WhatsApp
 
-O Japão pede **WhatsApp**; o Peru pede **e-mail**. Não é gosto de layout —
+Desde **02/09/2026** o Peru pede **WhatsApp** no lugar do e-mail (pedido do
+Bruno, no mesmo dia em que a página subiu com e-mail). Não é gosto de layout —
 é o que cada automação consegue fazer depois:
 
-- com e-mail, o n8n **consegue** criar o convite no Google Agenda com a pessoa
-  como convidada (`convidar_email` já vai no payload);
-- sem WhatsApp, **não há disparo de ManyChat** para lembrar da live, e **não há
-  `findbycomm`** no Bitrix: cada inscrito nasce como contato novo.
+- com WhatsApp, dá para **disparar o ManyChat** com o lembrete da live e para
+  cruzar inscritos × presentes do `/entrar`; e o Bitrix acha a pessoa por
+  `findbycomm`, em vez de criar contato novo a cada inscrição;
+- sem e-mail, **não há convite no Google Agenda** — ele depende do
+  `convidar_email` no payload, que agora vai vazio para as duas lives.
 
-Para pedir os dois, basta ligar `formulario.pedirWhatsapp` em
-`src/data/live-peru.ts`. O componente e a validação do servidor já aguentam
-qualquer combinação — o servidor exige nome **+ pelo menos uma** forma de
-contato.
+> **Quem separa as duas listas é o n8n**, mandando cada `Destino` para uma ABA
+> própria da planilha (Bruno, 02/09/2026) — e é a aba que vira a lista do
+> ManyChat. Isso passou a importar de verdade agora: enquanto o Peru pedia
+> e-mail, um disparo sem separação simplesmente pulava aqueles inscritos por
+> falta de telefone; hoje, sem ela, eles receberiam o aviso da live do Japão.
+
+Para voltar a pedir e-mail (nas duas ou só numa), é só ligar
+`formulario.pedirEmail` no `src/data/live-*.ts` da live. O componente e a
+validação do servidor aguentam qualquer combinação — o servidor exige nome
+**+ pelo menos uma** forma de contato.
 
 ### `/obrigado.html` é a mesma para as duas
 
@@ -557,9 +565,14 @@ no GTM, o gatilho por esse parâmetro já está disponível.
 
 `npm run build` passa (duas entradas), console limpo nas duas páginas, e o envio
 foi testado de ponta a ponta em `localhost`: o payload chega em
-`/api/save-lead` com `slug: peru-live`, `fonte: [Peru] - Live`,
-`source_id: LIVE_PERU`, `email` e `convidar_email` preenchidos e `whatsapp`
-vazio — e o servidor aceita.
+`/api/save-lead` com `slug: peru-live`, `fonte: [Peru] - Live` e
+`source_id: LIVE_PERU` — e o servidor aceita.
+
+> ⚠️ Aquele teste foi feito com a versão que pedia e-mail (`email` e
+> `convidar_email` preenchidos, `whatsapp` vazio). **Desde a troca de
+> 02/09/2026 é o inverso**: `whatsapp` em E.164 preenchido, `email` e
+> `convidar_email` vazios — exatamente o payload que a live do Japão já
+> manda há dias.
 
 Conferido no navegador, em `/peru`: 9 slides no carrossel, headline "viver o
 Peru no ritmo certo", rodapé "PERU / TE ESPERAMOS", e **nenhum vazamento** de

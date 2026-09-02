@@ -17,17 +17,20 @@
  *  O que é do Peru e mora fora daqui: o **roteiro dos 9 dias** e a copy do
  *  cabeçalho da seção, em `roteiro-peru.ts` (escolhido por `expedicao.ts`).
  *
- *  ⚠️ FORMULÁRIO: nome + E-MAIL (o do Japão pede nome + WhatsApp). O que isso
- *     custa, para ninguém se surpreender depois:
- *       · **não há disparo de ManyChat** para os inscritos do Peru — o
- *         ManyChat precisa de telefone. O lembrete da live tem que sair por
- *         e-mail ou na comunidade.
- *       · **não há findbycomm no Bitrix**: sem telefone, cada inscrito nasce
- *         como contato novo (a SDR pega o telefone na conversa).
- *       · em compensação, **volta o convite no Google Agenda** — ele depende
- *         do e-mail do lead como convidado, e é isso que o n8n monta com o
- *         `convidar_email` do payload.
- *     Para pedir os dois, é só ligar `pedirWhatsapp` aqui embaixo.
+ *  ⚠️ FORMULÁRIO: nome + WHATSAPP — igual ao do Japão. O e-mail saiu do lugar
+ *     dele em 02/09/2026, a pedido do Bruno. O que a troca muda:
+ *       · **volta o disparo do ManyChat** para os inscritos do Peru — o lembrete
+ *         da live sai no WhatsApp, que é onde a live acontece. A separação por
+ *         live é feita no n8n, que manda cada `Destino` para uma ABA própria
+ *         da planilha (Bruno, 02/09/2026) — é a aba que vira a lista do
+ *         ManyChat, então o Peru não recebe o aviso do Japão.
+ *       · **volta o findbycomm no Bitrix**: quem já é contato não vira card
+ *         duplicado.
+ *       · em troca, **acaba o convite no Google Agenda** — ele depende do
+ *         e-mail do lead como convidado (`convidar_email` do payload), e sem
+ *         e-mail o n8n não tem quem convidar. O lembrete passa a ser só o do
+ *         WhatsApp/comunidade.
+ *     Para pedir os dois, é só religar `pedirEmail` aqui embaixo.
  *
  *  ⚠️ Os campos marcados com "PREENCHER" precisam do valor real antes de subir.
  * ============================================================================
@@ -179,13 +182,14 @@ export const livePeru: ConfigLive = {
 
   /**
    * ---- Campos do formulário -----------------------------------------------
-   * Nome + e-mail, como o Bruno pediu (02/09/2026). Ver o aviso no topo do
-   * arquivo sobre o que isso liga (convite no Google Agenda) e o que desliga
-   * (ManyChat e findbycomm no Bitrix).
+   * Nome + WhatsApp, como o Bruno pediu (02/09/2026) — o telefone entrou no
+   * lugar do e-mail. Ver o aviso no topo do arquivo sobre o que isso liga
+   * (ManyChat e findbycomm no Bitrix) e o que desliga (convite no Google
+   * Agenda).
    */
   formulario: {
-    pedirWhatsapp: false,
-    pedirEmail: true,
+    pedirWhatsapp: true,
+    pedirEmail: false,
   },
 
   heroImage: `${import.meta.env.BASE_URL}assets/peru/hero.jpg`,

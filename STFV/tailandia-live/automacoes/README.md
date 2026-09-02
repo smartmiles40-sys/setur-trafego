@@ -30,8 +30,18 @@
 > **Entradas** (sem `Formulario`, que só existe na de inscritos):
 > `Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id`
 >
-> Sem a coluna `E-mail`, **os inscritos da live do Peru chegam sem contato
-> nenhum** — aquela LP pede nome + e-mail, não WhatsApp.
+> A coluna `E-mail` passou a vir **vazia para as duas lives** em 02/09/2026,
+> quando o Peru trocou o e-mail pelo WhatsApp. Mantenha-a no cabeçalho mesmo
+> assim — é ela que recebe o dado no dia em que alguma live voltar a pedir
+> e-mail (`formulario.pedirEmail` na LP), e coluna ausente é descartada em
+> silêncio.
+>
+> **Separação das listas:** o `Destino` de cada inscrito vai para uma ABA
+> própria da planilha (Bruno, 02/09/2026), e é a aba que vira a lista do
+> ManyChat. Isso passou a importar de verdade agora: enquanto o Peru pedia
+> e-mail, um disparo sem separação pulava aqueles inscritos por falta de
+> telefone; hoje todos têm telefone, e sem ela o inscrito do Peru receberia o
+> aviso da live do Japão.
 >
 > ### Os paths antigos continuam funcionando
 >

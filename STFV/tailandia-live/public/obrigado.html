@@ -78,7 +78,7 @@
   <main class="card">
     <div class="check">✓</div>
     <h1 id="titulo">Inscrição confirmada!</h1>
-    <p class="sub">
+    <p class="sub" id="subtitulo">
       Estamos te levando para a nossa comunidade no WhatsApp — é por lá que o link da live é enviado.
     </p>
     <a class="btn" id="btn-comunidade" href="https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK">
@@ -90,9 +90,30 @@
 
   <script>
     (function () {
-      var SLUG = 'japao-live';
-      var PADRAO = 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK';
+      // ESTA PÁGINA SERVE AS DUAS LIVES, de propósito: o gatilho de conversão no
+      // GTM é o pageview DESTA URL. Uma /obrigado-peru.html separada não seria
+      // contada. Quem diz de quem é o inscrito é o `?live=` que o formulário
+      // acrescenta; sem ele (link colado à mão, aba antiga) o padrão é o Japão,
+      // que é quem vive na raiz do domínio.
+      function param(nome) {
+        try {
+          return new URLSearchParams(window.location.search).get(nome) || '';
+        } catch (e) { return ''; }
+      }
+
+      var SLUG = param('live') || 'japao-live';
+      // Link de emergência de quem cai aqui com o sessionStorage vazio (aba
+      // anônima). É o grupo do JAPÃO — por isso só vale para o Japão: mandar o
+      // inscrito do Peru para lá seria pior do que não mandar para lugar nenhum.
+      // Trocou o grupo em src/data/live-japao.ts? Troque aqui também.
+      var PADRAO = SLUG === 'japao-live' ? 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK' : '';
       var SEGUNDOS = 3;
+
+      // A página é noindex e dura 3 segundos, mas o título aparece na aba e no
+      // histórico — deixar "Japão" para quem se inscreveu no Peru é confuso.
+      if (SLUG === 'peru-live') {
+        document.title = 'Inscrição confirmada! · Live Expedição Peru 2027';
+      }
 
       function ler(chave) {
         try { return sessionStorage.getItem(chave); } catch (e) { return null; }
@@ -108,6 +129,21 @@
         document.getElementById('titulo').textContent =
           'Inscrição confirmada, ' + String(dados.nome).trim().split(' ')[0] + '!';
       }
+
+      // Sem grupo configurado (live nova, `comunidade.url` ainda vazio) a
+      // página vira só a confirmação: some o botão, some a contagem e ninguém é
+      // redirecionado. O pageview — que é o que conta a conversão — já
+      // aconteceu de qualquer jeito.
+      var btn = document.getElementById('btn-comunidade');
+      if (!destino) {
+        btn.style.display = 'none';
+        document.getElementById('aviso-email').textContent =
+          'O convite da live chega no e-mail que você informou.';
+        document.getElementById('subtitulo').textContent =
+          'Inscrição registrada. O convite com o link da sala vai para o seu e-mail.';
+        return;
+      }
+      btn.href = destino;
 
       var restante = SEGUNDOS;
       var span = document.getElementById('contagem');

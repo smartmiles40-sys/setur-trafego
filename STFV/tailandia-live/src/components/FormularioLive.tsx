@@ -12,38 +12,53 @@ import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/envio'
 
 /**
- * Formulário da INSCRIÇÃO da live — nome + WhatsApp.
+ * Formulário da INSCRIÇÃO da live.
  *
  * Não é o formulário das LPs de expedição (aquele qualifica o lead em 3 etapas),
  * nem o da porta da live (public/entrar.html). Este é o "form 1": vem do
  * anúncio, e o destino é a comunidade no WhatsApp.
  *
- * Histórico dos campos, porque isto foi e voltou no mesmo dia (28/08/2026):
- * e-mail e WhatsApp saíram de manhã, pelo menor atrito possível; o **WhatsApp
- * voltou** à tarde porque o Bruno dispara no ManyChat em cima desta lista, e
- * disparo precisa de contato. O e-mail continua fora — e com ele continua fora
- * o convite no Google Agenda, que dependia dele.
+ * ⚠️ OS CAMPOS MUDAM POR LIVE — quem manda é `live.formulario` (ver
+ * src/data/live-japao.ts e src/data/live-peru.ts). Hoje:
+ *   Japão (/)     → nome + WhatsApp
+ *   Peru  (/peru) → nome + e-mail
+ * O nome é o único campo sempre presente. Não é preferência de layout: o
+ * WhatsApp é o que permite disparar ManyChat e cruzar inscritos × presentes; o
+ * e-mail é o que permite ao n8n convidar a pessoa no Google Agenda. Cada live
+ * escolhe o que a automação dela vai usar.
+ *
+ * Histórico, porque isto foi e voltou no mesmo dia (28/08/2026): e-mail e
+ * WhatsApp saíram de manhã da live do Japão, pelo menor atrito possível; o
+ * WhatsApp voltou à tarde por causa do ManyChat. O e-mail voltou em 02/09/2026,
+ * mas só para a live do Peru.
  *
  * Esta lista vai para uma PLANILHA PRÓPRIA, separada da lista de quem entrou de
  * fato na sala (essa é a do /entrar). Duas planilhas de propósito: inscritos ×
- * presentes. O telefone é o que permite cruzar as duas.
+ * presentes.
  *
  * Depois do envio, UM destino só: a comunidade, com redirect automático em
- * poucos segundos.
+ * poucos segundos. Se a live ainda não tem grupo (`comunidade.url` vazio), o
+ * redirect não acontece — a confirmação aparece e para ali.
  *
- * A página monta ESTE componente duas vezes (hero e meio da página). O estado
- * do envio é compartilhado por ../lib/envio, então enviar em um faz o outro
- * sair do ar na hora — ninguém manda o lead duas vezes. Os ids são prefixados
- * por instância para não duplicar id no DOM; a instância do hero mantém os ids
- * canônicos, que são o contrato com o GTM:
- *   #live-form, #nome, #whatsapp, #lead_id, #utm_*, #btn-submit,
+ * A página do Japão monta ESTE componente duas vezes (hero e meio da página); a
+ * do Peru, uma só. O estado do envio é compartilhado por ../lib/envio, então
+ * enviar em um faz o outro sair do ar na hora — ninguém manda o lead duas
+ * vezes. Os ids são prefixados por instância para não duplicar id no DOM; a
+ * instância do hero mantém os ids canônicos, que são o contrato com o GTM:
+ *   #live-form, #nome, #whatsapp, #email, #lead_id, #utm_*, #btn-submit,
  *   #live-success, #btn-comunidade
- * (#email não existe mais — variável do GTM que leia esse id vem vazia.)
+ * (o id de um campo que a live não pede simplesmente não existe no DOM —
+ * variável do GTM que o leia vem vazia, o que é o comportamento certo.)
  */
 
 const SAVE_LEAD_URL = '/api/save-lead'
 
 const SLUG = live.slug
+const PEDE_WHATSAPP = live.formulario.pedirWhatsapp
+const PEDE_EMAIL = live.formulario.pedirEmail
+// Sem grupo configurado não há para onde mandar ninguém: a confirmação aparece
+// e para ali. Melhor do que despejar o inscrito do Peru no grupo do Japão.
+const TEM_COMUNIDADE = Boolean(live.comunidade.url)
 const FORM_NAME = `live-${SLUG}-${live.expedicao.ano}`
 const LEAD_ID_KEY = `${SLUG}_lead_id`
 const TRACK_STORAGE_KEY = `${SLUG}_track`
@@ -156,6 +171,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
 
   const [nome, setNome] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
+  const [email, setEmail] = useState('')
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
@@ -189,7 +205,19 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
   )
 
   const concluir = useCallback(
-    (nomeOk: string, whatsappOk: string, leadId: string, atrib: Track) => {
+    (
+      nomeOk: string,
+      contato: { whatsapp: string; email: string },
+      leadId: string,
+      atrib: Track,
+    ) => {
+      // Só vai no dataLayer o que a live realmente pediu — mandar `email: ''`
+      // para uma live que não pede e-mail suja o relatório de preenchimento.
+      const leadDataLayer = {
+        nome: nomeOk,
+        ...(PEDE_WHATSAPP ? { whatsapp: contato.whatsapp } : {}), // E.164
+        ...(PEDE_EMAIL ? { email: contato.email } : {}),
+      }
       // Conversão. O redirect para a comunidade só acontece alguns segundos
       // depois (ver LevandoParaComunidade), então o GTM tem tempo de disparar.
       pushDataLayer('live_lead', {
@@ -197,7 +225,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         event_id: leadId, // mesma chave usada no Pixel — permite deduplicar com a CAPI
         destino: SLUG,
         posicao, // qual dos dois formulários converteu
-        lead: { nome: nomeOk, whatsapp: whatsappOk }, // whatsapp em E.164
+        lead: leadDataLayer,
         ...atrib,
       })
       // Mesmo evento das LPs de expedição, para a tag que JÁ existe no GTM
@@ -210,7 +238,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
           event_id: leadId, // mesmo id do live_lead: o Meta deduplica
           destino: SLUG,
           origem: 'live',
-          lead: { nome: nomeOk, whatsapp: whatsappOk },
+          lead: leadDataLayer,
           ...atrib,
         })
       }
@@ -223,12 +251,28 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
       // lead; o trigger é a URL, e vale também em .vercel.app). Por isso o lead
       // passa por lá antes da comunidade. A obrigado.html mostra a confirmação,
       // conta 3s (tempo do GTM/Stape despachar) e leva ao WhatsApp.
+      //
+      // ⚠️ AS DUAS LIVES PASSAM PELA MESMA /obrigado.html, de propósito: o
+      // trigger de conversão no GTM é a URL desta página. Uma /obrigado-peru
+      // separada não seria contada. O `?live=` diz a ela de quem é o inscrito
+      // (e deixa a porta aberta para o Bruno criar, no GTM, um gatilho por
+      // parâmetro se um dia quiser separar o CPL das duas lives).
+      //
+      // ⚠️ O JAPÃO VAI SEM PARÂMETRO NENHUM, de propósito. A URL dele fica
+      // BYTE A BYTE igual à que já está em produção e já dispara a conversão
+      // hoje. Não sabemos se o gatilho do GTM casa "Page Path" ou "Page URL":
+      // se for o segundo, uma query string nova derrubaria a conversão da live
+      // que já roda. A obrigado.html trata a ausência do parâmetro como Japão,
+      // então o comportamento é idêntico — só o risco some.
       try {
-        sessionStorage.setItem(`${SLUG}_comunidade`, live.comunidade.url)
+        // Só grava quando existe grupo: chave vazia faria a obrigado.html cair
+        // no link padrão dela, que é o grupo do JAPÃO.
+        if (TEM_COMUNIDADE) sessionStorage.setItem(`${SLUG}_comunidade`, live.comunidade.url)
       } catch {
-        /* aba anônima: a obrigado.html cai no link padrão dela */
+        /* aba anônima: a obrigado.html se vira com o `?live=` */
       }
-      window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
+      const query = SLUG === 'japao-live' ? '' : `?live=${encodeURIComponent(SLUG)}`
+      window.location.href = `${import.meta.env.BASE_URL}obrigado.html${query}`
     },
     [posicao],
   )
@@ -245,8 +289,16 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         ok = false
       }
       const wDigits = whatsapp.replace(/\D/g, '')
-      if (wDigits.length !== 11 || wDigits[2] !== '9') {
+      if (PEDE_WHATSAPP && (wDigits.length !== 11 || wDigits[2] !== '9')) {
         setErro('whatsapp', 'Digite um celular válido com DDD (11 dígitos). Ex.: (11) 98765-4321')
+        ok = false
+      }
+      const emailLimpo = email.trim().toLowerCase()
+      // Checagem deliberadamente frouxa: "tem @ e um ponto depois dele". Regex
+      // de e-mail apertada rejeita endereço válido e custa lead — quem valida
+      // de verdade é o e-mail que a pessoa não recebe.
+      if (PEDE_EMAIL && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) {
+        setErro('email', 'Digite um e-mail válido. É nele que chega o convite da live.')
         ok = false
       }
       if (!ok) return
@@ -262,19 +314,23 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         leadId = gerarLeadId()
       }
 
-      const whatsappE164 = `+55${wDigits}`
+      const whatsappE164 = PEDE_WHATSAPP ? `+55${wDigits}` : ''
+      const emailOk = PEDE_EMAIL ? emailLimpo : ''
       const payload = {
         lead_id: leadId,
         nome: nome.trim(),
         whatsapp: whatsappE164,
+        email: emailOk,
         slug: SLUG,
         expedicao: `Expedição ${live.expedicao.nome} ${live.expedicao.ano}`,
         fonte: live.fonte,
         source_id: live.sourceId,
         origem: 'live',
         // Dados do evento: seguem no payload porque o n8n usa para montar a
-        // mensagem/registro da inscrição. Não há mais `convidar_email` — sem o
-        // e-mail do lead não dá para convidá-lo no Google Agenda.
+        // mensagem/registro da inscrição. `convidar_email` é o que o nó do
+        // Google Calendar usa para pôr a pessoa como convidada — vai vazio nas
+        // lives que não pedem e-mail (o Japão), e aí não há convite a criar.
+        convidar_email: emailOk,
         evento_titulo: live.evento.titulo,
         evento_inicio: live.evento.inicioISO,
         evento_duracao_min: live.evento.duracaoMinutos,
@@ -296,12 +352,12 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
           body: JSON.stringify(payload),
         })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
-        concluir(nome.trim(), whatsappE164, leadId, track)
+        concluir(nome.trim(), { whatsapp: whatsappE164, email: emailOk }, leadId, track)
       } catch (err) {
         if (import.meta.env.DEV) {
           // Em dev o /api não existe (a função roda só na Vercel) — segue o fluxo
           console.warn('[dev] save-lead indisponível, simulando sucesso:', err)
-          concluir(nome.trim(), whatsappE164, leadId, track)
+          concluir(nome.trim(), { whatsapp: whatsappE164, email: emailOk }, leadId, track)
           return
         }
         setErroEnvio(true)
@@ -309,7 +365,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         setEnviando(false)
       }
     },
-    [nome, whatsapp, track, setErro, concluir, posicao],
+    [nome, whatsapp, email, track, setErro, concluir, posicao],
   )
 
   if (enviado) return <LevandoParaComunidade dados={enviado} posicao={posicao} sufixo={sufixo} />
@@ -365,25 +421,48 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         {erros.nome && <p className="field-error">{erros.nome}</p>}
       </div>
 
-      <div className="mt-4 md:mt-5">
-        <label htmlFor={id('whatsapp')} className="input-label">
-          WhatsApp com DDD
-        </label>
-        <input
-          type="tel"
-          id={id('whatsapp')}
-          name="whatsapp"
-          className={`input ${erros.whatsapp ? 'input-error' : ''}`}
-          required
-          maxLength={15}
-          inputMode="numeric"
-          autoComplete="tel-national"
-          placeholder="(11) 98765-4321"
-          value={whatsapp}
-          onChange={(e) => setWhatsapp(mascaraWhatsapp(e.target.value))}
-        />
-        {erros.whatsapp && <p className="field-error">{erros.whatsapp}</p>}
-      </div>
+      {PEDE_WHATSAPP && (
+        <div className="mt-4 md:mt-5">
+          <label htmlFor={id('whatsapp')} className="input-label">
+            WhatsApp com DDD
+          </label>
+          <input
+            type="tel"
+            id={id('whatsapp')}
+            name="whatsapp"
+            className={`input ${erros.whatsapp ? 'input-error' : ''}`}
+            required
+            maxLength={15}
+            inputMode="numeric"
+            autoComplete="tel-national"
+            placeholder="(11) 98765-4321"
+            value={whatsapp}
+            onChange={(e) => setWhatsapp(mascaraWhatsapp(e.target.value))}
+          />
+          {erros.whatsapp && <p className="field-error">{erros.whatsapp}</p>}
+        </div>
+      )}
+
+      {PEDE_EMAIL && (
+        <div className="mt-4 md:mt-5">
+          <label htmlFor={id('email')} className="input-label">
+            Seu melhor e-mail
+          </label>
+          <input
+            type="email"
+            id={id('email')}
+            name="email"
+            className={`input ${erros.email ? 'input-error' : ''}`}
+            required
+            inputMode="email"
+            autoComplete="email"
+            placeholder="voce@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {erros.email && <p className="field-error">{erros.email}</p>}
+        </div>
+      )}
 
       {erroEnvio && (
         <p className="field-error mt-6 text-center">
@@ -401,9 +480,22 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         {!enviando && <ArrowRight size={18} />}
       </button>
 
+      {/* O aviso tem que descrever o que REALMENTE acontece depois do envio —
+          é a única promessa que a pessoa lê antes de clicar. */}
       <p className="mt-3 text-center text-[10px] leading-relaxed text-dark-teal/45 md:mt-4 md:text-[11px]">
-        Ao enviar, você entra na nossa comunidade no WhatsApp — é por lá que o link da live e os
-        avisos da expedição são enviados. Pode sair quando quiser.
+        {TEM_COMUNIDADE ? (
+          <>
+            Ao enviar, você entra na nossa comunidade no WhatsApp — é por lá que o link da live e os
+            avisos da expedição são enviados. Pode sair quando quiser.
+          </>
+        ) : PEDE_EMAIL ? (
+          <>
+            O convite da live e o link da sala chegam no e-mail que você informar. Nada de spam:
+            só os avisos desta live.
+          </>
+        ) : (
+          <>Enviamos o link da live e os avisos por onde você nos deixar o contato.</>
+        )}
       </p>
     </form>
   )
@@ -445,7 +537,10 @@ function LevandoParaComunidade({
   const [restante, setRestante] = useState(SEGUNDOS_ATE_COMUNIDADE)
 
   useEffect(() => {
-    if (jaFoi) return
+    // Sem grupo configurado não há redirect nem contagem: a confirmação fica
+    // parada na tela. É o caso da live do Peru enquanto o `comunidade.url`
+    // dela estiver vazio.
+    if (jaFoi || !TEM_COMUNIDADE) return
     // A contagem aparece nas duas instâncias (a aba inteira vai navegar, não
     // importa em qual formulário a pessoa enviou), mas só UMA agenda o redirect
     // — senão são dois timers correndo para o mesmo destino.
@@ -481,22 +576,29 @@ function LevandoParaComunidade({
       </p>
 
       <p className="mx-auto mt-2 max-w-md text-[13px] leading-relaxed text-dark-teal/70 md:mt-3 md:text-sm">
-        Estamos te levando para a nossa comunidade no WhatsApp — é por lá que o link da live é
-        enviado.
+        {TEM_COMUNIDADE
+          ? 'Estamos te levando para a nossa comunidade no WhatsApp — é por lá que o link da live é enviado.'
+          : 'O convite da live vai para o e-mail que você informou. É por lá que chega o link da sala.'}
       </p>
 
-      <a
-        id={id('btn-comunidade')}
-        href={live.comunidade.url}
-        onClick={() => pushDataLayer('live_comunidade_click', { destino: SLUG, posicao })}
-        className="btn-primary mt-5 w-full md:mt-6"
-      >
-        <MessageCircle size={18} />
-        {!jaFoi && restante > 0 ? `Entrar na comunidade agora (${restante})` : 'Entrar na comunidade'}
-      </a>
+      {TEM_COMUNIDADE && (
+        <a
+          id={id('btn-comunidade')}
+          href={live.comunidade.url}
+          onClick={() => pushDataLayer('live_comunidade_click', { destino: SLUG, posicao })}
+          className="btn-primary mt-5 w-full md:mt-6"
+        >
+          <MessageCircle size={18} />
+          {!jaFoi && restante > 0
+            ? `Entrar na comunidade agora (${restante})`
+            : 'Entrar na comunidade'}
+        </a>
+      )}
 
       <p className="mt-4 text-[11px] leading-relaxed text-dark-teal/55 md:mt-5 md:text-xs">
-        O link da live é enviado na comunidade. Anote na agenda: {rotuloCompleto()}.
+        {TEM_COMUNIDADE
+          ? `O link da live é enviado na comunidade. Anote na agenda: ${rotuloCompleto()}.`
+          : `Anote na agenda: ${rotuloCompleto()}.`}
       </p>
     </div>
   )

@@ -1,9 +1,16 @@
-//  /api/save-lead — backend do formulário da ISCA DA LIVE (Japão).
+//  /api/save-lead — backend do formulário das ISCAS DE LIVE (Japão e Peru).
 //
 //  Mesmo desenho do /api/save-lead das LPs de expedição, com uma diferença
 //  deliberada: aqui existe UM destino só — o webhook exclusivo da live. Assim
 //  os inscritos da live caem numa etapa/coluna própria no Bitrix (a da
 //  comunidade) e nunca se misturam com os leads qualificados das LPs.
+//
+//  ⚠️ AS DUAS LIVES DIVIDEM ESTE WEBHOOK. `WEBHOOK_LIVE_URL` é uma env var por
+//  PROJETO na Vercel, e Japão (/) e Peru (/peru) são o mesmo projeto — então
+//  os dois POSTs chegam na mesma URL do n8n. Quem separa é o campo `slug` do
+//  payload ('japao-live' × 'peru-live'), e é nele que o workflow tem que
+//  ramificar: coluna do Bitrix, planilha e (no caso do Peru) o convite do
+//  Google Agenda. Sem esse ramo, inscrito do Peru cai na lista do Japão.
 //
 //  Dois canais, em paralelo, como nas outras LPs:
 //    1. webhook do n8n  → Bitrix (coluna da comunidade) + convite no Google
@@ -83,17 +90,27 @@ export default async function handler(req, res) {
   }
   for (const k of TRACK_KEYS) lead[k] = str(body[k], 200)
 
-  // Validação no servidor: nome e WhatsApp. O e-mail NÃO é mais exigido — saiu
-  // do formulário em 28/08/2026 e com ele o convite no Google Agenda. O
-  // WhatsApp saiu junto e VOLTOU no mesmo dia: é ele que alimenta o disparo do
-  // ManyChat em cima da lista de inscritos, e é a chave para cruzar esta lista
-  // com a de quem entrou de fato na sala (/entrar).
+  // Validação no servidor: NOME + PELO MENOS UMA FORMA DE CONTATO.
+  //
+  // A regra é essa, e não "nome + WhatsApp", porque as duas lives servidas por
+  // este projeto pedem campos diferentes (ver src/data/live-*.ts):
+  //   Japão (/)     → nome + WhatsApp  (é ele que alimenta o ManyChat e cruza
+  //                                     inscritos × presentes do /entrar)
+  //   Peru  (/peru) → nome + e-mail    (é ele que permite ao n8n convidar a
+  //                                     pessoa no Google Agenda)
+  //
+  // Exigir os dois quebraria uma das páginas; não exigir nenhum deixaria entrar
+  // lead sem como falar com a pessoa — que é lead perdido, não lead barato.
+  // Como a checagem é por FORMA DE CONTATO e não por slug, acrescentar uma
+  // terceira live não mexe aqui.
   if (lead.nome.length < 2) {
     res.status(400).json({ ok: false, error: 'nome_invalido' })
     return
   }
-  if (lead.whatsapp.length < 13) { // +55 + ao menos 10 dígitos
-    res.status(400).json({ ok: false, error: 'whatsapp_invalido' })
+  const temWhatsapp = lead.whatsapp.length >= 13 // +55 + ao menos 10 dígitos
+  const temEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)
+  if (!temWhatsapp && !temEmail) {
+    res.status(400).json({ ok: false, error: 'contato_invalido' })
     return
   }
 

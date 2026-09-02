@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -58,10 +59,34 @@ function apiDev(env: Record<string, string>): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    // Isca da live — deploy isolado na Vercel (domínio próprio), então vive na
-    // raiz do domínio. Página única: hero (vídeo + formulário), depoimentos,
-    // roteiro e a chamada final.
+    // Iscas de live — deploy isolado na Vercel (domínio próprio), então vivem
+    // na raiz do domínio.
     base: '/',
     plugins: [react(), apiDev(env)],
+
+    build: {
+      rollupOptions: {
+        /**
+         * DUAS páginas, um projeto só na Vercel:
+         *
+         *   index.html → /       → live do Japão (página cheia)
+         *   peru.html  → /peru   → live do Peru  (só o formulário)
+         *
+         * São entradas HTML de verdade, não rotas de SPA, porque cada uma
+         * precisa dos próprios <title>/description/og:* — é isso que o
+         * WhatsApp e o Facebook raspam quando alguém compartilha o link do
+         * anúncio. Uma SPA com rota /peru serviria as tags do Japão.
+         *
+         * ⚠️ Entrada nova aqui exige DUAS coisas mais, senão a página existe
+         * mas ninguém a alcança pela URL limpa: o rewrite no vercel.json
+         * (/destino → /destino.html) e o arquivo em tailwind.config.js
+         * (`content`), senão as classes usadas só nela são podadas do CSS.
+         */
+        input: {
+          main: fileURLToPath(new URL('./index.html', import.meta.url)),
+          peru: fileURLToPath(new URL('./peru.html', import.meta.url)),
+        },
+      },
+    },
   }
 })

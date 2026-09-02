@@ -1,6 +1,22 @@
 # Isca da LIVE — Expedição Japão 2027 (com extensão China)
 
-> ### ⚠️ A PASTA SE CHAMA `tailandia-live`, MAS A LP É DO JAPÃO
+> ### 📍 ESTE PROJETO SERVE **DUAS** LIVES
+>
+> | URL | Live | Dados | Roteiro | Formulário |
+> |---|---|---|---|---|
+> | `live.setuforeuvouviagens.com.br/` | Japão (ext. China) | `src/data/live-japao.ts` | `roteiro-japao.ts` (17 dias) | nome + WhatsApp |
+> | `live.setuforeuvouviagens.com.br/peru` | Peru 2027 | `src/data/live-peru.ts` | `roteiro-peru.ts` (9 dias) | nome + e-mail |
+>
+> **As duas usam a MESMA página** (`src/App.tsx`) — mesmo hero, mesmos
+> depoimentos, mesmo carrossel de roteiro, mesmo rodapé. Nenhum componente sabe
+> qual live está renderizando: todos leem `live` e `expedicao`, que já vêm
+> resolvidos.
+>
+> Um projeto só na Vercel, um build só, **um deploy só** — publicar as duas é
+> commitar. Quem escolhe o conjunto de dados é o caminho da URL, em
+> `src/data/live.ts`. Detalhes e o que falta preencher: **seção 9**.
+
+> ### ⚠️ A PASTA SE CHAMA `tailandia-live`, MAS A LP DA RAIZ É DO JAPÃO
 >
 > Não é engano e não renomeie. Em 28/08/2026 esta LP substituiu, **por cima**,
 > a isca da live da Tailândia — que já tinha acabado (a live foi 27/08). O nome
@@ -9,7 +25,7 @@
 > domínio ou env var. Renomear a pasta quebra o build do projeto.
 >
 > Quem manda na identidade do lead é o **slug `japao-live`** (em
-> `src/data/live.ts`), não o nome da pasta. É ele que vai para o CRM, para o
+> `src/data/live-japao.ts`), não o nome da pasta. É ele que vai para o CRM, para o
 > ledger e para o dataLayer.
 >
 > **Decisão do Bruno:** esta live NÃO fixa turma — fala da expedição (roteiro,
@@ -61,9 +77,10 @@ Moret/Inter, Ken Burns no hero, revelação cinética do título), mesmo
 
 ---
 
-## 1. O que PREENCHER antes de subir
+## 1. O que PREENCHER antes de subir (live do JAPÃO, na raiz)
 
-Tudo num arquivo só: **`src/data/live.ts`**. Nenhum componente precisa ser tocado.
+Tudo num arquivo só: **`src/data/live-japao.ts`**. Nenhum componente precisa ser
+tocado. (A do Peru tem a lista própria na **seção 9**.)
 
 | Campo | O que é | Onde pegar |
 |---|---|---|
@@ -77,7 +94,7 @@ Tudo num arquivo só: **`src/data/live.ts`**. Nenhum componente precisa ser toca
 | `verificacao.youtube.url` | canal do YouTube da agência | YouTube → seu canal → URL `@handle` |
 | `gate.liberarAposSegundos` | válvula de escape do gate (ver abaixo) | você |
 
-Fora do `live.ts`, mais dois:
+Fora do `live-japao.ts`, mais dois:
 
 | Onde | O quê |
 |---|---|
@@ -424,3 +441,131 @@ atende `/entrar` sem tocar no resto.
 - **O selo "AO VIVO AGORA" é derivado da data**, não escrito à mão: antes da
   hora mostra a data, durante mostra "ao vivo", depois mostra "live encerrada".
   A data está em `INICIO_ISO`, no mesmo `<script>`.
+
+---
+
+## 9. A live do PERU vive em `/peru`
+
+Servida em **`https://live.setuforeuvouviagens.com.br/peru`**, no mesmo projeto
+da Vercel da live do Japão. Não há subdomínio novo, projeto novo nem
+configuração de painel: **publicar é commitar na `main`**, igual ao Japão.
+
+### Como duas páginas cabem num projeto só
+
+| Peça | Papel |
+|---|---|
+| `peru.html` | entrada HTML própria — é dela que saem `<title>`, `description` e as `og:*` que o WhatsApp e o Facebook raspam do link do anúncio. O `<script>` dela aponta para o **mesmo** `/src/main.tsx` do Japão |
+| `src/data/live-peru.ts` | todos os dados da live do Peru |
+| `src/data/live.ts` | **despachante 1**: lê o 1º segmento da URL e devolve `livePeru` ou `liveJapao` |
+| `src/data/expedicao.ts` | **despachante 2**: pelo `live.slug`, escolhe `roteiro-peru.ts` ou `roteiro-japao.ts`. O resto (nome, ano, resumo, foto) já é derivado de `live` |
+| `vite.config.ts` → `build.rollupOptions.input` | declara as duas entradas |
+| `vercel.json` → `rewrites` | `/peru` → `/peru.html` (é o rewrite que faz a URL limpa existir) |
+
+**Por que dois despachantes e não um `if` nos componentes:** os dez componentes
+e as duas libs já importavam `live` e `expedicao` como módulo. Resolvendo a
+escolha nos dados, **nenhum componente precisou mudar** — a página do Peru é
+literalmente a mesma árvore de React da do Japão.
+
+O que é **compartilhado de propósito**: os depoimentos (são sobre a agência, não
+sobre o destino), o Shorts do YouTube, os canais de verificação e o rodapé.
+
+São duas páginas HTML **de verdade**, não rotas de SPA. O motivo é o anúncio:
+uma SPA com rota `/peru` serviria as `og:*` do Japão, e o link compartilhado
+apareceria com foto e título do Japão.
+
+> **Para acrescentar uma terceira live** (`/egito`, digamos), são 6 lugares:
+> `live-egito.ts` (no formato do `ConfigLive`), `roteiro-egito.ts`, uma linha no
+> mapa de `src/data/live.ts`, outra no mapa de `src/data/expedicao.ts`, a
+> entrada em `vite.config.ts` e o rewrite em `vercel.json` — mais o arquivo em
+> `tailwind.config.js` (`content`). Esquecer o Tailwind faz a página subir sem
+> os estilos que só ela usa; esquecer o mapa de `expedicao.ts` faz ela subir com
+> o **roteiro do Japão** (é o padrão de segurança).
+
+### O que PREENCHER antes de anunciar
+
+Tudo em **`src/data/live-peru.ts`**:
+
+| Campo | O que é | Onde pegar |
+|---|---|---|
+| `evento.inicioISO` | ⚠️ **data e hora reais da live** — hoje está um espaço reservado (06/09/2026 19h30) | você |
+| `evento.meetUrl` | sala do Google Meet **desta** live | Google Meet → nova reunião |
+| `comunidade.url` | grupo do WhatsApp **próprio do Peru** | WhatsApp → Comunidade → Convidar por link |
+| `sourceId` | está `LIVE_PERU`, pelo padrão do portal | **conferir no Bitrix** (ver abaixo) |
+
+E fora do arquivo:
+
+| Onde | O quê |
+|---|---|
+| n8n | ramificar o workflow por `slug` (`peru-live` × `japao-live`) — ver abaixo |
+| Bitrix | cadastrar a origem `[Peru] - Live` / `LIVE_PERU` se ainda não existir |
+
+### Três armadilhas específicas do Peru
+
+1. **O webhook é COMPARTILHADO.** `WEBHOOK_LIVE_URL` é env var por *projeto* na
+   Vercel, e as duas lives são o mesmo projeto — os dois POSTs chegam na mesma
+   URL do n8n. Quem separa é o campo **`slug`** do payload. Sem um ramo por
+   `slug` no workflow, inscrito do Peru cai na planilha e na coluna do Japão.
+2. **`sourceId` errado não dá erro.** STATUS_ID inexistente faz o negócio nascer
+   *sem origem* no Bitrix — some no meio de "Site" e o CPL da live fica
+   impossível de medir. Conferir antes de gastar em mídia.
+3. **Sem `comunidade.url`, ninguém é redirecionado** — e isso é de propósito. A
+   confirmação aparece e para ali, dizendo que o convite vai por e-mail. A
+   alternativa (cair no grupo do Japão) seria pior. Assim que o grupo existir,
+   preencha o campo e o redirect de 3s volta a funcionar sozinho.
+
+### Formulário: nome + e-mail (e o que isso custa)
+
+O Japão pede **WhatsApp**; o Peru pede **e-mail**. Não é gosto de layout —
+é o que cada automação consegue fazer depois:
+
+- com e-mail, o n8n **consegue** criar o convite no Google Agenda com a pessoa
+  como convidada (`convidar_email` já vai no payload);
+- sem WhatsApp, **não há disparo de ManyChat** para lembrar da live, e **não há
+  `findbycomm`** no Bitrix: cada inscrito nasce como contato novo.
+
+Para pedir os dois, basta ligar `formulario.pedirWhatsapp` em
+`src/data/live-peru.ts`. O componente e a validação do servidor já aguentam
+qualquer combinação — o servidor exige nome **+ pelo menos uma** forma de
+contato.
+
+### `/obrigado.html` é a mesma para as duas
+
+De propósito: o gatilho de conversão no GTM é o **pageview daquela URL**. Uma
+`/obrigado-peru.html` separada não seria contada. O formulário acrescenta
+`?live=peru-live`, e é esse parâmetro que diz à página de quem é o inscrito
+(título, texto e link do grupo). Se um dia quiser separar o CPL das duas lives
+no GTM, o gatilho por esse parâmetro já está disponível.
+
+### O roteiro do Peru veio da LP de tráfego
+
+`roteiro-peru.ts` é uma cópia do roteiro de `STFV/peru`, com o campo `data`
+('22/08', '23/08'…) removido de cada dia — o `Roteiro.tsx` desta LP mostra
+"Dia 1, Dia 2…", não dia do mês. As 7 fotos dos dias também foram copiadas para
+`public/assets/peru/`.
+
+> ⚠️ **São duas cópias em dois projetos.** Se a operação mudar o itinerário do
+> Peru, ele NÃO muda sozinho aqui. Conferir os dois.
+
+### Verificado em 02/09/2026
+
+`npm run build` passa (duas entradas), console limpo nas duas páginas, e o envio
+foi testado de ponta a ponta em `localhost`: o payload chega em
+`/api/save-lead` com `slug: peru-live`, `fonte: [Peru] - Live`,
+`source_id: LIVE_PERU`, `email` e `convidar_email` preenchidos e `whatsapp`
+vazio — e o servidor aceita.
+
+Conferido no navegador, em `/peru`: 9 slides no carrossel, headline "viver o
+Peru no ritmo certo", rodapé "PERU / TE ESPERAMOS", e **nenhum vazamento** de
+Japão/China no conteúdo — exceto o depoimento do Toninho Lima, que é real e cita
+"já comprei Japão e China 2027" (depoimento de cliente não se edita; se
+incomodar numa página do Peru, o caminho é tirá-lo da lista, não reescrevê-lo).
+
+E em `/`: 17 slides, headline do Japão, campos nome + WhatsApp, "com extensão
+China" no hero, zero menção ao Peru. Sem barra horizontal em iPhone 13 nem
+Pixel 7 nas duas páginas.
+
+⚠️ **Achado que vale para TODAS as LPs, não só esta:** o banner de cookies é
+`position: fixed; bottom: 0` e mede **204px**. Num iPhone 13 (viewport de
+664px) ele ocupa quase um terço da tela e **cobre o primeiro campo do
+formulário** — inclusive na LP do Japão que já está no ar. Some ao aceitar/
+recusar e ao rolar a página, mas na primeira tela ele está por cima do campo.

@@ -4,7 +4,9 @@
   "installCommand": "npm install",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/entrar", "destination": "/entrar.html" }
+    { "source": "/entrar", "destination": "/entrar.html" },
+    { "source": "/peru", "destination": "/peru.html" },
+    { "source": "/peru/", "destination": "/peru.html" }
   ],
   "headers": [
     {

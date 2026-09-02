@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  // Uma linha por página HTML: o Tailwind poda tudo que não vê aqui, então
+  // esquecer uma entrada faz a página subir sem os estilos usados só nela.
+  content: ['./index.html', './peru.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {

@@ -101,18 +101,24 @@ export default function HeroLive() {
                 inline-block com vertical-align:top, então sem um bloco em volta
                 este texto encosta no canto superior direito do "JAPÃO 2027" em
                 vez de começar uma linha nova. */}
-            <div>
-              <div className="kinetic-mask-wrapper mt-1 md:mt-2">
-                <motion.span
-                  initial={{ y: '110%' }}
-                  animate={{ y: '0%' }}
-                  transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-                  className="serif-italic inline-block text-[clamp(0.95rem,3.2vw,2.1rem)] font-normal leading-none tracking-[0.04em] text-off-white/70"
-                >
-                  {live.expedicao.complementoNome}
-                </motion.span>
+            {/* Só existe quando a expedição TEM complemento. O Peru não tem
+                (`complementoNome: ''`): sem esta guarda sobrava um bloco vazio
+                com margem, abrindo um buraco entre o título e o que vem
+                embaixo. */}
+            {live.expedicao.complementoNome && (
+              <div>
+                <div className="kinetic-mask-wrapper mt-1 md:mt-2">
+                  <motion.span
+                    initial={{ y: '110%' }}
+                    animate={{ y: '0%' }}
+                    transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+                    className="serif-italic inline-block text-[clamp(0.95rem,3.2vw,2.1rem)] font-normal leading-none tracking-[0.04em] text-off-white/70"
+                  >
+                    {live.expedicao.complementoNome}
+                  </motion.span>
+                </div>
               </div>
-            </div>
+            )}
           </h1>
 
           <motion.div

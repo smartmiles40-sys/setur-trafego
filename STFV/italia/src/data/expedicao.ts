@@ -464,8 +464,8 @@ export const gastosPessoais = {
 }
 
 export const whatsappConfig = {
-  numero: '551148636051',
+  numero: '5511951251935',
   mensagem:
     'Olá! Quero saber mais sobre a Expedição Costa Amalfitana 2027 — 4 a 14 de setembro de 2027.',
 }
-export const whatsappUrl = `https://wa.me/551148636051?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`
+export const whatsappUrl = `https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

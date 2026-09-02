@@ -5,7 +5,7 @@
 // ────────────────────────────────────────────────────────────────────
 
 // WhatsApp oficial da agência (DDI 55). Usado no envio do formulário e nos CTAs.
-export const WHATSAPP = "551148636051";
+export const WHATSAPP = "5511951251935";
 
 export const expedicao = {
   // Tipo do produto na Hero (palavra pequena em itálico acima do nome).

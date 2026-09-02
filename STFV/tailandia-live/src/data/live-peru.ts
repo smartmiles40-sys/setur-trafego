@@ -85,17 +85,19 @@ export const livePeru: ConfigLive = {
     titulo: 'Live: Expedição Peru 2027 · Se Tu For, Eu Vou',
 
     /**
-     * ⚠️ PREENCHER — data e hora reais da live do Peru.
+     * Data e hora da live, no fuso de São Paulo.
      *
      * Formato ISO com offset explícito: 'AAAA-MM-DDTHH:MM:00-03:00' (horário
      * de Brasília; não existe mais horário de verão). TUDO na página deriva
-     * DESTA linha — contagem regressiva, rótulo da data, convite do Google
-     * Agenda e o .ics. Não há data escrita à mão em nenhum outro lugar.
+     * DESTA linha — contagem regressiva, rótulo da data, chip do header,
+     * convite do Google Agenda e o .ics. Não há data escrita à mão em nenhum
+     * outro lugar: trocar a live de dia é editar só esta linha.
      *
-     * O valor abaixo é só um espaço reservado (domingo 06/09/2026, 19h30, no
-     * mesmo horário da live do Japão). Trocar antes de anunciar.
+     * ✅ Definida pelo Bruno em 02/09/2026: **quinta-feira, 03/09/2026, 20h00**
+     *    (BRT) — o dia seguinte ao pedido. Note que é 20h, não 19h30: esta live
+     *    NÃO é no mesmo horário da do Japão.
      */
-    inicioISO: '2026-09-06T19:30:00-03:00',
+    inicioISO: '2026-09-03T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ⚠️ PREENCHER — sala do Google Meet desta live. Vazio = o convite do

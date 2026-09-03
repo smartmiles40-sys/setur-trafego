@@ -53,14 +53,13 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit?usp=sharing",
+          "value": "https://docs.google.com/spreadsheets/d/1wfGSEGubsAouvPLca4dKX_Ufb30m7dFDd-lKPSKdeRQ/edit",
           "mode": "url"
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Pagina1"
+          "value": "Geral",
+          "mode": "name"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
@@ -88,14 +87,14 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Aba GERAL (a primeira da planilha, gid=0): recebe TODAS as lives, e e a rede de seguranca. Ela grava primeiro; so depois a linha vai para a aba da live. Cabecalho da linha 1 tem que bater com os nomes das chaves do no de codigo -- coluna que falta e descartada EM SILENCIO."
+      "notes": "Aba GERAL (a de nome \"Geral\"): recebe TODAS as lives, e e a rede de seguranca. Grava primeiro; so depois a linha vai para a aba da live. Endereçada por NOME e nao por gid=0 de proposito: planilha convertida de .xlsx nao tem aba de gid 0. Cabecalho da linha 1 tem que bater com as chaves do no de codigo -- coluna que falta e descartada EM SILENCIO."
     },
     {
       "parameters": {
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit?usp=sharing",
+          "value": "https://docs.google.com/spreadsheets/d/1wfGSEGubsAouvPLca4dKX_Ufb30m7dFDd-lKPSKdeRQ/edit",
           "mode": "url"
         },
         "sheetName": {
@@ -184,14 +183,13 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40/edit?gid=0#gid=0",
+          "value": "https://docs.google.com/spreadsheets/d/1qHBwwft8LklrtAtIaQZZjhYncYN8iLvd0yp31-bArIM/edit",
           "mode": "url"
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Pagina1"
+          "value": "Geral",
+          "mode": "name"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
@@ -219,14 +217,14 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Aba GERAL (a primeira da planilha, gid=0): recebe TODAS as lives, e e a rede de seguranca. Ela grava primeiro; so depois a linha vai para a aba da live. Cabecalho da linha 1 tem que bater com os nomes das chaves do no de codigo -- coluna que falta e descartada EM SILENCIO."
+      "notes": "Aba GERAL (a de nome \"Geral\"): recebe TODAS as lives, e e a rede de seguranca. Grava primeiro; so depois a linha vai para a aba da live. Endereçada por NOME e nao por gid=0 de proposito: planilha convertida de .xlsx nao tem aba de gid 0. Cabecalho da linha 1 tem que bater com as chaves do no de codigo -- coluna que falta e descartada EM SILENCIO."
     },
     {
       "parameters": {
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40/edit?gid=0#gid=0",
+          "value": "https://docs.google.com/spreadsheets/d/1qHBwwft8LklrtAtIaQZZjhYncYN8iLvd0yp31-bArIM/edit",
           "mode": "url"
         },
         "sheetName": {

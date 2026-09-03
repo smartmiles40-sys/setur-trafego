@@ -44,10 +44,10 @@
  */
 
 /** Planilha de INSCRITOS (o form da LP — base do disparo no ManyChat). */
-var ID_INSCRITOS = '1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE';
+var ID_INSCRITOS = '1wfGSEGubsAouvPLca4dKX_Ufb30m7dFDd-lKPSKdeRQ';
 
 /** Planilha de ENTRADAS (o form do /entrar — quem apareceu na sala). */
-var ID_ENTRADAS = '15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40';
+var ID_ENTRADAS = '1qHBwwft8LklrtAtIaQZZjhYncYN8iLvd0yp31-bArIM';
 
 /** 23 colunas. Mesma ordem das chaves do nó "Montar a linha — inscritos". */
 var CABECALHO_INSCRITOS = [

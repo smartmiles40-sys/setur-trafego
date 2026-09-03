@@ -7,16 +7,16 @@
         "path": "inscricao-live",
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000001",
+      "id": "b1000000-0000-4000-8000-000000000001",
       "name": "Webhook — inscricao (PADRAO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -320,
-        -368
+        -272,
+        -384
       ],
       "webhookId": "inscricao-live",
-      "notes": "ESTA e' a URL que vai na env var WEBHOOK_LIVE_URL de TODA LP de live. Sem destino no path de proposito: quem separa uma live da outra e' a coluna Destino (o campo slug do payload). CUIDADO: e' OUTRO webhook e OUTRA planilha do 'entrada-live'."
+      "notes": "INSCRITOS (form da LP, base do disparo no ManyChat). Serve TODAS as lives: quem separa e a coluna Destino (campo slug). Env var na Vercel: WEBHOOK_LIVE_URL. CUIDADO: e OUTRO webhook e OUTRA planilha do entrada-live."
     },
     {
       "parameters": {
@@ -24,28 +24,28 @@
         "path": "inscricao-live-japao",
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000002",
+      "id": "b1000000-0000-4000-8000-000000000002",
       "name": "Webhook — inscricao (LEGADO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -320,
+        -272,
         -208
       ],
       "webhookId": "inscricao-live-japao",
-      "notes": "Path antigo, mantido so' para nao perder lead durante a troca: quem ainda estiver com a env var velha na Vercel continua caindo aqui, no MESMO destino. Pode apagar depois de confirmar que WEBHOOK_LIVE_URL aponta para /inscricao-live e que chegou lead por la."
+      "notes": "LEGADO, ligado no MESMO no. Continua aqui porque a env var WEBHOOK_LIVE_URL da Vercel ainda pode apontar para este path. So apagar depois de confirmar que chegou lead pelo path novo (inscricao-live)."
     },
     {
       "parameters": {
-        "jsCode": "// Uma linha da planilha por INSCRITO — de QUALQUER live.\n//\n// Este workflow e' o PADRAO: a MESMA URL de webhook serve todas as LPs de\n// live. O que separa uma live da outra nao e' um workflow por destino, e' a\n// coluna \"Destino\" (o campo `slug` do payload).\n//\n// ⚠️ Nomes das chaves = nomes das COLUNAS. O no do Sheets mapeia por NOME, e\n// coluna que nao existe no cabecalho da linha 1 e' DESCARTADA EM SILENCIO --\n// nao da erro, o dado simplesmente some. Cabecalho exato esperado:\n//\n//   Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n  const txt = (v) => String(v ?? '').trim();\n\n  const whatsapp = txt(b.whatsapp);\n  // Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n  // +5511987654321 em notacao cientifica. E telefone quebrado nao dispara no\n  // ManyChat.\n  const whatsappCelula = whatsapp ? `'${whatsapp}` : '';\n\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      'Data/hora': txt(b.data_hora_cadastro),\n      // 'japao-live' | 'peru-live' | ...\n      // ⚠️ E' por esta coluna que voce FILTRA antes de disparar no ManyChat.\n      // Sem filtro, quem se inscreveu no Peru recebe o aviso da live do Japao.\n      'Destino': txt(b.slug) || 'desconhecido',\n      'Nome': txt(b.nome),\n      // Cada live escolhe os campos que pede (live.formulario nas LPs). Desde\n      // 02/09/2026 as DUAS pedem WhatsApp -- a coluna E-mail vem vazia, e isso\n      // e' esperado, nao e' falha de captura. Se uma live voltar a pedir\n      // e-mail, o dado cai nesta coluna sem mexer aqui.\n      'WhatsApp': whatsappCelula,\n      'E-mail': txt(b.email).toLowerCase(),\n      'Live': txt(b.evento_titulo),\n      'Formulario': b.posicao === 'fim' ? 'fim da pagina' : 'topo da pagina',\n      'Origem': origem,\n      'gclid': txt(b.gclid),\n      'fbclid': txt(b.fbclid),\n      'lead_id': txt(b.lead_id),\n    },\n  });\n}\n\nreturn linhas;"
+        "jsCode": "// Uma linha da planilha por INSCRITO -- de QUALQUER live.\n//\n// Este workflow e' o PADRAO: a MESMA URL de webhook serve todas as LPs de live\n// (/, /peru, /costa-amalfitana, /tailandia, /turquia, /islandia, /egito). O que\n// separa uma live da outra e' a coluna \"Destino\" (o campo `slug` do payload) --\n// e e' por ela que a linha tambem vai para a ABA daquela live.\n//\n// ⚠️ Nomes das chaves = nomes das COLUNAS. O no do Sheets mapeia por NOME, e\n// coluna que nao existe no cabecalho da linha 1 e' DESCARTADA EM SILENCIO --\n// nao da erro, o dado simplesmente some. Cabecalho exato esperado:\n//\n//   Data/hora | Destino | Nome | WhatsApp | E-mail | Expedicao | Live |\n//   Data da live | Formulario | Origem | utm_source | utm_medium |\n//   utm_campaign | utm_content | utm_term | utm_id | gclid | fbclid |\n//   gbraid | wbraid | Fonte | source_id | lead_id\n//\n// A chave `_aba` NAO e' coluna: e' o nome da aba, lido pelo no seguinte. Como\n// nao existe no cabecalho, o Sheets a descarta sozinho.\n\n// ============================================================================\n//  A ABA DE CADA LIVE\n// ============================================================================\n//  A chave e' o `slug` que a LP manda (a mesma coisa da coluna Destino).\n//  O valor e' o NOME EXATO da aba na planilha -- se nao bater, a linha nao vai\n//  para a aba da live (mas NAO se perde: ela ja foi gravada na aba geral pelo\n//  no anterior).\n//\n//  Live nova = uma linha aqui + criar a aba com o mesmo cabecalho.\n// ============================================================================\nconst ABA_POR_DESTINO = {\n  'japao-live':            'Japao 20/09',\n  'peru-live':             'Peru 03/09',\n  'costa-amalfitana-live': 'Amalfitana 08/09',\n  'tailandia-live':        'Tailandia 13/09',\n  'turquia-live':          'Turquia 15/09',\n  'islandia-live':         'Islandia 17/09',\n  'egito-live':            'Egito 29/09',\n};\n\nconst txt = (v) => String(v ?? '').trim();\n\n// Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n// +5511987654321 em notacao cientifica -- e telefone quebrado nao dispara no\n// ManyChat.\nconst comoTexto = (v) => (txt(v) ? \"'\" + txt(v) : '');\n\n// '2026-09-29T20:00:00-03:00' -> '29/09/2026 20:00' (fuso de Brasilia)\nfunction dataBR(iso) {\n  const s = txt(iso);\n  if (!s) return '';\n  const d = new Date(s);\n  if (isNaN(d.getTime())) return s;\n  try {\n    return new Intl.DateTimeFormat('pt-BR', {\n      day: '2-digit', month: '2-digit', year: 'numeric',\n      hour: '2-digit', minute: '2-digit',\n      timeZone: 'America/Sao_Paulo',\n    }).format(d).replace(', ', ' ');\n  } catch (e) { return s; }\n}\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n  const destino = txt(b.slug) || 'desconhecido';\n\n  // Origem legivel de bater o olho: \"google / cpc / live-egito\".\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      'Data/hora': txt(b.data_hora_cadastro),\n      // ⚠️ E' por esta coluna que voce FILTRA antes de disparar no ManyChat --\n      // e e' ela que escolhe a aba, logo abaixo. Sem isso, quem se inscreveu\n      // na live do Egito recebe o aviso da live do Japao.\n      'Destino': destino,\n      'Nome': txt(b.nome),\n      // Cada live escolhe os campos que pede (live.formulario nas LPs). Hoje\n      // TODAS pedem nome + WhatsApp: a coluna E-mail vem vazia, e isso e'\n      // esperado, nao e' falha de captura. Se uma live voltar a pedir e-mail,\n      // o dado cai nesta coluna sem mexer aqui.\n      'WhatsApp': comoTexto(b.whatsapp),\n      'E-mail': txt(b.email).toLowerCase(),\n      'Expedicao': txt(b.expedicao),\n      'Live': txt(b.evento_titulo),\n      'Data da live': dataBR(b.evento_inicio),\n      'Formulario': b.posicao === 'fim' ? 'fim da pagina' : 'topo da pagina',\n      'Origem': origem,\n      'utm_source': txt(b.utm_source),\n      'utm_medium': txt(b.utm_medium),\n      'utm_campaign': txt(b.utm_campaign),\n      'utm_content': txt(b.utm_content),\n      'utm_term': txt(b.utm_term),\n      'utm_id': txt(b.utm_id),\n      'gclid': txt(b.gclid),\n      'fbclid': txt(b.fbclid),\n      'gbraid': txt(b.gbraid),\n      'wbraid': txt(b.wbraid),\n      // Como o lead nasce no Bitrix -- serve para cruzar planilha x CRM.\n      'Fonte': txt(b.fonte),\n      'source_id': txt(b.source_id),\n      'lead_id': txt(b.lead_id),\n\n      // controle, nao e' coluna:\n      '_aba': ABA_POR_DESTINO[destino] || '',\n    },\n  });\n}\n\nreturn linhas;"
       },
-      "id": "a1000000-0000-4000-8000-000000000003",
+      "id": "b1000000-0000-4000-8000-000000000003",
       "name": "Montar a linha — inscritos",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -32,
-        -288
+        -16,
+        -296
       ]
     },
     {
@@ -60,125 +60,13 @@
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Página1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit#gid=0"
+          "cachedResultName": "Pagina1"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
           "value": {},
           "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Data/hora",
-              "displayName": "Data/hora",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Destino",
-              "displayName": "Destino",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Nome",
-              "displayName": "Nome",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "WhatsApp",
-              "displayName": "WhatsApp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "E-mail",
-              "displayName": "E-mail",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Live",
-              "displayName": "Live",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Formulario",
-              "displayName": "Formulario",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Origem",
-              "displayName": "Origem",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "gclid",
-              "displayName": "gclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "fbclid",
-              "displayName": "fbclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "lead_id",
-              "displayName": "lead_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
+          "schema": [],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
@@ -186,13 +74,13 @@
           "useAppend": true
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000004",
-      "name": "Planilha INSCRITOS",
+      "id": "b1000000-0000-4000-8000-000000000004",
+      "name": "Planilha INSCRITOS — geral",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        256,
-        -288
+        240,
+        -296
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -200,7 +88,49 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Planilha de INSCRITOS (base do disparo no ManyChat). Cabecalho EXATO da linha 1: Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id -- as colunas Destino e E-mail sao NOVAS (02/09/2026): sem elas no cabecalho o dado some sem erro. E-mail hoje vem vazio (as duas lives pedem WhatsApp), mas fica no cabecalho para a live que voltar a pedir. A coluna Destino e' o que separa as lives em ABAS (uma aba por live), e a aba e' a lista do ManyChat: sem essa separacao, agora que as duas lives tem telefone, o inscrito do Peru receberia o aviso do Japao. 'Use Append' LIGADO: sem isso o n8n procura a 1a linha vazia em vez de usar o append da API, e escreve num buraco se alguma linha do meio estiver vazia."
+      "notes": "Aba GERAL (a primeira da planilha, gid=0): recebe TODAS as lives, e e a rede de seguranca. Ela grava primeiro; so depois a linha vai para a aba da live. Cabecalho da linha 1 tem que bater com os nomes das chaves do no de codigo -- coluna que falta e descartada EM SILENCIO."
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json._aba }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "id": "b1000000-0000-4000-8000-000000000005",
+      "name": "Planilha INSCRITOS — aba da live",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        -296
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3Pz5up7dEtcK5nim",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Escreve a MESMA linha na aba da live, pelo nome que veio em _aba (mapa ABA_POR_DESTINO no no de codigo). E essa aba que vira a lista do ManyChat: com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da aba geral. Se nao existir (ou o nome nao bater), o erro e engolido de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral: nao se perde lead, so deixa de separar -- e a aba vazia e um sintoma visivel.",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -208,16 +138,16 @@
         "path": "entrada-live",
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000005",
+      "id": "b1000000-0000-4000-8000-000000000006",
       "name": "Webhook — entrada (PADRAO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -320,
-        48
+        -272,
+        16
       ],
       "webhookId": "entrada-live",
-      "notes": "ESTA e' a URL que vai na env var WEBHOOK_ENTRAR_URL. Aqui caem os PRESENTES (form do /entrar), nao os inscritos. NAO reaproveitar o webhook da inscricao: sao listas diferentes, e cruzar as duas nao da erro -- so mistura tudo numa lista so."
+      "notes": "PRESENTES (form do /entrar). Env var na Vercel: WEBHOOK_ENTRAR_URL. NAO reaproveitar o webhook da inscricao: sao listas diferentes."
     },
     {
       "parameters": {
@@ -225,28 +155,28 @@
         "path": "entrada-live-japao",
         "options": {}
       },
-      "id": "a1000000-0000-4000-8000-000000000006",
+      "id": "b1000000-0000-4000-8000-000000000007",
       "name": "Webhook — entrada (LEGADO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -320,
-        208
+        -272,
+        192
       ],
       "webhookId": "entrada-live-japao",
-      "notes": "Path antigo, mantido so' durante a troca da env var. Pode apagar depois de confirmar que WEBHOOK_ENTRAR_URL aponta para /entrada-live."
+      "notes": "LEGADO, ligado no MESMO no. Ver a observacao do legado de inscricao."
     },
     {
       "parameters": {
-        "jsCode": "// Uma linha da planilha por pessoa que ENTROU na sala — de QUALQUER live.\n//\n// O payload vem de /api/entrar-live. Mesma ideia do de cima: uma URL so' para\n// todas as lives, separadas pela coluna \"Destino\".\n//\n// ⚠️ Cabecalho exato esperado na linha 1 (SEM a coluna Formulario, que so'\n// existe na planilha de inscritos):\n//\n//   Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n  const txt = (v) => String(v ?? '').trim();\n\n  const whatsapp = txt(b.whatsapp);\n  // Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n  // +5511987654321 em notacao cientifica.\n  const whatsappCelula = whatsapp ? `'${whatsapp}` : '';\n\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      // `data_hora_entrada` e' o campo do /api/entrar-live. O fallback para\n      // `data_hora_cadastro` existe porque um payload de INSCRICAO disparado\n      // aqui por engano (ou por pin de teste) deixaria a coluna vazia, e uma\n      // linha sem data e' inutil para cruzar inscritos x presentes.\n      'Data/hora': txt(b.data_hora_entrada) || txt(b.data_hora_cadastro),\n      'Destino': txt(b.slug) || 'desconhecido',\n      'Nome': txt(b.nome),\n      'WhatsApp': whatsappCelula,\n      'E-mail': txt(b.email).toLowerCase(),\n      'Live': txt(b.evento_titulo),\n      'Origem': origem,\n      'gclid': txt(b.gclid),\n      'fbclid': txt(b.fbclid),\n      'lead_id': txt(b.lead_id),\n    },\n  });\n}\n\nreturn linhas;"
+        "jsCode": "// Uma linha da planilha por pessoa que ENTROU na sala -- de QUALQUER live.\n//\n// O payload vem de /api/entrar-live, e a pagina /entrar manda o `slug` da live\n// pelo `?live=` da URL. Mesma ideia do de cima: uma URL so' para todas as\n// lives, separadas pela coluna \"Destino\" e por uma aba propria.\n//\n// ⚠️ Cabecalho exato esperado (SEM a coluna Formulario, que so' existe na\n// planilha de inscritos, e SEM E-mail/Expedicao, que o form de entrada nao\n// coleta):\n//\n//   Data/hora | Destino | Nome | WhatsApp | Live | Data da live | Origem |\n//   utm_source | utm_medium | utm_campaign | utm_content | utm_term |\n//   utm_id | gclid | fbclid | gbraid | wbraid | lead_id\n\n// ============================================================================\n//  A ABA DE CADA LIVE\n// ============================================================================\n//  A chave e' o `slug` que a LP manda (a mesma coisa da coluna Destino).\n//  O valor e' o NOME EXATO da aba na planilha -- se nao bater, a linha nao vai\n//  para a aba da live (mas NAO se perde: ela ja foi gravada na aba geral pelo\n//  no anterior).\n//\n//  Live nova = uma linha aqui + criar a aba com o mesmo cabecalho.\n// ============================================================================\nconst ABA_POR_DESTINO = {\n  'japao-live':            'Japao 20/09',\n  'peru-live':             'Peru 03/09',\n  'costa-amalfitana-live': 'Amalfitana 08/09',\n  'tailandia-live':        'Tailandia 13/09',\n  'turquia-live':          'Turquia 15/09',\n  'islandia-live':         'Islandia 17/09',\n  'egito-live':            'Egito 29/09',\n};\n\nconst txt = (v) => String(v ?? '').trim();\n\n// Telefone como TEXTO: sem o apostrofo o Sheets come o '+' e transforma\n// +5511987654321 em notacao cientifica -- e telefone quebrado nao dispara no\n// ManyChat.\nconst comoTexto = (v) => (txt(v) ? \"'\" + txt(v) : '');\n\n// '2026-09-29T20:00:00-03:00' -> '29/09/2026 20:00' (fuso de Brasilia)\nfunction dataBR(iso) {\n  const s = txt(iso);\n  if (!s) return '';\n  const d = new Date(s);\n  if (isNaN(d.getTime())) return s;\n  try {\n    return new Intl.DateTimeFormat('pt-BR', {\n      day: '2-digit', month: '2-digit', year: 'numeric',\n      hour: '2-digit', minute: '2-digit',\n      timeZone: 'America/Sao_Paulo',\n    }).format(d).replace(', ', ' ');\n  } catch (e) { return s; }\n}\n\nconst linhas = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body || item.json;\n  const destino = txt(b.slug) || 'desconhecido';\n\n  const origem = [b.utm_source, b.utm_medium, b.utm_campaign, b.utm_content]\n    .filter(Boolean)\n    .join(' / ');\n\n  linhas.push({\n    json: {\n      // Fallback de proposito: payload de INSCRICAO disparado aqui por engano\n      // (ou um pin de teste) deixava a linha sem data -- e linha sem data nao\n      // cruza inscritos x presentes.\n      'Data/hora': txt(b.data_hora_entrada) || txt(b.data_hora_cadastro),\n      'Destino': destino,\n      'Nome': txt(b.nome),\n      'WhatsApp': comoTexto(b.whatsapp),\n      'Live': txt(b.evento_titulo),\n      'Data da live': dataBR(b.evento_inicio),\n      'Origem': origem,\n      'utm_source': txt(b.utm_source),\n      'utm_medium': txt(b.utm_medium),\n      'utm_campaign': txt(b.utm_campaign),\n      'utm_content': txt(b.utm_content),\n      'utm_term': txt(b.utm_term),\n      'utm_id': txt(b.utm_id),\n      'gclid': txt(b.gclid),\n      'fbclid': txt(b.fbclid),\n      'gbraid': txt(b.gbraid),\n      'wbraid': txt(b.wbraid),\n      'lead_id': txt(b.lead_id),\n\n      // controle, nao e' coluna:\n      '_aba': ABA_POR_DESTINO[destino] || '',\n    },\n  });\n}\n\nreturn linhas;"
       },
-      "id": "a1000000-0000-4000-8000-000000000007",
+      "id": "b1000000-0000-4000-8000-000000000008",
       "name": "Montar a linha — entradas",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -32,
-        128
+        -16,
+        104
       ]
     },
     {
@@ -261,115 +191,13 @@
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Página1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40/edit#gid=0"
+          "cachedResultName": "Pagina1"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
           "value": {},
           "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Data/hora",
-              "displayName": "Data/hora",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Destino",
-              "displayName": "Destino",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Nome",
-              "displayName": "Nome",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "WhatsApp",
-              "displayName": "WhatsApp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "E-mail",
-              "displayName": "E-mail",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Live",
-              "displayName": "Live",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Origem",
-              "displayName": "Origem",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "gclid",
-              "displayName": "gclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "fbclid",
-              "displayName": "fbclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "lead_id",
-              "displayName": "lead_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
+          "schema": [],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
@@ -377,13 +205,13 @@
           "useAppend": true
         }
       },
-      "id": "a1000000-0000-4000-8000-000000000008",
-      "name": "Planilha ENTRADAS",
+      "id": "b1000000-0000-4000-8000-000000000009",
+      "name": "Planilha ENTRADAS — geral",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        256,
-        128
+        240,
+        104
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -391,160 +219,7 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Planilha de ENTRADAS (quem apareceu de verdade). Cabecalho EXATO da linha 1: Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id -- SEM a coluna Formulario, que so' existe na de inscritos. Destino e E-mail sao novas (02/09/2026). 'Use Append' LIGADO."
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit?usp=sharing",
-          "mode": "url"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "={{ $json.Destino }}",
-          "mode": "name"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Data/hora",
-              "displayName": "Data/hora",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Destino",
-              "displayName": "Destino",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Nome",
-              "displayName": "Nome",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "WhatsApp",
-              "displayName": "WhatsApp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "E-mail",
-              "displayName": "E-mail",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Live",
-              "displayName": "Live",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Formulario",
-              "displayName": "Formulario",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Origem",
-              "displayName": "Origem",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "gclid",
-              "displayName": "gclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "fbclid",
-              "displayName": "fbclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "lead_id",
-              "displayName": "lead_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {
-          "useAppend": true
-        }
-      },
-      "id": "a1000000-0000-4000-8000-000000000009",
-      "name": "Planilha INSCRITOS — aba da live",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.5,
-      "position": [
-        480,
-        -288
-      ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "3Pz5up7dEtcK5nim",
-          "name": "Google Sheets account"
-        }
-      },
-      "notes": "Escreve a MESMA linha numa aba com o nome do Destino (o slug da live: japao-live, peru-live, costa-amalfitana-live, tailandia-live, turquia-live, islandia-live, egito-live). E essa aba que vira a lista do ManyChat -- com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da linha 1 da aba geral: aba que nao existe da erro, e o erro e engolido aqui de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral pelo no anterior. Ou seja: esquecer de criar a aba nao perde lead nenhum, so deixa de separar.",
-      "onError": "continueRegularOutput"
+      "notes": "Aba GERAL (a primeira da planilha, gid=0): recebe TODAS as lives, e e a rede de seguranca. Ela grava primeiro; so depois a linha vai para a aba da live. Cabecalho da linha 1 tem que bater com os nomes das chaves do no de codigo -- coluna que falta e descartada EM SILENCIO."
     },
     {
       "parameters": {
@@ -556,115 +231,14 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "={{ $json.Destino }}",
+          "value": "={{ $json._aba }}",
           "mode": "name"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
           "value": {},
           "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Data/hora",
-              "displayName": "Data/hora",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Destino",
-              "displayName": "Destino",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Nome",
-              "displayName": "Nome",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "WhatsApp",
-              "displayName": "WhatsApp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "E-mail",
-              "displayName": "E-mail",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Live",
-              "displayName": "Live",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Origem",
-              "displayName": "Origem",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "gclid",
-              "displayName": "gclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "fbclid",
-              "displayName": "fbclid",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "lead_id",
-              "displayName": "lead_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
+          "schema": [],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
@@ -672,13 +246,13 @@
           "useAppend": true
         }
       },
-      "id": "a1000000-0000-4000-8000-00000000000a",
+      "id": "b1000000-0000-4000-8000-00000000000a",
       "name": "Planilha ENTRADAS — aba da live",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        480,
-        128
+        496,
+        104
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -686,7 +260,7 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Escreve a MESMA linha numa aba com o nome do Destino (o slug da live: japao-live, peru-live, costa-amalfitana-live, tailandia-live, turquia-live, islandia-live, egito-live). E essa aba que vira a lista do ManyChat -- com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da linha 1 da aba geral: aba que nao existe da erro, e o erro e engolido aqui de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral pelo no anterior. Ou seja: esquecer de criar a aba nao perde lead nenhum, so deixa de separar.",
+      "notes": "Escreve a MESMA linha na aba da live, pelo nome que veio em _aba (mapa ABA_POR_DESTINO no no de codigo). E essa aba que vira a lista do ManyChat: com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da aba geral. Se nao existir (ou o nome nao bater), o erro e engolido de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral: nao se perde lead, so deixa de separar -- e a aba vazia e um sintoma visivel.",
       "onError": "continueRegularOutput"
     }
   ],
@@ -717,7 +291,18 @@
       "main": [
         [
           {
-            "node": "Planilha INSCRITOS",
+            "node": "Planilha INSCRITOS — geral",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha INSCRITOS — geral": {
+      "main": [
+        [
+          {
+            "node": "Planilha INSCRITOS — aba da live",
             "type": "main",
             "index": 0
           }
@@ -750,25 +335,14 @@
       "main": [
         [
           {
-            "node": "Planilha ENTRADAS",
+            "node": "Planilha ENTRADAS — geral",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Planilha INSCRITOS": {
-      "main": [
-        [
-          {
-            "node": "Planilha INSCRITOS — aba da live",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Planilha ENTRADAS": {
+    "Planilha ENTRADAS — geral": {
       "main": [
         [
           {
@@ -780,7 +354,82 @@
       ]
     }
   },
-  "pinData": {},
+  "pinData": {
+    "Webhook — inscricao (PADRAO)": [
+      {
+        "headers": {
+          "content-type": "application/json"
+        },
+        "params": {},
+        "query": {},
+        "body": {
+          "lead_id": "teste_inscricao_egito",
+          "nome": "TESTE — apagar esta linha",
+          "whatsapp": "+5511995801374",
+          "email": "",
+          "expedicao": "Expedição Egito 2027",
+          "fonte": "[Egito] - Live",
+          "source_id": "LIVE_EGITO",
+          "origem": "live",
+          "slug": "egito-live",
+          "posicao": "hero",
+          "evento_titulo": "Live: Expedição Egito 2027 · Se Tu For, Eu Vou",
+          "evento_inicio": "2026-09-29T20:00:00-03:00",
+          "evento_duracao_min": 90,
+          "evento_meet_url": "",
+          "convidar_email": "",
+          "comunidade_url": "",
+          "form_name": "live-egito-live-2027",
+          "data_hora_cadastro": "03/09/2026 16:00:00",
+          "etapa": "live",
+          "formulario_completo": true,
+          "utm_source": "facebook",
+          "utm_medium": "cpc",
+          "utm_campaign": "live-egito",
+          "utm_content": "LIVE",
+          "utm_term": "",
+          "utm_id": "",
+          "gclid": "",
+          "fbclid": "fb.1.teste",
+          "gbraid": "",
+          "wbraid": ""
+        },
+        "webhookUrl": "https://n8n-mowr.srv1758620.hstgr.cloud/webhook/inscricao-live",
+        "executionMode": "test"
+      }
+    ],
+    "Webhook — entrada (PADRAO)": [
+      {
+        "headers": {
+          "content-type": "application/json"
+        },
+        "params": {},
+        "query": {},
+        "body": {
+          "lead_id": "teste_entrada_egito",
+          "nome": "TESTE — apagar esta linha",
+          "whatsapp": "+5511995801374",
+          "slug": "egito-live",
+          "origem": "entrada-live",
+          "evento_titulo": "Live: Expedição Egito 2027 · Se Tu For, Eu Vou",
+          "evento_inicio": "2026-09-29T20:00:00-03:00",
+          "data_hora_entrada": "29/09/2026 20:03:11",
+          "utm_source": "",
+          "utm_medium": "",
+          "utm_campaign": "",
+          "utm_term": "",
+          "utm_content": "",
+          "utm_id": "",
+          "gclid": "",
+          "fbclid": "",
+          "gbraid": "",
+          "wbraid": ""
+        },
+        "webhookUrl": "https://n8n-mowr.srv1758620.hstgr.cloud/webhook/entrada-live",
+        "executionMode": "test"
+      }
+    ]
+  },
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "91aa63e4f74d7cbe350736303e89cc11603c939156428dd97f3f611c857dbb64"

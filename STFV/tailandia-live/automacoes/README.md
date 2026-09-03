@@ -24,11 +24,15 @@
 > 1 é **descartada em silêncio** — não dá erro, o dado só some. Duas colunas são
 > novas (`Destino` e `E-mail`), então a linha 1 precisa virar exatamente isto:
 >
-> **Inscritos:**
-> `Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id`
+> **Inscritos** (23 colunas — 03/09/2026: passou a gravar TUDO o que o form manda):
+> `Data/hora | Destino | Nome | WhatsApp | E-mail | Expedicao | Live | Data da live | Formulario | Origem | utm_source | utm_medium | utm_campaign | utm_content | utm_term | utm_id | gclid | fbclid | gbraid | wbraid | Fonte | source_id | lead_id`
 >
-> **Entradas** (sem `Formulario`, que só existe na de inscritos):
-> `Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id`
+> **Entradas** (18 colunas — sem `Formulario`, `E-mail`, `Expedicao`, `Fonte` e `source_id`, que o form de entrada não coleta):
+> `Data/hora | Destino | Nome | WhatsApp | Live | Data da live | Origem | utm_source | utm_medium | utm_campaign | utm_content | utm_term | utm_id | gclid | fbclid | gbraid | wbraid | lead_id`
+>
+> Esse cabeçalho vale para a **aba geral E para cada aba de live** — as duas
+> recebem a mesma linha. Coluna que você não quiser, é só não criar: o nó
+> descarta em silêncio o que não achar no cabeçalho.
 >
 > A coluna `E-mail` passou a vir **vazia para as duas lives** em 02/09/2026,
 > quando o Peru trocou o e-mail pelo WhatsApp. Mantenha-a no cabeçalho mesmo
@@ -46,15 +50,19 @@
 > aviso da live errada. O que você precisa fazer: **criar as abas**, com o nome
 > exato do slug e o **mesmo cabeçalho da linha 1** da aba geral —
 >
-> | Live | Rota da LP | Aba (= `Destino`) |
-> |---|---|---|
-> | Japão | `/` | `japao-live` |
-> | Peru | `/peru` | `peru-live` |
-> | Costa Amalfitana | `/costa-amalfitana` | `costa-amalfitana-live` |
-> | Tailândia | `/tailandia` | `tailandia-live` |
-> | Turquia & Grécia | `/turquia` | `turquia-live` |
-> | Islândia | `/islandia` | `islandia-live` |
-> | Egito | `/egito` | `egito-live` |
+> | Live | Rota da LP | `Destino` | Nome da ABA |
+> |---|---|---|---|
+> | Japão | `/` | `japao-live` | `Japao 20/09` |
+> | Peru | `/peru` | `peru-live` | `Peru 03/09` |
+> | Costa Amalfitana | `/costa-amalfitana` | `costa-amalfitana-live` | `Amalfitana 08/09` |
+> | Tailândia | `/tailandia` | `tailandia-live` | `Tailandia 13/09` |
+> | Turquia & Grécia | `/turquia` | `turquia-live` | `Turquia 15/09` |
+> | Islândia | `/islandia` | `islandia-live` | `Islandia 17/09` |
+> | Egito | `/egito` | `egito-live` | `Egito 29/09` |
+>
+> Os nomes de aba seguem a convenção que você já usava (`Peru 03/09`) e moram
+> no mapa `ABA_POR_DESTINO`, no topo dos dois nós de código — mudou o nome da
+> aba, muda lá.
 >
 > **Esquecer de criar a aba NÃO perde lead:** o nó da aba tem
 > `onError = continueRegularOutput`, e a linha já foi gravada na aba geral pelo

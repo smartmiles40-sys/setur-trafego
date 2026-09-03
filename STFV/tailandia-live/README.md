@@ -370,8 +370,16 @@ Env vars do projeto:
 
 | Variável | Para quê |
 |---|---|
-| `WEBHOOK_LIVE_URL` | webhook do n8n da live (evita commitar a URL) |
-| `SUPABASE_LEADS_URL` / `SUPABASE_LEADS_KEY` | ledger `site_leads` (mesmos valores das outras LPs) |
+| `WEBHOOK_LIVE_URL` | webhook do n8n da inscrição (evita commitar a URL) |
+| `WEBHOOK_ENTRAR_URL` | webhook do n8n da `/entrar` (outra planilha, outra lista) |
+| ~~`SUPABASE_LEADS_URL` / `SUPABASE_LEADS_KEY`~~ | ledger `site_leads` — **decisão do Bruno em 03/09/2026: NÃO usar nas LPs de live** |
+
+**Sem o ledger, a única rede de segurança do lead é o log da Vercel.** A função
+loga o payload inteiro antes de chamar o n8n (`[lead-live] {...}`), então lead
+que chega enquanto o n8n está fora do ar (workflow desativado, reimportação,
+webhook 404) **não se perde de vez** — dá para remontar a lista a partir dos
+logs de runtime do projeto. Mas é recuperação manual: durante uma live, evite
+mexer no workflow.
 
 Depois do deploy: apontar o domínio/subdomínio **e liberar esse domínio no
 painel da ConverteAI** para o vídeo tocar.

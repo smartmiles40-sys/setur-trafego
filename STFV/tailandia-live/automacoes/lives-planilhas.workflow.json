@@ -99,7 +99,7 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "={{ $json._aba }}",
+          "value": "={{ $('Montar a linha — inscritos').all()[$itemIndex].json._aba }}",
           "mode": "name"
         },
         "columns": {
@@ -128,7 +128,7 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Escreve a MESMA linha na aba da live, pelo nome que veio em _aba (mapa ABA_POR_DESTINO no no de codigo). E essa aba que vira a lista do ManyChat: com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da aba geral. Se nao existir (ou o nome nao bater), o erro e engolido de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral: nao se perde lead, so deixa de separar -- e a aba vazia e um sintoma visivel.",
+      "notes": "Escreve a MESMA linha na aba da live. O nome da aba vem do mapa ABA_POR_DESTINO, lido DIRETO do no de codigo ($('Montar a linha — inscritos')) e nao de $json: a saida do no anterior e a linha JA MAPEADA pelo cabecalho, e como _aba nao e coluna da planilha ela e descartada ali -- lendo $json._aba o nome da aba chegava VAZIO e o no falhava em todo lead. E essa aba que vira a lista do ManyChat: com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da aba geral. Se nao existir (ou o nome nao bater), o erro e engolido de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral: nao se perde lead, so deixa de separar -- e a aba vazia e um sintoma visivel.",
       "onError": "continueRegularOutput"
     },
     {
@@ -229,7 +229,7 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "={{ $json._aba }}",
+          "value": "={{ $('Montar a linha — entradas').all()[$itemIndex].json._aba }}",
           "mode": "name"
         },
         "columns": {
@@ -258,7 +258,7 @@
           "name": "Google Sheets account"
         }
       },
-      "notes": "Escreve a MESMA linha na aba da live, pelo nome que veio em _aba (mapa ABA_POR_DESTINO no no de codigo). E essa aba que vira a lista do ManyChat: com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da aba geral. Se nao existir (ou o nome nao bater), o erro e engolido de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral: nao se perde lead, so deixa de separar -- e a aba vazia e um sintoma visivel.",
+      "notes": "Escreve a MESMA linha na aba da live. O nome da aba vem do mapa ABA_POR_DESTINO, lido DIRETO do no de codigo ($('Montar a linha — entradas')) e nao de $json: a saida do no anterior e a linha JA MAPEADA pelo cabecalho, e como _aba nao e coluna da planilha ela e descartada ali -- lendo $json._aba o nome da aba chegava VAZIO e o no falhava em todo lead. E essa aba que vira a lista do ManyChat: com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da aba geral. Se nao existir (ou o nome nao bater), o erro e engolido de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral: nao se perde lead, so deixa de separar -- e a aba vazia e um sintoma visivel.",
       "onError": "continueRegularOutput"
     }
   ],

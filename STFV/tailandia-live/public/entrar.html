@@ -377,7 +377,7 @@
           fundo: '/assets/japao/hero.jpg'
         },
         'peru-live': {
-          sala: '',
+          sala: 'https://meet.google.com/ktf-indr-tro',
           inicio: '2026-09-03T20:00:00-03:00',
           nome: 'Peru 2027',
           compl: '',
@@ -583,7 +583,10 @@
         var id = idDaVisita();
         var corpo = { lead_id: id, event_id: id, nome: nome, whatsapp: '+55' + digitos,
                       slug: SLUG, origem: 'entrada-live',
-                      evento_titulo: 'Live: Expedição Japão 2027 · Se Tu For, Eu Vou',
+                      // Deriva do mapa LIVES: escrito à mão, toda live que não
+                      // fosse o Japão gravava "Japão 2027" na coluna Live da
+                      // planilha de Entradas — e nada acusava o erro.
+                      evento_titulo: 'Live: Expedição ' + CFG.nome + ' · Se Tu For, Eu Vou',
                       evento_inicio: INICIO_ISO };
         var atr = atribuicao();
         for (var k in atr) { if (Object.prototype.hasOwnProperty.call(atr, k)) corpo[k] = atr[k]; }

@@ -108,7 +108,7 @@ export const livePeru: ConfigLive = {
     //
     // NÃO reaproveitar a sala do Japão: as duas lives podem acontecer na mesma
     // semana, e quem tem o link acaba entrando na sala errada.
-    meetUrl: '',
+    meetUrl: 'https://meet.google.com/ktf-indr-tro',
 
     descricao:
       'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar a Expedição Peru 2027: os 9 dias entre Lima, Cusco, Vale Sagrado, Machu Picchu e Vinicunca, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',

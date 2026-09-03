@@ -6,8 +6,13 @@
  *  O que ele faz, nas planilhas que o workflow do n8n já usa (não cria
  *  planilha nova — os IDs abaixo são os mesmos que estão no workflow):
  *
- *    1. cria a ABA de cada live que ainda não existe (Egito 29/09, Islandia
- *       17/09, ...), mais a aba geral se ela tiver sumido;
+ *    1. cria a ABA de cada live que ainda não existe (Egito 29-09, Islandia
+ *       17-09, ...), mais a aba geral se ela tiver sumido;
+ *
+ *       ⚠️ O nome usa HÍFEN, não barra ("Egito 29-09"): o Excel não aceita "/"
+ *       em nome de aba, e as planilhas nasceram de um .xlsx. O Google Sheets
+ *       aceitaria, mas os dois lados têm que falar o mesmo nome — quem manda é
+ *       o mapa ABA_POR_DESTINO do n8n.
  *    2. escreve o CABEÇALHO certo na linha 1;
  *    3. congela a linha 1, deixa em negrito e formata a coluna WhatsApp como
  *       TEXTO (sem isso o Sheets come o "+" do telefone e ele para de
@@ -66,13 +71,13 @@ var CABECALHO_ENTRADAS = [
  */
 var ABAS = [
   'Geral',
-  'Japao 20/09',
-  'Peru 03/09',
-  'Amalfitana 08/09',
-  'Tailandia 13/09',
-  'Turquia 15/09',
-  'Islandia 17/09',
-  'Egito 29/09',
+  'Japao 20-09',
+  'Peru 03-09',
+  'Amalfitana 08-09',
+  'Tailandia 13-09',
+  'Turquia 15-09',
+  'Islandia 17-09',
+  'Egito 29-09',
 ];
 
 /** Cor da guia de cada aba, só para achar mais rápido no meio de oito. */

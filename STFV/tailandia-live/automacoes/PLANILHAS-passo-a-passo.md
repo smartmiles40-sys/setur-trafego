@@ -47,7 +47,7 @@ Regras que valem para os dois arquivos:
 
 ARQUIVO 1 — nome: "Lives - Inscritos.xlsx"
 Abas, nesta ordem:
-Geral | Japao 20/09 | Peru 03/09 | Amalfitana 08/09 | Tailandia 13/09 | Turquia 15/09 | Islandia 17/09 | Egito 29/09
+Geral | Japao 20-09 | Peru 03-09 | Amalfitana 08-09 | Tailandia 13-09 | Turquia 15-09 | Islandia 17-09 | Egito 29-09
 
 Cabeçalho (23 colunas), igual em TODAS as abas:
 Data/hora | Destino | Nome | WhatsApp | E-mail | Expedicao | Live | Data da live | Formulario | Origem | utm_source | utm_medium | utm_campaign | utm_content | utm_term | utm_id | gclid | fbclid | gbraid | wbraid | Fonte | source_id | lead_id
@@ -72,7 +72,9 @@ Me devolva os dois arquivos para download.
 ## Passo 3 — Confira em 30 segundos
 
 - [ ] 8 abas em cada planilha, com os nomes exatos (repare no `Japao` e
-      `Islandia` **sem acento**, e na barra da data: `Egito 29/09`).
+      `Islandia` **sem acento**, e no HÍFEN da data: `Egito 29-09`, nunca
+      `29/09` — o Excel não aceita `/` em nome de aba, então o hífen virou o
+      padrão dos dois lados).
 - [ ] Linha 1 preenchida em todas as abas (23 colunas nos inscritos, 18 nas
       entradas).
 - [ ] Coluna **WhatsApp** como texto: escreva `+5511999999999` numa célula de
@@ -97,7 +99,7 @@ Três lugares, sempre os três:
 
 1. a **aba** nas duas planilhas (mesmo cabeçalho);
 2. o mapa `ABA_POR_DESTINO`, no topo dos dois nós de código do n8n
-   (`'egito-live': 'Egito 29/09'`);
+   (`'egito-live': 'Egito 29-09'`);
 3. o `live-<rota>.ts` da LP (é ele que manda o `slug`, que vira a coluna
    `Destino` e escolhe a aba).
 

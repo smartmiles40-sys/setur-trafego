@@ -59,15 +59,15 @@
 >
 > | Live | Rota da LP | `Destino` | Nome da ABA |
 > |---|---|---|---|
-> | Japão | `/` | `japao-live` | `Japao 20/09` |
-> | Peru | `/peru` | `peru-live` | `Peru 03/09` |
-> | Costa Amalfitana | `/costa-amalfitana` | `costa-amalfitana-live` | `Amalfitana 08/09` |
-> | Tailândia | `/tailandia` | `tailandia-live` | `Tailandia 13/09` |
-> | Turquia & Grécia | `/turquia` | `turquia-live` | `Turquia 15/09` |
-> | Islândia | `/islandia` | `islandia-live` | `Islandia 17/09` |
-> | Egito | `/egito` | `egito-live` | `Egito 29/09` |
+> | Japão | `/` | `japao-live` | `Japao 20-09` |
+> | Peru | `/peru` | `peru-live` | `Peru 03-09` |
+> | Costa Amalfitana | `/costa-amalfitana` | `costa-amalfitana-live` | `Amalfitana 08-09` |
+> | Tailândia | `/tailandia` | `tailandia-live` | `Tailandia 13-09` |
+> | Turquia & Grécia | `/turquia` | `turquia-live` | `Turquia 15-09` |
+> | Islândia | `/islandia` | `islandia-live` | `Islandia 17-09` |
+> | Egito | `/egito` | `egito-live` | `Egito 29-09` |
 >
-> Os nomes de aba seguem a convenção que você já usava (`Peru 03/09`) e moram
+> Os nomes de aba seguem a convenção que você já usava (`Peru 03-09`) e moram
 > no mapa `ABA_POR_DESTINO`, no topo dos dois nós de código — mudou o nome da
 > aba, muda lá.
 >

@@ -34,6 +34,13 @@
 > recebem a mesma linha. Coluna que você não quiser, é só não criar: o nó
 > descarta em silêncio o que não achar no cabeçalho.
 >
+> **Não faça isso à mão:** `preparar-planilhas.gs` (nesta pasta) cria todas as
+> abas e escreve o cabeçalho nas DUAS planilhas. Abra a planilha de inscritos →
+> Extensões → Apps Script → cole o arquivo → rode `prepararTudo`. Aba que já tem
+> dados não é reescrita: ele só ACRESCENTA ao final as colunas que faltam, sem
+> mexer na ordem (o nó do Sheets mapeia por NOME, então a posição é irrelevante).
+> Pode rodar de novo quantas vezes quiser.
+>
 > A coluna `E-mail` passou a vir **vazia para as duas lives** em 02/09/2026,
 > quando o Peru trocou o e-mail pelo WhatsApp. Mantenha-a no cabeçalho mesmo
 > assim — é ela que recebe o dado no dia em que alguma live voltar a pedir

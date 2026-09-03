@@ -2,7 +2,16 @@
 export default {
   // Uma linha por página HTML: o Tailwind poda tudo que não vê aqui, então
   // esquecer uma entrada faz a página subir sem os estilos usados só nela.
-  content: ['./index.html', './peru.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './index.html',
+    './peru.html',
+    './costa-amalfitana.html',
+    './tailandia.html',
+    './turquia.html',
+    './islandia.html',
+    './egito.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       colors: {

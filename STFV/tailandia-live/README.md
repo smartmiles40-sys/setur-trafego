@@ -589,3 +589,94 @@ Pixel 7 nas duas páginas.
 664px) ele ocupa quase um terço da tela e **cobre o primeiro campo do
 formulário** — inclusive na LP do Japão que já está no ar. Some ao aceitar/
 recusar e ao rolar a página, mas na primeira tela ele está por cima do campo.
+
+---
+
+## 10. As SEIS lives de setembro de 2026 (03/09/2026)
+
+O projeto deixou de servir duas iscas e passou a servir **sete páginas de
+live**, uma por expedição, todas no mesmo domínio e no mesmo deploy:
+
+| Live | Rota pública | Data (BRT) | Slug (CRM / coluna Destino) | Roteiro |
+|---|---|---|---|---|
+| Costa Amalfitana | `/costa-amalfitana` | ter 08/09, 20h | `costa-amalfitana-live` | 11 dias |
+| Tailândia | `/tailandia` | dom 13/09, 20h | `tailandia-live` | 16 dias |
+| Turquia & Grécia | `/turquia` | ter 15/09, 20h | `turquia-live` | 13 dias |
+| Islândia | `/islandia` | qui 17/09, 20h | `islandia-live` | 11 dias |
+| Japão | `/` (raiz) | dom 20/09, 20h | `japao-live` | 17 dias |
+| Egito | `/egito` | ter 29/09, 20h | `egito-live` | 14 dias |
+| Peru | `/peru` | (já aconteceu: 03/09) | `peru-live` | 9 dias |
+
+O **Japão continua na raiz** de propósito: é para lá que apontam os anúncios
+que já rodaram e o domínio verificado no Meta. `/japao` e `/japao-china`
+redirecionam (301) para a raiz, para o caso de alguém digitar.
+
+### O que ainda PRECISA ser preenchido antes de rodar tráfego
+
+Nenhum destes quebra o build nem a página — todos falham em silêncio, que é
+o que os torna perigosos:
+
+1. **Grupo do WhatsApp de cada live** — `comunidade.url` em
+   `src/data/live-<rota>.ts` **e** o mapa `PADRAO_POR_LIVE` de
+   `public/obrigado.html` (os dois, sempre). Enquanto estiver vazio a
+   `/obrigado.html` vira só a confirmação, sem botão e sem redirect — de
+   propósito: cair no grupo errado é pior do que não cair em grupo nenhum.
+2. **Sala do Google Meet** — `evento.meetUrl` em `src/data/live-<rota>.ts`
+   **e** o mapa `LIVES` de `public/entrar.html`. Cada live com a SUA sala:
+   várias acontecem na mesma semana.
+3. **`sourceId` no Bitrix** — `LIVE_ITALIA`, `LIVE_TAILANDIA`, `LIVE_TURQUIA`,
+   `LIVE_ISLANDIA`, `LIVE_EGITO` são o padrão do portal, mas foram escritos
+   por dedução. STATUS_ID inexistente **não dá erro**: o negócio nasce sem
+   origem e some no meio de "Site" — e aí não dá para medir custo por lead.
+4. **Abas da planilha** — uma por live, com o nome do slug (ver
+   `automacoes/README.md`).
+
+### A porta da sala virou multi-live
+
+A `/entrar` era só do Japão (slug, sala e data escritos à mão no HTML). Agora
+ela lê o `?live=` da URL:
+
+```
+/entrar                          → Japão (o padrão)
+/entrar?live=egito-live          → Egito
+/entrar?live=costa-amalfitana-live → Costa Amalfitana
+```
+
+⚠️ **É o link COM `?live=` que você manda no grupo na hora da live.** O
+`/entrar` pelado abre a sala do Japão. Live desconhecida também cai no Japão
+(nunca fica sem dados).
+
+### Live nova = 7 lugares
+
+Nenhum deles quebra o build se for esquecido; cada um entrega um defeito
+diferente e silencioso:
+
+| # | Arquivo | Esquecer causa |
+|---|---|---|
+| 1 | `src/data/live-<rota>.ts` | — (é a configuração) |
+| 2 | `src/data/roteiro-<rota>.ts` | — (é o roteiro) |
+| 3 | mapa `POR_CAMINHO` em `src/data/live.ts` | a rota abre a live do Japão |
+| 4 | mapa `POR_SLUG` em `src/data/expedicao.ts` | **a página sobe com o roteiro do Japão** |
+| 5 | `<rota>.html` + entrada no `vite.config.ts` | a URL dá 404 |
+| 6 | rewrite no `vercel.json` | só `/rota.html` funciona; `/rota` dá 404 |
+| 7 | `tailwind.config.js` (`content`) | a página sobe **sem os estilos** usados só nela |
+
+O roteiro sai da LP de tráfego correspondente (`STFV/<destino>`) **sem o campo
+`data`** de cada dia — o carrossel da live mostra "Dia 1, Dia 2…", e a data da
+turma aparece uma vez só, no rodapé (`expedicao.resumoExpedicao`).
+⚠️ São duas cópias em dois projetos: itinerário que mudar na operação precisa
+ser conferido nos dois.
+
+### Verificado em 03/09/2026
+
+Build local + `vite preview` + Playwright nas 7 páginas
+(`~/.claude/_qa_setur/qa-lives-setembro.mjs`): cada uma com o h1 do seu
+destino, o número certo de dias no carrossel, a data certa da live na tela,
+formulário nome + WhatsApp, **zero** vazamento de conteúdo de outro destino,
+zero requisição 4xx e zero erro de console. A `/entrar` foi conferida nos 7
+slugs mais um inexistente (que cai no Japão, como deve).
+
+⚠️ **Achado:** a LP de tráfego da Tailândia (`STFV/tailandia`) diz "15 dias"
+em `duracao`, mas o roteiro dela tem **16 dias** — a divergência é de lá, veio
+junto. Por isso o rodapé da live da Tailândia mostra as datas da turma sem
+repetir o número de dias. Vale corrigir na LP de tráfego.

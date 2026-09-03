@@ -102,11 +102,11 @@ export const liveJapao = {
      * Agenda e o .ics — é derivado DAQUI. Não há data escrita à mão em
      * nenhum outro lugar.
      *
-     * ⚠️ CONFERIR: o Bruno pediu "domingo às 19h30" em 28/08/2026 (sexta), e
-     * aqui está o domingo SEGUINTE — 30/08/2026. Se a live for outro domingo
-     * (06/09, 13/09...), troque só esta linha: a página inteira acompanha.
+     * ✅ Reagendada pelo Bruno em 03/09/2026: **domingo, 20/09/2026, 20h00**
+     *    (BRT). A live de 30/08 já aconteceu; esta é a nova rodada, no mesmo
+     *    horário das outras cinco lives de setembro (20h, não 19h30).
      */
-    inicioISO: '2026-08-30T19:30:00-03:00',
+    inicioISO: '2026-09-20T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // Sala do Google Meet desta live.

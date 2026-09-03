@@ -6,7 +6,24 @@
   "rewrites": [
     { "source": "/entrar", "destination": "/entrar.html" },
     { "source": "/peru", "destination": "/peru.html" },
-    { "source": "/peru/", "destination": "/peru.html" }
+    { "source": "/peru/", "destination": "/peru.html" },
+    { "source": "/costa-amalfitana", "destination": "/costa-amalfitana.html" },
+    { "source": "/costa-amalfitana/", "destination": "/costa-amalfitana.html" },
+    { "source": "/amalfitana", "destination": "/costa-amalfitana.html" },
+    { "source": "/tailandia", "destination": "/tailandia.html" },
+    { "source": "/tailandia/", "destination": "/tailandia.html" },
+    { "source": "/turquia", "destination": "/turquia.html" },
+    { "source": "/turquia/", "destination": "/turquia.html" },
+    { "source": "/turquia-grecia", "destination": "/turquia.html" },
+    { "source": "/turquia-grecia/", "destination": "/turquia.html" },
+    { "source": "/islandia", "destination": "/islandia.html" },
+    { "source": "/islandia/", "destination": "/islandia.html" },
+    { "source": "/egito", "destination": "/egito.html" },
+    { "source": "/egito/", "destination": "/egito.html" }
+  ],
+  "redirects": [
+    { "source": "/japao", "destination": "/", "permanent": true },
+    { "source": "/japao-china", "destination": "/", "permanent": true }
   ],
   "headers": [
     {

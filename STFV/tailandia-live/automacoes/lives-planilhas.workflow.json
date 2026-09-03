@@ -11,7 +11,10 @@
       "name": "Webhook — inscricao (PADRAO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-320, -368],
+      "position": [
+        -320,
+        -368
+      ],
       "webhookId": "inscricao-live",
       "notes": "ESTA e' a URL que vai na env var WEBHOOK_LIVE_URL de TODA LP de live. Sem destino no path de proposito: quem separa uma live da outra e' a coluna Destino (o campo slug do payload). CUIDADO: e' OUTRO webhook e OUTRA planilha do 'entrada-live'."
     },
@@ -25,7 +28,10 @@
       "name": "Webhook — inscricao (LEGADO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-320, -208],
+      "position": [
+        -320,
+        -208
+      ],
       "webhookId": "inscricao-live-japao",
       "notes": "Path antigo, mantido so' para nao perder lead durante a troca: quem ainda estiver com a env var velha na Vercel continua caindo aqui, no MESMO destino. Pode apagar depois de confirmar que WEBHOOK_LIVE_URL aponta para /inscricao-live e que chegou lead por la."
     },
@@ -37,7 +43,10 @@
       "name": "Montar a linha — inscritos",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-32, -288]
+      "position": [
+        -32,
+        -288
+      ]
     },
     {
       "parameters": {
@@ -59,30 +68,137 @@
           "value": {},
           "matchingColumns": [],
           "schema": [
-            { "id": "Data/hora", "displayName": "Data/hora", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Destino", "displayName": "Destino", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Nome", "displayName": "Nome", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "WhatsApp", "displayName": "WhatsApp", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "E-mail", "displayName": "E-mail", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Live", "displayName": "Live", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Formulario", "displayName": "Formulario", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Origem", "displayName": "Origem", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "gclid", "displayName": "gclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "fbclid", "displayName": "fbclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "lead_id", "displayName": "lead_id", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false }
+            {
+              "id": "Data/hora",
+              "displayName": "Data/hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Destino",
+              "displayName": "Destino",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Live",
+              "displayName": "Live",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Formulario",
+              "displayName": "Formulario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Origem",
+              "displayName": "Origem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gclid",
+              "displayName": "gclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fbclid",
+              "displayName": "fbclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
-        "options": { "useAppend": true }
+        "options": {
+          "useAppend": true
+        }
       },
       "id": "a1000000-0000-4000-8000-000000000004",
       "name": "Planilha INSCRITOS",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [256, -288],
+      "position": [
+        256,
+        -288
+      ],
       "credentials": {
-        "googleSheetsOAuth2Api": { "id": "3Pz5up7dEtcK5nim", "name": "Google Sheets account" }
+        "googleSheetsOAuth2Api": {
+          "id": "3Pz5up7dEtcK5nim",
+          "name": "Google Sheets account"
+        }
       },
       "notes": "Planilha de INSCRITOS (base do disparo no ManyChat). Cabecalho EXATO da linha 1: Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Formulario | Origem | gclid | fbclid | lead_id -- as colunas Destino e E-mail sao NOVAS (02/09/2026): sem elas no cabecalho o dado some sem erro. E-mail hoje vem vazio (as duas lives pedem WhatsApp), mas fica no cabecalho para a live que voltar a pedir. A coluna Destino e' o que separa as lives em ABAS (uma aba por live), e a aba e' a lista do ManyChat: sem essa separacao, agora que as duas lives tem telefone, o inscrito do Peru receberia o aviso do Japao. 'Use Append' LIGADO: sem isso o n8n procura a 1a linha vazia em vez de usar o append da API, e escreve num buraco se alguma linha do meio estiver vazia."
     },
@@ -96,7 +212,10 @@
       "name": "Webhook — entrada (PADRAO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-320, 48],
+      "position": [
+        -320,
+        48
+      ],
       "webhookId": "entrada-live",
       "notes": "ESTA e' a URL que vai na env var WEBHOOK_ENTRAR_URL. Aqui caem os PRESENTES (form do /entrar), nao os inscritos. NAO reaproveitar o webhook da inscricao: sao listas diferentes, e cruzar as duas nao da erro -- so mistura tudo numa lista so."
     },
@@ -110,7 +229,10 @@
       "name": "Webhook — entrada (LEGADO)",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-320, 208],
+      "position": [
+        -320,
+        208
+      ],
       "webhookId": "entrada-live-japao",
       "notes": "Path antigo, mantido so' durante a troca da env var. Pode apagar depois de confirmar que WEBHOOK_ENTRAR_URL aponta para /entrada-live."
     },
@@ -122,7 +244,10 @@
       "name": "Montar a linha — entradas",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-32, 128]
+      "position": [
+        -32,
+        128
+      ]
     },
     {
       "parameters": {
@@ -144,51 +269,515 @@
           "value": {},
           "matchingColumns": [],
           "schema": [
-            { "id": "Data/hora", "displayName": "Data/hora", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Destino", "displayName": "Destino", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Nome", "displayName": "Nome", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "WhatsApp", "displayName": "WhatsApp", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "E-mail", "displayName": "E-mail", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Live", "displayName": "Live", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "Origem", "displayName": "Origem", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "gclid", "displayName": "gclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "fbclid", "displayName": "fbclid", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false },
-            { "id": "lead_id", "displayName": "lead_id", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true, "removed": false }
+            {
+              "id": "Data/hora",
+              "displayName": "Data/hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Destino",
+              "displayName": "Destino",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Live",
+              "displayName": "Live",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Origem",
+              "displayName": "Origem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gclid",
+              "displayName": "gclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fbclid",
+              "displayName": "fbclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
-        "options": { "useAppend": true }
+        "options": {
+          "useAppend": true
+        }
       },
       "id": "a1000000-0000-4000-8000-000000000008",
       "name": "Planilha ENTRADAS",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [256, 128],
+      "position": [
+        256,
+        128
+      ],
       "credentials": {
-        "googleSheetsOAuth2Api": { "id": "3Pz5up7dEtcK5nim", "name": "Google Sheets account" }
+        "googleSheetsOAuth2Api": {
+          "id": "3Pz5up7dEtcK5nim",
+          "name": "Google Sheets account"
+        }
       },
       "notes": "Planilha de ENTRADAS (quem apareceu de verdade). Cabecalho EXATO da linha 1: Data/hora | Destino | Nome | WhatsApp | E-mail | Live | Origem | gclid | fbclid | lead_id -- SEM a coluna Formulario, que so' existe na de inscritos. Destino e E-mail sao novas (02/09/2026). 'Use Append' LIGADO."
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1u2tifFvIzmjrp588V7Be_uO_80IBioFs7ahYpcejMDE/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.Destino }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Data/hora",
+              "displayName": "Data/hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Destino",
+              "displayName": "Destino",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Live",
+              "displayName": "Live",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Formulario",
+              "displayName": "Formulario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Origem",
+              "displayName": "Origem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gclid",
+              "displayName": "gclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fbclid",
+              "displayName": "fbclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000009",
+      "name": "Planilha INSCRITOS — aba da live",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        -288
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3Pz5up7dEtcK5nim",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Escreve a MESMA linha numa aba com o nome do Destino (o slug da live: japao-live, peru-live, costa-amalfitana-live, tailandia-live, turquia-live, islandia-live, egito-live). E essa aba que vira a lista do ManyChat -- com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da linha 1 da aba geral: aba que nao existe da erro, e o erro e engolido aqui de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral pelo no anterior. Ou seja: esquecer de criar a aba nao perde lead nenhum, so deixa de separar.",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/15Mg1In5RZk4NWegctokgV9RTCSdL4cdqWhIptRtSC40/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.Destino }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Data/hora",
+              "displayName": "Data/hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Destino",
+              "displayName": "Destino",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Live",
+              "displayName": "Live",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Origem",
+              "displayName": "Origem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gclid",
+              "displayName": "gclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fbclid",
+              "displayName": "fbclid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "id": "a1000000-0000-4000-8000-00000000000a",
+      "name": "Planilha ENTRADAS — aba da live",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        128
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3Pz5up7dEtcK5nim",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Escreve a MESMA linha numa aba com o nome do Destino (o slug da live: japao-live, peru-live, costa-amalfitana-live, tailandia-live, turquia-live, islandia-live, egito-live). E essa aba que vira a lista do ManyChat -- com 7 lives no ar, separar a mao e o que faz alguem receber o aviso da live errada. A ABA PRECISA EXISTIR, com o MESMO cabecalho da linha 1 da aba geral: aba que nao existe da erro, e o erro e engolido aqui de proposito (onError = continueRegularOutput) porque a linha JA foi gravada na aba geral pelo no anterior. Ou seja: esquecer de criar a aba nao perde lead nenhum, so deixa de separar.",
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
     "Webhook — inscricao (PADRAO)": {
-      "main": [[{ "node": "Montar a linha — inscritos", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Montar a linha — inscritos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Webhook — inscricao (LEGADO)": {
-      "main": [[{ "node": "Montar a linha — inscritos", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Montar a linha — inscritos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Montar a linha — inscritos": {
-      "main": [[{ "node": "Planilha INSCRITOS", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Planilha INSCRITOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Webhook — entrada (PADRAO)": {
-      "main": [[{ "node": "Montar a linha — entradas", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Montar a linha — entradas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Webhook — entrada (LEGADO)": {
-      "main": [[{ "node": "Montar a linha — entradas", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Montar a linha — entradas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Montar a linha — entradas": {
-      "main": [[{ "node": "Planilha ENTRADAS", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Planilha ENTRADAS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha INSCRITOS": {
+      "main": [
+        [
+          {
+            "node": "Planilha INSCRITOS — aba da live",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha ENTRADAS": {
+      "main": [
+        [
+          {
+            "node": "Planilha ENTRADAS — aba da live",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "pinData": {},

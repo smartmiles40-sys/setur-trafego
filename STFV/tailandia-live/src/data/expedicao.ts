@@ -3,13 +3,13 @@
  *  A EXPEDIÇÃO QUE A LIVE APRESENTA
  * ============================================================================
  *
- *  Serve as DUAS lives. Quase tudo aqui é DERIVADO de `live` — e `live` já é a
+ *  Serve TODAS as lives. Quase tudo aqui é DERIVADO de `live` — e `live` já é a
  *  live certa para a URL aberta (ver `live.ts`). Ou seja: nome, ano, resumo,
  *  saída, slug e foto do hero acertam sozinhos, sem `if` nenhum.
  *
  *  Só duas coisas mudam de verdade por destino, e vêm dos arquivos
- *  `roteiro-japao.ts` / `roteiro-peru.ts`:
- *    · o ROTEIRO (17 dias do Japão × 9 dias do Peru);
+ *  `roteiro-<destino>.ts`:
+ *    · o ROTEIRO (17 dias do Japão, 9 do Peru, 14 do Egito...);
  *    · a COPY do cabeçalho da seção Roteiro.
  *
  *  Os DEPOIMENTOS são compartilhados de propósito: são sobre a AGÊNCIA, não
@@ -20,10 +20,21 @@
 import { live } from './live'
 import { roteiroJapao, copyRoteiroJapao } from './roteiro-japao'
 import { roteiroPeru, copyRoteiroPeru } from './roteiro-peru'
+import { roteiroCostaAmalfitana, copyRoteiroCostaAmalfitana } from './roteiro-costa-amalfitana'
+import { roteiroTailandia, copyRoteiroTailandia } from './roteiro-tailandia'
+import { roteiroTurquia, copyRoteiroTurquia } from './roteiro-turquia'
+import { roteiroIslandia, copyRoteiroIslandia } from './roteiro-islandia'
+import { roteiroEgito, copyRoteiroEgito } from './roteiro-egito'
 
+/** A chave é o SLUG da live (o do CRM), não a rota. */
 const POR_SLUG = {
   'peru-live': { roteiro: roteiroPeru, copy: copyRoteiroPeru },
   'japao-live': { roteiro: roteiroJapao, copy: copyRoteiroJapao },
+  'costa-amalfitana-live': { roteiro: roteiroCostaAmalfitana, copy: copyRoteiroCostaAmalfitana },
+  'tailandia-live': { roteiro: roteiroTailandia, copy: copyRoteiroTailandia },
+  'turquia-live': { roteiro: roteiroTurquia, copy: copyRoteiroTurquia },
+  'islandia-live': { roteiro: roteiroIslandia, copy: copyRoteiroIslandia },
+  'egito-live': { roteiro: roteiroEgito, copy: copyRoteiroEgito },
 }
 
 // Live nova que esqueceu de entrar no mapa cai no Japão — é o que já vive na

@@ -7,7 +7,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Entrar na live · Expedição Japão 2027 | Se Tu For, Eu Vou</title>
+  <title>Entrar na live | Se Tu For, Eu Vou</title>
 
   <!--
     ===========================================================================
@@ -29,10 +29,20 @@
     redirect, de propósito: um redirect trocaria a URL e a `/obrigado.html` —
     que é o gatilho da conversão no GTM — não pode ser renomeada.
 
-    ⚠️ O link da sala mora em DOIS lugares (aqui em SALA_URL e em
-    `src/data/live.ts` → `evento.meetUrl`, que vai no payload do n8n). Trocar um
-    e esquecer o outro não dá erro: a pessoa entra num lugar e o convite aponta
-    para outro. Trocou aqui, troque lá.
+    ESTA PÁGINA SERVE TODAS AS LIVES. Quem diz qual é o `?live=` da URL:
+
+      /entrar                     → Japão (o padrão, que vive na raiz)
+      /entrar?live=egito-live     → Egito
+      /entrar?live=islandia-live  → Islândia   ...e assim por diante
+
+    É esse link com `?live=` que você manda no grupo da live na hora. Sem o
+    parâmetro a página abre a sala do JAPÃO — por isso o link do grupo não pode
+    ser o /entrar pelado.
+
+    ⚠️ O link da sala mora em DOIS lugares (aqui no mapa LIVES e em
+    `src/data/live-<rota>.ts` → `evento.meetUrl`, que vai no payload do n8n).
+    Trocar um e esquecer o outro não dá erro: a pessoa entra num lugar e o
+    convite aponta para outro. Trocou aqui, troque lá.
   -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -269,7 +279,9 @@
     <!-- End Google Tag Manager (noscript) -->
 
   <div class="fundo" aria-hidden="true">
-    <img src="/assets/japao/hero.jpg" alt="" fetchpriority="high" decoding="async" />
+    <!-- src trocado pelo JS conforme a live do `?live=` (o do Japão fica como
+         padrão para quem abre sem parâmetro, e como fallback se o mapa falhar) -->
+    <img id="fundo-img" src="/assets/japao/hero.jpg" alt="" fetchpriority="high" decoding="async" />
   </div>
 
   <div class="wrap">
@@ -277,17 +289,17 @@
       <span class="selo" id="selo"><span class="ponto"></span><span id="selo-txt">Live gratuita</span></span>
 
       <h1>
-        Expedição <span class="lime">Japão 2027</span>
-        <span class="compl">com extensão China</span>
+        Expedição <span class="lime" id="h1-nome">Japão 2027</span>
+        <span class="compl" id="h1-compl">com extensão China</span>
       </h1>
 
       <div class="risco"></div>
 
-      <p class="chamada">
+      <p class="chamada" id="chamada">
         <!-- "ao lado" nao serve: no celular o formulario fica ABAIXO, nao ao lado.
              Texto neutro de layout. -->
         Preencha seus dados para liberar sua entrada. A gente abre o roteiro dia a dia,
-        a extensão China, os valores e responde suas perguntas ao vivo.
+        os valores e responde suas perguntas ao vivo.
       </p>
 
       <div class="quando">
@@ -339,26 +351,103 @@
       'use strict';
 
       /* =====================================================================
-         O QUE VOCÊ PRECISA MEXER AQUI  —  as 2 primeiras linhas, só.
+         O QUE VOCÊ PRECISA MEXER AQUI  —  o mapa LIVES, só.
+
+         Uma entrada por live, com a MESMA chave do slug do CRM (é ela que vai
+         no `?live=` da URL e na coluna Destino da planilha).
+
+           sala   → o Google Meet daquela live. Vazio = a página captura
+                    normalmente e mostra "a sala abre no horário da live" em vez
+                    de redirecionar; ela nunca fica quebrada esperando o link.
+                    ⚠️ É o MESMO link de `evento.meetUrl` em
+                    src/data/live-<rota>.ts. Trocou aqui, troque lá — sem isso a
+                    pessoa entra num lugar e o convite aponta pra outro, e nada
+                    acusa o erro.
+           inicio → início no fuso de Brasília. É daqui que saem o selo
+                    "AO VIVO AGORA" e a frase da data, sem ninguém editar texto.
+           nome / compl / fundo → o que a primeira tela mostra.
          ===================================================================== */
 
-      // A sala da live (Google Meet). Vazio = a página captura normalmente e
-      // mostra "a sala abre no horário da live" em vez de redirecionar — ela
-      // nunca fica quebrada esperando o link.
-      // ⚠️ É o MESMO link de `evento.meetUrl` em src/data/live.ts. Trocou aqui,
-      // troque lá: sem isso a pessoa entra num lugar e o convite aponta pra
-      // outro, e nada acusa o erro.
-      var SALA_URL = 'https://meet.google.com/nub-mmfn-edw';
-
-      // Início da live, no fuso de Brasília. É daqui que sai o selo
-      // "AO VIVO AGORA" e a frase da data — sem ninguém editar texto na mão.
-      var INICIO_ISO = '2026-08-30T19:30:00-03:00';
-      var DURACAO_MIN = 90;
+      var LIVES = {
+        'japao-live': {
+          sala: 'https://meet.google.com/nub-mmfn-edw',
+          inicio: '2026-09-20T20:00:00-03:00',
+          nome: 'Japão 2027',
+          compl: 'com extensão China',
+          fundo: '/assets/japao/hero.jpg'
+        },
+        'peru-live': {
+          sala: '',
+          inicio: '2026-09-03T20:00:00-03:00',
+          nome: 'Peru 2027',
+          compl: '',
+          fundo: '/assets/peru/hero.jpg'
+        },
+        'costa-amalfitana-live': {
+          sala: '',
+          inicio: '2026-09-08T20:00:00-03:00',
+          nome: 'Costa Amalfitana 2027',
+          compl: '',
+          fundo: '/assets/italia/hero-positano.jpg'
+        },
+        'tailandia-live': {
+          sala: '',
+          inicio: '2026-09-13T20:00:00-03:00',
+          nome: 'Tailândia 2027',
+          compl: '',
+          fundo: '/assets/tailandia/hero.jpg'
+        },
+        'turquia-live': {
+          sala: '',
+          inicio: '2026-09-15T20:00:00-03:00',
+          nome: 'Turquia & Grécia 2027',
+          compl: '',
+          fundo: '/assets/turquia-grecia/hero.jpg'
+        },
+        'islandia-live': {
+          sala: '',
+          inicio: '2026-09-17T20:00:00-03:00',
+          nome: 'Islândia 2027',
+          compl: '',
+          fundo: '/assets/islandia/aurora-boreal.jpg'
+        },
+        'egito-live': {
+          sala: '',
+          inicio: '2026-09-29T20:00:00-03:00',
+          nome: 'Egito 2027',
+          compl: 'com extensão Dubai',
+          fundo: '/assets/egito/hero-piramides.webp'
+        }
+      };
 
       /* ===================================================================== */
 
+      function paramLive() {
+        try {
+          return new URLSearchParams(window.location.search).get('live') || '';
+        } catch (e) { return ''; }
+      }
+
+      // Live desconhecida (link velho, parâmetro digitado errado) cai no Japão,
+      // que é quem vive na raiz do domínio — a página nunca fica sem dados.
+      var SLUG = LIVES[paramLive()] ? paramLive() : 'japao-live';
+      var CFG = LIVES[SLUG];
+
+      var SALA_URL = CFG.sala;
+      var INICIO_ISO = CFG.inicio;
+      var DURACAO_MIN = 90;
+
+      (function pintarLive() {
+        document.title = 'Entrar na live · Expedição ' + CFG.nome + ' | Se Tu For, Eu Vou';
+        var n = document.getElementById('h1-nome');
+        var c = document.getElementById('h1-compl');
+        var f = document.getElementById('fundo-img');
+        if (n) n.textContent = CFG.nome;
+        if (c) { c.textContent = CFG.compl; c.style.display = CFG.compl ? '' : 'none'; }
+        if (f && CFG.fundo) f.src = CFG.fundo;
+      })();
+
       var ENDPOINT = '/api/entrar-live';
-      var SLUG = 'japao-live';
       // Segundos antes de trocar de site: dá tempo do GTM/Stape despachar o
       // evento antes de a aba ir embora (mesma razão do countdown da
       // /obrigado.html).
@@ -383,7 +472,7 @@
             timeZone: 'America/Sao_Paulo',
           }).format(inicio).replace(' às ', ', ');
         } catch (e) {
-          return 'domingo, 30 de agosto, 19:30';
+          return 'no horário combinado';
         }
       }
       (function pintarQuando() {

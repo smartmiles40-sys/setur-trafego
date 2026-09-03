@@ -114,15 +114,34 @@
       // a aba anônima para o lugar errado.
       var PADRAO_POR_LIVE = {
         'japao-live': 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK',
-        'peru-live': 'https://chat.whatsapp.com/JGzOfTsgNsm0HlCawBArCQ'
+        'peru-live': 'https://chat.whatsapp.com/JGzOfTsgNsm0HlCawBArCQ',
+        // ⚠️ PREENCHER quando o grupo de cada live for criado. Enquanto estiver
+        // vazio a página vira só a confirmação (sem botão, sem contagem) — que é
+        // o comportamento certo: cair no grupo errado é pior do que não cair em
+        // grupo nenhum. O MESMO link precisa ir para o `comunidade.url` do
+        // src/data/live-<rota>.ts correspondente.
+        'costa-amalfitana-live': '',
+        'tailandia-live': '',
+        'turquia-live': '',
+        'islandia-live': '',
+        'egito-live': ''
       };
       var PADRAO = PADRAO_POR_LIVE[SLUG] || '';
       var SEGUNDOS = 3;
 
       // A página é noindex e dura 3 segundos, mas o título aparece na aba e no
-      // histórico — deixar "Japão" para quem se inscreveu no Peru é confuso.
-      if (SLUG === 'peru-live') {
-        document.title = 'Inscrição confirmada! · Live Expedição Peru 2027';
+      // histórico — deixar "Japão" para quem se inscreveu no Egito é confuso.
+      // O padrão (Japão) já está escrito no <title> do HTML.
+      var TITULO_POR_LIVE = {
+        'peru-live': 'Peru 2027',
+        'costa-amalfitana-live': 'Costa Amalfitana 2027',
+        'tailandia-live': 'Tailândia 2027',
+        'turquia-live': 'Turquia & Grécia 2027',
+        'islandia-live': 'Islândia 2027',
+        'egito-live': 'Egito 2027'
+      };
+      if (TITULO_POR_LIVE[SLUG]) {
+        document.title = 'Inscrição confirmada! · Live Expedição ' + TITULO_POR_LIVE[SLUG];
       }
 
       function ler(chave) {

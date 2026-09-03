@@ -6,7 +6,7 @@
 >
 > | Form | Onde | Path do webhook | Env var na Vercel | Planilha |
 > |---|---|---|---|---|
-> | 1 — inscrição | LP da live (`/`, `/peru`, …) | **`/webhook/inscricao-live`** | `WEBHOOK_LIVE_URL` | **Inscritos** (base do ManyChat) |
+> | 1 — inscrição | LP da live (`/`, `/peru`, `/egito`, …) | **`/webhook/inscricao-live`** | `WEBHOOK_LIVE_URL` | **Inscritos** (base do ManyChat) |
 > | 2 — entrada | `/entrar` | **`/webhook/entrada-live`** | `WEBHOOK_ENTRAR_URL` | **Entradas** (quem apareceu) |
 >
 > **O que mudou e por quê:** os paths perderam o `-japao`. Antes era um workflow
@@ -36,12 +36,30 @@
 > e-mail (`formulario.pedirEmail` na LP), e coluna ausente é descartada em
 > silêncio.
 >
-> **Separação das listas:** o `Destino` de cada inscrito vai para uma ABA
-> própria da planilha (Bruno, 02/09/2026), e é a aba que vira a lista do
-> ManyChat. Isso passou a importar de verdade agora: enquanto o Peru pedia
-> e-mail, um disparo sem separação pulava aqueles inscritos por falta de
-> telefone; hoje todos têm telefone, e sem ela o inscrito do Peru receberia o
-> aviso da live do Japão.
+> **Separação das listas — agora AUTOMÁTICA (03/09/2026).** Cada linha é
+> gravada **duas vezes**: primeiro na aba geral (como sempre) e, logo depois,
+> numa aba com o **nome do `Destino`** — os nós `Planilha INSCRITOS — aba da
+> live` e `Planilha ENTRADAS — aba da live`. É essa aba que vira a lista do
+> ManyChat.
+>
+> Com 7 lives no ar, separar à mão é justamente o que faz alguém receber o
+> aviso da live errada. O que você precisa fazer: **criar as abas**, com o nome
+> exato do slug e o **mesmo cabeçalho da linha 1** da aba geral —
+>
+> | Live | Rota da LP | Aba (= `Destino`) |
+> |---|---|---|
+> | Japão | `/` | `japao-live` |
+> | Peru | `/peru` | `peru-live` |
+> | Costa Amalfitana | `/costa-amalfitana` | `costa-amalfitana-live` |
+> | Tailândia | `/tailandia` | `tailandia-live` |
+> | Turquia & Grécia | `/turquia` | `turquia-live` |
+> | Islândia | `/islandia` | `islandia-live` |
+> | Egito | `/egito` | `egito-live` |
+>
+> **Esquecer de criar a aba NÃO perde lead:** o nó da aba tem
+> `onError = continueRegularOutput`, e a linha já foi gravada na aba geral pelo
+> nó anterior. Só deixa de separar — e aí a aba fica vazia, que é um sintoma
+> visível, não silencioso.
 >
 > ### Os paths antigos continuam funcionando
 >

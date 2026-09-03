@@ -67,10 +67,15 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         /**
-         * DUAS páginas, um projeto só na Vercel:
+         * UMA página HTML por live, um projeto só na Vercel:
          *
-         *   index.html → /       → live do Japão (página cheia)
-         *   peru.html  → /peru   → live do Peru  (só o formulário)
+         *   index.html              → /                   → Japão (padrão)
+         *   peru.html               → /peru               → Peru
+         *   costa-amalfitana.html   → /costa-amalfitana   → Costa Amalfitana
+         *   tailandia.html          → /tailandia          → Tailândia
+         *   turquia.html            → /turquia            → Turquia & Grécia
+         *   islandia.html           → /islandia           → Islândia
+         *   egito.html              → /egito              → Egito
          *
          * São entradas HTML de verdade, não rotas de SPA, porque cada uma
          * precisa dos próprios <title>/description/og:* — é isso que o
@@ -85,6 +90,11 @@ export default defineConfig(({ mode }) => {
         input: {
           main: fileURLToPath(new URL('./index.html', import.meta.url)),
           peru: fileURLToPath(new URL('./peru.html', import.meta.url)),
+          costaAmalfitana: fileURLToPath(new URL('./costa-amalfitana.html', import.meta.url)),
+          tailandia: fileURLToPath(new URL('./tailandia.html', import.meta.url)),
+          turquia: fileURLToPath(new URL('./turquia.html', import.meta.url)),
+          islandia: fileURLToPath(new URL('./islandia.html', import.meta.url)),
+          egito: fileURLToPath(new URL('./egito.html', import.meta.url)),
         },
       },
     },

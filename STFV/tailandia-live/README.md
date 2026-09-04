@@ -428,9 +428,10 @@ atende `/entrar` sem tocar no resto.
 
 ### O que preencher
 
-1. ~~`SALA_URL`~~ — **já preenchida** (28/08/2026):
-   `https://meet.google.com/nub-mmfn-edw`, no topo do `<script>` de
-   `public/entrar.html` **e** em `evento.meetUrl` de `src/data/live.ts`.
+1. ~~`SALA_URL`~~ — **já preenchidas** (04/09/2026): cada live tem a SUA
+   sala, no mapa `LIVES` de `public/entrar.html` **e** em `evento.meetUrl` do
+   `src/data/live-<rota>.ts` correspondente (a do Japão passou a ser
+   `https://meet.google.com/nrp-tpia-asr`).
    ⚠️ São DOIS lugares e eles precisam continuar iguais: trocar um e esquecer o
    outro não dá erro — a pessoa entra numa sala e o convite aponta para outra.
    (Se um dia zerar o `SALA_URL`, a página não quebra: captura normalmente e

@@ -82,15 +82,15 @@ export const liveIslandia: ConfigLive = {
     inicioISO: '2026-09-17T20:00:00-03:00',
     duracaoMinutos: 90,
 
-    // ⚠️ PREENCHER — sala do Google Meet DESTA live. Vazio = o convite do
-    // Google Agenda chega sem link da sala.
+    // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
+    // do Google Agenda chega sem link da sala.
     //
     // NÃO reaproveitar a sala de outra live: várias acontecem na mesma
     // semana, e quem tem o link acaba entrando na sala errada.
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: '',
+    meetUrl: 'https://meet.google.com/bfq-cjwy-zza',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:
@@ -123,13 +123,13 @@ export const liveIslandia: ConfigLive = {
 
   /**
    * ---- Comunidade do WhatsApp (destino depois do envio) --------------------
-   * ⚠️ PREENCHER — grupo PRÓPRIO desta live.
+   * ✅ Grupo PRÓPRIO desta live (Bruno, 04/09/2026).
    *
-   * Enquanto estiver vazio a página NÃO redireciona: a /obrigado.html vira só
-   * a confirmação, sem botão e sem contagem. É de propósito — cair no grupo
-   * errado é pior do que não cair em grupo nenhum.
+   * Vazio, a página NÃO redireciona: a /obrigado.html vira só a confirmação,
+   * sem botão e sem contagem. É de propósito — cair no grupo errado é pior do
+   * que não cair em grupo nenhum.
    *
-   * Preencheu aqui? Preencha também o mapa `PADRAO_POR_LIVE` de
+   * Trocou aqui? Troque também o mapa `PADRAO_POR_LIVE` de
    * public/obrigado.html — é o link de emergência de quem cai lá com o
    * sessionStorage vazio (aba anônima). Os dois fora de sincronia não dão
    * erro nenhum, só mandam a aba anônima para o lugar errado.
@@ -138,7 +138,7 @@ export const liveIslandia: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: '', // PREENCHER: https://chat.whatsapp.com/XXXXXXXX
+    url: 'https://chat.whatsapp.com/CVupYigJKHy2iGczz8lywd',
     nome: 'Live - Islândia 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

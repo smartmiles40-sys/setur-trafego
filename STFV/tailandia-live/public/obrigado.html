@@ -81,7 +81,7 @@
     <p class="sub" id="subtitulo">
       Estamos te levando para a nossa comunidade no WhatsApp — é por lá que o link da live é enviado.
     </p>
-    <a class="btn" id="btn-comunidade" href="https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK">
+    <a class="btn" id="btn-comunidade" href="https://chat.whatsapp.com/KTzqHVsVrtNL8Xla56001D">
       Entrar na comunidade agora <span id="contagem"></span>
     </a>
     <p class="aviso" id="aviso-email">O link da live é enviado na comunidade do WhatsApp.</p>
@@ -113,18 +113,18 @@
       // Trocou lá, troque aqui: fora de sincronia não dá erro nenhum, só manda
       // a aba anônima para o lugar errado.
       var PADRAO_POR_LIVE = {
-        'japao-live': 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK',
+        'japao-live': 'https://chat.whatsapp.com/KTzqHVsVrtNL8Xla56001D',
         'peru-live': 'https://chat.whatsapp.com/JGzOfTsgNsm0HlCawBArCQ',
-        // ⚠️ PREENCHER quando o grupo de cada live for criado. Enquanto estiver
-        // vazio a página vira só a confirmação (sem botão, sem contagem) — que é
-        // o comportamento certo: cair no grupo errado é pior do que não cair em
-        // grupo nenhum. O MESMO link precisa ir para o `comunidade.url` do
-        // src/data/live-<rota>.ts correspondente.
-        'costa-amalfitana-live': '',
-        'tailandia-live': '',
-        'turquia-live': '',
-        'islandia-live': '',
-        'egito-live': ''
+        // Um grupo PRÓPRIO por live (04/09/2026). Vazia, a página vira só a
+        // confirmação (sem botão, sem contagem) — que é o comportamento certo:
+        // cair no grupo errado é pior do que não cair em grupo nenhum. O MESMO
+        // link precisa ir para o `comunidade.url` do src/data/live-<rota>.ts
+        // correspondente.
+        'costa-amalfitana-live': 'https://chat.whatsapp.com/Eu0EwIhzGlHK6sB7gjDdnp',
+        'tailandia-live': 'https://chat.whatsapp.com/HXuwpHYjnhu01Qen3cR4ZP',
+        'turquia-live': 'https://chat.whatsapp.com/DBAZl6hveugGMfffBPMM5s',
+        'islandia-live': 'https://chat.whatsapp.com/CVupYigJKHy2iGczz8lywd',
+        'egito-live': 'https://chat.whatsapp.com/DMXW53GERpVCLqclY8t27x'
       };
       var PADRAO = PADRAO_POR_LIVE[SLUG] || '';
       var SEGUNDOS = 3;

@@ -112,7 +112,7 @@ export const liveJapao = {
     // Sala do Google Meet desta live.
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
     // que redireciona pra cá). Trocou lá, troque aqui.
-    meetUrl: 'https://meet.google.com/nub-mmfn-edw',
+    meetUrl: 'https://meet.google.com/nrp-tpia-asr',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:
@@ -170,7 +170,7 @@ export const liveJapao = {
     // agência que a live da Tailândia usava. Se trocar, troque também o
     // `PADRAO` da public/obrigado.html: é o link de emergência de quem cai lá
     // com o sessionStorage vazio (aba anônima).
-    url: 'https://chat.whatsapp.com/BQmxhBuEF5DAO27XkP50xK',
+    url: 'https://chat.whatsapp.com/KTzqHVsVrtNL8Xla56001D',
     nome: 'Live - Japão & China',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

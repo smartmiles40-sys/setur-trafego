@@ -196,10 +196,12 @@ export default function FormularioLead() {
     } catch {
       /* aba privada: segue só em memória */
     }
-    // STFV: marca a versão nesta hospedagem no utm_content — diferencia do V4 no
-    // CRM e no disparo de conversão (expedicao_lead). Força "STFV" sempre.
-    // Derivado, não persistido (o storage guarda a atribuição real).
-    setTrack({ ...proximo, utm_content: 'STFV' })
+    // A atribuição vai INTEIRA pro CRM: utm_content carrega {{ad.name}}, que é
+    // como se mede qual criativo converte. Antes isto era sobrescrito com o
+    // literal "STFV" e o nome do anúncio se perdia. O marcador da LP agora
+    // viaja no dataLayer como versao_lp, e no CRM quem separa STFV de V4 é a
+    // Fonte (SOURCE_ID), que já é própria de cada LP.
+    setTrack(proximo)
   }, [])
 
   // Timer da Etapa 2: começa quando o lead ENTRA na etapa do vídeo e trava o
@@ -346,6 +348,7 @@ export default function FormularioLead() {
         w.dataLayer = w.dataLayer || []
         w.dataLayer.push({
           event: 'expedicao_lead',
+          versao_lp: 'STFV', // marca a LP STFV (antes era o utm_content forçado)
           destino: expedicao.slug,
           event_id: eventId,
           lead: {

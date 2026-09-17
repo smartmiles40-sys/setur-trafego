@@ -18,6 +18,8 @@
 //    2. ledger Supabase → captura 100% dos leads mesmo se o n8n estiver fora.
 //  Falha em qualquer um dos dois nunca trava a resposta para o navegador.
 
+import { registrarNaColunaLives } from './_bitrix-lives.mjs'
+
 // ⚠️ PREENCHER — webhook de produção do n8n criado para a live.
 //    Enquanto estiver vazio, o lead ainda é salvo no ledger e nos logs da
 //    função (Vercel → Deployment → Functions → Logs), então nada se perde.
@@ -200,11 +202,25 @@ export default async function handler(req, res) {
     }
   }
 
-  // Os dois canais correm em PARALELO: nenhum atrasa o outro, e o ledger captura
-  // mesmo que o n8n falhe.
-  const [rN8n, rLedger] = await Promise.allSettled([enviarN8n(), gravarLedger()])
+  // ── Canal 3: Bitrix, funil Tecnologia › coluna "Lives" (17/09/2026) ───────
+  // Todo inscrito vira card. O n8n continua cuidando SÓ da planilha.
+  const enviarBitrix = async () => {
+    const base = process.env.BITRIX_WEBHOOK_URL
+    if (!base) {
+      console.warn('[bitrix] BITRIX_WEBHOOK_URL ausente — inscrito NÃO foi pro Bitrix (lead_id ' + lead.lead_id + ')')
+      return
+    }
+    const r = await registrarNaColunaLives(base, lead)
+    if (r.ok) console.log('[bitrix] negocio', r.negocioId, r.jaTinha ? '(ja existia)' : '(criado)', lead.lead_id)
+    else console.error('[bitrix] falhou —', r.etapa, r.erro, r.descricao || '', lead.lead_id)
+  }
+
+  // Os três canais correm em PARALELO: nenhum atrasa o outro, e a falha de um
+  // (Bitrix fora, n8n fora) não impede os outros de gravar.
+  const [rN8n, rLedger, rBitrix] = await Promise.allSettled([enviarN8n(), gravarLedger(), enviarBitrix()])
   if (rN8n.status === 'rejected') console.error('[webhook] falhou:', rN8n.reason && rN8n.reason.message)
   if (rLedger.status === 'rejected') console.error('[ledger] falhou:', rLedger.reason && rLedger.reason.message)
+  if (rBitrix.status === 'rejected') console.error('[bitrix] falhou:', rBitrix.reason && rBitrix.reason.message)
 
   res.status(200).json({ ok: true })
 }

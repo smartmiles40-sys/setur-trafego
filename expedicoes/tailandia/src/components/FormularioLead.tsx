@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowDown, Check, Lock } from 'lucide-react'
 import { expedicao } from '../data/expedicao'
+import AgendaSdr from './AgendaSdr'
+import BarraProgresso from './BarraProgresso'
 import VslPlayer from './VslPlayer'
 
 /**
@@ -189,6 +191,8 @@ export default function FormularioLead() {
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
+  // Depois das perguntas, TODO lead ganha a etapa da ligação com o SDR
+  const [agenda, setAgenda] = useState<null | { jaNoBitrix: boolean; irParaObrigado: () => void }>(null)
   // Etapa 2 (vídeo): timer que libera o avanço para as perguntas
   const [videoLiberado, setVideoLiberado] = useState(false)
   const [progresso, setProgresso] = useState(0) // 0–100: enche a mini barra do botão
@@ -346,6 +350,9 @@ export default function FormularioLead() {
           body: JSON.stringify(payload),
         })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
+        // `bitrix === false` = o n8n não recebeu (slug sem rota ou fora do ar):
+        // aí quem abre o card no Bitrix é o QS, na hora de marcar a ligação.
+        const retorno = (await resp.json().catch(() => ({}))) as { bitrix?: boolean }
         const eventId =
           typeof crypto !== 'undefined' && crypto.randomUUID
             ? crypto.randomUUID()
@@ -358,6 +365,16 @@ export default function FormularioLead() {
           sessionStorage.removeItem(LEAD_ID_KEY)
           guardarMensagemWhatsapp(nome)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
+        }
+
+        // Todo lead ganha a etapa da ligação com o SDR (ver AgendaSdr.tsx) e só
+        // DEPOIS vai pro obrigado.html, onde o GTM conta a conversão.
+        let abriuAgenda = false
+        const seguir = () => {
+          if (abriuAgenda) return
+          abriuAgenda = true
+          setAgenda({ jaNoBitrix: retorno.bitrix !== false, irParaObrigado })
+          document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })
         }
 
         const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
@@ -380,12 +397,12 @@ export default function FormularioLead() {
             timing: slugDaResposta('decisao', respostas['decisao']),
           },
           ...track,
-          eventCallback: irParaObrigado,
+          eventCallback: seguir,
           eventTimeout: 2000,
         })
 
         // Rede de segurança: se o GTM não chamar o callback, redireciona mesmo assim
-        setTimeout(irParaObrigado, 2000)
+        setTimeout(seguir, 2000)
       } catch (err) {
         if (import.meta.env.DEV) {
           // Em dev o /api não existe (função roda só na Vercel) — segue o fluxo
@@ -403,14 +420,18 @@ export default function FormularioLead() {
     [respostas, nome, whatsapp, email, instagram, setErro, videoLiberado, track],
   )
 
-  const stepClass = (ativo: boolean, passado: boolean) =>
-    `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-      ativo
-        ? 'bg-lime text-dark-teal'
-        : passado
-          ? 'bg-dark-teal text-off-white'
-          : 'bg-dark-teal/10 text-dark-teal/50'
-    }`
+  if (agenda) {
+    return (
+      <AgendaSdr
+        nome={nome.trim()}
+        email={email.trim().toLowerCase()}
+        whatsapp={`+55${whatsapp.replace(/\D/g, '')}`}
+        jaNoBitrix={agenda.jaNoBitrix}
+        formName={FORM_NAME}
+        irParaObrigado={agenda.irParaObrigado}
+      />
+    )
+  }
 
   return (
     <form
@@ -427,18 +448,12 @@ export default function FormularioLead() {
         <input key={k} type="hidden" name={k} id={k} value={track[k]} readOnly />
       ))}
 
-      {/* Indicador de progresso (3 etapas) */}
-      <div className="flex items-center justify-center gap-3 mb-8" aria-hidden>
-        <span id="step1-indicator" className={stepClass(etapa === 1, etapa > 1)}>1</span>
-        <span className="w-10 h-[2px] bg-dark-teal/20" />
-        <span id="step2-indicator" className={stepClass(etapa === 2, etapa > 2)}>2</span>
-        <span className="w-10 h-[2px] bg-dark-teal/20" />
-        <span id="step3-indicator" className={stepClass(etapa === 3, false)}>3</span>
-      </div>
+      {/* Barra de progresso (sem número): a ligação com o SDR conta no total */}
+      <BarraProgresso fracao={etapa / 4} />
 
       {/* ============ ETAPA 1 — contato ============ */}
       <div id="form-step-1" className={`form-step ${etapa === 1 ? '' : 'hidden'}`}>
-        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 1 de 3 · Dados de contato</p>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">Dados de contato</p>
 
         <div className="space-y-5">
           <div>
@@ -516,7 +531,7 @@ export default function FormularioLead() {
       {/* ============ ETAPA 2 — vídeo (trava o avanço por 1 min) ============ */}
       <div id="form-step-2" className={`form-step ${etapa === 2 ? '' : 'hidden'}`}>
         <p className="input-label !mb-6 text-center text-dark-teal/60">
-          Etapa 2 de 3 · Assista ao vídeo
+          Assista ao vídeo
         </p>
 
         {/* Monta o player SÓ quando a Etapa 2 está visível. Se montar junto com o
@@ -580,7 +595,7 @@ export default function FormularioLead() {
 
       {/* ============ ETAPA 3 — perfil ============ */}
       <div id="form-step-3" className={`form-step ${etapa === 3 ? '' : 'hidden'}`}>
-        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 3 de 3 · Seu perfil de viagem</p>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">Seu perfil de viagem</p>
 
         <div className="space-y-7">
           {PERGUNTAS.map((p) => (

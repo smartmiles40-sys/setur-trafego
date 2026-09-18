@@ -120,7 +120,7 @@ export default async function handler(req, res) {
   const enviarN8n = async () => {
     if (!webhookUrl) {
       console.warn(`[webhook] sem destino para slug="${slug}" — coberto pelo ledger`)
-      return
+      return false
     }
     const ctrl = new AbortController()
     const timeout = setTimeout(() => ctrl.abort(), 7000)
@@ -132,6 +132,7 @@ export default async function handler(req, res) {
         signal: ctrl.signal,
       })
       if (!resp.ok) console.error('[webhook] status', resp.status)
+      return resp.ok
     } finally {
       clearTimeout(timeout)
     }
@@ -203,5 +204,7 @@ export default async function handler(req, res) {
   if (rN8n.status === 'rejected') console.error('[webhook] falhou:', rN8n.reason && rN8n.reason.message)
   if (rLedger.status === 'rejected') console.error('[ledger] falhou:', rLedger.reason && rLedger.reason.message)
 
-  res.status(200).json({ ok: true })
+  // `bitrix`: o formulário usa pra decidir, na ligação com o SDR, se o QS
+  // precisa abrir o card (n8n não recebeu) ou só adotar o que o n8n abriu.
+  res.status(200).json({ ok: true, bitrix: rN8n.status === 'fulfilled' && rN8n.value === true })
 }

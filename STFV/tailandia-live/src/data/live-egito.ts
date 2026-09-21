@@ -21,6 +21,23 @@
 
 import type { ConfigLive } from './live-japao'
 
+/**
+ * O Egito tem DUAS lives (Bruno, 21/09/2026). A página vale a próxima que
+ * ainda não terminou (início + duracaoMinutos), decidido quando a página abre:
+ * até 23/09 às 13h30 mostra a de 23/09 ao meio-dia; depois, a de 29/09 às 20h.
+ * Passada a última, fica na última. Os mesmos pares estão em `sessoes` no
+ * mapa `LIVES` de public/entrar.html — trocou aqui, troque lá.
+ */
+const SESSOES_EGITO = [
+  { inicioISO: '2026-09-23T12:00:00-03:00', meetUrl: 'https://meet.google.com/rzh-huak-zrw' },
+  { inicioISO: '2026-09-29T20:00:00-03:00', meetUrl: 'https://meet.google.com/arw-qozv-pop' },
+]
+const DURACAO_EGITO_MIN = 90
+const SESSAO_EGITO =
+  SESSOES_EGITO.find(
+    (s) => new Date(s.inicioISO).getTime() + DURACAO_EGITO_MIN * 60_000 > Date.now(),
+  ) ?? SESSOES_EGITO[SESSOES_EGITO.length - 1]
+
 export const liveEgito: ConfigLive = {
   // Slug próprio: é ele que separa esta base das outras no ledger, no CRM,
   // no dataLayer e na coluna `Destino` da planilha do n8n.
@@ -79,8 +96,9 @@ export const liveEgito: ConfigLive = {
      *
      * ✅ Definida pelo Bruno em 03/09/2026: terça-feira, 29 de setembro de 2026, 20h00 (BRT).
      */
-    inicioISO: '2026-09-29T20:00:00-03:00',
-    duracaoMinutos: 90,
+    // 🔁 21/09/2026: duas lives, 23/09 12h e 29/09 20h — ver SESSOES_EGITO no topo.
+    inicioISO: SESSAO_EGITO.inicioISO,
+    duracaoMinutos: DURACAO_EGITO_MIN,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.
@@ -90,7 +108,7 @@ export const liveEgito: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/pze-qexv-afu',
+    meetUrl: SESSAO_EGITO.meetUrl,
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

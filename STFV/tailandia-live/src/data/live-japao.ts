@@ -106,13 +106,14 @@ export const liveJapao = {
      *    (BRT). A live de 30/08 já aconteceu; esta é a nova rodada, no mesmo
      *    horário das outras cinco lives de setembro (20h, não 19h30).
      */
-    inicioISO: '2026-09-20T20:00:00-03:00',
+    // 🔁 Remarcada em 21/09/2026 para sexta-feira, 25 de setembro de 2026, 12h00 (sala nova).
+    inicioISO: '2026-09-25T12:00:00-03:00',
     duracaoMinutos: 90,
 
     // Sala do Google Meet desta live.
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
     // que redireciona pra cá). Trocou lá, troque aqui.
-    meetUrl: 'https://meet.google.com/nrp-tpia-asr',
+    meetUrl: 'https://meet.google.com/wkv-dbgb-hnf',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

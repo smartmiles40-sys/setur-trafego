@@ -100,7 +100,8 @@ export const livePeru: ConfigLive = {
      *    (BRT) — o dia seguinte ao pedido. Note que é 20h, não 19h30: esta live
      *    NÃO é no mesmo horário da do Japão.
      */
-    inicioISO: '2026-09-03T20:00:00-03:00',
+    // 🔁 Remarcada em 21/09/2026 para quarta-feira, 23 de setembro de 2026, 20h00 (sala nova).
+    inicioISO: '2026-09-23T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ⚠️ PREENCHER — sala do Google Meet desta live. Vazio = o convite do
@@ -108,7 +109,7 @@ export const livePeru: ConfigLive = {
     //
     // NÃO reaproveitar a sala do Japão: as duas lives podem acontecer na mesma
     // semana, e quem tem o link acaba entrando na sala errada.
-    meetUrl: 'https://meet.google.com/ktf-indr-tro',
+    meetUrl: 'https://meet.google.com/svv-tsve-wrm',
 
     descricao:
       'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar a Expedição Peru 2027: os 9 dias entre Lima, Cusco, Vale Sagrado, Machu Picchu e Vinicunca, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',

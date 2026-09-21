@@ -370,36 +370,36 @@
 
       var LIVES = {
         'japao-live': {
-          sala: 'https://meet.google.com/nrp-tpia-asr',
-          inicio: '2026-09-20T20:00:00-03:00',
+          sala: 'https://meet.google.com/wkv-dbgb-hnf',
+          inicio: '2026-09-25T12:00:00-03:00',
           nome: 'Japão 2027',
           compl: 'com extensão China',
           fundo: '/assets/japao/hero.jpg'
         },
         'peru-live': {
-          sala: 'https://meet.google.com/ktf-indr-tro',
-          inicio: '2026-09-03T20:00:00-03:00',
+          sala: 'https://meet.google.com/svv-tsve-wrm',
+          inicio: '2026-09-23T20:00:00-03:00',
           nome: 'Peru 2027',
           compl: '',
           fundo: '/assets/peru/hero.jpg'
         },
         'costa-amalfitana-live': {
-          sala: 'https://meet.google.com/uuf-ryah-ddj',
-          inicio: '2026-09-08T20:00:00-03:00',
+          sala: 'https://meet.google.com/yeo-vvek-dfk',
+          inicio: '2026-09-24T20:00:00-03:00',
           nome: 'Costa Amalfitana 2027',
           compl: '',
           fundo: '/assets/italia/hero-positano.jpg'
         },
         'tailandia-live': {
-          sala: 'https://meet.google.com/vva-zuud-ire',
-          inicio: '2026-09-13T20:00:00-03:00',
+          sala: 'https://meet.google.com/tfx-jthu-koy',
+          inicio: '2026-09-22T20:00:00-03:00',
           nome: 'Tailândia 2027',
           compl: '',
           fundo: '/assets/tailandia/hero.jpg'
         },
         'turquia-live': {
-          sala: 'https://meet.google.com/eno-cvog-dty',
-          inicio: '2026-09-15T20:00:00-03:00',
+          sala: 'https://meet.google.com/yis-dunh-opv',
+          inicio: '2026-09-27T20:00:00-03:00',
           nome: 'Turquia & Grécia 2027',
           compl: '',
           fundo: '/assets/turquia-grecia/hero.jpg'
@@ -412,8 +412,14 @@
           fundo: '/assets/islandia/aurora-boreal.jpg'
         },
         'egito-live': {
-          sala: 'https://meet.google.com/pze-qexv-afu',
+          // Duas lives: vale a próxima que ainda não terminou (ver `sessoes`
+          // logo abaixo). sala/inicio aqui são só o valor de reserva.
+          sala: 'https://meet.google.com/arw-qozv-pop',
           inicio: '2026-09-29T20:00:00-03:00',
+          sessoes: [
+            { sala: 'https://meet.google.com/rzh-huak-zrw', inicio: '2026-09-23T12:00:00-03:00' },
+            { sala: 'https://meet.google.com/arw-qozv-pop', inicio: '2026-09-29T20:00:00-03:00' }
+          ],
           nome: 'Egito 2027',
           compl: 'com extensão Dubai',
           fundo: '/assets/egito/hero-piramides.webp'
@@ -436,6 +442,18 @@
       var SALA_URL = CFG.sala;
       var INICIO_ISO = CFG.inicio;
       var DURACAO_MIN = 90;
+
+      // Destino com mais de uma live (hoje só o Egito): vale a primeira que
+      // ainda não terminou; passada a última, fica na última.
+      if (CFG.sessoes && CFG.sessoes.length) {
+        var agoraMs = Date.now();
+        var sessao = CFG.sessoes[CFG.sessoes.length - 1];
+        for (var i = 0; i < CFG.sessoes.length; i++) {
+          if (new Date(CFG.sessoes[i].inicio).getTime() + DURACAO_MIN * 60000 > agoraMs) { sessao = CFG.sessoes[i]; break; }
+        }
+        SALA_URL = sessao.sala;
+        INICIO_ISO = sessao.inicio;
+      }
 
       (function pintarLive() {
         document.title = 'Entrar na live · Expedição ' + CFG.nome + ' | Se Tu For, Eu Vou';

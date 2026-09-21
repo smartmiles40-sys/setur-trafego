@@ -79,7 +79,8 @@ export const liveTurquia: ConfigLive = {
      *
      * ✅ Definida pelo Bruno em 03/09/2026: terça-feira, 15 de setembro de 2026, 20h00 (BRT).
      */
-    inicioISO: '2026-09-15T20:00:00-03:00',
+    // 🔁 Remarcada em 21/09/2026 para domingo, 27 de setembro de 2026, 20h00 (sala nova).
+    inicioISO: '2026-09-27T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -90,7 +91,7 @@ export const liveTurquia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/eno-cvog-dty',
+    meetUrl: 'https://meet.google.com/yis-dunh-opv',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

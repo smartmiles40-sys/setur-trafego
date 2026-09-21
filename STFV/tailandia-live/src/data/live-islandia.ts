@@ -78,8 +78,9 @@ export const liveIslandia: ConfigLive = {
      * esta linha.
      *
      * ✅ Definida pelo Bruno em 03/09/2026: quinta-feira, 17 de setembro de 2026, 20h00 (BRT).
+     * 🔁 Remarcada em 21/09/2026 para segunda-feira, 21 de setembro de 2026, 20h00 (sala nova).
      */
-    inicioISO: '2026-09-17T20:00:00-03:00',
+    inicioISO: '2026-09-21T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -90,7 +91,7 @@ export const liveIslandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/bfq-cjwy-zza',
+    meetUrl: 'https://meet.google.com/pvh-kbbc-ksj',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

@@ -58,7 +58,7 @@ export const expedicao = {
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/03/15/audio_8ba73cd728.mp3?filename=zen-meditation-amp-yoga-118041.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
-  faixaInvestimento: { min: 21000, max: 27000 },
+  faixaInvestimento: { min: 21000, max: 29000 },
   // Instagram da agência (mesmo @ para todas as expedições)
   instagram: {
     handle: '@setuforeuvouviagens',

@@ -9,48 +9,48 @@ export const expedicao = {
   // Source ID do Bitrix24 — vai no payload como source_id p/ atribuir
   // a origem dessa LP no CRM.
   sourceId: 'UC_5FDRLJ',
-  nome: 'Japão e China',
-  nomeUpper: 'JAPÃO & CHINA',
+  nome: 'Japão',
+  nomeUpper: 'JAPÃO',
   ano: 2027,
   dataInicio: '2027-10-14',
   dataInicioLabel: '14 de outubro',
   dataFimLabel: '30 de outubro',
   dataRange: '14 a 30 de outubro de 2027',
-  dataResumoCurto: 'Japão+China · 14 – 30 out',
+  dataResumoCurto: 'Japão · 14 – 30 out',
   duracao: '17 dias',
   duracaoNumero: 17,
   duracaoNumeroLegenda:
-    'Da Muralha da China ao Monte Fuji e Tóquio, com trem-bala, Cidade Proibida e chá com gueixa.',
+    'De Osaka a Tóquio — Kyoto, Hiroshima, Monte Fuji e trem-bala — abrindo com a extensão China em Pequim.',
   duracaoExtenso: '17 dias · 14 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
   cidades: ['Pequim', 'Osaka', 'Kyoto', 'Hiroshima', 'Monte Fuji', 'Tóquio'],
-  cidadesPrincipaisLinha: 'Pequim · Osaka · Kyoto · Tóquio',
+  cidadesPrincipaisLinha: 'Osaka · Kyoto · Tóquio · + extensão China',
   bandeira: '🇯🇵',
   heroImage: `${import.meta.env.BASE_URL}assets/japao-china/hero.jpg`,
   slogan:
-    'Atravesse dois milênios em duas culturas — do silêncio milenar\nda Muralha às luzes elétricas de Tóquio.',
+    'Do silêncio dos templos de Kyoto às luzes elétricas de Tóquio —\ncom extensão China na Muralha e na Cidade Proibida.',
   mapaDescricao:
-    'Uma travessia por dois gigantes da Ásia: começamos pela China (Pequim, Muralha, Cidade Proibida, Templo do Céu) e seguimos para o Japão tradicional (Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio) — com trem-bala, voos internos e suporte de instalação de Alipay e WeChat.',
+    'Uma travessia pelo Japão — Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio, com trem-bala e voos internos — abrindo com a extensão China: Pequim, Muralha, Cidade Proibida e Templo do Céu, com suporte de instalação de Alipay e WeChat.',
   mapaTrajetoTexto: 'Pequim → Osaka → Kyoto → Hiroshima → Monte Fuji → Tóquio',
   mapaDistancia: '3 voos + trem-bala · 17 dias',
   mapaDistanciaCurta: '3 voos + JR · 17 dias',
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
-  mapaIframeTitulo: 'Mapa interativo da rota Expedição Japão e China',
+  mapaIframeTitulo: 'Mapa interativo da rota Expedição Japão + extensão China',
   tudoResolvidoDescricao:
-    'Japão e China são destinos plurais e exigentes — sistemas de transporte complexos, idiomas com escritas próprias, apps locais (Alipay, WeChat) obrigatórios na China, e visto chinês com burocracia. Cada decisão isolada vira um obstáculo.',
+    'O Japão é um destino plural e exigente — sistema de transporte complexo, escrita própria, ritmo acelerado. E a extensão China acrescenta apps locais obrigatórios (Alipay, WeChat) e visto com burocracia. Cada decisão isolada vira um obstáculo.',
   tudoResolvidoDestaque: 'Na expedição, tudo isso acontece nos bastidores.',
   tudoResolvidoSubtitulo: 'Hospedagem 3★/4★ + trem-bala incluso',
-  roteiroHeadlineDestino: 'Japão e China',
+  roteiroHeadlineDestino: 'Japão',
   roteiroHeadlineComplemento: 'em camadas.',
   roteiroDescricao:
-    'Este não é um roteiro para "ver tudo correndo". É uma sequência de experiências que atravessam China e Japão — do silêncio milenar da Muralha à modernidade elétrica de Tóquio — respeitando ritmo, pausas e acompanhamento constante.',
-  porQueHeadlineDestino: 'Japão e China',
+    'Este não é um roteiro para "ver tudo correndo". É uma sequência de experiências pelo Japão — dos templos de Kyoto à modernidade elétrica de Tóquio —, aberta pela extensão China na Muralha e na Cidade Proibida, respeitando ritmo, pausas e acompanhamento constante.',
+  porQueHeadlineDestino: 'Japão',
   opcoesDescricao:
-    'Uma imersão dupla em China e Japão: começamos por Pequim — Muralha, Cidade Proibida e Templo do Céu — e seguimos para Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio. Tour privativo na Muralha, chá com gueixa e riquixá inclusos.',
-  formularioHeadlineDestino: 'Japão e China',
+    'Uma imersão no Japão: Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio, com chá com gueixa e riquixá inclusos — abrindo com a extensão China por Pequim: Muralha (tour privativo), Cidade Proibida e Templo do Céu.',
+  formularioHeadlineDestino: 'Japão',
   faqDescricao:
-    'Respostas para as principais perguntas sobre nossa Expedição Japão e China 2027.',
+    'Respostas para as principais perguntas sobre nossa Expedição Japão 2027, com extensão China.',
   musicUrl:
     'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=japanese-amp-zen-meditation-119946.mp3',
   // Faixa de investimento da expedição (min–max), exibida na seção Opções
@@ -72,11 +72,11 @@ export const expedicao = {
 export const opcoesItens = [
   '17 dias de expedição',
   'Voos internacionais e domésticos',
-  '4 noites em Pequim + 6 em Osaka',
-  '4 noites em Tóquio 3★/4★',
+  'Extensão China: 4 noites em Pequim',
+  '6 noites em Osaka + 4 em Tóquio 3★/4★',
   'Trem-bala (Osaka↔Hiroshima e → Tóquio)',
   'Chá da tarde com gueixa + riquixá',
-  'Tour privativo à Muralha da China',
+  'Tour privativo à Muralha da China (extensão)',
 ]
 
 export const incluso = [
@@ -95,12 +95,12 @@ export const incluso = [
   {
     icon: 'Bed',
     title: 'Hospedagem premium',
-    desc: '4 noites Pequim + 6 Osaka + 4 Tóquio',
+    desc: '4 noites Pequim (extensão China) + 6 Osaka + 4 Tóquio',
     emoji: '🏨',
   },
   {
     icon: 'MapPin',
-    title: 'Tour privativo Muralha',
+    title: 'Extensão China · Muralha da China',
     desc: 'Visita exclusiva com guia bilíngue',
     emoji: '🐉',
   },
@@ -113,7 +113,7 @@ export const incluso = [
   {
     icon: 'Smartphone',
     title: 'Suporte Alipay + WeChat',
-    desc: 'Instalação e configuração para a China',
+    desc: 'Instalação e configuração para a extensão China',
     emoji: '📱',
   },
   {
@@ -135,7 +135,7 @@ export const galeria = [
 export const naoIncluso = [
   'Refeições não mencionadas no roteiro',
   'Chip de celular / conectividade local',
-  'Visto chinês (suporte incluído)',
+  'Visto chinês da extensão (suporte incluído)',
   'Passeios extras / atividades opcionais',
   'Gorjetas',
   'Despesas pessoais',
@@ -145,7 +145,7 @@ export const roteiro = [
   {
     dia: 1,
     data: '14/10',
-    cidade: 'São Paulo → China',
+    cidade: 'São Paulo → Pequim',
     titulo: 'Embarque internacional',
     atividades: [
       'Encontro no Aeroporto de Guarulhos (GRU)',
@@ -162,12 +162,12 @@ export const roteiro = [
     dia: 2,
     data: '15/10',
     cidade: 'Pequim',
-    titulo: 'Chegada em Pequim & noite livre',
+    titulo: 'Extensão China · Chegada em Pequim',
     atividades: [
       'Recepção no aeroporto de Pequim',
       'Transfer privativo até o hotel',
       'Suporte com instalação de Alipay e WeChat',
-      'Noite livre para o primeiro contato com a China',
+      'Noite livre para o primeiro contato com a extensão China',
     ],
     logistica: 'Transfer privativo + check-in + suporte apps',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-13.jpg`,
@@ -215,7 +215,7 @@ export const roteiro = [
       'Tempo livre: hutongs e mercados',
       'Gastronomia em Wangfujing',
       'Massagens e chás opcionais',
-      'Última noite na China',
+      'Última noite da extensão China',
     ],
     logistica: 'Dia livre · líder à disposição',
     imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-16.jpg`,
@@ -226,7 +226,7 @@ export const roteiro = [
     dia: 6,
     data: '19/10',
     cidade: 'Pequim → Osaka',
-    titulo: 'Despedida da China · Chegada ao Japão',
+    titulo: 'Fim da extensão China · Chegada ao Japão',
     atividades: [
       'Traslado ao aeroporto de Pequim',
       'Voo Pequim → Osaka',
@@ -422,7 +422,7 @@ export const roteiro = [
   },
 ]
 
-// Etapas do roteiro por país (China → Japão), na ordem real da viagem.
+// Etapas do roteiro (extensão China → Japão), na ordem real da viagem.
 // O componente Roteiro agrupa os dias por faixa (diaInicio..diaFim) e mostra
 // o divisor `transicao` entre uma etapa e a próxima. Array vazio = roteiro contínuo.
 export const roteiroEtapas: {
@@ -435,7 +435,7 @@ export const roteiroEtapas: {
   transicao?: string
 }[] = [
   {
-    ordem: 'Primeira etapa',
+    ordem: 'Extensão China',
     pais: 'China',
     bandeira: '🇨🇳',
     cidades: 'Pequim · Muralha · Cidade Proibida · Templo do Céu',
@@ -444,7 +444,7 @@ export const roteiroEtapas: {
     transicao: 'Voo Pequim → Osaka',
   },
   {
-    ordem: 'Segunda etapa',
+    ordem: 'Expedição Japão',
     pais: 'Japão',
     bandeira: '🇯🇵',
     cidades: 'Osaka · Kyoto · Hiroshima · Monte Fuji · Tóquio',
@@ -455,16 +455,16 @@ export const roteiroEtapas: {
 
 export const porQue = {
   sozinho: [
-    'Dois países, dois idiomas com escrita própria',
+    'Japão e extensão China: dois idiomas com escrita própria',
     'Sistemas de transporte complexos (JR, metrô)',
-    'Visto chinês com burocracia específica',
-    'Alipay e WeChat são obrigatórios na China',
+    'Visto chinês da extensão, com burocracia específica',
+    'Alipay e WeChat são obrigatórios na extensão China',
     'Tempo perdido em logística é dia menos vivido',
   ],
   conosco: [
-    'Roteiro China+Japão consolidado e testado',
+    'Roteiro do Japão consolidado e testado, com extensão China',
     'Voos, trem-bala e transfers já resolvidos',
-    'Suporte para emissão do visto chinês',
+    'Suporte para emissão do visto chinês da extensão',
     'Instalação assistida de Alipay e WeChat',
     'Líderes brasileiros + guia bilíngue',
   ],
@@ -523,8 +523,8 @@ export const depoimentos = [
 
 export const faq = [
   {
-    q: 'Preciso de visto para o Japão e para a China?',
-    a: 'Brasileiros têm isenção de visto para o Japão para estadias turísticas de até 90 dias. A China exige visto turístico — nosso time fornece suporte completo para a emissão antes do embarque.',
+    q: 'Preciso de visto para o Japão e para a extensão China?',
+    a: 'Brasileiros têm isenção de visto para o Japão para estadias turísticas de até 90 dias. A extensão China exige visto turístico — nosso time fornece suporte completo para a emissão antes do embarque.',
   },
   {
     q: 'Os voos internacionais estão inclusos?',
@@ -535,8 +535,8 @@ export const faq = [
     a: 'Sim. Os trechos Osaka ↔ Hiroshima e o trem-bala de Osaka a Tóquio (com parada no Monte Fuji) estão inclusos, com assentos reservados.',
   },
   {
-    q: 'Como funciona pagamento na China? Cartão funciona?',
-    a: 'A China opera quase 100% via Alipay e WeChat Pay — não é fácil usar cartão internacional. Como começamos por Pequim, nosso time ajuda na instalação e configuração desses apps já na chegada.',
+    q: 'Como funciona pagamento na extensão China? Cartão funciona?',
+    a: 'A China opera quase 100% via Alipay e WeChat Pay — não é fácil usar cartão internacional. Como a extensão abre a viagem por Pequim, nosso time ajuda na instalação e configuração desses apps já na chegada. No Japão, cartão internacional funciona normalmente.',
   },
   {
     q: 'Como funciona o pagamento da expedição?',
@@ -547,8 +547,8 @@ export const faq = [
     a: 'Sim. Trabalhamos com parcelamento no cartão e planos personalizados. Entre em contato com nosso time para alinhar a melhor forma para você.',
   },
   {
-    q: 'Qual é o clima no Japão e China em março/abril?',
-    a: 'É primavera — uma das melhores épocas do ano, com as cerejeiras (sakura) em flor. No Japão a temperatura fica entre 10°C e 20°C; Pequim é um pouco mais fria (5°C a 18°C). Enviamos um checklist completo do que levar.',
+    q: 'Qual é o clima no Japão em outubro?',
+    a: 'É outono — uma das melhores épocas do ano, com clima ameno e as folhas mudando de cor (koyo). No Japão a temperatura fica entre 12°C e 22°C; Pequim, na extensão, é um pouco mais fria e seca (7°C a 19°C). Enviamos um checklist completo do que levar.',
   },
   {
     q: 'Vou conseguir me comunicar?',
@@ -562,15 +562,15 @@ export const gastosPessoais = {
   inclui: [
     'Refeições não inclusas no roteiro',
     'Bebidas extras',
-    'Passeios opcionais (extras em Pequim, Hiroshima)',
+    'Passeios opcionais (extras na extensão China, Hiroshima)',
     'Compras pessoais e souvenirs',
-    'Visto chinês (taxa)',
+    'Visto chinês da extensão (taxa)',
     'Gorjetas para guias e equipe',
   ],
 }
 
 export const whatsappConfig = {
   numero: '5511951251935',
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão e China 2027 — 28 de março a 13 de abril de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão 2027 (com extensão China) — 14 a 30 de outubro de 2027.',
 }
 export const whatsappUrl = `https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

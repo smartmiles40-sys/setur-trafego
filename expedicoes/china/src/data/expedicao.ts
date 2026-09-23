@@ -10,11 +10,11 @@ export const expedicao = {
   nome: 'China',
   nomeUpper: 'CHINA',
   ano: 2027,
-  dataInicio: '2027-05-15',
-  dataInicioLabel: '15 de maio',
-  dataFimLabel: '30 de maio',
-  dataRange: '15 a 30 de maio de 2027',
-  dataResumoCurto: 'China · 15 – 30 mai',
+  dataInicio: '2027-10-16',
+  dataInicioLabel: '16 de outubro',
+  dataFimLabel: '31 de outubro',
+  dataRange: '16 a 31 de outubro de 2027',
+  dataResumoCurto: 'China · 16 – 31 out',
   duracao: '16 dias',
   duracaoNumero: 16,
   duracaoNumeroLegenda:
@@ -137,7 +137,7 @@ export const naoIncluso = [
 export const roteiro = [
   {
     dia: 1,
-    data: '15/05',
+    data: '16/10',
     cidade: 'São Paulo → China',
     titulo: 'Embarque internacional',
     atividades: [
@@ -153,7 +153,7 @@ export const roteiro = [
   },
   {
     dia: 2,
-    data: '16/05',
+    data: '17/10',
     cidade: 'Pequim',
     titulo: 'Chegada em Pequim & noite livre',
     atividades: [
@@ -169,7 +169,7 @@ export const roteiro = [
   },
   {
     dia: 3,
-    data: '17/05',
+    data: '18/10',
     cidade: 'Pequim',
     titulo: 'Muralha da China · Tour Privativo',
     atividades: [
@@ -185,7 +185,7 @@ export const roteiro = [
   },
   {
     dia: 4,
-    data: '18/05',
+    data: '19/10',
     cidade: 'Pequim',
     titulo: 'Cidade Proibida, Templo do Céu & Jantar Tradicional',
     atividades: [
@@ -201,7 +201,7 @@ export const roteiro = [
   },
   {
     dia: 5,
-    data: '19/05',
+    data: '20/10',
     cidade: "Pequim → Xi'an",
     titulo: "Trem para Xi'an & Quarteirão Muçulmano",
     atividades: [
@@ -217,7 +217,7 @@ export const roteiro = [
   },
   {
     dia: 6,
-    data: '20/05',
+    data: '21/10',
     cidade: "Xi'an → Chengdu",
     titulo: 'Guerreiros de Terracota',
     atividades: [
@@ -233,7 +233,7 @@ export const roteiro = [
   },
   {
     dia: 7,
-    data: '21/05',
+    data: '22/10',
     cidade: 'Chengdu → Chongqing',
     titulo: 'Base dos Pandas & Chongqing',
     atividades: [
@@ -252,7 +252,7 @@ export const roteiro = [
   },
   {
     dia: 8,
-    data: '22/05',
+    data: '23/10',
     cidade: 'Chongqing',
     titulo: 'Prédios, Bondinho & Gruta Hongya',
     atividades: [
@@ -268,7 +268,7 @@ export const roteiro = [
   },
   {
     dia: 9,
-    data: '23/05',
+    data: '24/10',
     cidade: 'Chongqing → Zhangjiajie',
     titulo: 'Trem a Zhangjiajie & Vila de Furong',
     atividades: [
@@ -284,7 +284,7 @@ export const roteiro = [
   },
   {
     dia: 10,
-    data: '24/05',
+    data: '25/10',
     cidade: 'Zhangjiajie',
     titulo: 'Montanhas de Avatar',
     atividades: [
@@ -300,7 +300,7 @@ export const roteiro = [
   },
   {
     dia: 11,
-    data: '25/05',
+    data: '26/10',
     cidade: 'Zhangjiajie',
     titulo: 'Porta do Céu & Ponte de Vidro',
     atividades: [
@@ -316,7 +316,7 @@ export const roteiro = [
   },
   {
     dia: 12,
-    data: '26/05',
+    data: '27/10',
     cidade: 'Zhangjiajie → Xangai',
     titulo: 'Voo a Xangai · Yuyuan & The Bund',
     atividades: [
@@ -332,7 +332,7 @@ export const roteiro = [
   },
   {
     dia: 13,
-    data: '27/05',
+    data: '28/10',
     cidade: 'Xangai',
     titulo: 'Dia livre em Xangai',
     atividades: [
@@ -348,7 +348,7 @@ export const roteiro = [
   },
   {
     dia: 14,
-    data: '28/05',
+    data: '29/10',
     cidade: 'Xangai',
     titulo: 'Retorno ao Brasil ou extensão a Pequim',
     atividades: [
@@ -364,7 +364,7 @@ export const roteiro = [
   },
   {
     dia: 15,
-    data: '29/05',
+    data: '30/10',
     cidade: 'Em viagem',
     titulo: 'Em trânsito de volta',
     atividades: [
@@ -380,7 +380,7 @@ export const roteiro = [
   },
   {
     dia: 16,
-    data: '30/05',
+    data: '31/10',
     cidade: 'São Paulo',
     titulo: 'Chegada ao Brasil',
     atividades: [
@@ -502,8 +502,8 @@ export const faq = [
     a: 'Sim. Trabalhamos com parcelamento no cartão e planos personalizados. Entre em contato com nosso time para alinhar a melhor forma para você.',
   },
   {
-    q: 'Qual é o clima na China em maio?',
-    a: 'Maio é uma das melhores épocas: primavera para começo de verão, com clima ameno na maior parte do país (18°C a 28°C), ideal para as montanhas de Zhangjiajie. Enviamos um checklist completo do que levar.',
+    q: 'Qual é o clima na China em outubro?',
+    a: 'Outubro é uma das melhores épocas: outono, céu limpo e clima ameno. Pequim fica entre 10°C e 20°C (leve um casaco para as manhãs); o centro-sul (Chengdu, Chongqing, Zhangjiajie) fica agradável e menos úmido que no verão; Xangai gira em torno de 18°C a 24°C. Enviamos um checklist completo do que levar.',
   },
   {
     q: 'Vou conseguir me comunicar?',
@@ -526,6 +526,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '5511951251935',
-  mensagem: 'Olá! Quero saber mais sobre a Expedição China 2027 — 15 a 30 de maio de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição China 2027 — 16 a 31 de outubro de 2027.',
 }
 export const whatsappUrl = `https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

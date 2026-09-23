@@ -87,31 +87,83 @@
      * página antes de sair dela — é aqui que a conversão é contada.
      * A mensagem personalizada vem do FormularioLead pelo sessionStorage
      * (mesma origem); sem ela, cai na mensagem padrão.
+     *
+     * DISTRIBUIDOR (23/09/2026): o número não é mais fixo. Durante o countdown
+     * a página pergunta ao QS qual SDR é a vez (ou quem já marcou ligação com
+     * a pessoa) e abre o WhatsApp DELE. Se o QS não responder em 3,5s, vai pro
+     * número de sempre — nenhum lead fica sem destino.
      */
     (function () {
-      var NUMERO = '5511951251935';
+      var NUMERO_PADRAO = '5511951251935';
+      var DISTRIBUIDOR = 'https://qs-turis.vercel.app/api/lead';
+      var ESPERA_MAX_MS = 3500;
       var MSG_PADRAO = 'Quero seguir os próximos passos';
       var MSG_KEY = 'stfv_wa_msg';
       var FEITO_KEY = 'stfv_wa_redirecionado';
+      var LEAD_KEY = 'stfv_wa_lead';
+      var NUMERO_KEY = 'stfv_wa_numero';
       var SEGUNDOS = 3;
 
       var storageOk = true;
       function ler(chave) {
         try { return sessionStorage.getItem(chave); } catch (e) { storageOk = false; return null; }
       }
+      function gravar(chave, valor) {
+        try { sessionStorage.setItem(chave, valor); } catch (e) {}
+      }
 
       var msgSalva = ler(MSG_KEY);
       var jaRedirecionou = ler(FEITO_KEY);
-      var url = 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(msgSalva || MSG_PADRAO);
+      // Quem volta do WhatsApp e clica de novo cai no MESMO SDR de antes.
+      var numero = ler(NUMERO_KEY) || NUMERO_PADRAO;
+      function montar() {
+        return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(msgSalva || MSG_PADRAO);
+      }
 
       var btn = document.getElementById('btn-whatsapp');
-      if (btn) btn.href = url;
+      if (btn) btn.href = montar();
 
       // Só redireciona sozinho quem acabou de enviar o formulário (tem mensagem
       // salva), e uma vez só — senão voltar do WhatsApp vira laço. Em aba privada
       // o sessionStorage estoura: aí redireciona mesmo assim, com a msg padrão.
       if ((!msgSalva && storageOk) || jaRedirecionou) return;
-      try { sessionStorage.setItem(FEITO_KEY, '1'); } catch (e) {}
+      gravar(FEITO_KEY, '1');
+
+      var decidido = false;
+      var contagemAcabou = false;
+      function ir() {
+        // replace: voltar do WhatsApp cai na LP, não nesta página
+        window.location.replace(montar());
+      }
+      function decidir(n) {
+        if (decidido) return;
+        decidido = true;
+        if (n && /^[0-9]{12,13}$/.test(String(n))) numero = String(n);
+        gravar(NUMERO_KEY, numero);
+        if (btn) btn.href = montar();
+        if (contagemAcabou) ir();
+      }
+
+      var lead = null;
+      try { lead = JSON.parse(ler(LEAD_KEY) || 'null'); } catch (e) {}
+      if (lead && lead.telefone && window.fetch) {
+        var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var limite = setTimeout(function () {
+          if (ctrl) ctrl.abort();
+          decidir(null);
+        }, ESPERA_MAX_MS);
+        fetch(DISTRIBUIDOR, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(lead),
+          signal: ctrl ? ctrl.signal : undefined,
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (d) { clearTimeout(limite); decidir(d && d.numero); })
+          .catch(function () { clearTimeout(limite); decidir(null); });
+      } else {
+        decidir(null);
+      }
 
       var aviso = document.getElementById('aviso-redirect');
       var contagem = document.getElementById('contagem');
@@ -120,11 +172,11 @@
       var restante = SEGUNDOS;
       var timer = setInterval(function () {
         restante -= 1;
-        if (contagem) contagem.textContent = restante;
+        if (contagem) contagem.textContent = Math.max(restante, 0);
         if (restante <= 0) {
           clearInterval(timer);
-          // replace: voltar do WhatsApp cai na LP, não nesta página
-          window.location.replace(url);
+          contagemAcabou = true;
+          if (decidido) ir();
         }
       }, 1000);
     })();

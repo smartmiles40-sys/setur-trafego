@@ -166,11 +166,27 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 // são FIXAS (sem slug) porque o outro lado é HTML puro, sem acesso ao bundle.
 const WHATSAPP_MSG_KEY = 'stfv_wa_msg'
 const WHATSAPP_REDIRECT_KEY = 'stfv_wa_redirecionado'
+// Distribuidor do QS (23/09/2026): a obrigado.html pergunta ao QS qual SDR é a
+// vez e abre o WhatsApp DELE. Ela precisa do telefone pra isso — é a chave que
+// faz o card no QS/Bitrix nascer com o mesmo SDR da conversa.
+const WHATSAPP_LEAD_KEY = 'stfv_wa_lead'
+const WHATSAPP_NUMERO_KEY = 'stfv_wa_numero'
 
-function guardarMensagemWhatsapp(nomeLead: string) {
+function guardarMensagemWhatsapp(nomeLead: string, telefone: string) {
   const msg = `Olá! Sou ${nomeLead.trim()} e acabei de preencher o formulário da Expedição ${expedicao.nome} ${expedicao.ano}. Quero seguir os próximos passos.`
   try {
     sessionStorage.setItem(WHATSAPP_MSG_KEY, msg)
+    sessionStorage.setItem(
+      WHATSAPP_LEAD_KEY,
+      JSON.stringify({
+        nome: nomeLead.trim(),
+        telefone: `+55${telefone.replace(/\D/g, '')}`,
+        expedicao: `${expedicao.nome} ${expedicao.ano}`,
+        origem: expedicao.fonte,
+      }),
+    )
+    // envio novo = pergunta de novo ao distribuidor
+    sessionStorage.removeItem(WHATSAPP_NUMERO_KEY)
     // envio novo = pode redirecionar de novo (a trava existe pra quem volta do
     // WhatsApp não cair num laço)
     sessionStorage.removeItem(WHATSAPP_REDIRECT_KEY)
@@ -363,7 +379,7 @@ export default function FormularioLead() {
           if (navegou) return
           navegou = true
           sessionStorage.removeItem(LEAD_ID_KEY)
-          guardarMensagemWhatsapp(nome)
+          guardarMensagemWhatsapp(nome, whatsapp)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
         }
 
@@ -408,7 +424,7 @@ export default function FormularioLead() {
           // Em dev o /api não existe (função roda só na Vercel) — segue o fluxo
           console.warn('[dev] save-lead indisponível, simulando sucesso:', err)
           sessionStorage.removeItem(LEAD_ID_KEY)
-          guardarMensagemWhatsapp(nome)
+          guardarMensagemWhatsapp(nome, whatsapp)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
           return
         }

@@ -11,7 +11,7 @@ export function Destinos({ onQuero }: Props) {
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex flex-col gap-3 md:mb-16 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-lime">Gostou da vista?</p>
+            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-lime">Os destinos</p>
             <h2 className="mt-2 font-display text-[2.6rem] leading-[0.95] text-off-white md:text-7xl">
               Escolhe o seu <em className="text-lime">rolê.</em>
             </h2>

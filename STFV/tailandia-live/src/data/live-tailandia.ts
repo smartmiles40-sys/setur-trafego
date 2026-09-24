@@ -139,7 +139,7 @@ export const liveTailandia: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/HXuwpHYjnhu01Qen3cR4ZP',
+    url: 'https://chat.whatsapp.com/Jyoy6O8W9b2Flt5i1HmOh6',
     nome: 'Live - Tailândia 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

@@ -139,7 +139,7 @@ export const liveTurquia: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/DBAZl6hveugGMfffBPMM5s',
+    url: 'https://chat.whatsapp.com/I3eb8uP6zKHCFkozKujvsn',
     nome: 'Live - Turquia & Grécia 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

@@ -156,7 +156,7 @@ export const liveEgito: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/DMXW53GERpVCLqclY8t27x',
+    url: 'https://chat.whatsapp.com/K7JzZaSK6GE7VuJituiyh9',
     nome: 'Live - Egito 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

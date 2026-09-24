@@ -35,7 +35,7 @@ export default function App() {
       )}
 
       <Hero />
-      <Destinos onQuero={quero} />
+      <Destinos />
       <ComoFunciona />
       <ChamadaFinal onQuero={quero} />
       <Rodape />

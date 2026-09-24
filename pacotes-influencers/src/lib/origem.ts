@@ -57,3 +57,19 @@ export function evento(nome: string, dados: Record<string, unknown> = {}) {
   w.dataLayer = w.dataLayer || []
   w.dataLayer.push({ event: nome, influenciador: influenciadorAtual() || 'direto', ...dados })
 }
+
+// Link pra página oficial do pacote no site, levando junto quem indicou nas
+// UTMs (utm_content = influenciador). As páginas dos pacotes têm GTM/GA, então
+// a visita fica atribuída lá; a conversão delas é pelo WhatsApp.
+const SITE = 'https://setuforeuvouviagens.com.br'
+export function linkDoSite(slugPacote: string): string {
+  const atuais = parametrosDeTracking()
+  const influ = influenciadorAtual()
+  const q = new URLSearchParams()
+  q.set('utm_source', atuais.utm_source || influ || 'lp-influenciadores')
+  q.set('utm_medium', atuais.utm_medium || 'influenciador')
+  q.set('utm_campaign', atuais.utm_campaign || 'lp-influenciadores')
+  q.set('utm_content', influ || atuais.utm_content || 'direto')
+  for (const k of ['utm_term', 'fbclid', 'gclid', 'ttclid'] as const) if (atuais[k]) q.set(k, atuais[k])
+  return `${SITE}/${slugPacote}/?${q.toString()}`
+}

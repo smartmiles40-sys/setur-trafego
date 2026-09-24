@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, CalendarDays, MapPin } from 'lucide-react'
 import { pacotes, type Pacote } from '../data/pacotes'
-
-type Props = { onQuero: (pacote?: string, origem?: string) => void }
+import { evento, linkDoSite } from '../lib/origem'
 
 // Cards empilhados: cada destino "gruda" no topo e o próximo sobe por cima.
-export function Destinos({ onQuero }: Props) {
+export function Destinos() {
   return (
     <section id="destinos" className="relative bg-ink px-4 pb-24 pt-10 md:px-8 md:pt-24">
       <div className="mx-auto max-w-6xl">
@@ -23,7 +22,7 @@ export function Destinos({ onQuero }: Props) {
 
         <div className="relative">
           {pacotes.map((p, i) => (
-            <Card key={p.slug} pacote={p} i={i} total={pacotes.length} onQuero={onQuero} />
+            <Card key={p.slug} pacote={p} i={i} total={pacotes.length} />
           ))}
         </div>
       </div>
@@ -31,7 +30,7 @@ export function Destinos({ onQuero }: Props) {
   )
 }
 
-function Card({ pacote: p, i, total, onQuero }: { pacote: Pacote; i: number; total: number; onQuero: Props['onQuero'] }) {
+function Card({ pacote: p, i, total }: { pacote: Pacote; i: number; total: number }) {
   return (
     <div
       className="sticky mb-6 md:mb-10 md:!top-[calc(80px+var(--i)*12px)]"
@@ -102,14 +101,14 @@ function Card({ pacote: p, i, total, onQuero }: { pacote: Pacote; i: number; tot
                 {p.preco.unidade}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => onQuero(p.slug, 'card_destino')}
+            <a
+              href={linkDoSite(p.slug)}
+              onClick={() => evento('ir_para_site', { pacote: p.slug })}
               className="btn-lime flex-none"
             >
-              Quero esse
+              Ver pacote
               <ArrowUpRight className="h-4 w-4 transition group-hover:rotate-45" />
-            </button>
+            </a>
           </div>
         </div>
       </motion.article>

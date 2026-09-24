@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import { FeedHero } from './components/FeedHero'
+import { VooHero } from './components/VooHero'
 import { Destinos } from './components/Destinos'
 import { ChamadaFinal, ComoFunciona, Rodape } from './components/Fechamento'
 import { LeadSheet } from './components/LeadSheet'
@@ -34,7 +34,7 @@ export default function App() {
         </div>
       )}
 
-      <FeedHero onQuero={quero} />
+      <VooHero onQuero={quero} />
       <Destinos onQuero={quero} />
       <ComoFunciona />
       <ChamadaFinal onQuero={quero} />

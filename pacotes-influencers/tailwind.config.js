@@ -20,14 +20,26 @@ export default {
         marquee: 'marquee 30s linear infinite',
         'marquee-fast': 'marquee 7s linear infinite',
         'spin-slow': 'spin 4s linear infinite',
-        'bounce-up': 'bounceUp 1.4s ease-in-out infinite',
+        'bounce-down': 'bounceDown 1.4s ease-in-out infinite',
+        'aviao-flutua': 'aviaoFlutua 5s ease-in-out infinite',
+        'nuvem-lenta': 'nuvemDrift 40s ease-in-out infinite alternate',
+        'nuvem-media': 'nuvemDrift 26s ease-in-out infinite alternate-reverse',
+        'nuvem-rapida': 'nuvemDrift 18s ease-in-out infinite alternate',
         'pop-heart': 'popHeart 0.9s ease-out forwards',
       },
       keyframes: {
         marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
-        bounceUp: {
+        bounceDown: {
           '0%, 100%': { transform: 'translateY(0)', opacity: '0.6' },
-          '50%': { transform: 'translateY(-8px)', opacity: '1' },
+          '50%': { transform: 'translateY(8px)', opacity: '1' },
+        },
+        aviaoFlutua: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-1.2%) rotate(-0.6deg)' },
+        },
+        nuvemDrift: {
+          '0%': { transform: 'translateX(-2.5%)' },
+          '100%': { transform: 'translateX(2.5%)' },
         },
         popHeart: {
           '0%': { transform: 'translate(-50%,-50%) scale(0.3) rotate(-15deg)', opacity: '0' },

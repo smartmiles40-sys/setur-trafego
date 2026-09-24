@@ -208,7 +208,7 @@ export const roteiro = [
     cidade: 'Cairo',
     titulo: 'Cairo Antigo',
     atividades: [
-      'Museu Egípcio e seus tesouros',
+      'Museu Nacional da Civilização Egípcia',
       'Cidadela de Salah El Din',
       'Bairro Copta',
       'Imersão na história milenar',

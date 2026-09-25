@@ -83,6 +83,7 @@ export function Universo({ u }: { u: MotionValue<number> }) {
       const k = w / 110 // pixels por grau de câmera
       const zoom = Math.max(0, 2.9 - cam.altitude)
       const t = agora / 1000
+      const leve = w < 768 // celular: estrela = quadradinho (sem círculo nem halo)
       ctx.clearRect(0, 0, w, h)
 
       // Nebulosa: bem ao fundo, anda pouco.
@@ -107,7 +108,7 @@ export function Universo({ u }: { u: MotionValue<number> }) {
         const r = s.r * (1 + zoom * 0.12 * s.d)
         ctx.globalAlpha = (0.55 + Math.sin(t * s.vel + s.fase) * 0.45) * (0.45 + s.d * 0.55)
         ctx.fillStyle = s.cor
-        if (r < 0.9) ctx.fillRect(x, y, r * 1.6, r * 1.6)
+        if (r < 0.9 || leve) ctx.fillRect(x, y, r * 1.6, r * 1.6)
         else {
           ctx.beginPath()
           ctx.arc(x, y, r, 0, 6.283)

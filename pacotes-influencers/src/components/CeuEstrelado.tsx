@@ -40,6 +40,8 @@ export function CeuEstrelado({ noite }: { noite: MotionValue<number> }) {
     let raf = 0
     let cadente: { x: number; y: number; vx: number; vy: number; vida: number } | null = null
     let proximaCadente = performance.now() + 2500
+    let ultimo = 0
+    const intervalo = window.matchMedia('(pointer: coarse)').matches ? 32 : 0
 
     const medir = () => {
       const dpr = Math.min(window.devicePixelRatio, 2)
@@ -58,6 +60,8 @@ export function CeuEstrelado({ noite }: { noite: MotionValue<number> }) {
     const desenhar = (agora: number) => {
       raf = requestAnimationFrame(desenhar)
       if (!visivel) return
+      if (intervalo && agora - ultimo < intervalo) return
+      ultimo = agora
       const n = noite.get()
       ctx.clearRect(0, 0, w, h)
       if (n <= 0.02) return
@@ -69,6 +73,10 @@ export function CeuEstrelado({ noite }: { noite: MotionValue<number> }) {
         const brilho = s.lactea ? 0.35 : 0.65 + Math.sin(t * s.vel + s.fase) * 0.35
         ctx.globalAlpha = a * brilho
         ctx.fillStyle = s.r > 1.2 ? '#fff6e8' : '#ffffff'
+        if (s.r < 1.1) {
+          ctx.fillRect(s.x * w - s.r, s.y * h - s.r, s.r * 1.8, s.r * 1.8)
+          continue
+        }
         ctx.beginPath()
         ctx.arc(s.x * w, s.y * h, s.r, 0, 6.283)
         ctx.fill()

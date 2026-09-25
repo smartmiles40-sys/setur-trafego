@@ -1,6 +1,7 @@
-import { useTransform, motion, type MotionValue } from 'framer-motion'
+import { useState } from 'react'
+import { useMotionValueEvent, useTransform, motion, type MotionValue } from 'framer-motion'
 import { ArrowUpRight, CalendarDays, MapPin } from 'lucide-react'
-import { ORIGEM, PARADAS, tempoDaCena } from '../../lib/jornada'
+import { inicioDo, ORIGEM, PARADAS, tempoDaCena } from '../../lib/jornada'
 import { TEMAS, useVisibilidadeDaCena } from './temas'
 
 // Uma cena de roteiro. A ESTRUTURA é igual em todas (frase do momento,
@@ -10,9 +11,8 @@ import { TEMAS, useVisibilidadeDaCena } from './temas'
 function Palavra({ texto, t, ini, cor }: { texto: string; t: MotionValue<number>; ini: number; cor?: string }) {
   const opacity = useTransform(t, [ini, ini + 0.05], [0, 1])
   const y = useTransform(t, [ini, ini + 0.05], ['0.5em', '0em'])
-  const filter = useTransform(t, [ini, ini + 0.05], ['blur(10px)', 'blur(0px)'])
   return (
-    <motion.span style={{ opacity, y, filter, color: cor }} className={`inline-block pr-[0.22em] ${cor ? 'italic' : ''}`}>
+    <motion.span style={{ opacity, y, color: cor }} className={`inline-block pr-[0.22em] ${cor ? 'italic' : ''}`}>
       {texto}
     </motion.span>
   )
@@ -32,6 +32,11 @@ export function CenaRoteiro({ u, i, onQuero, onVerRoteiro }: Props) {
   const p = parada.pacote
   const tema = TEMAS[p.slug]
   const t = useTransform(u, (v) => tempoDaCena(v, i))
+  // Começou o voo até este destino (ou já passou dele): pode baixar o vídeo.
+  const [carregar, setCarregar] = useState(false)
+  useMotionValueEvent(u, 'change', (v) => {
+    if (!carregar && v > inicioDo(i) - 0.3) setCarregar(true)
+  })
   const visivel = useVisibilidadeDaCena(u, i)
   const display = useTransform(visivel, (o) => (o > 0.001 ? 'block' : 'none'))
   const pointerEvents = useTransform(visivel, (o) => (o > 0.6 ? 'auto' : 'none'))
@@ -57,7 +62,7 @@ export function CenaRoteiro({ u, i, onQuero, onVerRoteiro }: Props) {
       className="absolute inset-0 overflow-hidden"
       aria-label={p.nome}
     >
-      <Efeito t={t} ativo={() => visivel.get() > 0.001} foto={tema.foto} alt={p.foto.alt} video={tema.video} />
+      <Efeito t={t} ativo={() => visivel.get() > 0.001} foto={tema.foto} alt={p.foto.alt} video={tema.video} carregar={carregar} />
       {/* Sombra em cima pra o texto ler em qualquer foto. */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[60%]"
@@ -76,12 +81,12 @@ export function CenaRoteiro({ u, i, onQuero, onVerRoteiro }: Props) {
       </motion.div>
 
       <motion.div style={{ y: subir }} className="absolute inset-x-0 top-[26svh] z-10 px-6 text-center md:top-[24svh]">
-        <h2 className="mx-auto max-w-4xl font-display text-[2.9rem] leading-[0.95] text-off-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.55)] md:text-[6.2rem]">
+        <h2 className="mx-auto max-w-4xl font-display text-[2.9rem] leading-[0.95] text-off-white [text-shadow:0_4px_24px_rgba(0,0,0,0.55)] md:text-[6.2rem]">
           {palavras.map((x, k) => (
             <Palavra key={k} texto={x.w} t={t} ini={0.18 + (k / palavras.length) * 0.18} cor={x.destaque ? tema.cor : undefined} />
           ))}
         </h2>
-        <motion.p style={{ opacity: frase }} className="mx-auto mt-5 max-w-md font-sans text-[15px] leading-relaxed text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] md:text-lg">
+        <motion.p style={{ opacity: frase }} className="mx-auto mt-5 max-w-md font-sans text-[15px] leading-relaxed text-white/90 [text-shadow:0_1px_10px_rgba(0,0,0,0.7)] md:text-lg">
           {tema.antes && <strong className="font-semibold text-white">{tema.antes} </strong>}
           {p.frase}
         </motion.p>
@@ -90,7 +95,7 @@ export function CenaRoteiro({ u, i, onQuero, onVerRoteiro }: Props) {
       <div className="absolute inset-x-3 bottom-3 z-10 md:inset-x-0 md:bottom-10 md:flex md:justify-center">
         <motion.div
           style={{ opacity: painel, y: painelY, background: tema.painel }}
-          className="rounded-[28px] border border-white/15 p-5 backdrop-blur-xl md:w-[760px] md:p-7"
+          className="rounded-[28px] border border-white/15 p-5 md:w-[760px] md:p-7"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="font-display text-3xl text-off-white md:text-4xl">{p.nome}</h3>

@@ -125,6 +125,9 @@ export default function Globo({ u, onPronto }: { u: MotionValue<number>; onPront
     () => [pontoOrigem, ...(mostraMundo ? pontosMundo : pontosDestinos.slice(0, acesas))],
     [mostraMundo, pontoOrigem, pontosMundo, pontosDestinos, acesas],
   )
+  // Círculos pulsando: só São Paulo e os 5 pacotes (21 destinos pulsando juntos
+  // pesava na abertura do celular).
+  const aneis = useMemo(() => (mostraMundo ? [pontoOrigem] : pontos), [mostraMundo, pontoOrigem, pontos])
   const rotulos = useMemo(() => {
     if (modoRotulos === 'exp') return rotulosMundo
     if (modoRotulos === 'nenhum') return []
@@ -213,7 +216,7 @@ export default function Globo({ u, onPronto }: { u: MotionValue<number>; onPront
           pointAltitude={0.012}
           pointRadius="raio"
           pointsTransitionDuration={600}
-          ringsData={pontos}
+          ringsData={aneis}
           ringColor={(d: object) => (t: number) => {
             const cor = (d as Ponto).cor
             const alfa = Math.round((1 - t) * 200).toString(16).padStart(2, '0')

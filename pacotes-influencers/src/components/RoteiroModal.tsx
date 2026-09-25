@@ -42,7 +42,7 @@ export function RoteiroModal({ slug, onFechar, onQuero }: Props) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onFechar}
-          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/65 backdrop-blur-sm md:items-center md:p-8"
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/80 md:items-center md:p-8"
         >
           <motion.div
             role="dialog"

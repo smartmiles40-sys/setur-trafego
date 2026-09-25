@@ -25,6 +25,10 @@ export function useTela(desenhar: Desenho, ativo: () => boolean = () => true, ma
     let limpo = false
     let sujo = true // mudou de tamanho: precisa redesenhar mesmo pausado
     let raf = 0
+    let ultimo = 0
+    // Celular: 30 quadros/s bastam pra estrelas, brilho, vento e neve
+    // (metade do trabalho, o olho quase não percebe).
+    const intervalo = window.matchMedia('(pointer: coarse)').matches ? 32 : 0
 
     const medir = () => {
       const dpr = Math.min(window.devicePixelRatio, 2)
@@ -44,6 +48,8 @@ export function useTela(desenhar: Desenho, ativo: () => boolean = () => true, ma
     const loop = (agora: number) => {
       raf = requestAnimationFrame(loop)
       if (!visivel) return
+      if (intervalo && agora - ultimo < intervalo) return
+      ultimo = agora
       if (!fn.current.ativo() && !(manterAoPausar && sujo && w > 0)) {
         if (!limpo && !manterAoPausar) ctx.clearRect(0, 0, w, h)
         limpo = true

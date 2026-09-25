@@ -54,11 +54,10 @@ function Abertura({ u }: { u: MotionValue<number> }) {
         style={{ opacity: cinco }}
         className="pointer-events-none absolute inset-x-0 bottom-[9svh] z-10 px-6 text-center md:bottom-auto md:left-[6vw] md:right-auto md:top-1/2 md:-translate-y-1/2 md:text-left"
       >
-        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-lime">Qualquer destino pelo mundo.</p>
-        <h2 className="mt-2 font-display text-[2.6rem] leading-[0.95] text-off-white md:text-7xl">
-          5 destinos.
+        <h2 className="font-display text-[2.6rem] leading-[0.95] text-off-white md:text-7xl">
+          Qual é o seu
           <br />
-          <em className="text-lime">Qual é o seu?</em>
+          <em className="text-lime">destino?</em>
         </h2>
       </motion.div>
       <motion.a

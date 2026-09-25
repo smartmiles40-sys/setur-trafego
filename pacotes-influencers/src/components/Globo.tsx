@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Globe, { type GlobeMethods } from 'react-globe.gl'
 import type { MotionValue } from 'framer-motion'
-import { AmbientLight, DirectionalLight } from 'three'
 import { destinosDoMundo, ESCALA } from '../data/destinos-mundo'
 import { ABERTURA, camera, cenaCobre, inicioDo, ORIGEM, PARADAS, roteiroAtual, rotasAcesas } from '../lib/jornada'
 
-// A Terra (toda acesa, textura de dia). Quem move a câmera é a ROLAGEM (`u` = telas roladas,
+// A Terra à noite. Quem move a câmera é a ROLAGEM (`u` = telas roladas,
 // ver lib/jornada.ts).
 //  • Parada no topo: a Terra gira inteira com os destinos mais procurados do
 //    mundo acesos ("a gente te leva pra qualquer lugar").
@@ -172,14 +171,6 @@ export default function Globo({ u, onPronto }: { u: MotionValue<number>; onPront
     // Celular: menos pixels pra desenhar = giro mais liso.
     const toque = window.matchMedia('(pointer: coarse)').matches
     g.renderer().setPixelRatio(Math.min(window.devicePixelRatio, toque ? 1 : 1.5))
-    // Terra TODA acesa: luz ambiente forte + uma luz "presa" na câmera, então
-    // o lado que a pessoa está vendo nunca fica na sombra (sem dia/noite).
-    const frente = new DirectionalLight(0xffffff, 0.9)
-    frente.position.set(0, 0, 1)
-    const cam = g.camera()
-    cam.add(frente)
-    g.scene().add(cam)
-    g.lights([new AmbientLight(0xffffff, 2.2)])
     const c = g.controls()
     c.enableZoom = false
     c.enableRotate = false
@@ -196,7 +187,7 @@ export default function Globo({ u, onPronto }: { u: MotionValue<number>; onPront
           width={tam.w}
           height={tam.h}
           backgroundColor="rgba(0,0,0,0)"
-          globeImageUrl={`${B}assets/globo/terra-dia.jpg`}
+          globeImageUrl={`${B}assets/globo/terra-noite.jpg`}
           bumpImageUrl={`${B}assets/globo/relevo.jpg`}
           showAtmosphere
           atmosphereColor="#9fd8ff"

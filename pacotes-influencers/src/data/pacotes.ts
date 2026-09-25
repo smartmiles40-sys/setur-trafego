@@ -1,6 +1,7 @@
 // ────────────────────────────────────────────────────────────────────
 // PONTO ÚNICO DE EDIÇÃO — os 5 pacotes da LP dos influenciadores.
-// Preços, dias e roteiro copiados das LPs oficiais de cada pacote
+// Preços em PARCELA (10x sem juros, como nas LPs oficiais — o total fica no
+// comentário de cada um). Preços, dias e roteiro copiados das LPs oficiais de cada pacote
 // (Setur Unificado/pacotes/<slug>/src/data/expedicao.ts). Mudou o preço
 // lá? Muda aqui também.
 // ────────────────────────────────────────────────────────────────────
@@ -53,7 +54,7 @@ export const pacotes: Pacote[] = [
     vibe: '#semfiltro',
     frase: 'Lagoas que viram espelho, gêiser ao amanhecer e o céu mais limpo do planeta.',
     destaques: ['Valle de la Luna', 'Piedras Rojas', 'Geysers del Tatio'],
-    preco: { prefixo: 'a partir de', valor: '5.914', unidade: 'por pessoa · acomodação dupla' },
+    preco: { prefixo: 'a partir de', parcelas: '10x', valor: '591', sufixo: 'sem juros', unidade: 'por pessoa · acomodação dupla' }, // total R$ 5.914
     foto: { src: IMG('pacotes/atacama/hero.jpg'), alt: 'Paisagem do Deserto do Atacama' },
     cor: '#FF7A6B',
   },
@@ -65,7 +66,7 @@ export const pacotes: Pacote[] = [
     vibe: '#fimdomundo',
     frase: 'Torres del Paine, lago azul-turquesa e navegação até as geleiras.',
     destaques: ['Torres del Paine', 'Navegação às geleiras', 'Estepe patagônica'],
-    preco: { prefixo: 'a partir de', valor: '8.251', unidade: 'por pessoa · acomodação dupla' },
+    preco: { prefixo: 'a partir de', parcelas: '10x', valor: '825', sufixo: 'sem juros', unidade: 'por pessoa · acomodação dupla' }, // total R$ 8.251
     foto: { src: IMG('pacotes/patagonia-chilena/hero.jpg'), alt: 'Torres del Paine, na Patagônia Chilena' },
     cor: '#7FB2FF',
   },
@@ -77,7 +78,7 @@ export const pacotes: Pacote[] = [
     vibe: '#modoaventura',
     frase: 'Perito Moreno, catamarã entre geleiras e Ushuaia, a cidade do fim do mundo.',
     destaques: ['Glaciar Perito Moreno', 'Torres del Paine', 'Ushuaia'],
-    preco: { prefixo: 'a partir de', valor: '16.881', unidade: 'por pessoa · acomodação dupla' },
+    preco: { prefixo: 'a partir de', parcelas: '10x', valor: '1.688', sufixo: 'sem juros', unidade: 'por pessoa · acomodação dupla' }, // total R$ 16.881
     foto: { src: IMG('pacotes/patagonia-austral/hero.jpg'), alt: 'Geleira na Patagônia' },
     cor: '#B9A6FF',
   },

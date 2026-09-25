@@ -25,10 +25,23 @@
 
     <link rel="icon" type="image/png" href="/Logo-circular.png" />
     <link rel="apple-touch-icon" href="/Logo-circular.png" />
-    <link rel="preload" as="image" href="/assets/globo/terra-noite.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/globo/terra-leve.jpg" fetchpriority="high" />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- A abertura já vem pronta no HTML (aparece antes do JavaScript carregar).
+         O React substitui tudo isso pela versão animada com o mesmo visual. -->
+    <div id="root">
+      <main class="bg-ink font-sans text-off-white antialiased">
+        <section class="relative h-[100svh] overflow-hidden bg-[#020a0b]">
+          <div class="ceu-estrelado absolute inset-0"></div>
+          <div class="terra-leve" aria-hidden="true"><div class="terra-leve-mapa" style="animation-delay:-3.57s"></div></div>
+          <img src="/Logo-circular.png" alt="Se Tu For, Eu Vou! Viagens" width="80" height="80" class="absolute left-1/2 top-[5svh] z-10 h-16 w-16 -translate-x-1/2 rounded-full shadow-2xl md:h-20 md:w-20" />
+          <div class="pointer-events-none absolute inset-x-0 top-[18svh] z-10 px-6 text-center md:top-[16svh]">
+            <p class="font-display text-[2.4rem] italic leading-none text-off-white md:text-7xl">Pensou em viajar?</p>
+          </div>
+        </section>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

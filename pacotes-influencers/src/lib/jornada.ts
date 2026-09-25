@@ -4,7 +4,7 @@
 // (1 = uma altura de tela rolada). A Terra fica sempre ao fundo; cada
 // roteiro entra por cima dela com um clarão e sai do mesmo jeito.
 //
-//   0 ─ 3        abertura: "Pensou em viajar?" → rotas saem do Brasil
+//   0 ─ 2        abertura: "Pensou em viajar?" → as 5 rotas acendem juntas
 //   depois, pra cada roteiro (ROTEIRO telas cada):
 //     voo        a câmera viaja até o destino
 //     mergulho   desce até o chão, clarão, a foto toma a tela
@@ -14,7 +14,7 @@
 
 import { pacotes } from '../data/pacotes'
 
-export const ABERTURA = 3
+export const ABERTURA = 2
 export const ROTEIRO = 2.4
 export const VOO = 0.45 // fim do voo (a partir do início do roteiro)
 export const CHAO = 0.72 // câmera chega no chão
@@ -31,6 +31,10 @@ export const PARADAS = [
   { slug: 'patagonia-chilena', lat: -50.94, lng: -72.99, rotulo: 'Torres del Paine', coord: '50.9° S · 72.9° O' },
   { slug: 'patagonia-austral', lat: -54.8, lng: -68.3, rotulo: 'Ushuaia', coord: '54.8° S · 68.3° O' },
 ].map((p) => ({ ...p, pacote: pacotes.find((x) => x.slug === p.slug)! }))
+
+// Quantas telas de rolagem de verdade vale cada "tela" da história.
+// Menor = viagem mais curta/rápida (tudo encolhe junto, na mesma proporção).
+export const TELAS_POR_UNIDADE = 0.6
 
 export const inicioDo = (i: number) => ABERTURA + i * ROTEIRO
 const ULTIMO = PARADAS.length - 1
@@ -56,9 +60,9 @@ const RASO = 0.12 // altitude no "chão"
 const CHAVES: Chave[] = (() => {
   const k: Chave[] = [
     [0, 8, -22, 2.9],
-    [0.66, -12, -46, 2.2],
-    [1.2, -16, -56, 1.95],
-    [2.9, -14, -64, 1.95],
+    [0.5, -12, -46, 2.2],
+    [0.85, -16, -56, 1.95],
+    [1.9, -14, -64, 1.95],
   ]
   PARADAS.forEach((p, i) => {
     const s = inicioDo(i)
@@ -121,7 +125,8 @@ const suave = (t: number) => t * t * (3 - 2 * t)
 
 // Parada no topo, a Terra gira inteira (mostrando as expedições pelo mundo).
 // Quando a pessoa começa a rolar, o giro se funde no caminho da câmera.
-const GIRO_GRAUS_POR_SEG = 14
+export const GIRO_GRAUS_POR_SEG = 14
+export const GIRO_LNG_INICIAL = -40
 export const FIM_DO_GIRO = 0.7
 
 // O quanto a pessoa girou a Terra com o dedo (somado ao giro automático).
@@ -132,7 +137,7 @@ export function camera(u: number, retrato = false, agora = performance.now()) {
   const lng = curva(u, DIM[1])
   let alt = Math.max(0.08, curva(u, DIM[2]))
   const w = suave(Math.min(1, Math.max(0, u / FIM_DO_GIRO)))
-  const giroLng = ((((agora / 1000) * GIRO_GRAUS_POR_SEG - 40 + arrasto.lng) % 360) + 540) % 360 - 180
+  const giroLng = ((((agora / 1000) * GIRO_GRAUS_POR_SEG + GIRO_LNG_INICIAL + arrasto.lng) % 360) + 540) % 360 - 180
   const giroLat = 18 + arrasto.lat
   const dif = ((((lng - giroLng) % 360) + 540) % 360) - 180 // menor caminho
   const pov = { lat: giroLat + (lat - giroLat) * w, lng: giroLng + dif * w, altitude: 2.7 + (alt - 2.7) * w }
@@ -142,8 +147,10 @@ export function camera(u: number, retrato = false, agora = performance.now()) {
   return pov
 }
 
-// Quantas rotas saindo de São Paulo já acenderam na abertura.
-export const rotasAcesas = (u: number) => Math.max(0, Math.min(PARADAS.length, Math.floor((u - 1.1) / 0.25) + 1))
+// As rotas saindo de São Paulo pros 5 pacotes acendem TODAS JUNTAS
+// (a gerência pediu: a pessoa tem que chegar rápido nos roteiros).
+export const ROTAS_ACENDEM = 0.8
+export const rotasAcesas = (u: number) => (u >= ROTAS_ACENDEM ? PARADAS.length : 0)
 
 // A cena do roteiro i cobre a tela inteira (dá pra pausar a Terra).
 export const cenaCobre = (u: number) =>

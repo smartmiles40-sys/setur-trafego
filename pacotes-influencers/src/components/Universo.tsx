@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import type { MotionValue } from 'framer-motion'
 import { camera, cenaCobre } from '../lib/jornada'
+import { jaInteragiu } from '../lib/interacao'
 import { useTela } from '../lib/useTela'
 
 // O espaço atrás da Terra: nebulosas, a Via Láctea e 3 camadas de estrelas
@@ -67,7 +68,7 @@ function pintarNebulosa(w: number, h: number) {
 }
 
 export function Universo({ u }: { u: MotionValue<number> }) {
-  const cache = useRef({ neb: null as HTMLCanvasElement | null, estrelas: [] as Estrela[], w: 0, h: 0 })
+  const cache = useRef({ neb: null as HTMLCanvasElement | null, estrelas: [] as Estrela[], w: 0, h: 0, desenhou: false })
 
   const ref = useTela(
     (ctx, w, h, agora) => {
@@ -120,8 +121,11 @@ export function Universo({ u }: { u: MotionValue<number> }) {
         }
       }
       ctx.globalAlpha = 1
+      c.desenhou = true
     },
-    () => !cenaCobre(u.get()),
+    // Antes da 1ª interação: desenha UM quadro e para (economiza o celular).
+    () => (jaInteragiu() || !cache.current.desenhou) && !cenaCobre(u.get()),
+    true,
   )
 
   return <canvas ref={ref} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full bg-[#020a0b]" />

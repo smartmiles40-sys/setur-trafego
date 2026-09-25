@@ -54,8 +54,9 @@
   pointer-events: none; transition: opacity 0.35s ease;
 }
 .rotulo-globo i { width: 8px; height: 8px; border-radius: 999px; display: block; }
-.rotulo-expedicao { padding: 3px 8px 3px 5px; font-size: 11px; background: rgba(6, 27, 29, 0.6); }
-.rotulo-expedicao i { width: 6px; height: 6px; }
+.rotulo-mundo { padding: 3px 8px 3px 5px; font-size: 11px; background: rgba(6, 27, 29, 0.6); }
+.rotulo-mundo i { width: 6px; height: 6px; }
+@media (max-width: 767px) { .rotulo-secundario { display: none; } }
 
 /* Sem barra de rolagem: quem mostra onde a pessoa está são os pontinhos das paradas. */
 html { scrollbar-width: none; }
@@ -86,3 +87,26 @@ html::-webkit-scrollbar { display: none; }
 }
 .sombra-nuvem-2 { top: 40%; width: 90%; animation-duration: 23s; animation-delay: -9s; }
 @keyframes sombraNuvem { from { transform: translateX(110%); } to { transform: translateX(-130%); } }
+
+/* Terra "leve" da abertura: imagem girando dentro de um círculo (só CSS,
+   animação em transform = barata pro celular). Fica na tela até a Terra 3D
+   carregar, que só liga quando a pessoa interage. Mesmo tamanho/lugar da 3D. */
+.terra-leve {
+  position: absolute; left: 50%; top: 50%;
+  width: min(60svh, 86vw); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%; overflow: hidden;
+  box-shadow: 0 0 70px 6px rgba(159, 216, 255, 0.28);
+}
+.terra-leve-mapa {
+  position: absolute; inset: 0 auto 0 0; width: 400%;
+  background: url('/assets/globo/terra-leve.jpg') repeat-x left 40% / 50% 118%; /* corta um pouco dos polos */
+  animation: terraGira 25.714s linear infinite; /* = 360° / GIRO_GRAUS_POR_SEG */
+}
+.terra-leve::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.16), transparent 42%),
+    radial-gradient(circle at 50% 50%, transparent 52%, rgba(2, 10, 20, 0.5) 74%, rgba(2, 10, 20, 0.9) 100%);
+}
+@keyframes terraGira { to { transform: translateX(-50%); } }

@@ -94,7 +94,7 @@ export function Rodape() {
           </a>
         </div>
       </div>
-      <p className="mx-auto mt-8 max-w-6xl font-sans text-[10px] leading-relaxed text-off-white/40">
+      <p className="mx-auto mt-8 max-w-6xl font-sans text-[10px] leading-relaxed text-off-white/60">
         Fotos: Glaciar Perito Moreno por Luca Galuzzi (CC BY-SA 2.5) e Cuernos del Paine (domínio público), via Wikimedia Commons. Terra:
         NASA.
       </p>

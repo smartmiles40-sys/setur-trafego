@@ -1,8 +1,9 @@
 import { lazy, Suspense, useRef, useState } from 'react'
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { arrasto, CHAO, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTEIRO, SAIDA, TOTAL, VOO } from '../lib/jornada'
+import { ABERTURA, arrasto, GIRO_GRAUS_POR_SEG, GIRO_LNG_INICIAL, CHAO, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTAS_ACENDEM, ROTEIRO, SAIDA, TELAS_POR_UNIDADE, TOTAL, VOO } from '../lib/jornada'
 import { Universo } from './Universo'
+import { useInteragiu } from '../lib/interacao'
 import { CenaRoteiro } from './cenas/CenaRoteiro'
 import { TEMAS } from './cenas/temas'
 
@@ -20,27 +21,25 @@ function useFaixa(u: MotionValue<number>, entra: [number, number], sai?: [number
 }
 
 function Abertura({ u }: { u: MotionValue<number> }) {
-  const logo = useFaixa(u, [-1, 0], [0.3, 0.55])
-  const pensou = useFaixa(u, [-1, 0], [0.6, 0.8])
-  const seTuFor = useFaixa(u, [0.15, 0.36], [0.66, 0.87])
-  const seTuForY = useTransform(u, [0.15, 0.36], [40, 0])
+  const logo = useFaixa(u, [-1, 0], [0.3, 0.5])
+  const pensou = useFaixa(u, [-1, 0], [0.55, 0.72])
+  const seTuFor = useFaixa(u, [0.12, 0.3], [0.6, 0.78])
+  const seTuForY = useTransform(u, [0.12, 0.3], [40, 0])
   const dica = useFaixa(u, [-1, 0], [0.06, 0.18])
-  const mundo = useFaixa(u, [-1, 0], [0.2, 0.45])
-  const cinco = useFaixa(u, [1.0, 1.2], [2.6, 2.85])
+  const cinco = useFaixa(u, [ROTAS_ACENDEM, ROTAS_ACENDEM + 0.15], [ABERTURA - 0.3, ABERTURA - 0.1])
   return (
     <>
       <motion.img
         style={{ opacity: logo }}
         src={`${B}Logo-circular.png`}
         alt="Se Tu For, Eu Vou! Viagens"
+        width={80}
+        height={80}
         className="absolute left-1/2 top-[5svh] z-10 h-16 w-16 -translate-x-1/2 rounded-full shadow-2xl md:h-20 md:w-20"
       />
       <div className="pointer-events-none absolute inset-x-0 top-[18svh] z-10 px-6 text-center md:top-[16svh]">
         <motion.p
           style={{ opacity: pensou }}
-          initial={{ y: 16, filter: 'blur(8px)' }}
-          animate={{ y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[2.4rem] italic leading-none text-off-white md:text-7xl"
         >
           Pensou em viajar?
@@ -56,20 +55,13 @@ function Abertura({ u }: { u: MotionValue<number> }) {
         style={{ opacity: cinco }}
         className="pointer-events-none absolute inset-x-0 bottom-[9svh] z-10 px-6 text-center md:bottom-auto md:left-[6vw] md:right-auto md:top-1/2 md:-translate-y-1/2 md:text-left"
       >
-        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-lime">Saindo do Brasil</p>
+        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-lime">Qualquer destino pelo mundo.</p>
         <h2 className="mt-2 font-display text-[2.6rem] leading-[0.95] text-off-white md:text-7xl">
           5 destinos.
           <br />
           <em className="text-lime">Qual é o seu?</em>
         </h2>
       </motion.div>
-      <motion.p
-        style={{ opacity: mundo }}
-        className="pointer-events-none absolute inset-x-0 bottom-[13svh] z-10 flex items-center justify-center gap-2 px-6 font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-off-white/80"
-      >
-        <span className="h-2 w-2 rounded-full bg-lime shadow-[0_0_12px_#D7F264]" />
-        Nossos destinos pelo mundo
-      </motion.p>
       <motion.a
         href="#jornada"
         style={{ opacity: dica }}
@@ -140,11 +132,11 @@ function Voo({ u, i }: { u: MotionValue<number>; i: number }) {
   const opacity = useFaixa(u, [s + 0.02, s + 0.14], [s + VOO - 0.05, s + VOO + 0.1])
   return (
     <motion.div style={{ opacity }} className="pointer-events-none absolute inset-x-0 top-[13svh] z-20 px-6 text-center">
-      <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-off-white/75">
+      <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-off-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
         {i === 0 ? 'Primeira parada' : `Parada ${String(i + 1).padStart(2, '0')} de ${String(PARADAS.length).padStart(2, '0')}`}
       </p>
       <p className="mt-2 font-display text-5xl text-off-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)] md:text-7xl">{p.pacote.nome}</p>
-      <p className="mt-2 font-sans text-xs tracking-[0.2em] text-off-white/65">{p.coord}</p>
+      <p className="mt-2 font-sans text-xs tracking-[0.2em] text-off-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">{p.coord}</p>
     </motion.div>
   )
 }
@@ -177,7 +169,7 @@ function Trajeto({ u, secao }: { u: MotionValue<number>; secao: React.RefObject<
     const r = roteiroAtual(v)
     if (r !== atual) setAtual(r)
   })
-  const opacity = useTransform(u, [2.7, 3.0], [0, 1])
+  const opacity = useTransform(u, [ABERTURA - 0.3, ABERTURA], [0, 1])
   const pular = (i: number) => {
     const el = secao.current
     if (!el) return
@@ -223,21 +215,47 @@ function Trajeto({ u, secao }: { u: MotionValue<number>; secao: React.RefObject<
 
 type Props = { onQuero: (pacote?: string, origem?: string) => void; onVerRoteiro: (slug: string) => void }
 
+// Terra leve (CSS). Gira na MESMA velocidade e no mesmo ponto da Terra 3D
+// (a textura começa em -180° de longitude e o centro do círculo mostra 180°
+// de largura), pra troca pela 3D não dar "pulo" de continente.
+const VOLTA_S = 360 / GIRO_GRAUS_POR_SEG
+const ATRASO_INICIAL_S = ((GIRO_LNG_INICIAL + 90) / 360) * VOLTA_S
+
+function TerraLeve() {
+  const [fase] = useState(() => `-${((performance.now() / 1000 + ATRASO_INICIAL_S) % VOLTA_S).toFixed(2)}s`)
+  return (
+    <motion.div key="terra-leve" exit={{ opacity: 0 }} transition={{ duration: 0.9 }} className="terra-leve" aria-hidden>
+      <div className="terra-leve-mapa" style={{ animationDelay: fase, animationDuration: `${VOLTA_S}s` }} />
+    </motion.div>
+  )
+}
+
 export function Jornada({ onQuero, onVerRoteiro }: Props) {
   const secao = useRef<HTMLElement>(null)
+  // A Terra 3D só carrega depois da 1ª interação (toque, rolagem, mouse).
+  const interagiu = useInteragiu()
+  const [globoPronto, setGloboPronto] = useState(false)
   const { scrollYProgress } = useScroll({ target: secao, offset: ['start start', 'end end'] })
-  const suave = useSpring(scrollYProgress, { stiffness: 70, damping: 22, mass: 0.6, restDelta: 0.00001 })
+  const suave = useSpring(scrollYProgress, { stiffness: 150, damping: 32, mass: 0.5, restDelta: 0.00001 })
   const u = useTransform(suave, (p) => p * TOTAL)
 
   return (
-    <section ref={secao} id="jornada" className="relative bg-[#020a0b]" style={{ height: `${(TOTAL + 1) * 100}svh` }}>
+    <section ref={secao} id="jornada" className="relative bg-[#020a0b]" style={{ height: `${(TOTAL * TELAS_POR_UNIDADE + 1) * 100}svh` }}>
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <Universo u={u} />
-        <Suspense fallback={null}>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6 }} className="absolute inset-0 isolate z-0">
-            <Globo u={u} />
-          </motion.div>
-        </Suspense>
+        <AnimatePresence>{!globoPronto && <TerraLeve />}</AnimatePresence>
+        {interagiu && (
+          <Suspense fallback={null}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: globoPronto ? 1 : 0 }}
+              transition={{ duration: 0.9 }}
+              className="absolute inset-0 isolate z-0"
+            >
+              <Globo u={u} onPronto={() => setGloboPronto(true)} />
+            </motion.div>
+          </Suspense>
+        )}
         {/* Escurece as bordas pra o texto respirar em cima da Terra. */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,10,11,0.6)_100%)]" />
 

@@ -80,7 +80,7 @@ export const liveTurquia: ConfigLive = {
      * ✅ Definida pelo Bruno em 03/09/2026: terça-feira, 15 de setembro de 2026, 20h00 (BRT).
      */
     // 🔁 Remarcada em 21/09/2026 para domingo, 27 de setembro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-09-27T20:00:00-03:00',
+    inicioISO: '2026-09-28T19:30:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite

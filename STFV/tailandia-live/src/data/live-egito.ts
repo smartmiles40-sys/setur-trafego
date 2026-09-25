@@ -24,13 +24,13 @@ import type { ConfigLive } from './live-japao'
 /**
  * O Egito tem DUAS lives (Bruno, 21/09/2026). A página vale a próxima que
  * ainda não terminou (início + duracaoMinutos), decidido quando a página abre:
- * até 23/09 às 13h30 mostra a de 23/09 ao meio-dia; depois, a de 29/09 às 20h.
+ * até 23/09 às 13h30 mostra a de 23/09 ao meio-dia; depois, a de 27/09 (domingo) às 20h.
  * Passada a última, fica na última. Os mesmos pares estão em `sessoes` no
  * mapa `LIVES` de public/entrar.html — trocou aqui, troque lá.
  */
 const SESSOES_EGITO = [
   { inicioISO: '2026-09-23T12:00:00-03:00', meetUrl: 'https://meet.google.com/rzh-huak-zrw' },
-  { inicioISO: '2026-09-29T20:00:00-03:00', meetUrl: 'https://meet.google.com/arw-qozv-pop' },
+  { inicioISO: '2026-09-27T20:00:00-03:00', meetUrl: 'https://meet.google.com/arw-qozv-pop' },
 ]
 const DURACAO_EGITO_MIN = 90
 const SESSAO_EGITO =

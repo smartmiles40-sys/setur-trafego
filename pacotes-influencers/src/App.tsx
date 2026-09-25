@@ -1,23 +1,29 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import { Hero } from './components/Hero'
-import { Destinos } from './components/Destinos'
+import { Jornada } from './components/Jornada'
+import { Convite } from './components/Convite'
 import { ChamadaFinal, ComoFunciona, Rodape } from './components/Fechamento'
 import { LeadSheet } from './components/LeadSheet'
+import { RoteiroModal } from './components/RoteiroModal'
 import { influenciadorAtual, nomeDoInfluenciador, evento } from './lib/origem'
 
 export default function App() {
   const [sheet, setSheet] = useState<{ aberto: boolean; pacote?: string; origem?: string }>({ aberto: false })
   const [mostrarBarra, setMostrarBarra] = useState(false)
-  const [convite] = useState(() => nomeDoInfluenciador(influenciadorAtual()))
+  const [roteiro, setRoteiro] = useState<string | null>(null)
+  const fecharRoteiro = useCallback(() => setRoteiro(null), [])
+  const [convite] = useState(() => {
+    const slug = influenciadorAtual()
+    return nomeDoInfluenciador(slug) ?? (slug ? `@${slug}` : null)
+  })
 
   const quero = useCallback((pacote?: string, origem?: string) => setSheet({ aberto: true, pacote, origem }), [])
   const fechar = useCallback(() => setSheet((s) => ({ ...s, aberto: false })), [])
 
   useEffect(() => {
     evento('page_view_influ')
-    const alvo = document.getElementById('destinos')
+    const alvo = document.getElementById('depois-da-viagem')
     if (!alvo) return
     const io = new IntersectionObserver(([e]) => setMostrarBarra(e.isIntersecting || e.boundingClientRect.top < 0), {
       rootMargin: '0px 0px -40% 0px',
@@ -28,14 +34,15 @@ export default function App() {
 
   return (
     <main className="bg-ink font-sans text-off-white antialiased">
+      <Convite nome={convite} />
       {convite && (
-        <div className="fixed left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-lime px-3 py-1 font-sans text-xs font-bold text-ink shadow-lg md:left-6 md:translate-x-0">
+        <div className="fixed right-3 top-3 z-40 rounded-full bg-lime px-3 py-1 font-sans text-xs font-bold text-ink shadow-lg md:right-6 md:top-6">
           convite de {convite}
         </div>
       )}
 
-      <Hero />
-      <Destinos />
+      <Jornada onQuero={quero} onVerRoteiro={setRoteiro} />
+      <div id="depois-da-viagem" />
       <ComoFunciona />
       <ChamadaFinal onQuero={quero} />
       <Rodape />
@@ -56,6 +63,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      <RoteiroModal slug={roteiro} onFechar={fecharRoteiro} onQuero={quero} />
       <LeadSheet aberto={sheet.aberto} pacoteInicial={sheet.pacote} origemClique={sheet.origem} onFechar={fechar} />
     </main>
   )

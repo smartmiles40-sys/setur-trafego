@@ -1,9 +1,8 @@
 import { lazy, Suspense, useRef, useState } from 'react'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
+import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { ABERTURA, arrasto, GIRO_GRAUS_POR_SEG, GIRO_LNG_INICIAL, CHAO, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTAS_ACENDEM, ROTEIRO, SAIDA, TELAS_POR_UNIDADE, TOTAL, VOO } from '../lib/jornada'
+import { ABERTURA, arrasto, CHAO, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTAS_ACENDEM, ROTEIRO, SAIDA, TELAS_POR_UNIDADE, TOTAL, VOO } from '../lib/jornada'
 import { Universo } from './Universo'
-import { useInteragiu } from '../lib/interacao'
 import { CenaRoteiro } from './cenas/CenaRoteiro'
 import { TEMAS } from './cenas/temas'
 
@@ -215,25 +214,8 @@ function Trajeto({ u, secao }: { u: MotionValue<number>; secao: React.RefObject<
 
 type Props = { onQuero: (pacote?: string, origem?: string) => void; onVerRoteiro: (slug: string) => void }
 
-// Terra leve (CSS). Gira na MESMA velocidade e no mesmo ponto da Terra 3D
-// (a textura começa em -180° de longitude e o centro do círculo mostra 180°
-// de largura), pra troca pela 3D não dar "pulo" de continente.
-const VOLTA_S = 360 / GIRO_GRAUS_POR_SEG
-const ATRASO_INICIAL_S = ((GIRO_LNG_INICIAL + 90) / 360) * VOLTA_S
-
-function TerraLeve() {
-  const [fase] = useState(() => `-${((performance.now() / 1000 + ATRASO_INICIAL_S) % VOLTA_S).toFixed(2)}s`)
-  return (
-    <motion.div key="terra-leve" exit={{ opacity: 0 }} transition={{ duration: 0.9 }} className="terra-leve" aria-hidden>
-      <div className="terra-leve-mapa" style={{ animationDelay: fase, animationDuration: `${VOLTA_S}s` }} />
-    </motion.div>
-  )
-}
-
 export function Jornada({ onQuero, onVerRoteiro }: Props) {
   const secao = useRef<HTMLElement>(null)
-  // A Terra 3D só carrega depois da 1ª interação (toque, rolagem, mouse).
-  const interagiu = useInteragiu()
   const [globoPronto, setGloboPronto] = useState(false)
   const { scrollYProgress } = useScroll({ target: secao, offset: ['start start', 'end end'] })
   const suave = useSpring(scrollYProgress, { stiffness: 150, damping: 32, mass: 0.5, restDelta: 0.00001 })
@@ -243,19 +225,16 @@ export function Jornada({ onQuero, onVerRoteiro }: Props) {
     <section ref={secao} id="jornada" className="relative bg-[#020a0b]" style={{ height: `${(TOTAL * TELAS_POR_UNIDADE + 1) * 100}svh` }}>
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <Universo u={u} />
-        <AnimatePresence>{!globoPronto && <TerraLeve />}</AnimatePresence>
-        {interagiu && (
-          <Suspense fallback={null}>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: globoPronto ? 1 : 0 }}
-              transition={{ duration: 0.9 }}
-              className="absolute inset-0 isolate z-0"
-            >
-              <Globo u={u} onPronto={() => setGloboPronto(true)} />
-            </motion.div>
-          </Suspense>
-        )}
+        <Suspense fallback={null}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: globoPronto ? 1 : 0 }}
+            transition={{ duration: 0.9 }}
+            className="absolute inset-0 isolate z-0"
+          >
+            <Globo u={u} onPronto={() => setGloboPronto(true)} />
+          </motion.div>
+        </Suspense>
         {/* Escurece as bordas pra o texto respirar em cima da Terra. */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,10,11,0.6)_100%)]" />
 

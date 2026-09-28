@@ -91,7 +91,7 @@ export const liveTailandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/tfx-jthu-koy',
+    meetUrl: 'https://meet.google.com/mtg-gwja-fss',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

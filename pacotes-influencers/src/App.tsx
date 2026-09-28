@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Jornada } from './components/Jornada'
 import { Convite } from './components/Convite'
-import { ComoFunciona, Depoimentos, Rodape, SobreNos } from './components/Fechamento'
+import { Depoimentos, RedesSociais, Rodape, SobreNos } from './components/Fechamento'
 import { LeadSheet } from './components/LeadSheet'
 import { RoteiroModal } from './components/RoteiroModal'
 import { influenciadorAtual, nomeDoInfluenciador, evento } from './lib/origem'
@@ -44,7 +44,7 @@ export default function App() {
       <div id="depois-da-viagem" />
       <SobreNos />
       <Depoimentos onQuero={quero} />
-      <ComoFunciona />
+      <RedesSociais />
       <Rodape />
 
       <AnimatePresence>

@@ -1,19 +1,37 @@
 import { useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ArrowUpRight, Briefcase, Camera, MessageCircle, Music2, Quote, Star } from 'lucide-react'
+import type { SVGProps } from 'react'
+import { ArrowUpRight, Quote, Star } from 'lucide-react'
 
 type Props = { onQuero: (pacote?: string, origem?: string) => void }
 
-// Texto e redes copiados do portal (Setur Unificado/portal/src/data/home.ts) — mudou lá, mudar aqui.
+// Ícones de marca desenhados aqui (o lucide tirou os de marca da biblioteca).
+type Icone = (p: SVGProps<SVGSVGElement>) => React.JSX.Element
+const Instagram: Icone = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden {...p}>
+    <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+    <circle cx="12" cy="12" r="4.2" />
+    <circle cx="17.6" cy="6.4" r="0.9" fill="currentColor" stroke="none" />
+  </svg>
+)
+const TikTok: Icone = (p) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
+    <path d="M16.6 2h-3.3v13.2a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9a6.2 6.2 0 1 0 5.3 6.2V8.6a8 8 0 0 0 4.7 1.5V6.8a4.7 4.7 0 0 1-4.7-4.8Z" />
+  </svg>
+)
+const LinkedIn: Icone = (p) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
+    <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11H3v-11Zm6.5 0h3.8v1.5h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1v5.46h-4v-4.84c0-1.16-.02-2.64-1.6-2.64-1.62 0-1.86 1.26-1.86 2.56v4.92h-4v-11Z" />
+  </svg>
+)
+
+// Redes do portal (Setur Unificado/portal/src/data/home.ts) — mudou lá, mudar aqui.
+// SEM o WhatsApp de propósito (Bruno, 28/09): contato é pelo formulário, que
+// leva pro WhatsApp do SDR da vez.
 const redes = [
-  { label: 'Instagram', href: 'https://instagram.com/setuforeuvouviagens', icone: Camera },
-  {
-    label: 'WhatsApp',
-    href: `https://wa.me/5511951251935?text=${encodeURIComponent('Quero seguir os próximos passos')}`,
-    icone: MessageCircle,
-  },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/setuforeuvouviagens/', icone: Briefcase },
-  { label: 'TikTok', href: 'https://www.tiktok.com/@setuforeuvouviagens', icone: Music2 },
+  { label: 'Instagram', usuario: '@setuforeuvouviagens', chamada: 'Bastidores, roteiros e as viagens acontecendo', href: 'https://instagram.com/setuforeuvouviagens', icone: Instagram },
+  { label: 'TikTok', usuario: '@setuforeuvouviagens', chamada: 'Os destinos em vídeo curto', href: 'https://www.tiktok.com/@setuforeuvouviagens', icone: TikTok },
+  { label: 'LinkedIn', usuario: 'Se Tu For, Eu Vou! Viagens', chamada: 'A empresa por trás das viagens', href: 'https://www.linkedin.com/company/setuforeuvouviagens/', icone: LinkedIn },
 ]
 
 export function SobreNos() {
@@ -79,36 +97,43 @@ export function SobreNos() {
   )
 }
 
-const passos = [
-  { n: '01', t: 'Escolhe o destino', d: 'Cancún, Peru, Atacama ou Patagônia. Ou deixa pra decidir com a gente.' },
-  { n: '02', t: 'A gente te chama no WhatsApp', d: 'Um especialista tira as dúvidas, vê datas e monta a viagem com você.' },
-  { n: '03', t: 'Parcela e faz a mala', d: 'Pix com desconto ou cartão parcelado. Aí é só chamar a galera.' },
-]
-
-export function ComoFunciona() {
+// No lugar do antigo "Como funciona" (Bruno, 28/09): as nossas redes.
+export function RedesSociais() {
   return (
-    <section className="bg-off-white px-4 py-20 text-ink md:px-8 md:py-28">
+    <section id="redes" className="bg-off-white px-4 py-20 text-ink md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-ink/60">Como funciona</p>
+        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-ink/60">Nossas redes</p>
         <h2 className="mt-2 max-w-2xl font-display text-[2.6rem] leading-[0.95] md:text-7xl">
-          Do feed pro <em>embarque</em> em 3 passos.
+          Segue a gente e <em>viaja junto.</em>
         </h2>
-        <ol className="mt-12 grid gap-4 md:grid-cols-3 md:gap-6">
-          {passos.map((p, i) => (
+        <ul className="mt-12 grid gap-4 md:grid-cols-3 md:gap-6">
+          {redes.map(({ label, usuario, chamada, href, icone: Icone }, i) => (
             <motion.li
-              key={p.n}
+              key={label}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-15% 0px' }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl border border-ink/10 bg-white p-6 md:p-8"
             >
-              <span className="inline-block rounded-full bg-lime px-3 py-1 font-sans text-xs font-bold">{p.n}</span>
-              <h3 className="mt-5 font-display text-3xl leading-tight">{p.t}</h3>
-              <p className="mt-2 font-sans text-[15px] leading-relaxed text-ink/70">{p.d}</p>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener"
+                className="group flex h-full items-center gap-4 rounded-3xl border border-ink/10 bg-white p-5 transition hover:border-ink md:flex-col md:items-start md:p-8"
+              >
+                <span className="flex h-14 w-14 flex-none items-center justify-center rounded-2xl bg-ink text-lime transition group-hover:scale-105">
+                  <Icone className="h-7 w-7" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-display text-2xl leading-tight md:mt-2 md:text-3xl">{label}</span>
+                  <span className="block truncate font-sans text-sm font-semibold text-ink/80">{usuario}</span>
+                  <span className="mt-1 block font-sans text-[14px] leading-snug text-ink/60">{chamada}</span>
+                </span>
+                <ArrowUpRight className="h-5 w-5 flex-none text-ink/40 transition group-hover:text-ink md:hidden" />
+              </a>
             </motion.li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
   )
@@ -297,9 +322,6 @@ export function Rodape() {
           </a>
         </div>
       </div>
-      <p className="mx-auto mt-8 max-w-6xl font-sans text-[10px] leading-relaxed text-off-white/60">
-        Imagem da Terra: NASA.
-      </p>
     </footer>
   )
 }

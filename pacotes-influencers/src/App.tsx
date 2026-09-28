@@ -13,10 +13,9 @@ export default function App() {
   const [mostrarBarra, setMostrarBarra] = useState(false)
   const [roteiro, setRoteiro] = useState<string | null>(null)
   const fecharRoteiro = useCallback(() => setRoteiro(null), [])
-  const [convite] = useState(() => {
-    const slug = influenciadorAtual()
-    return nomeDoInfluenciador(slug) ?? (slug ? `@${slug}` : null)
-  })
+  // Selo só pra influenciador cadastrado (data/influenciadores.ts): link
+  // digitado errado não vira "convite de @xyz". O lead registra o slug do mesmo jeito.
+  const [convite] = useState(() => nomeDoInfluenciador(influenciadorAtual()))
 
   const quero = useCallback((pacote?: string, origem?: string) => setSheet({ aberto: true, pacote, origem }), [])
   const fechar = useCallback(() => setSheet((s) => ({ ...s, aberto: false })), [])

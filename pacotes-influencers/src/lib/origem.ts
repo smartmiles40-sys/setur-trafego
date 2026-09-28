@@ -14,8 +14,16 @@ export const TRACK_KEYS = [
   'utm_id', 'gclid', 'fbclid', 'ttclid', 'gbraid', 'wbraid',
 ] as const
 
-const limpar = (v: string | null | undefined) =>
-  String(v || '').toLowerCase().trim().replace(/^@/, '').replace(/[^a-z0-9._-]/g, '').slice(0, 40)
+const semSinais = (s: string) => s.replace(/[._-]/g, '')
+
+// Tira acento (joãozinho → joaozinho) e, se bater com um influenciador
+// cadastrado ignorando ponto/hífen/"_", devolve o slug oficial dele.
+const limpar = (v: string | null | undefined) => {
+  const s = String(v || '')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().trim().replace(/^@/, '').replace(/[^a-z0-9._-]/g, '').slice(0, 40)
+  return influenciadores.find((i) => semSinais(i.slug) === semSinais(s))?.slug ?? s
+}
 
 function daUrl(): string {
   const params = new URLSearchParams(window.location.search)

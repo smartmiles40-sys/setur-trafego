@@ -33,8 +33,8 @@ export function Convite({ nome }: { nome: string | null }) {
             className="flex w-full max-w-sm items-center gap-3 rounded-[22px] border border-white/10 bg-white/10 p-3.5 shadow-2xl backdrop-blur-xl"
           >
             <img src={`${B}Logo-circular.png`} alt="" className="h-11 w-11 flex-none rounded-full" />
-            <div className="min-w-0 font-sans">
-              <p className="flex items-center justify-between text-[11px] text-white/55">
+            <div className="min-w-0 flex-1 font-sans">
+              <p className="flex items-center justify-between gap-2 text-[11px] text-white/55">
                 <span className="font-semibold uppercase tracking-wider">Se Tu For, Eu Vou!</span>
                 <span>agora</span>
               </p>

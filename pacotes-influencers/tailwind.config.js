@@ -19,6 +19,7 @@ export default {
       animation: {
         marquee: 'marquee 30s linear infinite',
         'marquee-fast': 'marquee 7s linear infinite',
+        'marquee-lento': 'marquee 60s linear infinite',
         'spin-slow': 'spin 4s linear infinite',
         'bounce-down': 'bounceDown 1.4s ease-in-out infinite',
         'ken-burns': 'kenBurns 24s ease-out forwards',

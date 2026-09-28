@@ -28,8 +28,7 @@ type Tema = {
 
 export const TEMAS: Record<string, Tema> = {
   'cancun-xcaret': {
-    foto: `${B}assets/cenas/cancun.jpg`,
-    video: `${B}assets/cenas/cancun.mp4`,
+    foto: `${B}assets/cenas/cancun-xcaret.jpg`,
     titulo: 'O mar que parece',
     destaque: 'filtro.',
     antes: 'Só que é real.',
@@ -51,8 +50,7 @@ export const TEMAS: Record<string, Tema> = {
     Efeito: EfeitoNevoa,
   },
   atacama: {
-    foto: `${B}assets/cenas/atacama.jpg`,
-    video: `${B}assets/cenas/atacama.mp4`,
+    foto: `${B}assets/cenas/atacama-deserto.jpg`,
     titulo: 'O céu mais limpo do',
     destaque: 'planeta.',
     cor: '#FFB38A',
@@ -63,8 +61,7 @@ export const TEMAS: Record<string, Tema> = {
     Efeito: EfeitoNoite,
   },
   'patagonia-chilena': {
-    foto: `${B}assets/cenas/paine.jpg`,
-    video: `${B}assets/cenas/paine.mp4`,
+    foto: `${B}assets/cenas/torres-del-paine.jpg`,
     titulo: 'Torres del Paine',
     destaque: 'ao vivo.',
     cor: '#A9CBFF',
@@ -74,8 +71,7 @@ export const TEMAS: Record<string, Tema> = {
     Efeito: EfeitoVento,
   },
   'patagonia-austral': {
-    foto: `${B}assets/cenas/moreno.jpg`,
-    video: `${B}assets/cenas/moreno.mp4`,
+    foto: `${B}assets/cenas/cuernos-del-paine.jpg`,
     titulo: 'Até onde o',
     destaque: 'mapa vai.',
     cor: '#BFE8FF',

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ArrowUpRight, Briefcase, Camera, MessageCircle, Music2 } from 'lucide-react'
+import { ArrowUpRight, Briefcase, Camera, MessageCircle, Music2, Quote, Star } from 'lucide-react'
 
 type Props = { onQuero: (pacote?: string, origem?: string) => void }
 
@@ -114,28 +114,139 @@ export function ComoFunciona() {
   )
 }
 
-export function ChamadaFinal({ onQuero }: Props) {
+// Depoimentos REAIS do Google, os mesmos das LPs de pacote do site
+// (Setur Unificado/pacotes/*/src/data/expedicao.ts) — mudou lá, mudar aqui.
+const depoimentos = [
+  {
+    nome: 'Leandro Albuquerque',
+    avatar: 'https://i.imgur.com/7qaVr2q.png',
+    tempo: '2 meses atrás',
+    texto:
+      'Recomendo de olhos fechados! Graças à Se tu for, eu vou, pudemos viver momentos inesquecíveis com todo conforto e comodidade sem precisar se preocupar com questões logísticas. Todo roteiro muito bem pensado e organizado para uma experiência única.',
+  },
+  {
+    nome: 'Michele Uehara',
+    avatar: 'https://ui-avatars.com/api/?name=Michele+Uehara&background=09282B&color=D7F264&bold=true',
+    tempo: '3 meses atrás',
+    texto:
+      'Viajar com esta agência foi uma experiência extraordinária. Desde o primeiro contato senti segurança e confiança de que tudo daria certo — e deu. O suporte foi impecável em todos os momentos.',
+  },
+  {
+    nome: 'Toninho Lima',
+    avatar: 'https://i.imgur.com/Y6YLnZJ.png',
+    tempo: '4 meses atrás',
+    texto:
+      'A agência oferece os melhores roteiros e tem uma combinação perfeita de acolhimento, cuidado e muita responsabilidade. Viajei para Tailândia em 2024, Suíça, Londres, Áustria e Escócia em 2025 — e já comprei Japão e China 2027.',
+  },
+  {
+    nome: 'Vinicius Jardim',
+    avatar: 'https://i.imgur.com/UeKQBkW.png',
+    tempo: '5 meses atrás',
+    texto:
+      'Equipe 100% especializada e disposta! Fizemos uma viagem em 4 pessoas para Roma e saiu tudo perfeito, desde o primeiro contato até na hora da viagem. Sem dúvidas, foi uma experiência perfeita. Recomendo fortemente!',
+  },
+  {
+    nome: 'Nathalia Jardim',
+    avatar: 'https://i.imgur.com/wEx5MRg.png',
+    tempo: '6 meses atrás',
+    texto:
+      '100% satisfeita na escolha da Se tu for, eu vou. Fui com mais três amigos para Itália e Vaticano. Sanaram todas as dúvidas antes do embarque, roteiro personalizado, guias incríveis e atendimento impecável. Recomendo de olhos fechados.',
+  },
+  {
+    nome: 'Roberta Oliveira',
+    avatar: 'https://i.imgur.com/9Le7PXi.png',
+    tempo: '7 meses atrás',
+    texto:
+      'Quero deixar meu agradecimento à agência pela primeira viagem organizada por vocês. Obrigada por cada mensagem de cuidado e carinho conosco. Essa agência é muito responsável e transmite muita confiança.',
+  },
+]
+
+function Estrelas({ className }: { className: string }) {
   return (
-    <section className="relative overflow-hidden bg-lime px-4 py-24 text-ink md:px-8 md:py-32">
-      <div className="pointer-events-none absolute inset-0 flex items-center overflow-hidden opacity-[0.05]">
-        <div className="flex w-max animate-marquee whitespace-nowrap font-display text-[22vw] leading-none">
-          <span className="pr-12">bora? bora? bora?</span>
-          <span className="pr-12">bora? bora? bora?</span>
+    <span className="flex items-center gap-0.5" aria-label="5 estrelas">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} className={className} />
+      ))}
+    </span>
+  )
+}
+
+function CardDepoimento({ d }: { d: (typeof depoimentos)[number] }) {
+  return (
+    <figure className="relative w-[290px] flex-shrink-0 rounded-3xl bg-off-white p-6 text-ink sm:w-[340px] md:w-[420px] md:p-7">
+      <Quote className="absolute right-5 top-5 h-8 w-8 fill-lime/40 text-lime-dark" aria-hidden />
+      <figcaption className="mb-4 flex items-center gap-3">
+        <img
+          src={d.avatar}
+          alt=""
+          loading="lazy"
+          className="h-12 w-12 rounded-full border-2 border-white bg-lime/20 object-cover shadow"
+          onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
+        />
+        <div className="min-w-0">
+          <strong className="block font-display text-lg leading-tight">{d.nome}</strong>
+          <span className="mt-0.5 flex items-center gap-1.5">
+            <Estrelas className="h-3 w-3 fill-lime-dark text-lime-dark" />
+            <span className="font-sans text-[11px] text-ink/50">{d.tempo}</span>
+          </span>
+        </div>
+      </figcaption>
+      <blockquote className="line-clamp-5 font-sans text-[14px] leading-relaxed text-ink/85 md:text-[15px]">“{d.texto}”</blockquote>
+    </figure>
+  )
+}
+
+export function Depoimentos({ onQuero }: Props) {
+  const linha1 = [...depoimentos, ...depoimentos]
+  const invertidos = [...depoimentos].reverse()
+  const linha2 = [...invertidos, ...invertidos]
+
+  return (
+    <section id="depoimentos" className="overflow-hidden bg-ink-2 py-20 md:py-28">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-15% 0px' }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto mb-12 max-w-6xl px-4 md:mb-16 md:px-8"
+      >
+        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-lime">Depoimentos</p>
+        <h2 className="mt-2 max-w-3xl font-display text-[2.6rem] leading-[0.95] md:text-6xl">
+          Algumas experiências <em className="text-lime">só fazem sentido quando são compartilhadas.</em>
+        </h2>
+        <p className="mt-6 max-w-2xl font-sans text-base leading-relaxed text-off-white/75">
+          Quem viaja com a Se Tu For, Eu Vou não fala só de lugares visitados. Fala de cuidado, segurança, tranquilidade e das
+          conexões criadas pelo caminho.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <Estrelas className="h-[18px] w-[18px] fill-lime text-lime" />
+          <span className="font-display text-3xl">5.0</span>
+          <span className="font-sans text-sm leading-tight text-off-white/60">
+            Baseado em avaliações reais
+            <br />
+            de viajantes da Se Tu For, Eu Vou
+          </span>
+        </div>
+      </motion.div>
+
+      <div className="py-2">
+        <div className="flex w-max animate-marquee-lento gap-5 pr-5 hover:[animation-play-state:paused]">
+          {linha1.map((d, i) => (
+            <CardDepoimento key={`a${i}`} d={d} />
+          ))}
         </div>
       </div>
-      <div className="relative mx-auto max-w-3xl text-center">
-        <h2 className="font-display text-[3rem] leading-[0.92] md:text-8xl">
-          Para de salvar. <em>Vai.</em>
-        </h2>
-        <p className="mx-auto mt-5 max-w-md font-sans text-base leading-relaxed text-ink/75">
-          Deixa seu WhatsApp e um especialista te chama pra montar a viagem. Sem compromisso.
-        </p>
-        <button
-          type="button"
-          onClick={() => onQuero(undefined, 'chamada_final')}
-          className="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-sans text-base font-bold text-lime transition hover:scale-[1.03] active:scale-95"
-        >
-          Quero viajar
+      <div className="mt-4 py-2">
+        <div className="flex w-max animate-marquee-lento gap-5 pr-5 [animation-direction:reverse] hover:[animation-play-state:paused]">
+          {linha2.map((d, i) => (
+            <CardDepoimento key={`b${i}`} d={d} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-12 px-4 text-center md:mt-16">
+        <button type="button" onClick={() => onQuero(undefined, 'depoimentos')} className="btn-lime px-8 py-4 text-base">
+          Quero viver isso também
           <ArrowUpRight className="h-5 w-5" />
         </button>
       </div>
@@ -187,8 +298,7 @@ export function Rodape() {
         </div>
       </div>
       <p className="mx-auto mt-8 max-w-6xl font-sans text-[10px] leading-relaxed text-off-white/60">
-        Fotos: Glaciar Perito Moreno por Luca Galuzzi (CC BY-SA 2.5) e Cuernos del Paine (domínio público), via Wikimedia Commons. Terra:
-        NASA.
+        Imagem da Terra: NASA.
       </p>
     </footer>
   )

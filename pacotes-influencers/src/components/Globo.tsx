@@ -115,7 +115,23 @@ export default function Globo({ u, onPronto }: { u: MotionValue<number>; onPront
     () => destinosDoMundo.map((e) => ({ id: e.nome, lat: e.lat, lng: e.lng, el: criarRotulo(e.nome, '#D7F264', true, e.secundario) })),
     [],
   )
-  const rotulosDestinos = useMemo<Rotulo[]>(() => destinos.map((d) => ({ id: d.slug, lat: d.lat, lng: d.lng, el: criarRotulo(d.rotulo, d.cor) })), [destinos])
+  // Os 5 pacotes são CLICÁVEIS: tocar no nome pula direto pro destino
+  // (a Jornada escuta o evento 'stfv:pular' e faz o pulo por trás do clarão).
+  const rotulosDestinos = useMemo<Rotulo[]>(
+    () =>
+      destinos.map((d, i) => {
+        const el = criarRotulo(d.rotulo, d.cor)
+        el.classList.add('rotulo-clicavel')
+        el.setAttribute('role', 'button')
+        el.setAttribute('aria-label', `Ir para ${d.pacote.nome}`)
+        el.addEventListener('click', (ev) => {
+          ev.stopPropagation()
+          window.dispatchEvent(new CustomEvent('stfv:pular', { detail: i }))
+        })
+        return { id: d.slug, lat: d.lat, lng: d.lng, el }
+      }),
+    [destinos],
+  )
 
   const arcos = useMemo(
     () => (mostraMundo ? arcosMundo : [...saidas.slice(0, acesas * 2), ...viagem.slice(0, trechos)]),

@@ -1,10 +1,11 @@
-import { lazy, Suspense, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { ABERTURA, arrasto, CHAO, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTAS_ACENDEM, ROTEIRO, SAIDA, TELAS_POR_UNIDADE, TOTAL, VOO } from '../lib/jornada'
 import { Universo } from './Universo'
 import { CenaRoteiro } from './cenas/CenaRoteiro'
 import { TEMAS } from './cenas/temas'
+import { evento } from '../lib/origem'
 
 // A página como UMA viagem num palco só (ver lib/jornada.ts): a Terra fica
 // sempre ao fundo e cada roteiro entra e sai por cima dela com um clarão.
@@ -160,55 +161,91 @@ function Clarao({ u, i }: { u: MotionValue<number>; i: number }) {
   )
 }
 
-// Onde estou na viagem: 5 pontinhos no canto, clicáveis.
-function Trajeto({ u, secao }: { u: MotionValue<number>; secao: React.RefObject<HTMLElement | null> }) {
+// Menu dos destinos no lado direito, sempre à mão (Bruno, 28/09: "o pessoal
+// reclama que demora pra chegar nos pacotes"). Na abertura aparece aberto,
+// com o recado e os nomes; dentro da viagem vira os pontinhos (nome no hover).
+// Tocar num destino PULA direto pra ele (ver `irPara` na Jornada).
+function Trajeto({ u, irPara }: { u: MotionValue<number>; irPara: (i: number) => void }) {
   const [atual, setAtual] = useState(-1)
+  const [naAbertura, setNaAbertura] = useState(true)
   useMotionValueEvent(u, 'change', (v) => {
     const r = roteiroAtual(v)
     if (r !== atual) setAtual(r)
+    const a = v < ABERTURA - 0.25
+    if (a !== naAbertura) setNaAbertura(a)
   })
-  const opacity = useTransform(u, [ABERTURA - 0.3, ABERTURA], [0, 1])
-  const pular = (i: number) => {
-    const el = secao.current
-    if (!el) return
-    const alvo = inicioDo(i) + CHAO + 0.35
-    const rolavel = el.offsetHeight - window.innerHeight
-    window.scrollTo({ top: el.offsetTop + (alvo / TOTAL) * rolavel, behavior: 'smooth' })
-  }
   return (
-    <motion.nav
-      style={{ opacity }}
-      aria-label="Paradas da viagem"
-      className="absolute right-3 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-3 md:right-6"
-    >
-      {PARADAS.map((p, i) => (
-        <button
-          key={p.slug}
-          type="button"
-          onClick={() => pular(i)}
-          className="group flex items-center justify-end gap-2"
-          aria-label={p.pacote.nome}
-          aria-current={i === atual}
-        >
-          <span
-            className={`hidden rounded-full bg-black/40 px-2 py-0.5 font-sans text-[11px] text-white backdrop-blur transition md:block ${
-              i === atual ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-            }`}
+    <nav aria-label="Destinos" className="absolute right-2 top-1/2 z-30 flex -translate-y-1/2 flex-col items-end md:right-6">
+      <motion.p
+        initial={false}
+        animate={{ opacity: naAbertura ? 1 : 0, height: naAbertura ? 'auto' : 0 }}
+        transition={{ duration: 0.35 }}
+        className="mb-2 max-w-[8.5rem] overflow-hidden text-right font-sans text-[11px] font-semibold leading-snug text-off-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] md:max-w-[12rem] md:text-sm"
+      >
+        Clique no seu destino ou role para descobrir mais
+      </motion.p>
+      <div className={`flex flex-col items-end ${naAbertura ? 'gap-1.5' : 'gap-1'}`}>
+        {PARADAS.map((p, i) => (
+          <button
+            key={p.slug}
+            type="button"
+            onClick={() => irPara(i)}
+            className="group flex min-h-[28px] items-center justify-end gap-2 pl-2"
+            aria-label={`Ir para ${p.pacote.nome}`}
+            aria-current={i === atual}
           >
-            {p.pacote.nome}
-          </span>
-          <span
-            className="block rounded-full border border-white/60 transition-all duration-500"
-            style={{
-              width: i === atual ? 10 : 7,
-              height: i === atual ? 22 : 7,
-              background: i <= atual ? p.pacote.cor : 'transparent',
-            }}
-          />
-        </button>
-      ))}
-    </motion.nav>
+            <span
+              className={`whitespace-nowrap rounded-full border px-2.5 py-1 font-sans text-[11px] font-semibold text-white backdrop-blur transition md:text-xs ${
+                naAbertura
+                  ? 'border-white/25 bg-black/45 opacity-100 hover:border-lime'
+                  : `border-transparent bg-black/40 md:block ${i === atual ? 'hidden opacity-100' : 'hidden opacity-0 group-hover:opacity-100'}`
+              }`}
+            >
+              {p.pacote.nome}
+            </span>
+            <span
+              className="block flex-none rounded-full border border-white/60 transition-all duration-500"
+              style={{
+                width: i === atual ? 10 : 8,
+                height: i === atual ? 22 : 8,
+                background: naAbertura || i <= atual ? p.pacote.cor : 'transparent',
+              }}
+            />
+          </button>
+        ))}
+      </div>
+    </nav>
   )
+}
+
+// O "véu" do pulo: um clarão na cor do destino cobre a tela enquanto a
+// rolagem salta — ninguém vê os destinos do meio passando.
+function VeuDoPulo({ cor }: { cor: string | null }) {
+  return (
+    <motion.div
+      aria-hidden
+      initial={false}
+      animate={{ opacity: cor ? 1 : 0 }}
+      transition={{ duration: cor ? 0.28 : 0.45 }}
+      style={{
+        background: `radial-gradient(circle at center, ${cor ?? '#ffffff'} 0%, ${cor ?? '#ffffff'} 45%, rgba(255,255,255,0.9) 100%)`,
+        pointerEvents: cor ? 'auto' : 'none',
+      }}
+      className="absolute inset-0 z-[45]"
+    />
+  )
+}
+
+// Baixa a foto do destino antes de tirar o véu (no máximo 1,5 s de espera).
+function carregarFoto(src: string) {
+  return new Promise<void>((ok) => {
+    const img = new Image()
+    const fim = () => ok()
+    img.onload = fim
+    img.onerror = fim
+    setTimeout(fim, 1500)
+    img.src = src
+  })
 }
 
 type Props = { onQuero: (pacote?: string, origem?: string) => void; onVerRoteiro: (slug: string) => void }
@@ -219,6 +256,39 @@ export function Jornada({ onQuero, onVerRoteiro }: Props) {
   const { scrollYProgress } = useScroll({ target: secao, offset: ['start start', 'end end'] })
   const suave = useSpring(scrollYProgress, { stiffness: 90, damping: 30, mass: 0.6, restDelta: 0.00001 })
   const u = useTransform(suave, (p) => p * TOTAL)
+  const [veu, setVeu] = useState<string | null>(null)
+  const pulando = useRef(false)
+
+  // PULO DIRETO pra um destino: cobre com o clarão, salta a rolagem de uma vez
+  // (e a mola junto, senão a câmera "voaria" por todos os destinos do meio),
+  // espera a foto e descobre. O resto da viagem segue igual pra quem rola.
+  const irPara = useCallback(
+    async (i: number) => {
+      const el = secao.current
+      if (!el || pulando.current) return
+      pulando.current = true
+      const tema = TEMAS[PARADAS[i].slug]
+      setVeu(tema.clarao)
+      evento('destino_pulo', { destino: PARADAS[i].slug })
+      const foto = carregarFoto(tema.foto)
+      await new Promise((r) => setTimeout(r, 300))
+      const alvo = (inicioDo(i) + CHAO + 0.35) / TOTAL
+      const rolavel = el.offsetHeight - window.innerHeight
+      window.scrollTo({ top: el.offsetTop + alvo * rolavel, behavior: 'instant' })
+      suave.jump(alvo)
+      await foto
+      setVeu(null)
+      pulando.current = false
+    },
+    [suave],
+  )
+
+  // Os nomes em cima do globo avisam por evento (eles são DOM do three-globe).
+  useEffect(() => {
+    const ouvir = (e: Event) => irPara((e as CustomEvent<number>).detail)
+    window.addEventListener('stfv:pular', ouvir)
+    return () => window.removeEventListener('stfv:pular', ouvir)
+  }, [irPara])
 
   return (
     <section ref={secao} id="jornada" className="relative bg-[#020a0b]" style={{ height: `${(TOTAL * TELAS_POR_UNIDADE + 1) * 100}svh` }}>
@@ -250,7 +320,8 @@ export function Jornada({ onQuero, onVerRoteiro }: Props) {
         {PARADAS.map((p, i) => (
           <Clarao key={p.slug} u={u} i={i} />
         ))}
-        <Trajeto u={u} secao={secao} />
+        <VeuDoPulo cor={veu} />
+        <Trajeto u={u} irPara={irPara} />
       </div>
     </section>
   )

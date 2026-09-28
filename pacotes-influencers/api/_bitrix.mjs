@@ -4,8 +4,7 @@
 //  Vercel → Settings → Environment Variables:
 //    BITRIX_WEBHOOK_URL  https://<portal>.bitrix24.com.br/rest/<userId>/<token>/
 //                        (precisa de escopo CRM; NUNCA no código — o repo é público)
-//    BITRIX_SOURCE_ID    STATUS_ID da fonte "[Pacotes] - Influenciadores"
-//                        (CRM → Configurações → Listas → Fonte). Sem ela: WEB.
+//  A fonte de cada lead vem do influenciador — ver `fonteDoInfluenciador`.
 
 /** Primeira coluna REAL do funil comercial. C25:NEW é "Ajuste", NÃO "Novo lead". */
 const FUNIL = { categoryId: '25', stageId: 'C25:PREPAYMENT_INVOIC' }
@@ -93,9 +92,25 @@ function comentario(lead, reaproveitado) {
   return l.join('\n')
 }
 
+/**
+ * A FONTE do lead = o influenciador (Bruno, 28/09: "traquear tudo no Bitrix
+ * pelas fontes"). Cada um tem a sua fonte cadastrada no portal como
+ * "[Influenciadores] - <nome>", STATUS_ID `INFLU_<SLUG>`. Link de slug
+ * desconhecido (digitado errado, influenciador novo ainda sem fonte) cai em
+ * `INFLU_GERAL` — o slug que veio fica no título e no comentário do card.
+ * Influenciador novo: criar a fonte no Bitrix (INFLU_<SLUG>) e pôr o slug aqui
+ * e em src/data/influenciadores.ts.
+ */
+const FONTES_INFLU = new Set([
+  'camilatrianda', 'jessieshen', 'coutinhonc', 'allanvaz',
+  'camilaviseu', 'rafaelbaricala', 'joebrunno', 'joaozinho',
+])
+export const fonteDoInfluenciador = (slug) =>
+  FONTES_INFLU.has(slug) ? `INFLU_${slug.toUpperCase()}` : 'INFLU_GERAL'
+
 /** Contato + negócio no funil Pré-Vendas. {ok, contatoId, negocioId} ou {ok:false,...}. */
 export async function criarLeadNoBitrix(base, lead) {
-  const fonte = process.env.BITRIX_SOURCE_ID || 'WEB'
+  const fonte = fonteDoInfluenciador(lead.influenciador)
   const nome = String(lead.nome || '').trim()
 
   const jaExiste = await contatoExistente(base, lead)

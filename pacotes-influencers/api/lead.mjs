@@ -7,7 +7,6 @@
 //
 //  Vercel → Settings → Environment Variables:
 //    BITRIX_WEBHOOK_URL  (obrigatória) webhook de entrada do Bitrix com escopo CRM.
-//    BITRIX_SOURCE_ID    (recomendada) fonte "[Pacotes] - Influenciadores".
 //    WEBHOOK_URL         (opcional) cópia do JSON inteiro pra outra automação.
 //
 //  Nada disso configurado ou o Bitrix fora do ar: o lead não se perde, fica

@@ -1,15 +1,19 @@
 //  /api/lead — backend do formulário da LP dos influenciadores.
 //
 //  O formulário manda um JSON; aqui ele é conferido (allowlist, tamanho,
-//  WhatsApp com +55) e repassado INTEIRO pro webhook de automação
-//  (n8n/Bitrix), com os metadados de origem: influenciador, pacote,
-//  UTMs/click ids, URL, referrer e dispositivo.
+//  WhatsApp com +55) e vira contato + negócio no Bitrix (funil Pré-Vendas,
+//  coluna "Novo Lead"), com as respostas nos MESMOS campos das expedições —
+//  ver _bitrix.mjs. O QS puxa o card do Bitrix como puxa os das expedições.
 //
 //  Vercel → Settings → Environment Variables:
-//    WEBHOOK_URL  (obrigatória) URL do webhook que recebe o JSON.
+//    BITRIX_WEBHOOK_URL  (obrigatória) webhook de entrada do Bitrix com escopo CRM.
+//    BITRIX_SOURCE_ID    (recomendada) fonte "[Pacotes] - Influenciadores".
+//    WEBHOOK_URL         (opcional) cópia do JSON inteiro pra outra automação.
 //
-//  Sem WEBHOOK_URL o lead não se perde: fica no log da função
-//  (Vercel → Deployment → Functions → Logs), linha "[lead]".
+//  Nada disso configurado ou o Bitrix fora do ar: o lead não se perde, fica
+//  no log da função (Vercel → Deployment → Functions → Logs), linha "[lead]".
+
+import { criarLeadNoBitrix } from './_bitrix.mjs'
 
 const TRACK_KEYS = [
   'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
@@ -56,7 +60,16 @@ export default async function handler(req, res) {
     whatsapp: normalizarWhatsapp(body.whatsapp),
     pacote: slug(body.pacote),
     pacote_nome: str(body.pacote_nome, 80),
-    quando: str(body.quando, 60),
+    email: str(body.email, 120).toLowerCase().trim(),
+    instagram: str(body.instagram, 40),
+    // Respostas (vocabulário controlado pelo formulário)
+    quando: str(body.quando, 80),
+    pessoas: str(body.pessoas, 40),
+    companhia: str(body.companhia, 60),
+    cidade: str(body.cidade, 80).trim(),
+    perfil: str(body.perfil, 80),
+    investimento: str(body.investimento, 80),
+    decisao: str(body.decisao, 80),
     influenciador: slug(body.influenciador) || 'direto',
     fonte: 'LP Influenciadores',
     ...tracking(body),
@@ -90,26 +103,51 @@ export default async function handler(req, res) {
     return
   }
 
+  // Sem UTM (link do bio, story sem parâmetro): quem trouxe é o influenciador.
+  // Assim o card no Bitrix e o dashboard sabem de onde veio.
+  if (!lead.utm_source) lead.utm_source = lead.influenciador
+  if (!lead.utm_medium) lead.utm_medium = 'influenciador'
+  if (!lead.utm_campaign) lead.utm_campaign = 'lp-influenciadores'
+  if (!lead.utm_content) lead.utm_content = lead.pacote || 'sem-pacote'
+
+  // Rede de segurança: todo lead fica no log da função.
   console.log('[lead]', JSON.stringify(lead))
 
-  const webhookUrl = process.env.WEBHOOK_URL
-  if (!webhookUrl) {
-    res.status(200).json({ ok: true, lead_id: lead.lead_id, webhook: false })
-    return
+  const enviarBitrix = async () => {
+    const base = process.env.BITRIX_WEBHOOK_URL
+    if (!base) {
+      console.warn('[bitrix] BITRIX_WEBHOOK_URL ausente — lead só no log', lead.lead_id)
+      return false
+    }
+    const r = await criarLeadNoBitrix(base, lead)
+    if (r.ok) console.log('[bitrix] negocio', r.negocioId, 'contato', r.contatoId, lead.lead_id)
+    else console.error('[bitrix] falhou na etapa', r.etapa, r.erro, r.descricao, lead.lead_id)
+    return r.ok
   }
 
-  try {
-    const r = await fetch(webhookUrl, {
+  const enviarWebhook = async () => {
+    const url = process.env.WEBHOOK_URL
+    if (!url) return false
+    const r = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(lead),
       signal: AbortSignal.timeout(8000),
     })
     if (!r.ok) console.error('[lead] webhook respondeu', r.status, lead.lead_id)
-    res.status(200).json({ ok: true, lead_id: lead.lead_id, webhook: r.ok })
-  } catch (e) {
-    // O lead já está no log; responde ok pra pessoa não reenviar em loop.
-    console.error('[lead] webhook falhou', lead.lead_id, String(e))
-    res.status(200).json({ ok: true, lead_id: lead.lead_id, webhook: false })
+    return r.ok
   }
+
+  // Em paralelo: um canal nunca atrasa nem derruba o outro.
+  const [bitrix, webhook] = await Promise.allSettled([enviarBitrix(), enviarWebhook()])
+  if (bitrix.status === 'rejected') console.error('[bitrix] erro', lead.lead_id, String(bitrix.reason))
+  if (webhook.status === 'rejected') console.error('[lead] webhook falhou', lead.lead_id, String(webhook.reason))
+
+  // Sempre 200: o lead já está no log, e erro aqui só faria a pessoa reenviar em loop.
+  res.status(200).json({
+    ok: true,
+    lead_id: lead.lead_id,
+    bitrix: bitrix.status === 'fulfilled' && bitrix.value === true,
+    webhook: webhook.status === 'fulfilled' && webhook.value === true,
+  })
 }

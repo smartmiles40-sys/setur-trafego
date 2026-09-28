@@ -1,7 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { ABERTURA, arrasto, CHAO, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTAS_ACENDEM, ROTEIRO, SAIDA, TELAS_POR_UNIDADE, TOTAL, VOO } from '../lib/jornada'
+import { ABERTURA, arrasto, CENA_INI, FIM_DO_GIRO, inicioDo, PARADAS, roteiroAtual, ROTAS_ACENDEM, ROTEIRO, SAIDA, TELAS_POR_UNIDADE, TOTAL, VOO } from '../lib/jornada'
 import { Universo } from './Universo'
 import { CenaRoteiro } from './cenas/CenaRoteiro'
 import { TEMAS } from './cenas/temas'
@@ -182,7 +182,7 @@ function Trajeto({ u, irPara }: { u: MotionValue<number>; irPara: (i: number) =>
         transition={{ duration: 0.35 }}
         className="mb-2 max-w-[8.5rem] overflow-hidden text-right font-sans text-[11px] font-semibold leading-snug text-off-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] md:max-w-[12rem] md:text-sm"
       >
-        Clique no seu destino ou role para descobrir mais
+        Clique no seu destino ou role para <span className="text-lime">descobrir mais</span>
       </motion.p>
       <div className={`flex flex-col items-end ${naAbertura ? 'gap-1.5' : 'gap-1'}`}>
         {PARADAS.map((p, i) => (
@@ -272,7 +272,10 @@ export function Jornada({ onQuero, onVerRoteiro }: Props) {
       evento('destino_pulo', { destino: PARADAS[i].slug })
       const foto = carregarFoto(tema.foto)
       await new Promise((r) => setTimeout(r, 300))
-      const alvo = (inicioDo(i) + CHAO + 0.35) / TOTAL
+      // Cai com a cena INTEIRA montada (título, frase e painel do preço entram
+      // até 60% da cena; a saída começa perto de 95%) — Bruno, 28/09: "o mais
+      // pra baixo possível".
+      const alvo = (inicioDo(i) + CENA_INI + 0.8 * (ROTEIRO - SAIDA - CENA_INI)) / TOTAL
       const rolavel = el.offsetHeight - window.innerHeight
       window.scrollTo({ top: el.offsetTop + alvo * rolavel, behavior: 'instant' })
       suave.jump(alvo)

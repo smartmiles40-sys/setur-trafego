@@ -217,7 +217,7 @@ export function Jornada({ onQuero, onVerRoteiro }: Props) {
   const secao = useRef<HTMLElement>(null)
   const [globoPronto, setGloboPronto] = useState(false)
   const { scrollYProgress } = useScroll({ target: secao, offset: ['start start', 'end end'] })
-  const suave = useSpring(scrollYProgress, { stiffness: 150, damping: 32, mass: 0.5, restDelta: 0.00001 })
+  const suave = useSpring(scrollYProgress, { stiffness: 90, damping: 30, mass: 0.6, restDelta: 0.00001 })
   const u = useTransform(suave, (p) => p * TOTAL)
 
   return (

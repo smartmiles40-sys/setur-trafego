@@ -36,15 +36,17 @@ function VideoLoop({ video, foto, alt, className, style, carregar }: { video: st
     io.observe(el)
     return () => io.disconnect()
   }, [])
-  return <motion.video ref={ref} src={video} poster={foto} aria-label={alt} muted loop playsInline preload={carregar ? 'auto' : 'none'} style={style} className={className} />
+  return <motion.video ref={ref} src={video} poster={carregar ? foto : undefined} aria-label={alt} muted loop playsInline preload={carregar ? 'auto' : 'none'} style={style} className={className} />
 }
 
 // A foto do destino — ou, se o tema tiver `video`, o vídeo em loop.
+// A foto também só baixa com `carregar` (antes as 5 vinham na abertura, ~1 MB,
+// porque <img> baixa mesmo com a cena em display:none).
 function Foto({ t, foto, alt, video, carregar, className = '', fim }: { t: MotionValue<number>; foto: string; alt: string; video?: string; carregar?: boolean; className?: string; fim?: number }) {
   const scale = usePouso(t, fim)
   const classe = `absolute inset-0 h-full w-full object-cover ${className}`
   if (video) return <VideoLoop video={video} foto={foto} alt={alt} carregar={carregar} style={{ scale }} className={classe} />
-  return <motion.img src={foto} alt={alt} decoding="async" style={{ scale }} className={classe} />
+  return <motion.img src={carregar ? foto : undefined} alt={alt} decoding="async" style={{ scale }} className={classe} />
 }
 
 const faixa = (a = 0.1, b = 0.5) => (v: number) => Math.min(1, Math.max(0, (v - a) / (b - a)))
@@ -148,7 +150,7 @@ export function EfeitoNoite({ t, foto, alt, video, carregar }: PropsEfeito) {
           <VideoLoop video={video} foto={foto} alt={alt} carregar={carregar} style={{ scale }} className="foto-atacama h-full w-full object-cover object-[50%_30%] md:object-[50%_0%]" />
         ) : (
           <motion.img
-            src={foto}
+            src={carregar ? foto : undefined}
             alt={alt}
             decoding="async"
             style={{ scale }}

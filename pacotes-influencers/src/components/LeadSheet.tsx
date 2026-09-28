@@ -285,7 +285,7 @@ export function LeadSheet({ aberto, pacoteInicial, origemClique, onFechar }: Pro
                 {etapa === 2 && (
                   <>
                     <Opcoes
-                      titulo="Qual viagem?"
+                      titulo="Qual destino?"
                       opcoes={[...pacotes.map((p) => p.nome), 'Ainda não sei']}
                       valor={pacotePorSlug(pacote)?.nome ?? (pacote === NAO_SEI ? 'Ainda não sei' : '')}
                       onEscolher={(nomeP) => setPacote(pacotes.find((p) => p.nome === nomeP)?.slug ?? NAO_SEI)}

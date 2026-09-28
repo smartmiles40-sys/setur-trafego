@@ -64,7 +64,7 @@ export function SobreNos() {
         >
           <video
             ref={videoRef}
-            src={`${B}assets/sobre-nos/institucional.mp4`}
+            src={`${B}assets/sobre-nos/institucional-v2.mp4`}
             poster={`${B}assets/sobre-nos/capa.jpg`}
             muted
             playsInline

@@ -34,7 +34,7 @@ export const PARADAS = [
 
 // Quantas telas de rolagem de verdade vale cada "tela" da história.
 // Menor = viagem mais curta/rápida (tudo encolhe junto, na mesma proporção).
-export const TELAS_POR_UNIDADE = 0.6
+export const TELAS_POR_UNIDADE = 0.9 // 28/09: Bruno pediu rolagem mais devagar (era 0.6)
 
 export const inicioDo = (i: number) => ABERTURA + i * ROTEIRO
 const ULTIMO = PARADAS.length - 1

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Jornada } from './components/Jornada'
 import { Convite } from './components/Convite'
-import { ChamadaFinal, ComoFunciona, Rodape } from './components/Fechamento'
+import { ChamadaFinal, ComoFunciona, Rodape, SobreNos } from './components/Fechamento'
 import { LeadSheet } from './components/LeadSheet'
 import { RoteiroModal } from './components/RoteiroModal'
 import { influenciadorAtual, nomeDoInfluenciador, evento } from './lib/origem'
@@ -43,6 +43,7 @@ export default function App() {
 
       <Jornada onQuero={quero} onVerRoteiro={setRoteiro} />
       <div id="depois-da-viagem" />
+      <SobreNos />
       <ComoFunciona />
       <ChamadaFinal onQuero={quero} />
       <Rodape />

@@ -1,7 +1,83 @@
-import { motion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { ArrowUpRight, Briefcase, Camera, MessageCircle, Music2 } from 'lucide-react'
 
 type Props = { onQuero: (pacote?: string, origem?: string) => void }
+
+// Texto e redes copiados do portal (Setur Unificado/portal/src/data/home.ts) — mudou lá, mudar aqui.
+const redes = [
+  { label: 'Instagram', href: 'https://instagram.com/setuforeuvouviagens', icone: Camera },
+  {
+    label: 'WhatsApp',
+    href: `https://wa.me/5511951251935?text=${encodeURIComponent('Quero seguir os próximos passos')}`,
+    icone: MessageCircle,
+  },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/setuforeuvouviagens/', icone: Briefcase },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@setuforeuvouviagens', icone: Music2 },
+]
+
+export function SobreNos() {
+  const B = import.meta.env.BASE_URL
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  // Toca mudo só com a seção bem dentro da tela; nada baixa antes disso (preload none).
+  const visivel = useInView(wrapRef, { margin: '-25% 0px -25% 0px' })
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (visivel) v.play().catch(() => {})
+    else v.pause()
+  }, [visivel])
+
+  return (
+    <section id="sobre-nos" className="bg-ink px-4 py-20 md:px-8 md:py-28">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[1fr_1.1fr] md:gap-14">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-15% 0px' }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p className="font-sans text-[11px] font-bold uppercase tracking-[0.28em] text-lime">Sobre nós</p>
+          <h2 className="mt-2 font-display text-[2.6rem] leading-[0.95] md:text-6xl">
+            Nós cuidamos de tudo.
+            <em className="block text-lime">Você só embarca.</em>
+          </h2>
+          <p className="mt-6 font-sans text-base leading-relaxed text-off-white/75">
+            A Se Tu For, Eu Vou! existe para uma coisa: tirar o peso da logística das suas costas. Voos, hospedagem, guias,
+            transporte e os detalhes que ninguém vê — tudo acontece nos bastidores. Viajamos com perfis alinhados, para que a
+            viagem seja sobre presença, conexão e memória.
+          </p>
+          <p className="mt-6 font-display text-2xl italic leading-snug md:text-3xl">
+            “Você não precisa saber por onde começar. Você só precisa querer ir.”
+          </p>
+        </motion.div>
+
+        <motion.div
+          ref={wrapRef}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-15% 0px' }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="overflow-hidden rounded-3xl border border-off-white/10"
+        >
+          <video
+            ref={videoRef}
+            src={`${B}assets/sobre-nos/institucional.mp4`}
+            poster={`${B}assets/sobre-nos/capa.jpg`}
+            muted
+            playsInline
+            controls
+            preload="none"
+            aria-label="Vídeo institucional da Se Tu For, Eu Vou! Viagens"
+            className="aspect-video w-full bg-ink-2 object-cover"
+          />
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
 const passos = [
   { n: '01', t: 'Escolhe o destino', d: 'Cancún, Peru, Atacama ou Patagônia. Ou deixa pra decidir com a gente.' },
@@ -81,7 +157,23 @@ export function Rodape() {
             Av. Dr. Chucri Zaidan, 1550 — Morumbi, São Paulo — SP, 04711-130
           </address>
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex flex-wrap items-center gap-5">
+          <ul className="flex items-center gap-2">
+            {redes.map(({ label, href, icone: Icone }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={label}
+                  title={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-off-white/15 text-off-white/80 transition hover:border-lime hover:text-lime"
+                >
+                  <Icone className="h-[18px] w-[18px]" />
+                </a>
+              </li>
+            ))}
+          </ul>
           <img src={`${B}assets/cadastur.png`} alt="Cadastur" className="h-10 w-auto opacity-80" loading="lazy" />
           <img src={`${B}assets/selo-qualidade.png`} alt="Selo de qualidade" className="h-12 w-auto" loading="lazy" />
           <a

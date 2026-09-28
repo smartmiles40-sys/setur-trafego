@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, Check, Loader2, X } from 'lucide-react'
+import { ArrowLeft, Check, Loader2, MessageCircle, X } from 'lucide-react'
 import { pacotes, pacotePorSlug } from '../data/pacotes'
-import { evento, influenciadorAtual, parametrosDeTracking } from '../lib/origem'
+import { evento, influenciadorAtual, nomeDoInfluenciador, parametrosDeTracking } from '../lib/origem'
 
 // Formulário em "bottom sheet", 3 etapas no molde das LPs de expedição:
 //   1. contato (nome, WhatsApp, e-mail, Instagram)
@@ -41,6 +41,35 @@ const mascaraInstagram = (v: string) => {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+// ── WhatsApp do SDR da vez (distribuidor do QS) ─────────────────────────────
+// O link aponta pro número de emergência (1935); o distribuidor.js do QS
+// (index.html) intercepta o clique, pergunta ao QS qual SDR é a vez e troca
+// pelo número DELE. Com o telefone no sessionStorage (`stfv_wa_lead`) ele vai
+// pelo "bilhete": o card no QS nasce com o mesmo SDR da conversa. QS lento,
+// fora do ar ou sem SDR → segue pro 1935 (nada se perde). Mesmas chaves das
+// LPs de tráfego — ver Setur Trafego/STFV/*/src/components/FormularioLead.tsx.
+const WHATSAPP_PADRAO = '5511951251935'
+const ESPERA_WHATSAPP_S = 3
+
+function prepararWhatsapp(lead: { nome: string; telefone: string; pacote: string; influenciador: string }) {
+  try {
+    sessionStorage.setItem(
+      'stfv_wa_lead',
+      JSON.stringify({
+        nome: lead.nome,
+        telefone: lead.telefone,
+        expedicao: lead.pacote,
+        origem: `[Influenciadores] - ${lead.influenciador}`,
+      }),
+    )
+    sessionStorage.removeItem('stfv_wa_numero') // envio novo = pergunta de novo ao QS
+  } catch {
+    /* aba privada: o distribuidor cai na roda por clique, ou no 1935 */
+  }
+  const msg = `Olá! Sou ${lead.nome} e acabei de preencher o formulário do pacote ${lead.pacote}. Quero seguir os próximos passos.`
+  return `https://wa.me/${WHATSAPP_PADRAO}?text=${encodeURIComponent(msg)}`
+}
 
 const novoLeadId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -87,6 +116,22 @@ export function LeadSheet({ aberto, pacoteInicial, origemClique, onFechar }: Pro
   const [estado, setEstado] = useState<'form' | 'enviando' | 'ok'>('form')
   const [erro, setErro] = useState('')
   const [faltando, setFaltando] = useState<string[]>([])
+  const [linkWhats, setLinkWhats] = useState('')
+  const [contagem, setContagem] = useState(ESPERA_WHATSAPP_S)
+  const botaoWhats = useRef<HTMLAnchorElement>(null)
+
+  // Depois do envio: conta 3s e "clica" no botão do WhatsApp — o clique passa
+  // pelo distribuidor do QS, que troca o número pelo do SDR da vez. Fechar o
+  // formulário cancela.
+  useEffect(() => {
+    if (estado !== 'ok' || !aberto || !linkWhats) return
+    if (contagem <= 0) {
+      botaoWhats.current?.click()
+      return
+    }
+    const t = setTimeout(() => setContagem((c) => c - 1), 1000)
+    return () => clearTimeout(t)
+  }, [estado, aberto, linkWhats, contagem])
 
   useEffect(() => {
     if (aberto) {
@@ -199,6 +244,15 @@ export function LeadSheet({ aberto, pacoteInicial, origemClique, onFechar }: Pro
       if (!res.ok) throw new Error(String(res.status))
       evento('form_submit', { pacote, quando, investimento, decisao })
       evento('lead_conversion', { pacote, value: 1 })
+      setLinkWhats(
+        prepararWhatsapp({
+          nome: nome.trim(),
+          telefone: payload.whatsapp,
+          pacote: payload.pacote_nome,
+          influenciador: nomeDoInfluenciador(influ) ?? 'Geral',
+        }),
+      )
+      setContagem(ESPERA_WHATSAPP_S)
       setEstado('ok')
     } catch {
       setEstado('form')
@@ -241,9 +295,15 @@ export function LeadSheet({ aberto, pacoteInicial, origemClique, onFechar }: Pro
                 </div>
                 <h2 id="lead-titulo" className="mt-5 font-display text-4xl">Fechou! 🎉</h2>
                 <p className="mx-auto mt-3 max-w-xs font-sans text-[15px] leading-relaxed text-ink/70">
-                  Um especialista vai te chamar no WhatsApp pra montar a viagem. Fica de olho!
+                  {contagem > 0
+                    ? `Te levando pro WhatsApp do especialista em ${contagem}…`
+                    : 'Abrindo o WhatsApp do especialista…'}
                 </p>
-                <button type="button" onClick={onFechar} className="btn-ink mt-7">
+                <a ref={botaoWhats} href={linkWhats} className="btn-ink mt-7" onClick={() => evento('whatsapp_click', { pacote })}>
+                  <MessageCircle className="h-5 w-5" />
+                  Falar no WhatsApp agora
+                </a>
+                <button type="button" onClick={onFechar} className="mx-auto mt-4 block font-sans text-sm text-ink/55 underline underline-offset-4">
                   Voltar pros destinos
                 </button>
               </div>

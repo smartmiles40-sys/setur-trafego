@@ -71,122 +71,14 @@
       Nosso time vai analisar seu perfil e entrar em contato pelo WhatsApp
       para alinharmos os próximos passos da sua expedição. Fica de olho no celular!
     </p>
-    <a class="btn" id="btn-whatsapp" href="https://qs-turis.vercel.app/api/whatsapp?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos">
-      Chamar no WhatsApp agora
-    </a>
-    <p class="aviso" id="aviso-redirect" hidden>
-      Abrindo seu WhatsApp em <b id="contagem">3</b>…
-    </p>
     <a class="voltar" href="./">← Voltar para a página da expedição</a>
     <div class="marca">Se Tu For, Eu Vou! · Viagens</div>
   </main>
-  <script>
-    /**
-     * Leva o lead direto pro WhatsApp depois do envio do formulário.
-     * O countdown existe pra dar tempo do GTM/Stape disparar a conversão desta
-     * página antes de sair dela — é aqui que a conversão é contada.
-     * A mensagem personalizada vem do FormularioLead pelo sessionStorage
-     * (mesma origem); sem ela, cai na mensagem padrão.
-     *
-     * DISTRIBUIDOR (23/09/2026): o número não é mais fixo. Durante o countdown
-     * a página pergunta ao QS qual SDR é a vez (ou quem já marcou ligação com
-     * a pessoa) e abre o WhatsApp DELE. Se o QS não responder em 3,5s, vai pela
-     * rota do QS (/api/whatsapp), que decide o SDR no servidor.
-     * 29/09/2026 (Bruno): o 1935 saiu — nenhum caminho daqui termina nele.
-     */
-    (function () {
-      var ROTA = 'https://qs-turis.vercel.app/api/whatsapp';
-      var DISTRIBUIDOR = 'https://qs-turis.vercel.app/api/lead';
-      var ESPERA_MAX_MS = 3500;
-      var MSG_PADRAO = 'Quero seguir os próximos passos';
-      var MSG_KEY = 'stfv_wa_msg';
-      var FEITO_KEY = 'stfv_wa_redirecionado';
-      var LEAD_KEY = 'stfv_wa_lead';
-      var NUMERO_KEY = 'stfv_wa_numero';
-      var SEGUNDOS = 3;
-
-      var storageOk = true;
-      function ler(chave) {
-        try { return sessionStorage.getItem(chave); } catch (e) { storageOk = false; return null; }
-      }
-      function gravar(chave, valor) {
-        try { sessionStorage.setItem(chave, valor); } catch (e) {}
-      }
-
-      var msgSalva = ler(MSG_KEY);
-      var jaRedirecionou = ler(FEITO_KEY);
-      // Quem volta do WhatsApp e clica de novo cai no MESMO SDR de antes.
-      function valido(n) {
-        var s = String(n || '');
-        return /^[0-9]{12,13}$/.test(s) && s !== '5511951251935' ? s : null;
-      }
-      var numero = valido(ler(NUMERO_KEY));
-      function montar() {
-        var texto = encodeURIComponent(msgSalva || MSG_PADRAO);
-        // Sem SDR decidido aqui: a rota do QS decide no servidor. Nunca o 1935.
-        return numero ? 'https://wa.me/' + numero + '?text=' + texto : ROTA + '?text=' + texto;
-      }
-
-      var btn = document.getElementById('btn-whatsapp');
-      if (btn) btn.href = montar();
-
-      // Só redireciona sozinho quem acabou de enviar o formulário (tem mensagem
-      // salva), e uma vez só — senão voltar do WhatsApp vira laço. Em aba privada
-      // o sessionStorage estoura: aí redireciona mesmo assim, com a msg padrão.
-      if ((!msgSalva && storageOk) || jaRedirecionou) return;
-      gravar(FEITO_KEY, '1');
-
-      var decidido = false;
-      var contagemAcabou = false;
-      function ir() {
-        // replace: voltar do WhatsApp cai na LP, não nesta página
-        window.location.replace(montar());
-      }
-      function decidir(n) {
-        if (decidido) return;
-        decidido = true;
-        if (valido(n)) numero = valido(n);
-        if (numero) gravar(NUMERO_KEY, numero);
-        if (btn) btn.href = montar();
-        if (contagemAcabou) ir();
-      }
-
-      var lead = null;
-      try { lead = JSON.parse(ler(LEAD_KEY) || 'null'); } catch (e) {}
-      if (lead && lead.telefone && window.fetch) {
-        var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        var limite = setTimeout(function () {
-          if (ctrl) ctrl.abort();
-          decidir(null);
-        }, ESPERA_MAX_MS);
-        fetch(DISTRIBUIDOR, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(lead),
-          signal: ctrl ? ctrl.signal : undefined,
-        })
-          .then(function (r) { return r.json(); })
-          .then(function (d) { clearTimeout(limite); decidir(d && d.numero); })
-          .catch(function () { clearTimeout(limite); decidir(null); });
-      } else {
-        decidir(null);
-      }
-
-      var aviso = document.getElementById('aviso-redirect');
-      var contagem = document.getElementById('contagem');
-      if (aviso) aviso.hidden = false;
-
-      var restante = SEGUNDOS;
-      var timer = setInterval(function () {
-        restante -= 1;
-        if (contagem) contagem.textContent = Math.max(restante, 0);
-        if (restante <= 0) {
-          clearInterval(timer);
-          contagemAcabou = true;
-          if (decidido) ir();
-        }
-      }, 1000);
-    })();
-  </script>
+  <!--
+    29/09/2026 (Bruno): sem WhatsApp aqui. A página não escolhe SDR nem abre
+    conversa: o lead entra no QS e a distribuição do QS decide o dono, que
+    chama a pessoa. Esta página existe pra confirmar o envio e pro GTM contar
+    a conversão.
+  -->
 </body>
 </html>

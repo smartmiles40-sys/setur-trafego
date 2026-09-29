@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
-import { investimento, pagamentos, WHATSAPP } from "../data/expedicao";
+import { investimento, pagamentos, WHATSAPP_LINK } from "../data/expedicao";
 import { cn } from "@/lib/utils";
 
-const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
+const waUrl = `${WHATSAPP_LINK}?text=${encodeURIComponent(
   `Quero seguir os próximos passos`
 )}`;
 

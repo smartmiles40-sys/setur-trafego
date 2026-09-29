@@ -5,7 +5,8 @@
 // ────────────────────────────────────────────────────────────────────
 
 // WhatsApp oficial da agência (DDI 55). Usado no envio do formulário e nos CTAs.
-export const WHATSAPP = "5511951251935";
+// 29/09/2026: sem número fixo — a rota do QS escolhe o SDR da vez (nunca o 1935).
+export const WHATSAPP_LINK = "https://qs-turis.vercel.app/api/whatsapp";
 
 export const expedicao = {
   // Tipo do produto na Hero (palavra pequena em itálico acima do nome).
@@ -101,7 +102,7 @@ export const pagamentos = [
 ];
 
 // Link de reserva no WhatsApp — reutilizado pelos CTAs da página.
-export const waReservaUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
+export const waReservaUrl = `${WHATSAPP_LINK}?text=${encodeURIComponent(
   `Quero seguir os próximos passos`
 )}`;
 

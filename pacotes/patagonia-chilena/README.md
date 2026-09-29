@@ -38,7 +38,7 @@ Quase tudo o que muda no dia a dia está em **um arquivo só**:
 - **Incluso / Não incluso** — listas `inclusos` e `naoInclusos`.
 - **Preço e formas de pagamento** — objeto `investimento`.
 - **WhatsApp** — troque só a constante `whatsappNumero` (uma vez). ⚠️ **Pendência:**
-  está em `5500000000000` (placeholder). O número oficial da agência é `5511951251935`
+  está em `5500000000000` (placeholder). O WhatsApp da agência não é mais um número fixo: é a rota `https://qs-turis.vercel.app/api/whatsapp` (SDR da vez)
   — confirme e troque. Formato: `55` + DDD + número.
 
 ### Fotos

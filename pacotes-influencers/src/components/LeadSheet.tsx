@@ -43,13 +43,13 @@ const mascaraInstagram = (v: string) => {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 // ── WhatsApp do SDR da vez (distribuidor do QS) ─────────────────────────────
-// O link aponta pro número de emergência (1935); o distribuidor.js do QS
-// (index.html) intercepta o clique, pergunta ao QS qual SDR é a vez e troca
-// pelo número DELE. Com o telefone no sessionStorage (`stfv_wa_lead`) ele vai
-// pelo "bilhete": o card no QS nasce com o mesmo SDR da conversa. QS lento,
-// fora do ar ou sem SDR → segue pro 1935 (nada se perde). Mesmas chaves das
+// O link aponta pra rota do QS (/api/whatsapp), que escolhe o SDR da vez no
+// servidor. O distribuidor.js do QS (index.html) intercepta o clique antes:
+// com o telefone no sessionStorage (`stfv_wa_lead`) ele vai pelo "bilhete" —
+// o card no QS nasce com o mesmo SDR da conversa. 29/09/2026 (Bruno): o 1935
+// saiu — nenhum caminho daqui termina nele. Mesmas chaves das
 // LPs de tráfego — ver Setur Trafego/STFV/*/src/components/FormularioLead.tsx.
-const WHATSAPP_PADRAO = '5511951251935'
+const WHATSAPP_ROTA = 'https://qs-turis.vercel.app/api/whatsapp'
 const ESPERA_WHATSAPP_S = 3
 
 function prepararWhatsapp(lead: { nome: string; telefone: string; pacote: string; influenciador: string }) {
@@ -65,10 +65,10 @@ function prepararWhatsapp(lead: { nome: string; telefone: string; pacote: string
     )
     sessionStorage.removeItem('stfv_wa_numero') // envio novo = pergunta de novo ao QS
   } catch {
-    /* aba privada: o distribuidor cai na roda por clique, ou no 1935 */
+    /* aba privada: o distribuidor cai na roda por clique */
   }
   const msg = `Olá! Sou ${lead.nome} e acabei de preencher o formulário do pacote ${lead.pacote}. Quero seguir os próximos passos.`
-  return `https://wa.me/${WHATSAPP_PADRAO}?text=${encodeURIComponent(msg)}`
+  return `${WHATSAPP_ROTA}?text=${encodeURIComponent(msg)}`
 }
 
 const novoLeadId = () =>

@@ -363,7 +363,7 @@ export const gastosPessoais = {
 }
 
 export const whatsappConfig = {
-  numero: '5511951251935',
+  numero: '', // 29/09/2026: sem número fixo — o WhatsApp é decidido pela rota do QS
   mensagem: 'Olá! Quero saber mais sobre a Expedição Amazônia 2027 — 7 a 11 de julho de 2027.',
 }
-export const whatsappUrl = `https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`
+export const whatsappUrl = `https://qs-turis.vercel.app/api/whatsapp?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

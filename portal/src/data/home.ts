@@ -43,7 +43,8 @@ export interface RedeSocial {
   icone: LucideIcon;
 }
 
-export const whatsappNumero = '5511951251935';
+// 29/09/2026: sem número fixo — a rota do QS escolhe o SDR da vez (nunca o 1935).
+export const whatsappLink = 'https://qs-turis.vercel.app/api/whatsapp';
 
 export const redesSociais: RedeSocial[] = [
   {
@@ -57,7 +58,7 @@ export const redesSociais: RedeSocial[] = [
     label: 'WhatsApp',
     descricao: 'Fale direto com a gente — atendimento humano.',
     // Mensagem pré-preenchida: a pessoa já chega se apresentando.
-    href: `https://wa.me/${whatsappNumero}?text=${encodeURIComponent('Quero seguir os próximos passos')}`,
+    href: `${whatsappLink}?text=${encodeURIComponent('Quero seguir os próximos passos')}`,
     icone: MessageCircle,
   },
   {

@@ -71,7 +71,7 @@
       Nosso time vai analisar seu perfil e entrar em contato pelo WhatsApp
       para alinharmos os próximos passos da sua expedição. Fica de olho no celular!
     </p>
-    <a class="btn" id="btn-whatsapp" href="https://wa.me/5511951251935?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos">
+    <a class="btn" id="btn-whatsapp" href="https://qs-turis.vercel.app/api/whatsapp?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos">
       Chamar no WhatsApp agora
     </a>
     <p class="aviso" id="aviso-redirect" hidden>
@@ -90,11 +90,12 @@
      *
      * DISTRIBUIDOR (23/09/2026): o número não é mais fixo. Durante o countdown
      * a página pergunta ao QS qual SDR é a vez (ou quem já marcou ligação com
-     * a pessoa) e abre o WhatsApp DELE. Se o QS não responder em 3,5s, vai pro
-     * número de sempre — nenhum lead fica sem destino.
+     * a pessoa) e abre o WhatsApp DELE. Se o QS não responder em 3,5s, vai pela
+     * rota do QS (/api/whatsapp), que decide o SDR no servidor.
+     * 29/09/2026 (Bruno): o 1935 saiu — nenhum caminho daqui termina nele.
      */
     (function () {
-      var NUMERO_PADRAO = '5511951251935';
+      var ROTA = 'https://qs-turis.vercel.app/api/whatsapp';
       var DISTRIBUIDOR = 'https://qs-turis.vercel.app/api/lead';
       var ESPERA_MAX_MS = 3500;
       var MSG_PADRAO = 'Quero seguir os próximos passos';
@@ -115,9 +116,15 @@
       var msgSalva = ler(MSG_KEY);
       var jaRedirecionou = ler(FEITO_KEY);
       // Quem volta do WhatsApp e clica de novo cai no MESMO SDR de antes.
-      var numero = ler(NUMERO_KEY) || NUMERO_PADRAO;
+      function valido(n) {
+        var s = String(n || '');
+        return /^[0-9]{12,13}$/.test(s) && s !== '5511951251935' ? s : null;
+      }
+      var numero = valido(ler(NUMERO_KEY));
       function montar() {
-        return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(msgSalva || MSG_PADRAO);
+        var texto = encodeURIComponent(msgSalva || MSG_PADRAO);
+        // Sem SDR decidido aqui: a rota do QS decide no servidor. Nunca o 1935.
+        return numero ? 'https://wa.me/' + numero + '?text=' + texto : ROTA + '?text=' + texto;
       }
 
       var btn = document.getElementById('btn-whatsapp');
@@ -138,8 +145,8 @@
       function decidir(n) {
         if (decidido) return;
         decidido = true;
-        if (n && /^[0-9]{12,13}$/.test(String(n))) numero = String(n);
-        gravar(NUMERO_KEY, numero);
+        if (valido(n)) numero = valido(n);
+        if (numero) gravar(NUMERO_KEY, numero);
         if (btn) btn.href = montar();
         if (contagemAcabou) ir();
       }

@@ -139,7 +139,7 @@ export const liveCostaAmalfitana: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/Eu0EwIhzGlHK6sB7gjDdnp',
+    url: 'https://chat.whatsapp.com/CGab2PT4iS1HdFpvt37IDi',
     nome: 'Live - Costa Amalfitana 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',
@@ -164,12 +164,13 @@ export const liveCostaAmalfitana: ConfigLive = {
     emitirEventoLegado: false,
   },
 
-  // Nome + WhatsApp (sem e-mail), como nas demais lives desde 02/09/2026.
-  // Efeito: liga o ManyChat e o findbycomm do Bitrix; desliga o convite do
-  // Google Agenda (que depende do e-mail do lead como convidado).
+  // Nome + WhatsApp + E-MAIL (05/10/2026, pedido do Bruno — a única live que
+  // pede os três). WhatsApp liga o ManyChat e o findbycomm do Bitrix; o e-mail
+  // vai pro contato no Bitrix e como `convidar_email` pro n8n (convite do
+  // Google Agenda, se o nó estiver ligado no workflow).
   formulario: {
     pedirWhatsapp: true,
-    pedirEmail: false,
+    pedirEmail: true,
   },
 
   heroImage: `${import.meta.env.BASE_URL}assets/italia/hero-positano.jpg`,

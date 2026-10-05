@@ -32,6 +32,7 @@ const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_c
 // dentro de `raw` — NÃO como coluna própria, para não quebrar o insert.
 const CLICK_KEYS = ['utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid']
 const TRACK_KEYS = [...UTM_KEYS, ...CLICK_KEYS]
+const RASTREIO_KEYS = ['fbc', 'fbp', 'ga_client_id', 'event_id', 'landing_page', 'referrer']
 
 /** Payload/CRM sempre recebem +55 + dígitos (ex.: +5542984265706). */
 function normalizarWhatsapp(valor) {
@@ -91,6 +92,14 @@ export default async function handler(req, res) {
     formulario_completo: body.formulario_completo !== false,
   }
   for (const k of TRACK_KEYS) lead[k] = str(body[k], 200)
+
+  // Rastreio do clique (ver src/lib/rastreio.ts): cookies de anúncio, event_id
+  // (dedupe pixel × servidor) e a página/referrer do primeiro toque. Mais IP e
+  // navegador de quem enviou — é o que a conversão pelo servidor (Meta CAPI /
+  // Google Ads) usa pra casar o lead com o clique.
+  for (const k of RASTREIO_KEYS) lead[k] = String(body[k] ?? '').slice(0, 500)
+  lead.client_user_agent = String(req.headers['user-agent'] || '').slice(0, 400)
+  lead.client_ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim().slice(0, 64)
 
   // Validação no servidor: NOME + PELO MENOS UMA FORMA DE CONTATO.
   //

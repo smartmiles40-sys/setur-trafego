@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { expedicao } from '../data/expedicao'
+import { cliquesDoNavegador, guardarPrimeiroToque, lerPrimeiroToque, novoEventId } from '../lib/rastreio'
 
 /**
  * Formulário próprio multi-etapas — padrão "PADRONIZACAO FORMULARIO LP - SE TU FOR"
@@ -39,7 +40,8 @@ const TRACK_STORAGE_KEY = `${SLUG}_track`
 
 function lerTrackSalvo(): Track {
   try {
-    const bruto = sessionStorage.getItem(TRACK_STORAGE_KEY)
+    // aba nova: cai pro primeiro toque guardado (90 dias) — ver lib/rastreio.ts
+    const bruto = sessionStorage.getItem(TRACK_STORAGE_KEY) || lerPrimeiroToque()
     return bruto ? { ...TRACK_VAZIO, ...JSON.parse(bruto) } : { ...TRACK_VAZIO }
   } catch {
     return { ...TRACK_VAZIO } // sessionStorage bloqueado (aba privada)
@@ -63,16 +65,6 @@ const PERGUNTAS: Pergunta[] = [
     ],
   },
   {
-    name: 'companhia',
-    label: 'Como você pretende viajar?',
-    opcoes: [
-      { label: 'Sozinho(a)', slug: 'sozinho' },
-      { label: 'Casal', slug: 'casal' },
-      { label: 'Família', slug: 'familia' },
-      { label: 'Com amigos', slug: 'amigos' },
-    ],
-  },
-  {
     name: 'perfil',
     label: 'Qual o seu perfil de viajante?',
     opcoes: [
@@ -89,18 +81,8 @@ const PERGUNTAS: Pergunta[] = [
       'pt-BR',
     )}. Você está preparado(a) para investir nessa experiência completa?`,
     opcoes: [
-      { label: 'Sim, estou preparado(a)', slug: 'sim' },
-      { label: 'Quero entender os valores primeiro', slug: 'talvez' },
-      { label: 'Não, está fora do meu momento agora', slug: 'nao' }, // NOVA opção
-    ],
-  },
-  {
-    name: 'decisao',
-    label: 'Quando você pretende tomar a decisão?',
-    opcoes: [
-      { label: 'O quanto antes — quero garantir minha vaga', slug: 'agora' },
-      { label: 'Nos próximos meses', slug: 'proximos' },
-      { label: 'Ainda estou só pesquisando', slug: 'explorando' },
+      { label: 'Sim, estou ciente', slug: 'sim' },
+      { label: 'Não, quero entender melhor', slug: 'talvez' },
     ],
   },
 ]
@@ -190,6 +172,7 @@ export default function FormularioLead() {
       if (v && !proximo[k]) proximo[k] = v.slice(0, 200)
     })
     try {
+      guardarPrimeiroToque(proximo)
       sessionStorage.setItem(TRACK_STORAGE_KEY, JSON.stringify(proximo))
     } catch {
       /* aba privada: segue só em memória */
@@ -267,6 +250,8 @@ export default function FormularioLead() {
         return
       }
 
+      // Nasce ANTES do envio: o mesmo id vai pro servidor e pro pixel (dedupe).
+      const eventId = novoEventId()
       const payload = {
         lead_id: leadId,
         nome: nome.trim(),
@@ -278,6 +263,8 @@ export default function FormularioLead() {
         source_id: expedicao.sourceId,
         ...respostas,
         ...track,
+        ...cliquesDoNavegador(track),
+        event_id: eventId,
         form_name: FORM_NAME,
         timestamp: new Date().toISOString(),
         etapa: 'completo',
@@ -292,10 +279,6 @@ export default function FormularioLead() {
           body: JSON.stringify(payload),
         })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
-        const eventId =
-          typeof crypto !== 'undefined' && crypto.randomUUID
-            ? crypto.randomUUID()
-            : `${Date.now()}-${Math.random()}`
 
         let navegou = false
         const irParaObrigado = () => {
@@ -320,10 +303,8 @@ export default function FormularioLead() {
           },
           resp: {
             disponibilidade: slugDaResposta('data', respostas['data']),
-            companhia: slugDaResposta('companhia', respostas['companhia']),
             perfil: slugDaResposta('perfil', respostas['perfil']),
             investimento: slugDaResposta('investimento', respostas['investimento']),
-            timing: slugDaResposta('decisao', respostas['decisao']),
           },
           ...track,
           eventCallback: irParaObrigado,

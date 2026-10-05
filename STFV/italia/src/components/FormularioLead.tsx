@@ -89,7 +89,11 @@ const PERGUNTAS: Pergunta[] = [
   },
   {
     name: 'investimento',
-    label: 'Você está preparado(a) para investir nessa experiência completa?',
+    label: `O investimento nessa expedição fica entre R$ ${expedicao.faixaInvestimento.min.toLocaleString(
+      'pt-BR',
+    )} e R$ ${expedicao.faixaInvestimento.max.toLocaleString(
+      'pt-BR',
+    )}. Você está preparado(a) para investir nessa experiência completa?`,
     opcoes: [
       { label: 'Sim, estou ciente', slug: 'sim' },
       { label: 'Não, quero entender melhor', slug: 'talvez' },
@@ -101,6 +105,32 @@ function slugDaResposta(perguntaName: string, label: string | undefined): string
   const p = PERGUNTAS.find((q) => q.name === perguntaName)
   const o = p?.opcoes.find((op) => op.label === label)
   return o?.slug ?? ''
+}
+
+// ---- Lead score (05/10/2026) ----------------------------------------------
+// Calculado AQUI, no site, e enviado pronto no payload: é ele que tem que
+// chegar no campo "Lead Scoring" do Bitrix (UF_CRM_1770310635906). Antes a
+// automação do Bitrix pontuava pelo TEXTO das respostas, com a pergunta de
+// decisão — que saiu do formulário.
+//
+//   data          sim 10 · talvez 5 · não 0
+//   investimento  sim 10 · quero entender melhor 0
+//
+//   20 = quente · 10 ou 15 = morno · até 5 = frio
+const PONTOS_LEAD: Record<string, Record<string, number>> = {
+  data: { sim: 10, talvez: 5 },
+  investimento: { sim: 10 },
+}
+// ids da lista "Lead Scoring" no Bitrix
+const LEAD_SCORE_BITRIX = { Quente: 943, Morno: 941, Frio: 939 } as const
+
+function leadScore(respostas: Record<string, string>) {
+  let pontos = 0
+  for (const [pergunta, tabela] of Object.entries(PONTOS_LEAD)) {
+    pontos += tabela[slugDaResposta(pergunta, respostas[pergunta])] ?? 0
+  }
+  const rotulo = pontos >= 20 ? 'Quente' : pontos >= 10 ? 'Morno' : 'Frio'
+  return { lead_score: rotulo, lead_score_id: LEAD_SCORE_BITRIX[rotulo], lead_score_pontos: pontos }
 }
 
 // ---- Helpers --------------------------------------------------------------
@@ -320,6 +350,7 @@ export default function FormularioLead() {
         fonte: expedicao.fonte,
         source_id: expedicao.sourceId,
         ...respostas,
+        ...leadScore(respostas),
         ...track,
         ...cliquesDoNavegador(track),
         event_id: eventId,
@@ -376,6 +407,7 @@ export default function FormularioLead() {
             disponibilidade: slugDaResposta('data', respostas['data']),
             perfil: slugDaResposta('perfil', respostas['perfil']),
             investimento: slugDaResposta('investimento', respostas['investimento']),
+            temperatura: leadScore(respostas).lead_score.toLowerCase(),
           },
           ...track,
           eventCallback: seguir,

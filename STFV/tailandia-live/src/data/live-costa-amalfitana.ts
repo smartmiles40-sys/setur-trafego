@@ -79,8 +79,8 @@ export const liveCostaAmalfitana: ConfigLive = {
      *
      * ✅ Definida pelo Bruno em 03/09/2026: terça-feira, 8 de setembro de 2026, 20h00 (BRT).
      */
-    // 🔁 Remarcada em 21/09/2026 para quinta-feira, 24 de setembro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-09-24T20:00:00-03:00',
+    // 🔁 Remarcada em 05/10/2026 para quinta-feira, 8 de outubro de 2026, 20h00 (sala nova).
+    inicioISO: '2026-10-08T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -91,7 +91,7 @@ export const liveCostaAmalfitana: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/yeo-vvek-dfk',
+    meetUrl: 'https://meet.google.com/byn-quit-efv',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

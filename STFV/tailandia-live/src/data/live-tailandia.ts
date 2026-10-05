@@ -79,8 +79,8 @@ export const liveTailandia: ConfigLive = {
      *
      * ✅ Definida pelo Bruno em 03/09/2026: domingo, 13 de setembro de 2026, 20h00 (BRT).
      */
-    // 🔁 Remarcada em 21/09/2026 para terça-feira, 22 de setembro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-09-28T20:00:00-03:00',
+    // 🔁 Remarcada em 05/10/2026 para terça-feira, 6 de outubro de 2026, 20h00 (sala nova).
+    inicioISO: '2026-10-06T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -91,7 +91,7 @@ export const liveTailandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/mtg-gwja-fss',
+    meetUrl: 'https://meet.google.com/hks-rhuk-han',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

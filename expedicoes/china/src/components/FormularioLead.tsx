@@ -230,10 +230,6 @@ export default function FormularioLead() {
       setErro('email', 'Digite um e-mail válido')
       ok = false
     }
-    if (instagram.replace('@', '').length < 2) {
-      setErro('instagram', 'Digite seu @ do Instagram')
-      ok = false
-    }
     return ok
   }, [nome, whatsapp, email, instagram, setErro])
 
@@ -448,13 +444,12 @@ export default function FormularioLead() {
           </div>
 
           <div>
-            <label htmlFor="instagram" className="input-label">Instagram</label>
+            <label htmlFor="instagram" className="input-label">Instagram <span className="font-normal opacity-60">(opcional)</span></label>
             <input
               type="text"
               id="instagram"
               name="instagram"
               className={`input ${erros.instagram ? 'input-error' : ''}`}
-              required
               inputMode="text"
               autoCapitalize="none"
               autoComplete="off"

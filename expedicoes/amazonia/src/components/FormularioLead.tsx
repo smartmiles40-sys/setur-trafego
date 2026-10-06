@@ -218,7 +218,8 @@ export default function FormularioLead() {
   // Depois das perguntas, TODO lead ganha a etapa da ligação com o SDR
   const [agenda, setAgenda] = useState<null | { jaNoBitrix: boolean; irParaObrigado: () => void }>(null)
   // Etapa 2 (vídeo): timer que libera o avanço para as perguntas
-  const [videoLiberado, setVideoLiberado] = useState(false)
+  // O vídeo não bloqueia mais as perguntas (06/10/2026): o avanço nasce liberado.
+  const [videoLiberado, setVideoLiberado] = useState(true)
   const [progresso, setProgresso] = useState(0) // 0–100: enche a mini barra do botão
   const deadlineRef = useRef<number | null>(null)
   const [track, setTrack] = useState<Track>(TRACK_VAZIO)
@@ -290,10 +291,6 @@ export default function FormularioLead() {
     }
     if (!EMAIL_RE.test(email.trim())) {
       setErro('email', 'Digite um e-mail válido')
-      ok = false
-    }
-    if (instagram.replace('@', '').length < 2) {
-      setErro('instagram', 'Digite seu @ do Instagram')
       ok = false
     }
     return ok
@@ -530,13 +527,12 @@ export default function FormularioLead() {
           </div>
 
           <div>
-            <label htmlFor="instagram" className="input-label">Instagram</label>
+            <label htmlFor="instagram" className="input-label">Instagram <span className="font-normal opacity-60">(opcional)</span></label>
             <input
               type="text"
               id="instagram"
               name="instagram"
               className={`input ${erros.instagram ? 'input-error' : ''}`}
-              required
               inputMode="text"
               autoCapitalize="none"
               autoComplete="off"
@@ -573,7 +569,7 @@ export default function FormularioLead() {
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-xl bg-lime/25 border border-lime px-4 py-3 text-dark-teal text-sm font-semibold">
             <Check className="h-4 w-4 flex-shrink-0" strokeWidth={3} aria-hidden />
-            <span>Liberado! Falta só o seu perfil de viagem.</span>
+            <span>Depois do vídeo, falta só o seu perfil de viagem.</span>
             <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden />
           </div>
         )}

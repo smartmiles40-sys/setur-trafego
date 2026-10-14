@@ -51,11 +51,11 @@ export default function App() {
       <Roteiro />
       <Mapa />
       <Opcoes />
-      <PorQue />
-      <Depoimentos />
       <Formulario />
+      <PorQue />
       <Gastos />
       <FAQ />
+      <Depoimentos />
       {/* <AssistenteIA /> — assistente de IA desativado temporariamente */}
       <Footer />
       <BottomCTA />

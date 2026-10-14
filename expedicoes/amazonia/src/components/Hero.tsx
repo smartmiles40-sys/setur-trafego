@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Clouds from './Clouds'
 import { expedicao } from '../data/expedicao'
+import ContagemRegressiva from './ContagemRegressiva'
 
 export default function Hero() {
   return (
@@ -101,6 +102,9 @@ export default function Hero() {
           >
             {expedicao.slogan}
           </motion.p>
+
+          {/* Cronômetro até o embarque — primeira dobra (doc 08/10/2026) */}
+          <ContagemRegressiva className="mb-10" />
 
           {/* 4. CTA */}
           <motion.a

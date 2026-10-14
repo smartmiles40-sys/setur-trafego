@@ -30,7 +30,7 @@ export default function TudoResolvido() {
             transition={{ duration: 0.8, delay: 0.05 }}
             className="font-serif text-[clamp(2rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-tight text-off-white mb-6"
           >
-            O que já está resolvido
+            O que já está resolvido{' '}
             <br />
             <span className="serif-italic font-normal text-lime">
               antes mesmo de você embarcar.
@@ -50,91 +50,92 @@ export default function TudoResolvido() {
           </motion.p>
         </div>
 
-        {/* Main card — asymmetric bento */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9 }}
-          className="bg-off-white text-dark-teal rounded-[2.5rem] p-5 md:p-8 shadow-card-lg max-w-6xl mx-auto relative overflow-hidden"
-        >
-          {/* Header strip inside card */}
-          <div className="flex items-center justify-between flex-wrap gap-4 mb-6 md:mb-8 px-2 md:px-3">
-            <div className="flex items-center gap-4">
-              <div className="w-[56px] h-[56px] rounded-full bg-lime/20 border-2 border-lime flex items-center justify-center">
-                <IconeExpedicao size={30} className="text-dark-teal" strokeWidth={2.2} />
+        {/* Redesenho 08/10/2026 (doc de ajustes do time): o bento antigo — 8
+            cartões verdes com texto de 11px e a duração em lime sobre fundo
+            claro — não dava pra ler. Agora: foto com a duração à esquerda e a
+            lista do que está incluso em corpo legível à direita. */}
+        <div className="max-w-6xl mx-auto grid md:grid-cols-12 gap-4 md:gap-6">
+          {/* Foto + duração */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8 }}
+            className="md:col-span-5 relative rounded-[2rem] overflow-hidden min-h-[280px] md:min-h-0 bg-dark-teal shadow-card-lg"
+          >
+            <img
+              src={expedicao.heroImage}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-dark-teal via-dark-teal/65 to-dark-teal/10" />
+            <div className="relative h-full flex flex-col justify-end p-7 md:p-9">
+              <p className="eyebrow text-lime mb-3">A expedição</p>
+              <div className="flex items-baseline gap-3">
+                <span
+                  className="num-stamp-solid text-lime leading-none"
+                  style={{ fontSize: 'clamp(5rem, 10vw, 8rem)' }}
+                >
+                  {expedicao.duracaoNumero}
+                </span>
+                <span className="text-off-white font-serif italic text-3xl md:text-4xl">
+                  dias
+                </span>
               </div>
-              <div>
-                <p className="eyebrow text-dark-teal/60 mb-1">Expedição Principal</p>
+              <p className="text-off-white/90 text-base mt-3 leading-relaxed max-w-xs">
+                {expedicao.duracaoNumeroLegenda}
+              </p>
+            </div>
+          </motion.div>
+
+          {/* O que está incluso */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="md:col-span-7 bg-off-white text-dark-teal rounded-[2rem] p-6 md:p-9 shadow-card-lg"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-[52px] h-[52px] rounded-full bg-lime/25 border-2 border-lime flex items-center justify-center shrink-0">
+                <IconeExpedicao size={26} className="text-dark-teal" strokeWidth={2.2} />
+              </div>
+              <div className="min-w-0">
+                <p className="eyebrow text-dark-teal/65 mb-1">Expedição Principal</p>
                 <h3 className="font-serif text-3xl md:text-4xl font-bold leading-none">
                   {expedicao.nome}
                 </h3>
               </div>
             </div>
-            <div className="text-sm md:text-base text-dark-teal/70 flex flex-wrap gap-x-3 gap-y-1">
-              <span>{expedicao.cidadesPrincipaisLinha}</span>
-              <span className="text-dark-teal/30">·</span>
-              <span>{expedicao.tudoResolvidoSubtitulo}</span>
-            </div>
-          </div>
+            <p className="mt-4 text-sm md:text-base text-dark-teal/70">
+              {expedicao.cidadesPrincipaisLinha}
+              <span className="text-dark-teal/30 mx-2">·</span>
+              {expedicao.tudoResolvidoSubtitulo}
+            </p>
 
-          {/* Bento grid: 1 featured + 8 regular */}
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4">
-            {/* Featured card — "8 dias" */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="col-span-2 md:col-span-2 md:row-span-2 relative bg-gradient-to-br from-dark-teal via-dark-teal-light to-dark-teal rounded-3xl p-6 md:p-8 overflow-hidden min-h-[240px] md:min-h-[340px] incan-pattern"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-dark-teal/60" />
-              <div className="relative h-full flex flex-col justify-between">
-                <p className="eyebrow text-lime opacity-90">A expedição</p>
-                <div>
-                  <div className="flex items-baseline gap-3">
-                    <span
-                      className="num-stamp-solid text-lime leading-none"
-                      style={{ fontSize: 'clamp(5rem, 9vw, 8rem)' }}
-                    >
-                      {expedicao.duracaoNumero}
-                    </span>
-                    <span className="text-off-white font-serif italic text-2xl md:text-3xl">
-                      dias
-                    </span>
+            <ul className="mt-6 pt-6 border-t border-dark-teal/10 grid sm:grid-cols-2 gap-x-6 gap-y-5">
+              {incluso.map((item) => (
+                <li key={item.title} className="flex items-start gap-3.5">
+                  <span
+                    className="w-11 h-11 rounded-2xl bg-soft-green flex items-center justify-center text-xl shrink-0"
+                    aria-hidden
+                  >
+                    {item.emoji}
+                  </span>
+                  <div className="min-w-0">
+                    <h4 className="font-semibold text-[15px] md:text-base leading-snug">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-dark-teal/70 leading-snug mt-0.5">{item.desc}</p>
                   </div>
-                  <div className="text-off-white/80 text-sm md:text-[15px] mt-3 leading-relaxed max-w-[240px]">
-                    {expedicao.duracaoNumeroLegenda}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* 8 regular cards in 4-col grid */}
-            {incluso.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.05 + i * 0.04 }}
-                className="group relative bg-gradient-to-br from-soft-green to-light-green/60 rounded-2xl md:rounded-3xl p-4 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default overflow-hidden"
-              >
-                <div className="absolute top-2.5 right-2.5 text-2xl md:text-3xl opacity-95 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                  {item.emoji}
-                </div>
-                <div className="mt-9 md:mt-11">
-                  <h4 className="font-semibold text-[13px] md:text-[15px] mb-0.5 leading-tight">
-                    {item.title}
-                  </h4>
-                  <p className="text-[11px] md:text-xs text-dark-teal/65 leading-snug">
-                    {item.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
 
         {/* Seguro viagem incluso — destaque pedido pela diretoria (2026-06-10) */}
         <motion.div

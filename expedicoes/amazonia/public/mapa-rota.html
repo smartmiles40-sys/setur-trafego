@@ -70,10 +70,11 @@
   }
 
   const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([-2.7, -60.1], 8);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap &copy; CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19
+  // 08/10/2026: o CARTO passou a exigir chave (os quadros vinham escritos
+  // 'API KEY REQUIRED'). Esri Light Gray: mesmo visual claro, sem chave.
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap',
+    maxZoom: 16
   }).addTo(map);
 
   // Pontos da Expedição Amazônia (coordenadas WGS84)

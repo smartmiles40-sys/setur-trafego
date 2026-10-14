@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, MapPin, Calendar, Plane, Sparkles, ArrowRight } from 'lucide-react'
 import { Wallet } from 'lucide-react'
@@ -17,31 +16,7 @@ const iconesExpedicao = {
   Compass,
 }
 
-function useCountdown(target: string) {
-  const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 })
-  useEffect(() => {
-    const calc = () => {
-      const now = Date.now()
-      const end = new Date(target).getTime()
-      const diff = Math.max(0, end - now)
-      setT({
-        d: Math.floor(diff / 86400000),
-        h: Math.floor((diff % 86400000) / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
-      })
-    }
-    calc()
-    const id = setInterval(calc, 1000)
-    return () => clearInterval(id)
-  }, [target])
-  return t
-}
-
-const pad = (n: number) => String(n).padStart(2, '0')
-
 export default function Opcoes() {
-  const t = useCountdown(expedicao.dataInicio + 'T00:00:00-03:00')
   const IconeExpedicao = iconesExpedicao[expedicao.iconeExpedicao] ?? Leaf
 
   const itens = opcoesItens
@@ -134,34 +109,6 @@ export default function Opcoes() {
             <Plane size={14} /> Saída: {expedicao.saida}
           </span>
         </div>
-
-        {/* Countdown */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="flex justify-center gap-2 md:gap-3 mb-16"
-        >
-          {[
-            { v: t.d, l: 'DIAS' },
-            { v: t.h, l: 'HORAS' },
-            { v: t.m, l: 'MIN' },
-            { v: t.s, l: 'SEG' },
-          ].map((b, i) => (
-            <div key={i} className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-lime/60 to-light-green/30 rounded-2xl blur opacity-40 group-hover:opacity-70 transition-opacity" />
-              <div className="relative bg-gradient-to-br from-dark-teal via-dark-teal-light to-dark-teal text-off-white rounded-2xl px-4 md:px-8 py-4 md:py-5 min-w-[78px] md:min-w-[110px] shadow-card border border-dark-teal-soft/40">
-                <div className="font-serif text-3xl md:text-5xl font-bold leading-none tabular-nums">
-                  {pad(b.v)}
-                </div>
-                <div className="text-[10px] md:text-[11px] mt-2 tracking-[0.25em] opacity-75">
-                  {b.l}
-                </div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
       </div>
 
       {/* Premium Card — architectural layout */}

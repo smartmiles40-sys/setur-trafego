@@ -38,7 +38,7 @@ export const expedicao = {
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
   mapaIframeTitulo: 'Mapa interativo da rota Expedição Islândia',
   tudoResolvidoDescricao:
-    'A Islândia é um destino desafiador — clima extremo no inverno, estradas geladas, distâncias longas e janelas curtas para avistar a aurora. Cada decisão sob a tempestade pode comprometer a viagem inteira.',
+    'A Islândia no inverno é pura magia — aurora boreal, cachoeiras congeladas, lagoas termais e paisagens que parecem de outro planeta. Para viver tudo isso sem preocupação, cada detalhe precisa ser bem planejado: rotas, horários, clima e as melhores noites para ver a aurora.',
   tudoResolvidoDestaque: 'Na expedição, tudo isso acontece nos bastidores.',
   tudoResolvidoSubtitulo: 'Hospedagem 3★/4★ + 4×4 modificados',
   roteiroHeadlineDestino: 'a Islândia',

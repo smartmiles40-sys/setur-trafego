@@ -104,6 +104,7 @@ function comentario(lead, reaproveitado) {
 const FONTES_INFLU = new Set([
   'camilatrianda', 'jessieshen', 'coutinhonc', 'allanvaz',
   'camilaviseu', 'rafaelbaricala', 'joebrunno', 'joaozinho',
+  'jutrianda',
 ])
 export const fonteDoInfluenciador = (slug) =>
   FONTES_INFLU.has(slug) ? `INFLU_${slug.toUpperCase()}` : 'INFLU_GERAL'

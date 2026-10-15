@@ -21,4 +21,5 @@ export const influenciadores: Influenciador[] = [
   { slug: 'rafaelbaricala', nome: 'Rafael Baricala' },
   { slug: 'joebrunno', nome: 'Joe Brunno' },
   { slug: 'joaozinho', nome: 'Joãozinho' },
+  { slug: 'jutrianda', nome: 'Ju Trianda' },
 ]

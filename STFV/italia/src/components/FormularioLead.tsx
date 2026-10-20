@@ -209,8 +209,7 @@ export default function FormularioLead() {
   const [track, setTrack] = useState<Track>(TRACK_VAZIO)
 
   // Etapa 2 (vídeo): timer que libera o avanço para as perguntas
-  // O vídeo não bloqueia mais as perguntas (06/10/2026): o avanço nasce liberado.
-  const [videoLiberado, setVideoLiberado] = useState(true)
+  const [videoLiberado, setVideoLiberado] = useState(false)
   const [progresso, setProgresso] = useState(0) // 0–100: enche a mini barra do botão
   const deadlineRef = useRef<number | null>(null)
 
@@ -544,7 +543,7 @@ export default function FormularioLead() {
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-xl bg-lime/25 border border-lime px-4 py-3 text-dark-teal text-sm font-semibold">
             <Check className="h-4 w-4 flex-shrink-0" strokeWidth={3} aria-hidden />
-            <span>Depois do vídeo, falta só o seu perfil de viagem.</span>
+            <span>Liberado! Falta só o seu perfil de viagem.</span>
             <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden />
           </div>
         )}

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { expedicao } from '../data/expedicao'
 import { cliquesDoNavegador, guardarPrimeiroToque, lerPrimeiroToque, novoEventId } from '../lib/rastreio'
+import BarraProgresso from './BarraProgresso'
+import AgendaSdr from './AgendaSdr'
 
 /**
  * Formulário próprio multi-etapas — padrão "PADRONIZACAO FORMULARIO LP - SE TU FOR"
@@ -18,7 +20,7 @@ import { cliquesDoNavegador, guardarPrimeiroToque, lerPrimeiroToque, novoEventId
 const SAVE_LEAD_URL = '/api/save-lead'
 
 // slug da LP: usa expedicao.slug (deploy isolado, base '/') e cai no
-// BASE_URL ('/china/' → 'china') se rodar em monorepo unificado.
+// BASE_URL ('/china/' → 'china') no monorepo unificado.
 const SLUG =
   expedicao.slug || (import.meta.env.BASE_URL || '/').replace(/\//g, '') || 'lp'
 const FORM_NAME = `expedicao-${SLUG}-${expedicao.ano}`
@@ -153,6 +155,8 @@ function mascaraWhatsapp(valor: string) {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
+// ---------------------------------------------------------------------------
+
 // ---- Redirecionamento pro WhatsApp ----------------------------------------
 // A obrigado.html é um HTML estático compartilhado: ela não conhece a LP nem o
 // lead. Então o formulário deixa a mensagem já montada no sessionStorage (mesma
@@ -160,11 +164,27 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 // são FIXAS (sem slug) porque o outro lado é HTML puro, sem acesso ao bundle.
 const WHATSAPP_MSG_KEY = 'stfv_wa_msg'
 const WHATSAPP_REDIRECT_KEY = 'stfv_wa_redirecionado'
+// Distribuidor do QS (23/09/2026): a obrigado.html pergunta ao QS qual SDR é a
+// vez e abre o WhatsApp DELE. Ela precisa do telefone pra isso — é a chave que
+// faz o card no QS/Bitrix nascer com o mesmo SDR da conversa.
+const WHATSAPP_LEAD_KEY = 'stfv_wa_lead'
+const WHATSAPP_NUMERO_KEY = 'stfv_wa_numero'
 
-function guardarMensagemWhatsapp(nomeLead: string) {
+function guardarMensagemWhatsapp(nomeLead: string, telefone: string) {
   const msg = `Olá! Sou ${nomeLead.trim()} e acabei de preencher o formulário da Expedição ${expedicao.nome} ${expedicao.ano}. Quero seguir os próximos passos.`
   try {
     sessionStorage.setItem(WHATSAPP_MSG_KEY, msg)
+    sessionStorage.setItem(
+      WHATSAPP_LEAD_KEY,
+      JSON.stringify({
+        nome: nomeLead.trim(),
+        telefone: `+55${telefone.replace(/\D/g, '')}`,
+        expedicao: `${expedicao.nome} ${expedicao.ano}`,
+        origem: expedicao.fonte,
+      }),
+    )
+    // envio novo = pergunta de novo ao distribuidor
+    sessionStorage.removeItem(WHATSAPP_NUMERO_KEY)
     // envio novo = pode redirecionar de novo (a trava existe pra quem volta do
     // WhatsApp não cair num laço)
     sessionStorage.removeItem(WHATSAPP_REDIRECT_KEY)
@@ -185,6 +205,8 @@ export default function FormularioLead() {
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
+  // Depois das perguntas, a ligação com o SDR vira a última etapa (todo lead)
+  const [agenda, setAgenda] = useState<null | { jaNoBitrix: boolean; irParaObrigado: () => void }>(null)
   const [track, setTrack] = useState<Track>(TRACK_VAZIO)
 
   // Captura a atribuição no mount: mescla o que já está salvo na aba com o que
@@ -278,6 +300,7 @@ export default function FormularioLead() {
 
       // Nasce ANTES do envio: o mesmo id vai pro servidor e pro pixel (dedupe).
       const eventId = novoEventId()
+
       const payload = {
         lead_id: leadId,
         nome: nome.trim(),
@@ -306,14 +329,27 @@ export default function FormularioLead() {
           body: JSON.stringify(payload),
         })
         if (!resp.ok) throw new Error(`save-lead ${resp.status}`)
+        // `bitrix === false` = o n8n não recebeu (slug sem rota ou fora do ar):
+        // aí quem abre o card no Bitrix é o QS, na hora de marcar a reunião.
+        const retorno = (await resp.json().catch(() => ({}))) as { bitrix?: boolean }
 
         let navegou = false
         const irParaObrigado = () => {
           if (navegou) return
           navegou = true
           sessionStorage.removeItem(LEAD_ID_KEY)
-          guardarMensagemWhatsapp(nome)
+          guardarMensagemWhatsapp(nome, whatsapp)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
+        }
+
+        // Todo lead ganha a etapa da ligação com o SDR (ver AgendaSdr.tsx) e só
+        // DEPOIS vai pro obrigado.html.
+        let abriuAgenda = false
+        const seguir = () => {
+          if (abriuAgenda) return
+          abriuAgenda = true
+          setAgenda({ jaNoBitrix: retorno.bitrix !== false, irParaObrigado })
+          document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })
         }
 
         const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
@@ -335,18 +371,18 @@ export default function FormularioLead() {
             temperatura: leadScore(respostas).lead_score.toLowerCase(),
           },
           ...track,
-          eventCallback: irParaObrigado,
+          eventCallback: seguir,
           eventTimeout: 2000,
         })
 
         // Rede de segurança: se o GTM não chamar o callback, redireciona mesmo assim
-        setTimeout(irParaObrigado, 2000)
+        setTimeout(seguir, 2000)
       } catch (err) {
         if (import.meta.env.DEV) {
           // Em dev o /api não existe (função roda só na Vercel) — segue o fluxo
           console.warn('[dev] save-lead indisponível, simulando sucesso:', err)
           sessionStorage.removeItem(LEAD_ID_KEY)
-          guardarMensagemWhatsapp(nome)
+          guardarMensagemWhatsapp(nome, whatsapp)
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
           return
         }
@@ -357,6 +393,20 @@ export default function FormularioLead() {
     },
     [respostas, nome, whatsapp, email, instagram, setErro, track],
   )
+
+  if (agenda) {
+    return (
+      <AgendaSdr
+        etapasAntes={2}
+        nome={nome.trim()}
+        email={email.trim().toLowerCase()}
+        whatsapp={`+55${whatsapp.replace(/\D/g, '')}`}
+        jaNoBitrix={agenda.jaNoBitrix}
+        formName={FORM_NAME}
+        irParaObrigado={agenda.irParaObrigado}
+      />
+    )
+  }
 
   return (
     <form
@@ -373,30 +423,12 @@ export default function FormularioLead() {
         <input key={k} type="hidden" name={k} id={k} value={track[k]} readOnly />
       ))}
 
-      {/* Indicador de progresso */}
-      <div className="flex items-center justify-center gap-3 mb-8" aria-hidden>
-        <span
-          id="step1-indicator"
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-            etapa === 1 ? 'bg-lime text-dark-teal' : 'bg-dark-teal text-off-white'
-          }`}
-        >
-          1
-        </span>
-        <span id="step-connector" className="w-10 h-[2px] bg-dark-teal/20" />
-        <span
-          id="step2-indicator"
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-            etapa === 2 ? 'bg-lime text-dark-teal' : 'bg-dark-teal/10 text-dark-teal/50'
-          }`}
-        >
-          2
-        </span>
-      </div>
+      {/* Barra de progresso (sem número): a ligação com o SDR conta no total */}
+      <BarraProgresso fracao={etapa / 3} />
 
       {/* ============ ETAPA 1 — contato ============ */}
       <div id="form-step-1" className={`form-step ${etapa === 1 ? '' : 'hidden'}`}>
-        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 1 de 2 · Dados de contato</p>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">Dados de contato</p>
 
         <div className="space-y-5">
           <div>
@@ -473,7 +505,7 @@ export default function FormularioLead() {
 
       {/* ============ ETAPA 2 — perfil ============ */}
       <div id="form-step-2" className={`form-step ${etapa === 2 ? '' : 'hidden'}`}>
-        <p className="input-label !mb-6 text-center text-dark-teal/60">Etapa 2 de 2 · Seu perfil de viagem</p>
+        <p className="input-label !mb-6 text-center text-dark-teal/60">Seu perfil de viagem</p>
 
         <div className="space-y-7">
           {PERGUNTAS.map((p) => (

@@ -41,7 +41,7 @@ export default function Gastos() {
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-dark-teal/60 italic mt-4">
+            <p className="text-xs text-dark-teal/65 italic mt-4">
               * Valores podem variar conforme estilo de vida e preferências pessoais.
             </p>
           </div>

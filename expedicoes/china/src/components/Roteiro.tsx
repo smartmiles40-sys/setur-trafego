@@ -7,9 +7,13 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { expedicao, roteiro, roteiroEtapas } from '../data/expedicao'
+import Imagem from './Imagem'
 
 type Dia = (typeof roteiro)[number]
 type Etapa = (typeof roteiroEtapas)[number]
+
+// Título do dia: h4 quando há etapas (h2 › h3 país › h4 dia); h3 no roteiro contínuo (h2 › h3 dia)
+const TituloDia = roteiroEtapas.length > 0 ? 'h4' : 'h3'
 
 function DiaCard({ dia, i }: { dia: Dia; i: number }) {
   return (
@@ -22,9 +26,10 @@ function DiaCard({ dia, i }: { dia: Dia; i: number }) {
     >
       {/* Image hero */}
       <div className="relative h-[360px] md:h-[440px] overflow-hidden">
-        <img
+        <Imagem
           src={dia.imagem}
-          alt={dia.titulo}
+          sizes="(min-width: 1280px) 420px, (min-width: 1024px) 44vw, (min-width: 640px) 67vw, 90vw"
+          alt={dia.alt}
           className="w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.08]"
           loading="lazy"
           onError={(e) => {
@@ -56,9 +61,9 @@ function DiaCard({ dia, i }: { dia: Dia; i: number }) {
             <MapPin size={12} />
             <span className="tracking-wide">{dia.cidade}</span>
           </div>
-          <h4 className="font-serif font-bold text-off-white text-2xl md:text-3xl leading-[1.1] drop-shadow-lg">
+          <TituloDia className="font-serif font-bold text-off-white text-2xl md:text-3xl leading-[1.1] drop-shadow-lg">
             {dia.titulo}
-          </h4>
+          </TituloDia>
         </div>
       </div>
 
@@ -72,7 +77,7 @@ function DiaCard({ dia, i }: { dia: Dia; i: number }) {
           ))}
         </ul>
         <div className="mt-auto pt-4 border-t border-dark-teal/10">
-          <p className="text-[10px] text-dark-teal/50 uppercase font-bold tracking-[0.25em] mb-1">
+          <p className="text-[10px] text-dark-teal/65 uppercase font-bold tracking-[0.25em] mb-1">
             Logística
           </p>
           <p className="text-sm text-dark-teal/85">{dia.logistica}</p>
@@ -123,16 +128,16 @@ function EtapaBlock({ etapa, dias }: { etapa: Etapa; dias: Dia[] }) {
           {etapa.bandeira}
         </span>
         <div className="flex-1 min-w-0">
-          <div className="eyebrow text-dark-teal/45 text-[10px] mb-1.5">{etapa.ordem}</div>
+          <div className="eyebrow text-dark-teal/65 text-[10px] mb-1.5">{etapa.ordem}</div>
           <div className="flex items-baseline gap-3 flex-wrap">
             <h3 className="font-serif text-2xl md:text-4xl font-bold text-dark-teal tracking-tight leading-none">
               {etapa.pais}
             </h3>
-            <span className="text-dark-teal/45 text-xs font-semibold tracking-wide">
+            <span className="text-dark-teal/65 text-xs font-semibold tracking-wide">
               {dias.length} dias
             </span>
           </div>
-          <p className="text-dark-teal/55 text-xs md:text-sm mt-2 tracking-wide truncate">
+          <p className="text-dark-teal/65 text-xs md:text-sm mt-2 tracking-wide truncate">
             {etapa.cidades}
           </p>
         </div>
@@ -154,7 +159,7 @@ function TransicaoDivider({ label }: { label: string }) {
       aria-hidden="true"
     >
       <span className="h-px flex-1 bg-gradient-to-r from-transparent to-dark-teal/20" />
-      <span className="inline-flex items-center gap-2 text-dark-teal/55 text-xs font-semibold tracking-[0.18em] uppercase whitespace-nowrap">
+      <span className="inline-flex items-center gap-2 text-dark-teal/65 text-xs font-semibold tracking-[0.18em] uppercase whitespace-nowrap">
         <Plane size={14} className="text-lime-dark" />
         {label}
       </span>

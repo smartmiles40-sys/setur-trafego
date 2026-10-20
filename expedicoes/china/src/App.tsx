@@ -4,10 +4,10 @@ import Hero from './components/Hero'
 import TudoResolvido from './components/TudoResolvido'
 import Roteiro from './components/Roteiro'
 import Mapa from './components/Mapa'
+import Formulario from './components/Formulario'
 import Opcoes from './components/Opcoes'
 import PorQue from './components/PorQue'
 import Depoimentos from './components/Depoimentos'
-import Formulario from './components/Formulario'
 import Gastos from './components/Gastos'
 import FAQ from './components/FAQ'
 // import AssistenteIA from './components/AssistenteIA' // desativado temporariamente (a pedido do Bruno)
@@ -51,11 +51,11 @@ export default function App() {
       <Roteiro />
       <Mapa />
       <Opcoes />
-      <PorQue />
-      <Depoimentos />
       <Formulario />
+      <PorQue />
       <Gastos />
       <FAQ />
+      <Depoimentos />
       {/* <AssistenteIA /> — assistente de IA desativado temporariamente */}
       <Footer />
       <BottomCTA />

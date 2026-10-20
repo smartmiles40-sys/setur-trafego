@@ -1,0 +1,28 @@
+// GERADO por scripts/otimizar-imagens.mjs — não edite à mão.
+// Fotos que têm versão leve em _otim/: url -> [largura, altura, [larguras geradas]]
+export const IMAGENS_OTIMIZADAS: Record<string, [number, number, number[]]> = {
+  '/Logo-circular.png': [515, 516, [480]],
+  '/assets/china/dia-1.jpg': [1600, 1063, [480, 800, 1200]],
+  '/assets/china/dia-10.jpg': [1200, 675, [480, 800, 1200]],
+  '/assets/china/dia-11.jpg': [1200, 800, [480, 800, 1200]],
+  '/assets/china/dia-12.jpg': [1000, 1501, [480, 800, 1000]],
+  '/assets/china/dia-13.jpg': [768, 512, [480, 768]],
+  '/assets/china/dia-14.jpg': [1440, 960, [480, 800, 1200]],
+  '/assets/china/dia-15.jpg': [6143, 4095, [480, 800, 1200]],
+  '/assets/china/dia-16.jpg': [1600, 1063, [480, 800, 1200]],
+  '/assets/china/dia-2.jpg': [1600, 2000, [480, 800, 1200]],
+  '/assets/china/dia-3.jpg': [1280, 850, [480, 800, 1200]],
+  '/assets/china/dia-4.jpg': [669, 446, [480, 669]],
+  '/assets/china/dia-5.jpg': [720, 480, [480, 720]],
+  '/assets/china/dia-6.jpg': [1200, 1200, [480, 800, 1200]],
+  '/assets/china/dia-7.jpg': [719, 480, [480, 719]],
+  '/assets/china/dia-8.jpg': [3840, 2160, [480, 800, 1200]],
+  '/assets/china/dia-9.jpg': [870, 579, [480, 800]],
+  '/assets/china/galeria-1.jpg': [1280, 850, [480, 800, 1200]],
+  '/assets/china/galeria-2.jpg': [669, 446, [480, 669]],
+  '/assets/china/galeria-3.jpg': [900, 480, [480, 800]],
+  '/assets/china/galeria-4.jpg': [1200, 800, [480, 800, 1200]],
+  '/assets/china/galeria-5.jpg': [1200, 1200, [480, 800, 1200]],
+  '/assets/china/hero.jpg': [1280, 850, [480, 800, 1200]],
+  '/assets/selo-qualidade.png': [249, 320, [249]],
+}

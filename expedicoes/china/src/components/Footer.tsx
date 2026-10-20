@@ -68,8 +68,31 @@ export default function Footer() {
               Expedições guiadas para quem quer viver o mundo com tranquilidade, segurança e
               experiências inesquecíveis.
             </p>
+            {/* Selos — Cadastur (Ministério do Turismo) e o prêmio de qualidade.
+                O Cadastur tem texto azul-marinho, por isso vive num selo claro;
+                o prêmio é dourado e assenta direto no fundo escuro. */}
+            <div className="mt-5 flex flex-wrap items-center gap-4">
+              <span className="inline-flex items-center rounded-2xl bg-off-white px-4 py-2.5">
+                <img
+                  src={`${import.meta.env.BASE_URL}assets/cadastur.png`}
+                  alt="Cadastur — cadastrada no Ministério do Turismo"
+                  loading="lazy"
+                  className="h-7 w-auto"
+                />
+              </span>
+              <img
+                src={`${import.meta.env.BASE_URL}assets/selo-qualidade.png`}
+                alt="Prêmio International Quality Company 2026"
+                width={249}
+                height={320}
+                loading="lazy"
+                decoding="async"
+                className="h-20 w-auto"
+              />
+            </div>
+
             {/* Dados cadastrais — agência registrada (CNPJ + endereço). */}
-            <address className="mt-5 not-italic text-off-white/45 text-xs leading-relaxed">
+            <address className="mt-5 not-italic text-off-white/50 text-xs leading-relaxed">
               <span className="block">CNPJ 53.545.815/0001-12</span>
               <span className="block">Av. Dr. Chucri Zaidan, 1550 — Morumbi</span>
               <span className="block">São Paulo — SP, 04711-130</span>
@@ -77,7 +100,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="text-[10px] tracking-[0.25em] uppercase text-off-white/40 font-semibold mb-3">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-off-white/50 font-semibold mb-3">
               Expedição {expedicao.nome} {expedicao.ano}
             </p>
             <p className="text-off-white/85 text-lg font-display">
@@ -89,7 +112,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="text-[10px] tracking-[0.25em] uppercase text-off-white/40 font-semibold mb-3">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-off-white/50 font-semibold mb-3">
               Siga-nos
             </p>
             <div className="flex gap-3">
@@ -118,7 +141,7 @@ export default function Footer() {
         </div>
 
         <div className="h-px bg-off-white/10 mt-12 mb-6" />
-        <div className="flex justify-between flex-wrap gap-3 text-xs text-off-white/40">
+        <div className="flex justify-between flex-wrap gap-3 text-xs text-off-white/50">
           <span>© {new Date().getFullYear()} Se Tu For, Eu Vou. Todos os direitos reservados.</span>
           <a
             href={`${import.meta.env.BASE_URL}politica-privacidade.html`}

@@ -82,11 +82,10 @@
 <div id="wrap">
   <svg id="map" role="img" aria-label="Mapa mundi com rota Brasil — China"></svg>
   <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
-  <div class="badge bottom-left">Brasil → Pequim ⇄ Muralha → Xi'an → Chengdu → Chongqing → Zhangjiajie → Xangai → Brasil</div>
+  <div class="badge bottom-left">Brasil → Pequim → Xian → Chengdu → Chongqing → Zhangjiajie → Xangai → Pequim → Brasil</div>
   <div class="badge bottom-right">
     <span class="legend-item"><span class="legend-line dashed"></span>Voos</span>
     <span class="legend-item"><span class="legend-line solid" style="background:#1F7A8C"></span>Trem-bala</span>
-    <span class="legend-item"><span class="legend-line solid" style="background:#D4AC0D"></span>Van</span>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -105,7 +104,7 @@
 
   const projection = d3.geoEquirectangular()
     .translate([width / 2, height / 2])
-    .scale(width / (2 * Math.PI));
+    .scale(460);
 
   const path = d3.geoPath(projection);
   const graticule = d3.geoGraticule10();
@@ -113,38 +112,32 @@
   mapLayer.append('path').datum({ type: 'Sphere' }).attr('fill', 'var(--ocean)').attr('d', path);
   mapLayer.append('path').datum(graticule).attr('fill', 'none').attr('stroke', 'var(--grid)').attr('stroke-width', 0.6).attr('opacity', 0.7).attr('d', path);
 
-  // Coordenadas reais das paradas da Expedição China 2027
   const S = {
     sao:         { name: 'São Paulo',   lat: -23.4356, lon: -46.4731, color: '#09282B', labelOffset: [-38, 20] },
-    pequim:      { name: 'Pequim',      lat:  39.9042, lon: 116.4074, color: '#C0392B', labelOffset: [12, -10] },
-    muralha:     {                      lat:  40.4319, lon: 116.5704, color: '#D4AC0D' }, // Mutianyu — sem label (colada em Pequim no zoom-out)
-    xian:        { name: "Xi'an",       lat:  34.3416, lon: 108.9398, color: '#E63946', labelOffset: [-48, -10] },
-    chengdu:     { name: 'Chengdu',     lat:  30.5728, lon: 104.0668, color: '#D4AC0D', labelOffset: [-66, 6] },
-    chongqing:   { name: 'Chongqing',   lat:  29.5630, lon: 106.5516, color: '#8E44AD', labelOffset: [-30, 24] },
-    furong:      { name: 'Furong',      lat:  28.7167, lon: 109.9833, color: '#1F7A8C', labelOffset: [4, 22] },
-    zhangjiajie: { name: 'Zhangjiajie', lat:  29.1170, lon: 110.4790, color: '#2E8B57', labelOffset: [10, -10] },
-    xangai:      { name: 'Xangai',      lat:  31.2304, lon: 121.4737, color: '#BFD850', labelOffset: [12, 6] },
+    pequim:      { name: 'Pequim',      lat:  39.9042, lon: 116.4074, color: '#C0392B', labelOffset: [-52, -12] },
+    xian:        { name: 'Xian',        lat:  34.3416, lon: 108.9398, color: '#D4AC0D', labelOffset: [12, -10] },
+    chengdu:     { name: 'Chengdu',     lat:  30.5728, lon: 104.0668, color: '#1F7A8C', labelOffset: [-64, 4] },
+    chongqing:   { name: 'Chongqing',   lat:  29.5630, lon: 106.5516, color: '#8E44AD', labelOffset: [4, 18] },
+    zhangjiajie: { name: 'Zhangjiajie', lat:  29.1170, lon: 110.4790, color: '#BFD850', labelOffset: [14, 18] },
+    xangai:      { name: 'Xangai',      lat:  31.2304, lon: 121.4737, color: '#E63946', labelOffset: [12, -8] },
   };
 
   const stops = Object.values(S);
 
-  // Rota fiel ao roteiro dia a dia: voo GRU→Pequim (dias 1-2) · van Pequim⇄Muralha
-  // (bate-volta dia 3) · trem-bala Pequim→Xi'an (dia 5) · Xi'an→Chengdu (dia 6) ·
-  // Chengdu→Chongqing (dia 7) · trem Chongqing→Furong→Zhangjiajie (dia 9) ·
-  // voo Zhangjiajie→Xangai (dia 12) · voo Xangai→GRU (dias 14-16).
+  // Cada segmento: stroke + dashed (voo). O veículo de cada trecho fica nas fases (phaseDefs).
+  // Rota fiel ao roteiro (China): voo GRU→Pequim · trem-bala Pequim→Xian→Chengdu→
+  // Chongqing→Zhangjiajie · voo Zhangjiajie→Xangai · voo Xangai→GRU.
   const segments = [
-    { from: S.sao,         to: S.pequim,      stroke: '#09282B', dashed: true,    // 0  voo internacional (via Europa)
-      via: [ { lat: 38.7, lon: -9.1 }, { lat: 48.2, lon: 16.4 } ] },
-    { from: S.pequim,      to: S.muralha,     stroke: '#D4AC0D' },                // 1  van — bate-volta Muralha
-    { from: S.muralha,     to: S.pequim,      stroke: '#D4AC0D' },                // 2  van — retorno a Pequim
-    { from: S.pequim,      to: S.xian,        stroke: '#1F7A8C' },                // 3  trem-bala Pequim → Xi'an
-    { from: S.xian,        to: S.chengdu,     stroke: '#1F7A8C' },                // 4  trem-bala Xi'an → Chengdu
-    { from: S.chengdu,     to: S.chongqing,   stroke: '#1F7A8C' },                // 5  trem-bala Chengdu → Chongqing
-    { from: S.chongqing,   to: S.furong,      stroke: '#1F7A8C' },                // 6  trem Chongqing → Furong
-    { from: S.furong,      to: S.zhangjiajie, stroke: '#1F7A8C' },                // 7  trem Furong → Zhangjiajie
-    { from: S.zhangjiajie, to: S.xangai,      stroke: '#C0392B', dashed: true },  // 8  voo Zhangjiajie → Xangai
-    { from: S.xangai,      to: S.sao,         stroke: '#09282B', dashed: true,    // 9  voo internacional (via Europa)
-      via: [ { lat: 48.2, lon: 16.4 }, { lat: 38.7, lon: -9.1 } ] },
+    { from: S.sao,        to: S.pequim,      stroke: '#09282B', dashed: true,    // 0  voo internacional (via Europa)
+      via: [ { lat: 38.7, lon: -9.1 }, { lat: 48.2, lon: 16.4 }, { lat: 55.0, lon: 60.0 } ] },
+    { from: S.pequim,     to: S.xian,        stroke: '#D4AC0D' },                // 1  trem-bala Pequim → Xian
+    { from: S.xian,       to: S.chengdu,     stroke: '#1F7A8C' },                // 2  trem-bala Xian → Chengdu
+    { from: S.chengdu,    to: S.chongqing,   stroke: '#8E44AD' },                // 3  trem-bala Chengdu → Chongqing
+    { from: S.chongqing,  to: S.zhangjiajie, stroke: '#BFD850' },                // 4  trem-bala Chongqing → Zhangjiajie
+    { from: S.zhangjiajie,to: S.xangai,      stroke: '#C0392B', dashed: true },  // 5  voo Zhangjiajie → Xangai
+    { from: S.xangai,     to: S.pequim,      stroke: '#1F7A8C' },                // 6  trem-bala Xangai → Pequim
+    { from: S.pequim,     to: S.sao,         stroke: '#09282B', dashed: true,    // 7  voo internacional (via Europa)
+      via: [ { lat: 55.0, lon: 60.0 }, { lat: 48.2, lon: 16.4 }, { lat: 38.7, lon: -9.1 } ] },
   ];
 
   const buildLine = (from, to, steps = 48) => {
@@ -207,11 +200,11 @@
     // ===== Fases sequenciais (na ordem real da viagem) =====
     // vehicle: 'plane' = voo | 'van' = transfer terrestre | 'train' = trem-bala
     const phaseDefs = [
-      { segs: [0],             vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Pequim (voo internacional)
-      { segs: [1, 2],          vehicle: 'van',   scale: SCALE.ground, duration: 3000 }, // Pequim ⇄ Muralha (bate-volta)
-      { segs: [3, 4, 5, 6, 7], vehicle: 'train', scale: SCALE.ground, duration: 9000 }, // Trens: Xi'an · Chengdu · Chongqing · Zhangjiajie
-      { segs: [8],             vehicle: 'plane', scale: SCALE.flight, duration: 3000 }, // Zhangjiajie → Xangai (voo doméstico)
-      { segs: [9],             vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Xangai → GRU (voo internacional)
+      { segs: [0],          vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Pequim (voo internacional)
+      { segs: [1, 2, 3, 4], vehicle: 'train', scale: SCALE.ground, duration: 11000 }, // Trem-bala: Xian · Chengdu · Chongqing · Zhangjiajie
+      { segs: [5],          vehicle: 'plane', scale: SCALE.flight, duration: 4000 }, // Zhangjiajie → Xangai (voo)
+      { segs: [6],          vehicle: 'train', scale: SCALE.ground, duration: 4000 }, // Xangai → Pequim (trem-bala)
+      { segs: [7],          vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Pequim → GRU (voo internacional)
     ];
 
     phaseDefs.forEach(p => {
@@ -235,16 +228,17 @@
     vanGroup.append('path').attr('d', 'M-4.5,-8 L4.5,-8 L3.5,-3 L-3.5,-3 Z').attr('fill', '#D7F264');
     vanGroup.append('rect').attr('x', -4).attr('y', 2).attr('width', 8).attr('height', 6).attr('rx', 1.5).attr('fill', '#1F7A8C').attr('opacity', 0.55);
 
-    // ----- Trem-bala (top-down, nariz afilado para cima) -----
+    // ----- Trem-bala (top-down, frente reta + fileiras de janelas) -----
     const trainGroup = mapLayer.append('g').attr('class', 'vehicle train-group').style('pointer-events', 'none');
     trainGroup.style('display', 'none');
     trainGroup.append('path')
-      .attr('d', 'M0,-16 Q5,-11 5,-5 L5,12 Q5,14 3,14 L-3,14 Q-5,14 -5,12 L-5,-5 Q-5,-11 0,-16 Z')
+      .attr('d', 'M-3,-15 Q-5,-15 -5,-13 L-5,13 Q-5,15 -3,15 L3,15 Q5,15 5,13 L5,-13 Q5,-15 3,-15 Z')
       .attr('fill', '#0f172a').attr('stroke', '#fff').attr('stroke-width', 1.2).attr('stroke-linejoin', 'round');
-    trainGroup.append('path').attr('d', 'M0,-13.5 Q3,-9.5 3,-5 L-3,-5 Q-3,-9.5 0,-13.5 Z').attr('fill', '#D7F264');
-    trainGroup.append('rect').attr('x', -3).attr('y', -2).attr('width', 6).attr('height', 4).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
-    trainGroup.append('rect').attr('x', -3).attr('y', 4).attr('width', 6).attr('height', 4).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
-    trainGroup.append('rect').attr('x', -3).attr('y', 10).attr('width', 6).attr('height', 2.5).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
+    trainGroup.append('path').attr('d', 'M-3.5,-13 L3.5,-13 L3,-8.5 L-3,-8.5 Z').attr('fill', '#D7F264');
+    trainGroup.append('rect').attr('x', -3.5).attr('y', -6).attr('width', 7).attr('height', 3.5).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
+    trainGroup.append('rect').attr('x', -3.5).attr('y', -1).attr('width', 7).attr('height', 3.5).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
+    trainGroup.append('rect').attr('x', -3.5).attr('y', 4).attr('width', 7).attr('height', 3.5).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
+    trainGroup.append('rect').attr('x', -3.5).attr('y', 9).attr('width', 7).attr('height', 3.5).attr('rx', 1).attr('fill', '#1F7A8C').attr('opacity', 0.75);
 
     const vehicleGroups = { plane: planeGroup, van: vanGroup, train: trainGroup };
 

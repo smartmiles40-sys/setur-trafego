@@ -54,7 +54,7 @@ export default function FAQ() {
                 className="w-full text-left px-5 md:px-7 py-5 md:py-6 flex items-center justify-between gap-4 transition-colors"
               >
                 <div className="flex items-center gap-4 md:gap-6 flex-1">
-                  <span className="font-serif italic text-dark-teal/35 text-xl md:text-2xl font-bold tabular-nums flex-shrink-0 w-8">
+                  <span className="font-serif italic text-dark-teal/50 text-xl md:text-2xl font-bold tabular-nums flex-shrink-0 w-8">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span className="font-semibold text-dark-teal text-sm md:text-base">

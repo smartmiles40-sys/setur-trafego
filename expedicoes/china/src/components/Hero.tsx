@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Clouds from './Clouds'
 import { expedicao } from '../data/expedicao'
+import Imagem from './Imagem'
+import ContagemRegressiva from './ContagemRegressiva'
 
 export default function Hero() {
   return (
@@ -9,9 +11,10 @@ export default function Hero() {
       {/* Background image with Ken Burns */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute inset-0 ken-burns">
-          <img
+          <Imagem
             src={expedicao.heroImage}
-            alt={`Expedição ${expedicao.nome}`}
+            prioridade
+            alt={expedicao.heroAlt}
             className="w-full h-full object-cover"
           />
         </div>
@@ -26,7 +29,7 @@ export default function Hero() {
         aria-hidden
       >
         <motion.span
-          initial={{ opacity: 0.06, scale: 1.1 }}
+          initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 0.06, scale: 1 }}
           transition={{ duration: 2.2, ease: 'easeOut', delay: 0.4 }}
           className="num-stamp-solid text-off-white"
@@ -67,7 +70,7 @@ export default function Hero() {
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                 className="inline-block serif-italic font-normal text-off-white/95 text-[clamp(2.25rem,6vw,4.5rem)] leading-none"
               >
-                Expedição
+                Expedição{' '}
               </motion.span>
             </div>
 
@@ -101,6 +104,9 @@ export default function Hero() {
           >
             {expedicao.slogan}
           </motion.p>
+
+          {/* Cronômetro até o embarque — primeira dobra (doc 08/10/2026) */}
+          <ContagemRegressiva className="mb-10" />
 
           {/* 4. CTA */}
           <motion.a

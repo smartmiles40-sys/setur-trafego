@@ -47,11 +47,11 @@ export default function PorQue() {
                 <X size={18} className="text-red-400" strokeWidth={2.5} />
               </div>
               <div>
-                <p className="text-[10px] tracking-[0.2em] uppercase text-dark-teal/40 font-semibold">
+                <p className="text-[10px] tracking-[0.2em] uppercase text-dark-teal/65 font-semibold">
                   Por conta própria
                 </p>
                 <h3 className="font-serif font-bold text-base md:text-lg text-dark-teal leading-tight">
-                  Você resolve tudo
+                  Você precisa resolver tudo sozinho
                 </h3>
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function PorQue() {
               {porQue.sozinho.map((p) => (
                 <li
                   key={p}
-                  className="flex items-start gap-2.5 text-dark-teal/60 text-sm leading-snug"
+                  className="flex items-start gap-2.5 text-dark-teal/65 text-sm leading-snug"
                 >
                   <span className="text-red-300 mt-1 flex-shrink-0">×</span>
                   <span>{p}</span>

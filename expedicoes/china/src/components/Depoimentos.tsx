@@ -98,7 +98,7 @@ function TestimonialCard({ d }: { d: typeof depoimentos[number] }) {
       <div className="flex items-center gap-3 mb-4">
         <img
           src={d.avatar}
-          alt={d.nome}
+          alt={`Foto de ${d.nome}`}
           className="w-12 h-12 rounded-full object-cover bg-lime/20 border-2 border-white shadow"
           loading="lazy"
           onError={(e) => {
@@ -107,12 +107,12 @@ function TestimonialCard({ d }: { d: typeof depoimentos[number] }) {
           }}
         />
         <div className="min-w-0">
-          <h4 className="font-serif font-bold text-base leading-tight">{d.nome}</h4>
+          <h3 className="font-serif font-bold text-base leading-tight">{d.nome}</h3>
           <div className="flex items-center gap-1 mt-0.5">
             {Array.from({ length: d.rating }).map((_, i) => (
               <Star key={i} size={11} className="fill-lime-dark text-lime-dark" />
             ))}
-            <span className="text-[11px] text-dark-teal/50 ml-1 tracking-wide">
+            <span className="text-[11px] text-dark-teal/65 ml-1 tracking-wide">
               {d.tempo}
             </span>
           </div>

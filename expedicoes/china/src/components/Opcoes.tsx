@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, MapPin, Calendar, Plane, Sparkles, ArrowRight } from 'lucide-react'
 import { Wallet } from 'lucide-react'
 import { Leaf, Mountain, Snowflake, Sun, Palmtree, Compass } from 'lucide-react'
 import FloatingOrnaments from './FloatingOrnaments'
 import { expedicao, galeria, opcoesItens } from '../data/expedicao'
+import Imagem from './Imagem'
 
 // Mapeia o nome do ícone definido no data file (expedicao.iconeExpedicao)
 // para o componente lucide-react correspondente. Mantém a LP data-driven.
@@ -17,31 +17,7 @@ const iconesExpedicao = {
   Compass,
 }
 
-function useCountdown(target: string) {
-  const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 })
-  useEffect(() => {
-    const calc = () => {
-      const now = Date.now()
-      const end = new Date(target).getTime()
-      const diff = Math.max(0, end - now)
-      setT({
-        d: Math.floor(diff / 86400000),
-        h: Math.floor((diff % 86400000) / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
-      })
-    }
-    calc()
-    const id = setInterval(calc, 1000)
-    return () => clearInterval(id)
-  }, [target])
-  return t
-}
-
-const pad = (n: number) => String(n).padStart(2, '0')
-
 export default function Opcoes() {
-  const t = useCountdown(expedicao.dataInicio + 'T00:00:00-03:00')
   const IconeExpedicao = iconesExpedicao[expedicao.iconeExpedicao] ?? Leaf
 
   const itens = opcoesItens
@@ -78,10 +54,11 @@ export default function Opcoes() {
                 whileHover={{ scale: 1.08, rotate: 0, zIndex: 10, y: -8 }}
                 className={`${sizes[i]} ${rotations[i]} relative flex-shrink-0 cursor-pointer transition-shadow`}
               >
-                <div className="bg-white p-2 pb-8 md:pb-10 rounded-md shadow-[0_10px_30px_rgba(9,40,43,0.18)] h-full">
+                <div className="bg-white p-2 pb-10 md:pb-12 rounded-md shadow-[0_10px_30px_rgba(9,40,43,0.18)] h-full">
                   <div className="w-full h-full rounded-sm overflow-hidden bg-soft-green">
-                    <img
+                    <Imagem
                       src={img.src}
+                      sizes="(min-width: 768px) 320px, 240px"
                       alt={img.alt}
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -92,7 +69,7 @@ export default function Opcoes() {
                     />
                   </div>
                   <div className="absolute bottom-2 left-0 right-0 text-center">
-                    <span className="font-serif italic text-[10px] md:text-xs text-dark-teal/70">
+                    <span className="font-serif italic text-[10px] md:text-xs text-dark-teal leading-none">
                       {img.alt}
                     </span>
                   </div>
@@ -134,34 +111,6 @@ export default function Opcoes() {
             <Plane size={14} /> Saída: {expedicao.saida}
           </span>
         </div>
-
-        {/* Countdown */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="flex justify-center gap-2 md:gap-3 mb-16"
-        >
-          {[
-            { v: t.d, l: 'DIAS' },
-            { v: t.h, l: 'HORAS' },
-            { v: t.m, l: 'MIN' },
-            { v: t.s, l: 'SEG' },
-          ].map((b, i) => (
-            <div key={i} className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-lime/60 to-light-green/30 rounded-2xl blur opacity-40 group-hover:opacity-70 transition-opacity" />
-              <div className="relative bg-gradient-to-br from-dark-teal via-dark-teal-light to-dark-teal text-off-white rounded-2xl px-4 md:px-8 py-4 md:py-5 min-w-[78px] md:min-w-[110px] shadow-card border border-dark-teal-soft/40">
-                <div className="font-serif text-3xl md:text-5xl font-bold leading-none tabular-nums">
-                  {pad(b.v)}
-                </div>
-                <div className="text-[10px] md:text-[11px] mt-2 tracking-[0.25em] opacity-75">
-                  {b.l}
-                </div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
       </div>
 
       {/* Premium Card — architectural layout */}
@@ -199,7 +148,7 @@ export default function Opcoes() {
                 <IconeExpedicao size={28} className="text-dark-teal" strokeWidth={2.2} />
               </div>
               <div>
-                <p className="eyebrow text-dark-teal/60 mb-1">Expedição</p>
+                <p className="eyebrow text-dark-teal/65 mb-1">Expedição</p>
                 <h3 className="font-serif text-3xl md:text-5xl font-bold text-dark-teal leading-none">
                   {expedicao.nome} <span className="serif-italic font-normal">{expedicao.ano}</span>
                 </h3>
@@ -231,11 +180,11 @@ export default function Opcoes() {
                 <div className="w-9 h-9 rounded-xl bg-lime/30 flex items-center justify-center flex-shrink-0">
                   <Wallet size={18} className="text-dark-teal" />
                 </div>
-                <span className="eyebrow text-dark-teal/60">Faixa de investimento</span>
+                <span className="eyebrow text-dark-teal/65">Faixa de investimento</span>
               </div>
               <p className="font-serif text-xl md:text-2xl font-bold text-dark-teal leading-none whitespace-nowrap">
                 R$ {expedicao.faixaInvestimento.min.toLocaleString('pt-BR')}
-                <span className="font-normal text-dark-teal/40 mx-1.5">a</span>
+                <span className="font-normal text-dark-teal/65 mx-1.5">a</span>
                 R$ {expedicao.faixaInvestimento.max.toLocaleString('pt-BR')}
               </p>
             </div>
@@ -251,10 +200,8 @@ export default function Opcoes() {
               />
             </a>
 
-            <div className="relative mt-5 flex items-center justify-center gap-2 text-xs md:text-sm text-dark-teal/60">
+            <div className="relative mt-5 flex items-center justify-center gap-2 text-xs md:text-sm text-dark-teal/65">
               <MapPin size={12} />
-              <span>Grupos reduzidos</span>
-              <span className="text-dark-teal/25">·</span>
               <span>Vagas limitadas</span>
             </div>
           </div>

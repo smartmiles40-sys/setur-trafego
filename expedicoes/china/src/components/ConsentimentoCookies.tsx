@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react'
 /**
  * Banner de consentimento de cookies (LGPD — Lei 13.709/2018).
  *
- * Modelo OPT-OUT: o tracking (GTM / Google Ads / Meta Pixel) continua ligado por
+ * Modelo OPT-OUT: o tracking (GTM / Google Ads / Meta Pixel / Clarity) segue ligado por
  * padrão — como já estava — mas o visitante tem escolha clara. Se ele clicar em
- * "Recusar", chamamos o Consent Mode do Google e o revoke do Meta Pixel para
- * realmente parar a coleta não essencial naquele navegador.
+ * "Recusar", chamamos o Consent Mode do Google, o revoke do Meta Pixel e o
+ * consent=false do Clarity para realmente parar a coleta não essencial naquele
+ * navegador.
  *
  * Autocontido de propósito (estilos inline + <style> injetado): assim funciona
  * igual nos 11 projetos, sem depender da config de Tailwind de cada um.
@@ -23,6 +24,7 @@ declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void
     fbq?: (...args: unknown[]) => void
+    clarity?: (...args: unknown[]) => void
     dataLayer?: unknown[]
   }
 }
@@ -41,6 +43,11 @@ function aplicarConsentimento(estado: Consent) {
   // Meta Pixel
   if (typeof window.fbq === 'function') {
     window.fbq('consent', estado === 'accepted' ? 'grant' : 'revoke')
+  }
+  // Microsoft Clarity — grava a sessão inteira (mouse, scroll, cliques), então
+  // é o que MAIS precisa parar quando o visitante recusa.
+  if (typeof window.clarity === 'function') {
+    window.clarity('consent', estado === 'accepted')
   }
 }
 

@@ -37,7 +37,7 @@ export default function Header({ musicPlaying, toggleMusic }: HeaderProps) {
               <span className="font-display font-bold text-dark-teal text-lg md:text-xl tracking-tight">
                 SE TU FOR, EU VOU!
               </span>
-              <span className="text-xs text-dark-teal/60 font-sans italic hidden sm:inline">
+              <span className="text-xs text-dark-teal/65 font-sans italic hidden sm:inline">
                 Viagens
               </span>
             </a>

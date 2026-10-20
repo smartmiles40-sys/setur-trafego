@@ -2,34 +2,17 @@
 //  PADRONIZACAO FORMULARIO LP, adaptado de save-lead.php para a Vercel).
 //
 //  Fluxo: o formulário multi-etapas faz POST com JSON; aqui o lead é
-//  normalizado e encaminhado para o webhook de automação (N8N/Make/CRM).
+//  normalizado e vai em PARALELO pra dois lugares:
+//    1) Bitrix24 direto (contato + negócio) — ver _bitrix-lead.mjs. Até
+//       20/10/2026 passava pelo n8n ("Páginas tráfego"); agora não passa mais.
+//    2) ledger site_leads no Supabase (rede de segurança).
+//  Cada lead também sai em console.log (Vercel → Functions → Logs).
 //
-//  Diferença em relação ao PHP de referência: serverless não tem disco
-//  persistente, então NÃO existe leads.csv — o webhook é o canal de
-//  persistência. Cada lead também sai em console.log (visível em
-//  Vercel → Deployment → Functions → Logs) como rede de segurança
-//  enquanto o WEBHOOK_URL não estiver configurado.
-//
-//  Roteamento por expedição: cada LP tem seu próprio webhook de produção
-//  no n8n. O destino é escolhido pelo slug do lead (campo `slug`, ou
-//  derivado de `form_name` = "expedicao-<slug>-<ano>").
-//
-//  Override global opcional (Vercel → Env Vars): WEBHOOK_URL força TODAS as
-//  expedições para um único webhook — útil só para debug.
+//  A expedição é escolhida pelo slug do lead (campo `slug`, ou derivado de
+//  `form_name` = "expedicao-<slug>-<ano>"), e a fonte do Bitrix sai do mapa
+//  do servidor — nunca do navegador.
 
-const N8N_BASE = 'https://n8n-mowr.srv1758620.hstgr.cloud/webhook'
-
-// slug da expedição → webhook de PRODUÇÃO no n8n
-const WEBHOOKS = {
-  peru: `${N8N_BASE}/11b58934-b0d3-43f8-83ef-eeb1974333c1`,
-  islandia: `${N8N_BASE}/f5b01e9d-5135-4cbd-b6fe-bd0edaad834d`,
-  amazonia: `${N8N_BASE}/8fdcce67-e829-45ff-9f94-f07ed978c8a0`,
-  egito: `${N8N_BASE}/8c894d18-274c-4e61-b697-8a19e6f4d7c4`,
-  'japao-china': `${N8N_BASE}/612ef889-6284-4292-8a50-5bee3b815b8e`,
-  tailandia: `${N8N_BASE}/b9fc4978-7927-42c7-9dad-5eae0550049f`,
-  'turquia-grecia': `${N8N_BASE}/8674b368-80f4-4824-8d98-dbb2c915febb`,
-  italia: `${N8N_BASE}/957fa583-275d-40c0-b766-7109c8afa2fa`,
-}
+import { criarLeadNoBitrix, EXPEDICOES } from './_bitrix-lead.mjs'
 
 /** slug explícito do payload, ou derivado de form_name ("expedicao-<slug>-<ano>"). */
 function slugDoLead(lead) {
@@ -40,7 +23,7 @@ function slugDoLead(lead) {
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
 // Click ids: única âncora quando a campanha não manda UTM (autotagging do Google
-// manda só gclid). Vão pro n8n junto com as UTMs. No ledger eles entram dentro
+// manda só gclid). Vão pro Bitrix junto com as UTMs. No ledger eles entram dentro
 // de `raw` — NÃO como coluna própria, pra não quebrar o insert do site_leads.
 const CLICK_KEYS = ['utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid']
 const TRACK_KEYS = [...UTM_KEYS, ...CLICK_KEYS]
@@ -89,7 +72,11 @@ export default async function handler(req, res) {
     perfil: str(body.perfil, 60),
     investimento: str(body.investimento, 60),
     decisao: str(body.decisao, 60),
-    form_name: str(body.form_name, 80), // usado para rotear o webhook por destino
+    // Lead score calculado no site. Até 20/10/2026 ficava FORA desta lista e
+    // nunca chegava no Bitrix nem no QS pelos leads de tráfego.
+    lead_score: ['Quente', 'Morno', 'Frio'].includes(body.lead_score) ? body.lead_score : '',
+    lead_score_pontos: Number.isFinite(Number(body.lead_score_pontos)) ? String(Number(body.lead_score_pontos)) : '',
+    form_name: str(body.form_name, 80), // usado para achar a expedição
     slug: str(body.slug, 40),
     timestamp: str(body.timestamp, 40),
     data_hora_cadastro: dataHoraSaoPaulo(),
@@ -119,42 +106,35 @@ export default async function handler(req, res) {
   // Rede de segurança: todo lead fica nos logs da função
   console.log('[lead]', JSON.stringify(lead))
 
-  // Override global (debug) > webhook da expedição pelo slug
   const slug = slugDoLead(lead)
-  const webhookUrl = process.env.WEBHOOK_URL || WEBHOOKS[slug]
-  const slugOk = Boolean(webhookUrl)
+  const slugOk = Boolean(EXPEDICOES[slug])
 
-  // ── Canal 1: webhook do n8n (roteado por slug) ──────────────────────────────
-  const enviarN8n = async () => {
-    if (!webhookUrl) {
-      console.warn(`[webhook] sem destino para slug="${slug}" — coberto pelo ledger`)
+  // ── Canal 1: Bitrix direto ──────────────────────────────────────────────────
+  // Devolve true só quando o negócio existe no Bitrix (criado agora ou já
+  // criado por este mesmo envio).
+  const enviarBitrix = async () => {
+    const base = process.env.BITRIX_WEBHOOK_URL
+    if (!base) {
+      console.error('[bitrix] BITRIX_WEBHOOK_URL ausente — lead só no ledger/logs')
       return false
     }
-    const ctrl = new AbortController()
-    const timeout = setTimeout(() => ctrl.abort(), 7000)
-    try {
-      const resp = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lead),
-        signal: ctrl.signal,
-      })
-      if (!resp.ok) console.error('[webhook] status', resp.status)
-      return resp.ok
-    } finally {
-      clearTimeout(timeout)
+    const r = await criarLeadNoBitrix(base, slug, lead)
+    if (!r.ok) {
+      console.error('[bitrix] falhou', JSON.stringify({ lead_id: lead.lead_id, slug, etapa: r.etapa, erro: r.erro, descricao: r.descricao }))
+      return false
     }
+    console.log('[bitrix] ok', JSON.stringify({ lead_id: lead.lead_id, negocio: r.negocioId, repetido: !!r.repetido }))
+    return true
   }
 
   // ── Canal 2: ledger no Supabase, gravado por CÓDIGO (independe do n8n) ───────
-  // Captura 100% dos leads — inclusive slug sem rota (ex.: "japao") ou n8n fora
-  // do ar. É a fonte de verdade que a conciliação de 3h confere contra o Bitrix.
+  // Captura 100% dos leads — inclusive slug sem rota ou Bitrix fora do ar. É a fonte de verdade que a conciliação de 3h confere contra o Bitrix.
   // Falha aqui NUNCA trava o usuário nem perde o lead: só vira log.
   const gravarLedger = async () => {
     const SB_URL = process.env.SUPABASE_LEADS_URL
     const SB_KEY = process.env.SUPABASE_LEADS_KEY
     if (!SB_URL || !SB_KEY) {
-      console.warn('[ledger] SUPABASE_LEADS_URL/KEY ausentes — lead só no n8n/logs')
+      console.warn('[ledger] SUPABASE_LEADS_URL/KEY ausentes — lead só no Bitrix/logs')
       return
     }
     const ctrl = new AbortController()
@@ -207,12 +187,12 @@ export default async function handler(req, res) {
   }
 
   // Os dois canais correm em PARALELO: nenhum atrasa o outro, e o ledger captura
-  // mesmo que o n8n falhe.
-  const [rN8n, rLedger] = await Promise.allSettled([enviarN8n(), gravarLedger()])
-  if (rN8n.status === 'rejected') console.error('[webhook] falhou:', rN8n.reason && rN8n.reason.message)
+  // mesmo que o Bitrix falhe.
+  const [rBitrix, rLedger] = await Promise.allSettled([enviarBitrix(), gravarLedger()])
+  if (rBitrix.status === 'rejected') console.error('[bitrix] falhou:', rBitrix.reason && rBitrix.reason.message)
   if (rLedger.status === 'rejected') console.error('[ledger] falhou:', rLedger.reason && rLedger.reason.message)
 
   // `bitrix`: o formulário usa pra decidir, na ligação com o SDR, se o QS
-  // precisa abrir o card (n8n não recebeu) ou só adotar o que o n8n abriu.
-  res.status(200).json({ ok: true, bitrix: rN8n.status === 'fulfilled' && rN8n.value === true })
+  // precisa abrir o card (o Bitrix não recebeu) ou só adotar o que já existe.
+  res.status(200).json({ ok: true, bitrix: rBitrix.status === 'fulfilled' && rBitrix.value === true })
 }

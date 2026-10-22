@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowDown, Check, Lock } from 'lucide-react'
 import { expedicao } from '../data/expedicao'
-import AgendaSdr from './AgendaSdr'
 import BarraProgresso from './BarraProgresso'
 import VslPlayer from './VslPlayer'
 import { cliquesDoNavegador, guardarPrimeiroToque, lerPrimeiroToque, novoEventId } from '../lib/rastreio'
@@ -215,8 +214,6 @@ export default function FormularioLead() {
   const [erros, setErros] = useState<Record<string, string>>({})
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState(false)
-  // Depois das perguntas, TODO lead ganha a etapa da ligação com o SDR
-  const [agenda, setAgenda] = useState<null | { jaNoBitrix: boolean; irParaObrigado: () => void }>(null)
   // Etapa 2 (vídeo): timer que libera o avanço para as perguntas
   const [videoLiberado, setVideoLiberado] = useState(false)
   const [progresso, setProgresso] = useState(0) // 0–100: enche a mini barra do botão
@@ -393,14 +390,30 @@ export default function FormularioLead() {
           window.location.href = `${import.meta.env.BASE_URL}obrigado.html`
         }
 
-        // Todo lead ganha a etapa da ligação com o SDR (ver AgendaSdr.tsx) e só
-        // DEPOIS vai pro obrigado.html, onde o GTM conta a conversão.
-        let abriuAgenda = false
+        // 22/10/2026 (Bruno): o lead vai DIRETO pro obrigado.html, que é onde a
+        // Stape/GTM conta a conversão do Meta. A ligação com o SDR passou a ser
+        // marcada LÁ: antes ela era a última etapa daqui, e quem fechava a aba
+        // na agenda nunca chegava no obrigado (lead no Bitrix, mas invisível
+        // pra Meta). Os dados da agenda seguem pelo sessionStorage.
         const seguir = () => {
-          if (abriuAgenda) return
-          abriuAgenda = true
-          setAgenda({ jaNoBitrix: retorno.bitrix !== false, irParaObrigado })
-          document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })
+          try {
+            sessionStorage.setItem(
+              'stfv_agenda',
+              JSON.stringify({
+                nome: nome.trim(),
+                email: email.trim().toLowerCase(),
+                telefone: `+55${whatsapp.replace(/\D/g, '')}`,
+                expedicao: expedicao.nome,
+                origem: expedicao.fonte,
+                destino: expedicao.slug,
+                form_name: FORM_NAME,
+                ja_no_bitrix: retorno.bitrix !== false,
+              }),
+            )
+          } catch {
+            /* aba privada: o obrigado.html só confirma, sem agenda */
+          }
+          irParaObrigado()
         }
 
         const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
@@ -444,19 +457,6 @@ export default function FormularioLead() {
     },
     [respostas, nome, whatsapp, email, instagram, setErro, videoLiberado, track],
   )
-
-  if (agenda) {
-    return (
-      <AgendaSdr
-        nome={nome.trim()}
-        email={email.trim().toLowerCase()}
-        whatsapp={`+55${whatsapp.replace(/\D/g, '')}`}
-        jaNoBitrix={agenda.jaNoBitrix}
-        formName={FORM_NAME}
-        irParaObrigado={agenda.irParaObrigado}
-      />
-    )
-  }
 
   return (
     <form

@@ -10,6 +10,7 @@ export default {
     './turquia.html',
     './islandia.html',
     './egito.html',
+    './china.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {

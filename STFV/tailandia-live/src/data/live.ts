@@ -12,6 +12,7 @@
  *    live.setuforeuvouviagens.com.br/turquia           → Turquia & Grécia
  *    live.setuforeuvouviagens.com.br/islandia          → Islândia
  *    live.setuforeuvouviagens.com.br/egito             → Egito
+ *    live.setuforeuvouviagens.com.br/china             → China
  *
  *  Um projeto só na Vercel, um build só, um deploy só. O que muda é o
  *  conjunto de dados escolhido AQUI, pelo caminho da URL.
@@ -46,6 +47,7 @@ import { liveTailandia } from './live-tailandia'
 import { liveTurquia } from './live-turquia'
 import { liveIslandia } from './live-islandia'
 import { liveEgito } from './live-egito'
+import { liveChina } from './live-china'
 import type { ConfigLive } from './live-japao'
 
 /**
@@ -64,6 +66,7 @@ const POR_CAMINHO: Record<string, ConfigLive> = {
   turquia: liveTurquia,
   islandia: liveIslandia,
   egito: liveEgito,
+  china: liveChina,
 }
 
 function escolherLive(): ConfigLive {

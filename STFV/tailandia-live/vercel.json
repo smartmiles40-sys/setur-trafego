@@ -19,7 +19,9 @@
     { "source": "/islandia", "destination": "/islandia.html" },
     { "source": "/islandia/", "destination": "/islandia.html" },
     { "source": "/egito", "destination": "/egito.html" },
-    { "source": "/egito/", "destination": "/egito.html" }
+    { "source": "/egito/", "destination": "/egito.html" },
+    { "source": "/china", "destination": "/china.html" },
+    { "source": "/china/", "destination": "/china.html" }
   ],
   "redirects": [
     { "source": "/japao", "destination": "/", "permanent": true },

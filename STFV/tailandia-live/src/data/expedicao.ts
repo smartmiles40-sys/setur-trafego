@@ -25,6 +25,7 @@ import { roteiroTailandia, copyRoteiroTailandia } from './roteiro-tailandia'
 import { roteiroTurquia, copyRoteiroTurquia } from './roteiro-turquia'
 import { roteiroIslandia, copyRoteiroIslandia } from './roteiro-islandia'
 import { roteiroEgito, copyRoteiroEgito } from './roteiro-egito'
+import { roteiroChina, copyRoteiroChina } from './roteiro-china'
 
 /** A chave é o SLUG da live (o do CRM), não a rota. */
 const POR_SLUG = {
@@ -35,6 +36,7 @@ const POR_SLUG = {
   'turquia-live': { roteiro: roteiroTurquia, copy: copyRoteiroTurquia },
   'islandia-live': { roteiro: roteiroIslandia, copy: copyRoteiroIslandia },
   'egito-live': { roteiro: roteiroEgito, copy: copyRoteiroEgito },
+  'china-live': { roteiro: roteiroChina, copy: copyRoteiroChina },
 }
 
 // Live nova que esqueceu de entrar no mapa cai no Japão — é o que já vive na

@@ -39,7 +39,7 @@ export const expedicao = {
   incluidoHeadline: "Tudo pronto para você",
   incluidoHeadlineItalico: "viver o Japão.",
   incluidoDescricao:
-    "Hospedagem, traslados privativos, trem-bala, guias privativos, TeamLab Planets e Universal Studios Japan — resolvidos.",
+    "Traslados privativos, trem-bala, guias privativos, TeamLab Planets e Universal Studios Japan — resolvidos.",
   incluidoDestaque: "Você só precisa chegar e se encantar com o Japão.",
 
   roteiroHeadline: "Treze dias pelo Japão",
@@ -52,11 +52,6 @@ export const expedicao = {
 // "O que está incluído" — cards do bento (emoji + título + descrição).
 export const incluso = [
   {
-    emoji: "🏨",
-    title: "Hospedagem · 12 noites",
-    desc: "Hotéis selecionados em Tóquio, Osaka e Kyoto.",
-  },
-  {
     emoji: "🚐",
     title: "Traslados privativos",
     desc: "Aeroporto, estações de trem e hotéis — em todas as chegadas e saídas.",
@@ -64,7 +59,12 @@ export const incluso = [
   {
     emoji: "🚄",
     title: "Trem-bala",
-    desc: "Shinkansen Tóquio → Osaka e Kyoto → Tóquio, com assento reservado, e trem Osaka → Kyoto.",
+    desc: "Shinkansen Tóquio → Osaka e Kyoto → Tóquio, com assento reservado.",
+  },
+  {
+    emoji: "🚆",
+    title: "Trem Osaka → Kyoto",
+    desc: "Trecho de trem entre Osaka e Kyoto, com traslados até o hotel.",
   },
   {
     emoji: "🧭",
@@ -84,10 +84,10 @@ export const incluso = [
 ];
 
 export const naoIncluso = [
+  "Hospedagem (cotada conforme as datas da sua viagem)",
   "Passagem aérea internacional",
   "Seguro viagem",
   "Refeições",
-  "Taxas de hospedagem cobradas localmente pelos hotéis",
   "Passeios opcionais",
   "Gastos pessoais",
 ];
@@ -98,7 +98,7 @@ export const investimento = {
   moeda: "R$",
   valor: "16.982,46",
   sufixo: "",
-  unidade: "por pessoa · em quarto duplo",
+  unidade: "por pessoa · sem hospedagem",
   nota: "Valores sujeitos à disponibilidade e ao câmbio.",
 };
 

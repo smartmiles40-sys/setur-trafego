@@ -12,7 +12,7 @@ export const WHATSAPP_LINK = "https://qs-turis.vercel.app/api/whatsapp";
 // servidor pelo slug (api/lead-pacote.mjs); "fonte" aqui é o texto que vai pro QS.
 export const captacao = {
   slug: 'japao-essencial',
-  fonte: '[Japão Essencial] - Tráfego',
+  fonte: '[Pacote Japão] - Tráfego',
 };
 
 export const expedicao = {

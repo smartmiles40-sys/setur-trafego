@@ -107,13 +107,13 @@ export const liveJapao = {
      *    horário das outras cinco lives de setembro (20h, não 19h30).
      */
     // 🔁 Remarcada em 05/10/2026 para domingo, 11 de outubro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-10-22T20:00:00-03:00',
+    inicioISO: '2026-10-27T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // Sala do Google Meet desta live.
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
     // que redireciona pra cá). Trocou lá, troque aqui.
-    meetUrl: 'https://meet.google.com/oww-hfxu-bnr',
+    meetUrl: 'https://meet.google.com/mdz-mbei-gna',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

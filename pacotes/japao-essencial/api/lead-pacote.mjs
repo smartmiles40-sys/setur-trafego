@@ -12,6 +12,7 @@
 import { PACOTES, criarLeadDePacote } from './_bitrix.mjs'
 
 const TRACK_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'gclid', 'fbclid']
+const SITE_PRINCIPAL = 'https://setuforeuvouviagens.com.br/api/lead-pacote'
 const SCORES = new Set(['Quente', 'Morno', 'Frio'])
 
 const str = (v, max) => String(v ?? '').slice(0, max)
@@ -70,8 +71,17 @@ export default async function handler(req, res) {
   const enviarBitrix = async () => {
     const base = process.env.BITRIX_WEBHOOK_URL
     if (!base) {
-      console.warn('[bitrix] BITRIX_WEBHOOK_URL ausente — lead só no ledger/log', lead.lead_id)
-      return false
+      // Sem chave do Bitrix neste projeto: repassa pro site principal, que usa o
+      // mesmo webhook e grava com a fonte de tráfego (pacote japao-essencial-trafego).
+      const r = await fetch(SITE_PRINCIPAL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...lead, pacote: 'japao-essencial-trafego' }),
+        signal: AbortSignal.timeout(12000),
+      })
+      const j = await r.json().catch(() => ({}))
+      console.log('[bitrix] via site principal', r.status, JSON.stringify(j), lead.lead_id)
+      return j.bitrix === true
     }
     const r = await criarLeadDePacote(base, lead)
     if (r.ok) console.log('[bitrix] negocio', r.negocioId, 'contato', r.contatoId, lead.lead_id)

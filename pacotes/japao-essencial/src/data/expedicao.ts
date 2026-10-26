@@ -92,12 +92,11 @@ export const naoIncluso = [
   "Gastos pessoais",
 ];
 
-// ⚠️ VALOR PENDENTE: o comercial ainda vai passar o preço final por pessoa.
 export const investimento = {
   prefixo: "A partir de",
   parcelas: "",
   moeda: "R$",
-  valor: "xxxx",
+  valor: "16.982,46",
   sufixo: "",
   unidade: "por pessoa · em quarto duplo",
   nota: "Valores sujeitos à disponibilidade e ao câmbio.",

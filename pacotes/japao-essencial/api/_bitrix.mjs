@@ -17,7 +17,7 @@ const RESPONSAVEL_PADRAO = '28575'
  * 05/10/2026). Decidida AQUI pelo slug — nunca pelo que o navegador manda.
  */
 export const PACOTES = {
-  'japao-essencial': { nome: 'Japão Essencial', fonte: 'TRAFEGO_JAPAO_ESSENCIAL' },
+  'japao-essencial': { nome: 'Pacote Japão', fonte: 'TRAFEGO_JAPAO_ESSENCIAL' },
 }
 
 /** Lista "Lead Scoring" do negócio: o rótulo calculado no site vira o id da opção. */
@@ -83,6 +83,7 @@ function comentario(lead, reaproveitado) {
     ['Quantas pessoas', lead.pessoas],
     ['Cidade de embarque', lead.cidade],
     ['Perfil de viajante', lead.perfil],
+    ['Tipo de quarto', lead.quarto],
     ['Investimento', lead.investimento],
     ['Lead score (site)', `${lead.lead_score} (${lead.lead_score_pontos} pontos)`],
     ['Instagram', lead.instagram],

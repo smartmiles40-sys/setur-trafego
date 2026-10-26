@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
  * pretende viajar?", sem "Quando você pretende tomar a decisão?" e o
  * investimento com só duas opções. O pacote é o da página — não se escolhe.
  *
- *   1. contato  ·  2. a viagem  ·  3. perfil + investimento  ·  4. ligação com o SDR
+ *   1. contato  ·  2. a viagem  ·  3. quarto + investimento  ·  4. ligação com o SDR
  *
  * POST /api/lead-pacote → contato + negócio direto no Bitrix (funil Pré-Vendas),
  * com a fonte "[<pacote>] - Orgânico" e o Lead Scoring calculado AQUI.
@@ -23,10 +23,13 @@ import { cn } from "@/lib/utils";
 
 const QUANDO = ["Nos próximos 3 meses", "De 3 a 6 meses", "Daqui a mais de 6 meses", "Ainda não tenho data"];
 const PESSOAS = ["Só eu", "2 pessoas", "3 ou 4 pessoas", "5 ou mais"];
-const PERFIL = [
-  "Será minha primeira viagem internacional",
-  "Já viajei algumas vezes para fora do Brasil",
-  "Sou viajante experiente",
+// Japão (doc do Bruno, 26/10): o preço muda conforme o quarto/hospedagem,
+// então a pergunta de perfil de viajante deu lugar à do quarto.
+const QUARTO = [
+  "Quarto duplo (2 pessoas)",
+  "Quarto single (só eu)",
+  "Quarto triplo (3 pessoas)",
+  "Mais de um quarto (família ou grupo)",
 ];
 const INVESTIMENTO = ["Sim, estou ciente", "Não, quero entender melhor"];
 
@@ -131,7 +134,7 @@ export default function FormularioPacote() {
   const [quando, setQuando] = useState("");
   const [pessoas, setPessoas] = useState("");
   const [cidade, setCidade] = useState("");
-  const [perfil, setPerfil] = useState("");
+  const [quarto, setQuarto] = useState("");
   const [investimentoResp, setInvestimentoResp] = useState("");
   const [estado, setEstado] = useState<"form" | "enviando">("form");
   const [erro, setErro] = useState("");
@@ -170,7 +173,7 @@ export default function FormularioPacote() {
     e.preventDefault();
     if (etapa === 1) return avancar1();
     if (etapa === 2) return avancar2();
-    const f = [!perfil && "perfil", !investimentoResp && "investimento"].filter(Boolean) as string[];
+    const f = [!quarto && "quarto", !investimentoResp && "investimento"].filter(Boolean) as string[];
     if (f.length) {
       setFaltando(f);
       return setErro("Falta responder o que ficou em vermelho");
@@ -189,7 +192,7 @@ export default function FormularioPacote() {
       quando,
       pessoas,
       cidade: cidade.trim(),
-      perfil,
+      quarto,
       investimento: investimentoResp,
       ...score,
       ...trackingDaUrl(),
@@ -346,11 +349,11 @@ export default function FormularioPacote() {
               {etapa === 3 && (
                 <>
                   <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-dark-teal/55">
-                    Seu perfil de viagem
+                    Sua hospedagem
                   </p>
-                  <Opcoes titulo="Qual o seu perfil de viajante?" opcoes={PERFIL} valor={perfil} onEscolher={setPerfil} erro={f("perfil")} />
+                  <Opcoes titulo="Como vocês vão se hospedar?" opcoes={QUARTO} valor={quarto} onEscolher={setQuarto} erro={f("quarto")} />
                   <Opcoes
-                    titulo={`O ${expedicao.nome} sai ${FRASE_PRECO.charAt(0).toLowerCase()}${FRASE_PRECO.slice(1)}. Você está ciente desse investimento?`}
+                    titulo={`O ${expedicao.tipo} ${expedicao.nome} sai ${FRASE_PRECO.charAt(0).toLowerCase()}${FRASE_PRECO.slice(1)}. Você está ciente desse investimento?`}
                     opcoes={INVESTIMENTO}
                     valor={investimentoResp}
                     onEscolher={setInvestimentoResp}

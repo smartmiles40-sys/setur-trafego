@@ -36,7 +36,7 @@ export default function BottomCTA() {
         >
           <div className="flex items-center justify-between gap-4 px-4 py-3">
             <div className="leading-tight">
-              <p className="font-serif text-base font-bold text-off-white">{expedicao.nome}</p>
+              <p className="font-serif text-base font-bold text-off-white">{expedicao.tipo} {expedicao.nome}</p>
               <p className="text-[11px] text-off-white/60">{expedicao.local}</p>
             </div>
             <a

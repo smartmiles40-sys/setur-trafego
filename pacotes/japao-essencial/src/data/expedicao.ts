@@ -17,7 +17,7 @@ export const captacao = {
 
 export const expedicao = {
   tipo: "Pacote",
-  nome: "Japão Essencial",
+  nome: "Japão",
   nomeUpper: "JAPÃO",
   local: "Tóquio · Osaka · Kyoto · Japão",
   slogan:
@@ -98,8 +98,8 @@ export const investimento = {
   moeda: "R$",
   valor: "16.982,46",
   sufixo: "",
-  unidade: "por pessoa · sem hospedagem",
-  nota: "Valores sujeitos à disponibilidade e ao câmbio.",
+  unidade: "por pessoa · em quarto duplo",
+  nota: "Hospedagem cotada à parte, conforme o hotel e o tipo de quarto escolhidos. Viajando sozinho (quarto single): acréscimo de R$ 4.000. Valores sujeitos à disponibilidade e ao câmbio.",
 };
 
 export const pagamentos = [

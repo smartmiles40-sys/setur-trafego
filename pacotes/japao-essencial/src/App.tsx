@@ -18,10 +18,10 @@ export default function App() {
         <Hero />
         <Incluido />
         <Roteiro />
-        <Depoimentos />
         <Investimento />
         <FormularioPacote />
         <Encerramento />
+        <Depoimentos />
       </main>
       <section
         aria-label="Se Tu For, Eu Vou! Viagens"

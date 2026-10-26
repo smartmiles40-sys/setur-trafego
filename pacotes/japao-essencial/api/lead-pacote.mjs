@@ -48,6 +48,7 @@ export default async function handler(req, res) {
     pessoas: str(body.pessoas, 40),
     cidade: str(body.cidade, 80).trim(),
     perfil: str(body.perfil, 80),
+    quarto: str(body.quarto, 80),
     investimento: str(body.investimento, 80),
     lead_score: SCORES.has(body.lead_score) ? body.lead_score : '',
     lead_score_pontos: Number.isFinite(Number(body.lead_score_pontos)) ? Number(body.lead_score_pontos) : '',

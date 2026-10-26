@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <!-- Rastreio só no domínio oficial: preview da Vercel e localhost não mandam dados pro Analytics/Ads/pixel/Clarity de produção (06/10/2026) -->
+    <script>window.__stfvProd=/(^|\.)setuforeuvouviagens\.com\.br$/.test(location.hostname);if(!window.__stfvProd){window.fbq=function(){};}</script>
+    <!-- Google Tag Manager -->
+    <script>window.__stfvProd&&(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://load.stape-japao.setuforeuvouviagens.com.br/7e5pyoponlz.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','1q=EwhTKCQiVCdOVD9YOihAVgxRXEFBSR0eRx8LGwUJFgIfGRgABRkQER0JABxeDBYdVA4c');</script>
+    <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Recebemos seus dados! · Se Tu For, Eu Vou! Viagens</title>
+
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #F8F6F7;
+      color: #09282B;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 560px;
+      width: 100%;
+      background: #fff;
+      border-radius: 32px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(9, 40, 43, 0.10);
+    }
+    .check {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: #D7F264;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 34px;
+    }
+    h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 14px; }
+    h1 em { font-style: italic; font-weight: 400; }
+    p.sub { color: rgba(9, 40, 43, 0.7); line-height: 1.6; margin-bottom: 32px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: #D7F264; color: #09282B;
+      font-weight: 600; text-decoration: none;
+      padding: 16px 32px; border-radius: 999px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn:hover { background: #C0E046; transform: scale(1.02); }
+    .voltar {
+      display: block; margin-top: 20px;
+      color: rgba(9, 40, 43, 0.5); font-size: 14px; text-decoration: none;
+    }
+    .voltar:hover { color: #09282B; }
+    .marca { margin-top: 36px; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(9, 40, 43, 0.4); }
+    /* Agenda da ligação com o SDR (22/10/2026) */
+    .agenda { margin: 4px 0 8px; text-align: center; }
+    .agenda[hidden] { display: none; }
+    .agenda-titulo { font-weight: 700; font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; }
+    .agenda-texto { color: rgba(9, 40, 43, 0.7); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
+    #agenda-quadro { width: 100%; border: 0; display: block; min-height: 340px; }
+    .agenda-nota { margin-top: 16px; color: rgba(9, 40, 43, 0.6); font-size: 14px; }
+    @media (max-width: 480px) {
+      body { padding: 16px; align-items: flex-start; }
+      .card { padding: 36px 18px; border-radius: 24px; }
+    }
+  </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://load.stape-japao.setuforeuvouviagens.com.br/ns.html?id=GTM-W48Q7JG9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  <main class="card">
+    <div class="check">✓</div>
+    <h1>Recebemos seus dados!</h1>
+    <p class="sub" id="texto-padrao">
+      Nosso time vai analisar seu perfil e entrar em contato pelo WhatsApp
+      para alinharmos os próximos passos da sua viagem. Fica de olho no celular!
+    </p>
+    <!--
+      22/10/2026 (Bruno): a ligação com o SDR é marcada AQUI, não mais no
+      formulário. O lead chega nesta página assim que envia (é a visita a ela
+      que a Stape/GTM conta como conversão do Meta) e, já contado, escolhe o
+      horário. Agenda = página pública do QS no modo SDR (/agendar/?com=sdr):
+      reserva com trava por SDR, atividade na fila dele, e o card do Bitrix
+      passa pro nome de quem vai ligar (alcancarLigacaoSdr, no QS). Os dados
+      vêm do formulário pelo sessionStorage ('stfv_agenda'); sem eles (visita
+      direta, aba privada) a página fica só com a confirmação.
+    -->
+    <section id="agenda" class="agenda" hidden>
+      <p class="agenda-titulo">Falta só um passo: marque uma ligação rápida com o nosso time</p>
+      <p class="agenda-texto" id="agenda-texto">
+        Escolha o melhor horário e a gente te liga no WhatsApp para uma conversa de 5 minutos.
+      </p>
+      <iframe id="agenda-quadro" title="Escolha o horário da ligação" loading="eager"></iframe>
+      <p class="agenda-nota" id="agenda-nota">Se preferir não marcar agora, tudo bem: nosso time te chama no WhatsApp.</p>
+    </section>
+    <script>
+      (function () {
+        var QS = 'https://qs-turis.vercel.app';
+        var dados = null;
+        try { dados = JSON.parse(sessionStorage.getItem('stfv_agenda') || 'null'); } catch (e) {}
+        if (!dados || !dados.telefone) return;
+
+        var secao = document.getElementById('agenda');
+        var quadro = document.getElementById('agenda-quadro');
+        var padrao = document.getElementById('texto-padrao');
+        function dl(evento, extra) {
+          window.dataLayer = window.dataLayer || [];
+          var o = { event: evento, form_name: dados.form_name, destino: dados.destino };
+          for (var k in extra) o[k] = extra[k];
+          window.dataLayer.push(o);
+        }
+
+        if (padrao) padrao.hidden = true;
+        document.getElementById('agenda-texto').textContent =
+          'Escolha o melhor horário e a gente te liga no WhatsApp para uma conversa de 5 minutos sobre o pacote ' +
+          dados.expedicao + '.';
+        secao.hidden = false;
+
+        window.addEventListener('message', function (e) {
+          if (e.origin !== QS || !e.data || typeof e.data !== 'object') return;
+          var d = e.data;
+          // O iframe avisa quando está pronto; só então os dados vão. Por
+          // postMessage e não pela URL: endereço de iframe fica no histórico.
+          if (d.tipo === 'qs-agendar:pronto') {
+            quadro.contentWindow.postMessage({
+              tipo: 'qs-agendar:preencher',
+              nome: dados.nome,
+              email: dados.email,
+              telefone: dados.telefone,
+              expedicao: dados.expedicao,
+              origem: dados.origem,
+              ja_no_bitrix: dados.ja_no_bitrix !== false
+            }, QS);
+          }
+          if (d.tipo === 'qs-agendar:altura' && d.altura) quadro.style.height = d.altura + 'px';
+          if (d.tipo === 'qs-agendar:concluido') {
+            // Evento próprio: ligação marcada não é reunião com especialista.
+            dl('ligacao_agendada', { ja_existia: d.ja_existia === true, com: d.com || 'sdr' });
+            document.getElementById('agenda-nota').textContent = 'Pronto! Horário marcado. A gente te liga no WhatsApp.';
+            try { sessionStorage.removeItem('stfv_agenda'); } catch (e2) {}
+          }
+        });
+
+        quadro.src = QS + '/agendar/?com=sdr&embed=1&tema=stfv&dias=3&expedicao=' + encodeURIComponent(dados.expedicao);
+        dl('agenda_sdr_exibida', {});
+      })();
+    </script>
+    <a class="voltar" href="./">← Voltar para a página do pacote</a>
+    <div class="marca">Se Tu For, Eu Vou! · Viagens</div>
+  </main>
+  <!--
+    29/09/2026 (Bruno): sem WhatsApp aqui. A página não escolhe SDR nem abre
+    conversa: o lead entra no QS e a distribuição do QS decide o dono, que
+    chama a pessoa. Esta página existe pra confirmar o envio e pro GTM contar
+    a conversão.
+  -->
+</body>
+</html>

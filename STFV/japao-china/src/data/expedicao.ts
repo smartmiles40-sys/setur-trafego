@@ -12,16 +12,16 @@ export const expedicao = {
   nome: 'Japão',
   nomeUpper: 'JAPÃO',
   ano: 2027,
-  dataInicio: '2027-10-14',
-  dataInicioLabel: '14 de outubro',
-  dataFimLabel: '30 de outubro',
-  dataRange: '14 a 30 de outubro de 2027',
-  dataResumoCurto: 'Japão · 14 – 30 out',
-  duracao: '17 dias',
-  duracaoNumero: 17,
+  dataInicio: '2027-10-10',
+  dataInicioLabel: '10 de outubro',
+  dataFimLabel: '27 de outubro',
+  dataRange: '10 a 27 de outubro de 2027',
+  dataResumoCurto: 'Japão · 10 – 27 out',
+  duracao: '18 dias',
+  duracaoNumero: 18,
   duracaoNumeroLegenda:
     'De Osaka a Tóquio — Kyoto, Hiroshima, Monte Fuji e trem-bala — abrindo com a extensão China em Pequim.',
-  duracaoExtenso: '17 dias · 14 noites',
+  duracaoExtenso: '18 dias · 14 noites',
   saida: 'Aeroporto de Guarulhos (GRU)',
   saidaCurta: 'Encontro em Guarulhos (GRU)',
   cidades: ['Pequim', 'Osaka', 'Kyoto', 'Hiroshima', 'Monte Fuji', 'Tóquio'],
@@ -33,8 +33,8 @@ export const expedicao = {
   mapaDescricao:
     'Uma travessia pelo Japão — Osaka, Kyoto, Hiroshima, Monte Fuji e Tóquio, com trem-bala e voos internos — abrindo com a extensão China: Pequim, Muralha, Cidade Proibida e Templo do Céu, com suporte de instalação de Alipay e WeChat.',
   mapaTrajetoTexto: 'Pequim → Osaka → Kyoto → Hiroshima → Monte Fuji → Tóquio',
-  mapaDistancia: '3 voos + trem-bala · 17 dias',
-  mapaDistanciaCurta: '3 voos + JR · 17 dias',
+  mapaDistancia: '3 voos + trem-bala · 18 dias',
+  mapaDistanciaCurta: '3 voos + JR · 18 dias',
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
   mapaIframeTitulo: 'Mapa interativo da rota Expedição Japão + extensão China',
   tudoResolvidoDescricao:
@@ -70,7 +70,7 @@ export const expedicao = {
 }
 
 export const opcoesItens = [
-  '17 dias de expedição',
+  '18 dias de expedição',
   'Voos internacionais e domésticos',
   'Extensão China: 4 noites em Pequim',
   '6 noites em Osaka + 4 em Tóquio 3★/4★',
@@ -144,7 +144,7 @@ export const naoIncluso = [
 export const roteiro = [
   {
     dia: 1,
-    data: '14/10',
+    data: '10/10',
     cidade: 'São Paulo → Pequim',
     titulo: 'Embarque internacional',
     atividades: [
@@ -154,13 +154,29 @@ export const roteiro = [
       'Início oficial da expedição',
     ],
     logistica: 'Voo internacional GRU → Pequim',
-    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-01.jpg`,
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-02.jpg`,
     destaque: false,
     veiculos: [{ emoji: '✈️', label: 'Voo internacional GRU → Pequim' }],
   },
   {
     dia: 2,
-    data: '15/10',
+    data: '11/10',
+    cidade: 'Em trânsito',
+    titulo: 'Em trânsito rumo a Pequim',
+    atividades: [
+      'Conexão internacional com suporte do líder',
+      'Dia de voo e descanso a bordo',
+      'Cruzamento do fuso horário rumo à Ásia',
+    ],
+    logistica: 'Voo internacional + conexão',
+    imagem: `${import.meta.env.BASE_URL}assets/japao-china/dia-01.jpg`,
+    alt: 'Asa de avião sobre as nuvens ao entardecer',
+    destaque: false,
+    veiculos: [{ emoji: '✈️', label: 'Voo internacional em trânsito' }],
+  },
+  {
+    dia: 3,
+    data: '12/10',
     cidade: 'Pequim',
     titulo: 'Extensão China · Chegada em Pequim',
     atividades: [
@@ -175,8 +191,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚐', label: 'Transfer privativo' }],
   },
   {
-    dia: 3,
-    data: '16/10',
+    dia: 4,
+    data: '13/10',
     cidade: 'Pequim',
     titulo: 'Muralha da China · Tour Privativo',
     atividades: [
@@ -191,8 +207,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚐', label: 'Van privativa à Muralha' }],
   },
   {
-    dia: 4,
-    data: '17/10',
+    dia: 5,
+    data: '14/10',
     cidade: 'Pequim',
     titulo: 'Cidade Proibida & Templo do Céu',
     atividades: [
@@ -207,8 +223,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🐉', label: 'Tour cultural em Pequim' }],
   },
   {
-    dia: 5,
-    data: '18/10',
+    dia: 6,
+    data: '15/10',
     cidade: 'Pequim',
     titulo: 'Dia livre em Pequim',
     atividades: [
@@ -223,8 +239,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚶', label: 'Exploração de hutongs' }],
   },
   {
-    dia: 6,
-    data: '19/10',
+    dia: 7,
+    data: '16/10',
     cidade: 'Pequim → Osaka',
     titulo: 'Fim da extensão China · Chegada ao Japão',
     atividades: [
@@ -239,8 +255,8 @@ export const roteiro = [
     veiculos: [{ emoji: '✈️', label: 'Voo Pequim → Osaka' }],
   },
   {
-    dia: 7,
-    data: '20/10',
+    dia: 8,
+    data: '17/10',
     cidade: 'Osaka',
     titulo: 'Castelo, Mercado & Dotonbori',
     atividades: [
@@ -255,8 +271,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚇', label: 'Metrô Osaka' }],
   },
   {
-    dia: 8,
-    data: '21/10',
+    dia: 9,
+    data: '18/10',
     cidade: 'Kyoto',
     titulo: 'Fushimi Inari, Kiyomizu & Gueixa',
     atividades: [
@@ -271,8 +287,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚆', label: 'Trem Osaka ↔ Kyoto' }],
   },
   {
-    dia: 9,
-    data: '22/10',
+    dia: 10,
+    data: '19/10',
     cidade: 'Kyoto',
     titulo: 'Bambu, Pavilhão Dourado & Gion',
     atividades: [
@@ -287,8 +303,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🛺', label: 'Riquixá tradicional' }],
   },
   {
-    dia: 10,
-    data: '23/10',
+    dia: 11,
+    data: '20/10',
     cidade: 'Hiroshima',
     titulo: 'Hiroshima & Ilha de Miyajima',
     atividades: [
@@ -306,8 +322,8 @@ export const roteiro = [
     ],
   },
   {
-    dia: 11,
-    data: '24/10',
+    dia: 12,
+    data: '21/10',
     cidade: 'Osaka',
     titulo: 'Dia livre em Osaka',
     atividades: [
@@ -322,8 +338,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚶', label: 'Exploração livre' }],
   },
   {
-    dia: 12,
-    data: '25/10',
+    dia: 13,
+    data: '22/10',
     cidade: 'Monte Fuji → Tóquio',
     titulo: 'Monte Fuji & Trem-bala para Tóquio',
     atividades: [
@@ -341,8 +357,8 @@ export const roteiro = [
     ],
   },
   {
-    dia: 13,
-    data: '26/10',
+    dia: 14,
+    data: '23/10',
     cidade: 'Tóquio',
     titulo: 'Asakusa, Sensō-ji & Akihabara',
     atividades: [
@@ -357,8 +373,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚇', label: 'Metrô + cartão JR' }],
   },
   {
-    dia: 14,
-    data: '27/10',
+    dia: 15,
+    data: '24/10',
     cidade: 'Tóquio',
     titulo: 'Harajuku, Meiji, Shibuya & Shinjuku',
     atividades: [
@@ -373,8 +389,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚇', label: 'Metrô Tóquio' }],
   },
   {
-    dia: 15,
-    data: '28/10',
+    dia: 16,
+    data: '25/10',
     cidade: 'Tóquio',
     titulo: 'Dia livre em Tóquio',
     atividades: [
@@ -389,8 +405,8 @@ export const roteiro = [
     veiculos: [{ emoji: '🚶', label: 'Exploração livre' }],
   },
   {
-    dia: 16,
-    data: '29/10',
+    dia: 17,
+    data: '26/10',
     cidade: 'Tóquio → São Paulo',
     titulo: 'Despedida do Japão',
     atividades: [
@@ -405,8 +421,8 @@ export const roteiro = [
     veiculos: [{ emoji: '✈️', label: 'Voo Tóquio → GRU' }],
   },
   {
-    dia: 17,
-    data: '30/10',
+    dia: 18,
+    data: '27/10',
     cidade: 'São Paulo',
     titulo: 'Chegada ao Brasil',
     atividades: [
@@ -440,7 +456,7 @@ export const roteiroEtapas: {
     bandeira: '🇨🇳',
     cidades: 'Pequim · Muralha · Cidade Proibida · Templo do Céu',
     diaInicio: 1,
-    diaFim: 5,
+    diaFim: 6,
     transicao: 'Voo Pequim → Osaka',
   },
   {
@@ -448,8 +464,8 @@ export const roteiroEtapas: {
     pais: 'Japão',
     bandeira: '🇯🇵',
     cidades: 'Osaka · Kyoto · Hiroshima · Monte Fuji · Tóquio',
-    diaInicio: 6,
-    diaFim: 17,
+    diaInicio: 7,
+    diaFim: 18,
   },
 ]
 
@@ -571,6 +587,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '', // 29/09/2026: sem número fixo — o WhatsApp é decidido pela rota do QS
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão 2027 (com extensão China) — 14 a 30 de outubro de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão 2027 (com extensão China) — 10 a 27 de outubro de 2027.',
 }
 export const whatsappUrl = `https://qs-turis.vercel.app/api/whatsapp?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

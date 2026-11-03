@@ -365,12 +365,17 @@
                     acusa o erro.
            inicio → início no fuso de Brasília. É daqui que saem o selo
                     "AO VIVO AGORA" e a frase da data, sem ninguém editar texto.
+           aoVivoFixo → (opcional) true = selo "AO VIVO AGORA" fixo, ignora
+                    `inicio` e nunca mostra "Live encerrada".
            nome / compl / fundo → o que a primeira tela mostra.
          ===================================================================== */
 
       var LIVES = {
         'japao-live': {
-          sala: 'https://meet.google.com/mdz-mbei-gna',
+          // Live na AppLive (não é Meet). `aoVivoFixo` deixa o selo
+          // "Ao vivo agora" sempre ligado, sem depender de `inicio`.
+          sala: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2027/',
+          aoVivoFixo: true,
           inicio: '2026-10-27T20:00:00-03:00',
           nome: 'Japão 2027',
           compl: 'com extensão China',
@@ -506,7 +511,7 @@
         var selo = document.getElementById('selo');
         var seloTxt = document.getElementById('selo-txt');
         var quando = document.getElementById('quando-txt');
-        if (agora >= inicio && agora <= fim) {
+        if (CFG.aoVivoFixo || (agora >= inicio && agora <= fim)) {
           selo.className = 'selo ao-vivo';
           seloTxt.textContent = 'Ao vivo agora';
           quando.innerHTML = 'A transmissão <strong>já começou</strong> — entre agora';

@@ -110,10 +110,10 @@ export const liveJapao = {
     inicioISO: '2026-10-27T20:00:00-03:00',
     duracaoMinutos: 90,
 
-    // Sala do Google Meet desta live.
+    // Sala desta live (AppLive, não Meet).
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
     // que redireciona pra cá). Trocou lá, troque aqui.
-    meetUrl: 'https://meet.google.com/mdz-mbei-gna',
+    meetUrl: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2027/',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

@@ -45,7 +45,7 @@ export const livePacoteJapao: ConfigLive = {
   slug: 'pacote-japao-live',
 
   fonte: '[Pacote Japão] - Live',
-  sourceId: '', // ⚠️ PREENCHER com o STATUS_ID criado no Bitrix
+  sourceId: 'LIVE_PACOTE_JAPAO', // ✅ criada no Bitrix em 04/11/2026
 
   expedicao: expedicaoPacote,
 

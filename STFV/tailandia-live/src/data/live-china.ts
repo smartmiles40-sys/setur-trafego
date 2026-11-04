@@ -78,8 +78,9 @@ export const liveChina: ConfigLive = {
      * esta linha.
      *
      * ✅ Definida pelo Bruno em 23/10/2026: quinta-feira, 29 de outubro de 2026, 20h00 (BRT).
+     * 🔁 Remarcada em 04/11/2026 para quinta-feira, 05 de novembro de 2026, 21h00 (BRT).
      */
-    inicioISO: '2026-10-29T20:00:00-03:00',
+    inicioISO: '2026-11-05T21:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 23/10/2026). Vazio = o convite
@@ -90,7 +91,7 @@ export const liveChina: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/rar-hbaq-mxc',
+    meetUrl: 'https://meet.google.com/rtx-qybs-pzb',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

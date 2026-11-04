@@ -91,7 +91,8 @@ export const liveTailandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/uop-wwdq-oma',
+    // Sala desta live (AppLive, não Meet).
+    meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2027/webinar',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

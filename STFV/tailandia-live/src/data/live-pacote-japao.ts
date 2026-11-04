@@ -16,8 +16,6 @@
  *  componentes — ver os helpers no fim de `live.ts`. As lives de expedição
  *  não têm esses campos e continuam exatamente como estavam.
  *
- *  ⚠️ PREENCHER: `sourceId` (origem no Bitrix) — a origem será criada e
- *     enviada depois. Enquanto vazio, o card nasce sem origem no Bitrix.
  * ============================================================================
  */
 

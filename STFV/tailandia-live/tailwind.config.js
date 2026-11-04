@@ -11,6 +11,7 @@ export default {
     './islandia.html',
     './egito.html',
     './china.html',
+    './pacote-japao.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {

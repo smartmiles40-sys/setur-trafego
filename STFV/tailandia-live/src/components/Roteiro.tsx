@@ -7,6 +7,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { expedicao, roteiro } from '../data/expedicao'
+import { ehPacote, doProduto } from '../data/live'
 
 export default function Roteiro() {
   return (
@@ -48,7 +49,7 @@ export default function Roteiro() {
           </motion.p>
           <p className="text-dark-teal/70 text-xs md:text-sm inline-flex items-center gap-2">
             <Star size={14} className="fill-lime-dark text-lime-dark" />
-            Os dias marcados são emblemáticos da expedição
+            Os dias marcados são emblemáticos {doProduto}
           </p>
         </div>
       </div>
@@ -58,7 +59,7 @@ export default function Roteiro() {
         <div className="flex items-baseline justify-between mb-6 md:mb-8 px-1">
           <h3 className="font-serif text-base md:text-2xl font-bold text-dark-teal tracking-tight">
             {expedicao.nome} <span className="text-dark-teal/40 mx-2">—</span>{' '}
-            <span className="serif-italic font-normal">Expedição {expedicao.ano}</span>
+            <span className="serif-italic font-normal">{ehPacote ? 'Pacote' : `Expedição ${expedicao.ano}`}</span>
           </h3>
           <div className="eyebrow text-dark-teal/50 text-[10px]">
             {roteiro.length} dias

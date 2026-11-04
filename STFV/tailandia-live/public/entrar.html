@@ -289,7 +289,7 @@
       <span class="selo" id="selo"><span class="ponto"></span><span id="selo-txt">Live gratuita</span></span>
 
       <h1>
-        Expedição <span class="lime" id="h1-nome">Japão 2027</span>
+        <span id="h1-tipo">Expedição</span> <span class="lime" id="h1-nome">Japão 2027</span>
         <span class="compl" id="h1-compl">com extensão China</span>
       </h1>
 
@@ -368,6 +368,7 @@
            aoVivoFixo → (opcional) true = selo "AO VIVO AGORA" fixo, ignora
                     `inicio` e nunca mostra "Live encerrada".
            nome / compl / fundo → o que a primeira tela mostra.
+           tipo   → (opcional) 'Pacote' no lugar de "Expedição" no título.
          ===================================================================== */
 
       var LIVES = {
@@ -417,6 +418,15 @@
           nome: 'Islândia 2027',
           compl: '',
           fundo: '/assets/islandia/aurora-boreal.jpg'
+        },
+        'pacote-japao-live': {
+          // Pacote (não expedição): `tipo` troca "Expedição" por "Pacote" no título.
+          sala: 'https://meet.google.com/tib-uswd-wee',
+          inicio: '2026-11-08T21:00:00-03:00',
+          tipo: 'Pacote',
+          nome: 'Japão Essencial',
+          compl: 'Tóquio · Osaka · Kyoto',
+          fundo: '/assets/pacote-japao/hero.jpg'
         },
         'china-live': {
           sala: 'https://meet.google.com/rtx-qybs-pzb',
@@ -471,7 +481,10 @@
       }
 
       (function pintarLive() {
-        document.title = 'Entrar na live · Expedição ' + CFG.nome + ' | Se Tu For, Eu Vou';
+        var TIPO = CFG.tipo || 'Expedição';
+        var tp = document.getElementById('h1-tipo');
+        if (tp) tp.textContent = TIPO;
+        document.title = 'Entrar na live · ' + TIPO + ' ' + CFG.nome + ' | Se Tu For, Eu Vou';
         var n = document.getElementById('h1-nome');
         var c = document.getElementById('h1-compl');
         var f = document.getElementById('fundo-img');
@@ -619,7 +632,7 @@
                       // Deriva do mapa LIVES: escrito à mão, toda live que não
                       // fosse o Japão gravava "Japão 2027" na coluna Live da
                       // planilha de Entradas — e nada acusava o erro.
-                      evento_titulo: 'Live: Expedição ' + CFG.nome + ' · Se Tu For, Eu Vou',
+                      evento_titulo: 'Live: ' + (CFG.tipo || 'Expedição') + ' ' + CFG.nome + ' · Se Tu For, Eu Vou',
                       evento_inicio: INICIO_ISO };
         var atr = atribuicao();
         for (var k in atr) { if (Object.prototype.hasOwnProperty.call(atr, k)) corpo[k] = atr[k]; }

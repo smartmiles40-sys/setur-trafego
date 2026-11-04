@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { CalendarDays, Video } from 'lucide-react'
 import ContagemRegressiva from './ContagemRegressiva'
 import FormularioLive from './FormularioLive'
-import { live } from '../data/live'
+import { fundoDecorativo } from '../data/live'
 import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 
 /**
@@ -34,7 +34,7 @@ export default function ChamadaFinal() {
             opacity: 0.05,
           }}
         >
-          {live.expedicao.ano}
+          {fundoDecorativo}
         </span>
       </div>
 

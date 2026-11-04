@@ -21,7 +21,9 @@
     { "source": "/egito", "destination": "/egito.html" },
     { "source": "/egito/", "destination": "/egito.html" },
     { "source": "/china", "destination": "/china.html" },
-    { "source": "/china/", "destination": "/china.html" }
+    { "source": "/china/", "destination": "/china.html" },
+    { "source": "/pacote-japao", "destination": "/pacote-japao.html" },
+    { "source": "/pacote-japao/", "destination": "/pacote-japao.html" }
   ],
   "redirects": [
     { "source": "/japao", "destination": "/", "permanent": true },

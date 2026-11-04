@@ -1,4 +1,5 @@
 import { expedicao } from '../data/expedicao'
+import { tituloProduto } from '../data/live'
 
 const socials = [
   {
@@ -78,7 +79,7 @@ export default function Footer() {
 
           <div>
             <p className="text-[10px] tracking-[0.25em] uppercase text-off-white/40 font-semibold mb-3">
-              Expedição {expedicao.nome} {expedicao.ano}
+              {tituloProduto}
             </p>
             <p className="text-off-white/85 text-lg font-display">
               {expedicao.resumoExpedicao}

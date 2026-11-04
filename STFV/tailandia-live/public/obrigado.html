@@ -125,7 +125,8 @@
         'turquia-live': 'https://chat.whatsapp.com/I3eb8uP6zKHCFkozKujvsn',
         'islandia-live': 'https://chat.whatsapp.com/CVupYigJKHy2iGczz8lywd',
         'egito-live': 'https://chat.whatsapp.com/K7JzZaSK6GE7VuJituiyh9',
-        'china-live': 'https://chat.whatsapp.com/ENV0N9p6RDQEHNAgxscTtD'
+        'china-live': 'https://chat.whatsapp.com/ENV0N9p6RDQEHNAgxscTtD',
+        'pacote-japao-live': 'https://chat.whatsapp.com/JS8suwkDSG6BAPzzjclags'
       };
       var PADRAO = PADRAO_POR_LIVE[SLUG] || '';
       var SEGUNDOS = 3;
@@ -140,10 +141,12 @@
         'turquia-live': 'Turquia & Grécia 2027',
         'islandia-live': 'Islândia 2027',
         'egito-live': 'Egito 2027',
-        'china-live': 'China 2027'
+        'china-live': 'China 2027',
+        'pacote-japao-live': 'Pacote Japão Essencial'
       };
       if (TITULO_POR_LIVE[SLUG]) {
-        document.title = 'Inscrição confirmada! · Live Expedição ' + TITULO_POR_LIVE[SLUG];
+        var t = TITULO_POR_LIVE[SLUG];
+        document.title = 'Inscrição confirmada! · Live ' + (t.indexOf('Pacote') === 0 ? '' : 'Expedição ') + t;
       }
 
       function ler(chave) {

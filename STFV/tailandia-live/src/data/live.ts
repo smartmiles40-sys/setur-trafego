@@ -13,6 +13,7 @@
  *    live.setuforeuvouviagens.com.br/islandia          → Islândia
  *    live.setuforeuvouviagens.com.br/egito             → Egito
  *    live.setuforeuvouviagens.com.br/china             → China
+ *    live.setuforeuvouviagens.com.br/pacote-japao      → Pacote Japão Essencial
  *
  *  Um projeto só na Vercel, um build só, um deploy só. O que muda é o
  *  conjunto de dados escolhido AQUI, pelo caminho da URL.
@@ -48,6 +49,7 @@ import { liveTurquia } from './live-turquia'
 import { liveIslandia } from './live-islandia'
 import { liveEgito } from './live-egito'
 import { liveChina } from './live-china'
+import { livePacoteJapao } from './live-pacote-japao'
 import type { ConfigLive } from './live-japao'
 
 /**
@@ -67,6 +69,7 @@ const POR_CAMINHO: Record<string, ConfigLive> = {
   islandia: liveIslandia,
   egito: liveEgito,
   china: liveChina,
+  'pacote-japao': livePacoteJapao,
 }
 
 function escolherLive(): ConfigLive {
@@ -84,3 +87,22 @@ export const live = escolherLive()
 export const temVideo = Boolean(live.vsl.playerId && live.vsl.playerSrc)
 
 export type { ConfigLive }
+
+/**
+ * Expedição × Pacote. As lives de expedição não têm estes campos e caem no
+ * texto de sempre ("Expedição Japão 2027"); o pacote (`live-pacote-japao.ts`)
+ * traz `tipo`/`destaque`/`titulo` no objeto `expedicao` e troca só o texto.
+ */
+type ExtrasProduto = { tipo?: string; destaque?: string; titulo?: string }
+const extras = live.expedicao as ConfigLive['expedicao'] & ExtrasProduto
+export const ehPacote = extras.tipo === 'Pacote'
+/** "Expedição China 2027" | "Pacote Japão Essencial" */
+export const tituloProduto = extras.titulo ?? `Expedição ${live.expedicao.nome} ${live.expedicao.ano}`
+/** O que vem em lime ao lado do nome no hero: o ano, ou "ESSENCIAL". */
+export const destaqueTitulo = extras.destaque ?? String(live.expedicao.ano)
+/** "a Expedição" | "o Pacote" */
+export const sobreProduto = ehPacote ? 'o Pacote' : 'a Expedição'
+/** "da expedição" | "do pacote" */
+export const doProduto = ehPacote ? 'do pacote' : 'da expedição'
+/** Número gigante decorativo do fundo: o ano (pacote não tem). */
+export const fundoDecorativo = ehPacote ? '' : String(live.expedicao.ano)

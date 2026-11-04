@@ -77,6 +77,7 @@ export default defineConfig(({ mode }) => {
          *   islandia.html           → /islandia           → Islândia
          *   egito.html              → /egito              → Egito
  *   china.html              → /china              → China
+ *   pacote-japao.html       → /pacote-japao       → Pacote Japão Essencial
          *
          * São entradas HTML de verdade, não rotas de SPA, porque cada uma
          * precisa dos próprios <title>/description/og:* — é isso que o
@@ -97,6 +98,7 @@ export default defineConfig(({ mode }) => {
           islandia: fileURLToPath(new URL('./islandia.html', import.meta.url)),
           egito: fileURLToPath(new URL('./egito.html', import.meta.url)),
           china: fileURLToPath(new URL('./china.html', import.meta.url)),
+          'pacote-japao': fileURLToPath(new URL('./pacote-japao.html', import.meta.url)),
         },
       },
     },

@@ -3,7 +3,7 @@ import { CalendarDays, Video } from 'lucide-react'
 import Clouds from './Clouds'
 import ContagemRegressiva from './ContagemRegressiva'
 import Inscricao from './Inscricao'
-import { live } from '../data/live'
+import { live, tituloProduto, destaqueTitulo, sobreProduto, fundoDecorativo } from '../data/live'
 import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 
 /**
@@ -25,7 +25,7 @@ export default function HeroLive() {
         <div className="ken-burns absolute inset-0">
           <img
             src={live.heroImage}
-            alt={`Expedição ${live.expedicao.nome} ${live.expedicao.ano}`}
+            alt={tituloProduto}
             className="h-full w-full object-cover"
             fetchPriority="high"
           />
@@ -48,7 +48,7 @@ export default function HeroLive() {
             opacity: 0.05,
           }}
         >
-          {live.expedicao.ano}
+          {fundoDecorativo}
         </span>
       </div>
 
@@ -77,7 +77,7 @@ export default function HeroLive() {
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                 className="serif-italic inline-block text-[clamp(1.35rem,4.6vw,3.4rem)] font-normal leading-none text-off-white/95"
               >
-                Um encontro ao vivo sobre a Expedição
+                Um encontro ao vivo sobre {sobreProduto}
               </motion.span>
             </div>
 
@@ -89,7 +89,7 @@ export default function HeroLive() {
                 className="inline-block text-[clamp(2.5rem,10vw,9rem)] font-black leading-[0.95] tracking-[-0.035em]"
               >
                 {live.expedicao.nomeUpper}{' '}
-                <span className="text-lime">{live.expedicao.ano}</span>
+                <span className="text-lime">{destaqueTitulo}</span>
               </motion.span>
             </div>
 

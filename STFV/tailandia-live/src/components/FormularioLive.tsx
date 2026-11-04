@@ -7,7 +7,7 @@ import {
   type FormEvent,
 } from 'react'
 import { ArrowRight, Check, MessageCircle } from 'lucide-react'
-import { live } from '../data/live'
+import { live, tituloProduto, doProduto } from '../data/live'
 import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/envio'
 
@@ -324,7 +324,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         whatsapp: whatsappE164,
         email: emailOk,
         slug: SLUG,
-        expedicao: `Expedição ${live.expedicao.nome} ${live.expedicao.ano}`,
+        expedicao: tituloProduto,
         fonte: live.fonte,
         source_id: live.sourceId,
         origem: 'live',
@@ -488,7 +488,7 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         {TEM_COMUNIDADE ? (
           <>
             Ao enviar, você entra na nossa comunidade no WhatsApp — é por lá que o link da live e os
-            avisos da expedição são enviados. Pode sair quando quiser.
+            avisos {doProduto} são enviados. Pode sair quando quiser.
           </>
         ) : PEDE_EMAIL ? (
           <>

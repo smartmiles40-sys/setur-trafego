@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
 import { depoimentos } from '../data/expedicao'
+import { doProduto } from '../data/live'
 import DepoimentoVideo from './DepoimentoVideo'
 import OndeVerificar from './OndeVerificar'
 
@@ -66,7 +67,7 @@ export default function Depoimentos() {
             <span className="font-serif text-off-white text-xl md:text-3xl font-bold">5.0</span>
             <div className="text-off-white/60 text-xs md:text-sm">
               <span className="block leading-tight">Baseado em avaliações reais</span>
-              <span className="block leading-tight">de viajantes da expedição</span>
+              <span className="block leading-tight">de viajantes {doProduto}</span>
             </div>
           </div>
         </div>

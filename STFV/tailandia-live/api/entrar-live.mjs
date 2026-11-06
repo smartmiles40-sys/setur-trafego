@@ -30,6 +30,15 @@ function normalizarWhatsapp(valor) {
   return semDDI ? `+55${semDDI}` : ''
 }
 
+// Formulários do STFV Forms que gravam AQUI (sem Bitrix): o pós-live do time
+// de relacionamento (/f/islandia-whatsapp, 06/11/2026) manda nome + WhatsApp +
+// e-mail com origem 'LIVE EXPEDIAMIGOS'. Página de outro domínio = precisa de
+// CORS; só estas origens são liberadas.
+const ORIGENS_LIBERADAS = new Set([
+  'https://stfv-forms-geral.vercel.app',
+  'https://forms.setuforeuvouviagens.com.br',
+])
+
 function dataHoraSaoPaulo() {
   // d/m/Y H:i:s — mesmo formato das outras LPs, para a planilha ficar legível
   // sem ninguém formatar célula.
@@ -42,6 +51,17 @@ function dataHoraSaoPaulo() {
 }
 
 export default async function handler(req, res) {
+  const origemDaPagina = req.headers?.origin
+  if (origemDaPagina && ORIGENS_LIBERADAS.has(origemDaPagina)) {
+    res.setHeader('Access-Control-Allow-Origin', origemDaPagina)
+    res.setHeader('Vary', 'Origin')
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  }
+  if (req.method === 'OPTIONS') {
+    res.status(204).end()
+    return
+  }
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, error: 'method_not_allowed' })
     return
@@ -56,6 +76,7 @@ export default async function handler(req, res) {
     lead_id: str(body.lead_id, 80) || `ent_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
     nome: str(body.nome, 150).trim(),
     whatsapp: normalizarWhatsapp(body.whatsapp),
+    email: str(body.email, 150).trim().toLowerCase(),
     slug: str(body.slug, 40) || 'japao-live',
     origem: str(body.origem, 30) || 'entrada-live',
     evento_titulo: str(body.evento_titulo, 160),

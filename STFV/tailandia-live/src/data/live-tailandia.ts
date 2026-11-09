@@ -79,8 +79,8 @@ export const liveTailandia: ConfigLive = {
      *
      * ✅ Definida pelo Bruno em 03/09/2026: domingo, 13 de setembro de 2026, 20h00 (BRT).
      */
-    // 🔁 Remarcada em 05/10/2026 para terça-feira, 6 de outubro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-10-26T20:00:00-03:00',
+    // 🔁 Remarcada em 09/11/2026 para quinta-feira, 12 de novembro de 2026, 20h00 (Meet).
+    inicioISO: '2026-11-12T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -91,8 +91,8 @@ export const liveTailandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    // Sala desta live (AppLive, não Meet).
-    meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2027/webinar',
+    // Sala desta live (Meet, 09/11/2026).
+    meetUrl: 'https://meet.google.com/uqs-wdmd-efv',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

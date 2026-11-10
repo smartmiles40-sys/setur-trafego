@@ -80,8 +80,9 @@ export const liveIslandia: ConfigLive = {
      * ✅ Definida pelo Bruno em 03/09/2026: quinta-feira, 17 de setembro de 2026, 20h00 (BRT).
      * 🔁 Remarcada em 21/09/2026 para segunda-feira, 21 de setembro de 2026, 20h00 (sala nova).
      * 🔁 Remarcada em 06/11/2026 para sexta-feira, 06 de novembro de 2026, 20h00 (sala nova sri-emmt-nie).
+     * 🔁 Remarcada em 10/11/2026 para domingo, 15 de novembro de 2026, 21h00 (mesma sala).
      */
-    inicioISO: '2026-11-06T20:00:00-03:00',
+    inicioISO: '2026-11-15T21:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -140,7 +141,7 @@ export const liveIslandia: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/CVupYigJKHy2iGczz8lywd',
+    url: 'https://chat.whatsapp.com/CFGclZkLk4Y37Ci7af1jAs',
     nome: 'Live - Islândia 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

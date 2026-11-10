@@ -80,7 +80,7 @@ export const liveIslandia: ConfigLive = {
      * ✅ Definida pelo Bruno em 03/09/2026: quinta-feira, 17 de setembro de 2026, 20h00 (BRT).
      * 🔁 Remarcada em 21/09/2026 para segunda-feira, 21 de setembro de 2026, 20h00 (sala nova).
      * 🔁 Remarcada em 06/11/2026 para sexta-feira, 06 de novembro de 2026, 20h00 (sala nova sri-emmt-nie).
-     * 🔁 Remarcada em 10/11/2026 para domingo, 15 de novembro de 2026, 21h00 (mesma sala).
+     * 🔁 Remarcada em 10/11/2026 para domingo, 15 de novembro de 2026, 21h00 (sala nova gmr-nemh-cha).
      */
     inicioISO: '2026-11-15T21:00:00-03:00',
     duracaoMinutos: 90,
@@ -93,7 +93,7 @@ export const liveIslandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/sri-emmt-nie',
+    meetUrl: 'https://meet.google.com/gmr-nemh-cha',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

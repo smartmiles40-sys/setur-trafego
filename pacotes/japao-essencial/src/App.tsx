@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Incluido from "./components/Incluido";
 import Roteiro from "./components/Roteiro";
+import PacotesProntos from "./components/PacotesProntos";
 import Depoimentos from "./components/Depoimentos";
 import Investimento from "./components/Investimento";
 import Encerramento from "./components/Encerramento";
@@ -18,6 +19,7 @@ export default function App() {
         <Hero />
         <Incluido />
         <Roteiro />
+        <PacotesProntos />
         <Investimento />
         <FormularioPacote />
         <Encerramento />

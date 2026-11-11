@@ -26,8 +26,8 @@ export const expedicao = {
   duracaoNumeroLegenda:
     '5 noites num resort all inclusive pé na areia, Chichén Itzá, catamarã exclusivo em Isla Mujeres e a noite do Coco Bongo.',
   duracaoExtenso: '7 dias · 5 noites all inclusive',
-  saida: 'Fortaleza ou São Paulo',
-  saidaCurta: 'Saídas de Fortaleza e São Paulo',
+  saida: 'São Paulo (Guarulhos)',
+  saidaCurta: 'Saída de São Paulo (GRU) com o líder',
   cidades: ['Cancún', 'Chichén Itzá', 'Isla Mujeres'],
   cidadesPrincipaisLinha: 'Cancún · Chichén Itzá · Isla Mujeres',
   bandeira: '🇲🇽',
@@ -36,8 +36,8 @@ export const expedicao = {
   slogan:
     'Cancún como você nunca viu! Resort all inclusive de frente para o Caribe, Chichén Itzá,\ncatamarã exclusivo e Coco Bongo, com um líder da Se Tu For do embarque à volta.',
   mapaDescricao:
-    'Do Brasil ao Caribe mexicano: saídas de Fortaleza e São Paulo, com o grupo se encontrando no caminho e chegando junto a Cancún. De lá, Chichén Itzá e o cenote Chichikan, Isla Mujeres de catamarã e 5 noites num resort all inclusive na Zona Hoteleira.',
-  mapaTrajetoTexto: 'Fortaleza / São Paulo → Cancún → Chichén Itzá → Isla Mujeres',
+    'Do Brasil ao Caribe mexicano: saída única de São Paulo (Guarulhos), com o grupo e o líder de expedição voando juntos, ida e volta. De lá, Chichén Itzá e o cenote Chichikan, Isla Mujeres de catamarã e 5 noites num resort all inclusive na Zona Hoteleira.',
+  mapaTrajetoTexto: 'São Paulo → Cancún → Chichén Itzá → Isla Mujeres → São Paulo',
   mapaDistancia: 'Voo ida e volta + transfers privativos · 7 dias',
   mapaDistanciaCurta: 'Voo + transfers · 7 dias',
   mapaUrl: `${import.meta.env.BASE_URL}mapa-rota.html`,
@@ -57,9 +57,12 @@ export const expedicao = {
   faqDescricao: 'Respostas para as principais perguntas sobre nossa Expedição Cancún 2027.',
   // Sem trilha por enquanto (a da China era zen/oriental). Vazio = sem botão de som.
   musicUrl: '',
-  // Faixa de investimento por pessoa (do duplo saindo de SP ao single saindo de
-  // Fortaleza, valores "Por"). Usada na pergunta do formulário.
-  faixaInvestimento: { min: 21245, max: 28713 },
+  // Faixa de investimento por pessoa (briefing 11/11/2026, 10 viajantes + 1 líder):
+  // menor = quarto duplo por viajante (R$ 21.751,82), maior = single (R$ 27.626,22).
+  // Usada no card de investimento e na pergunta do formulário.
+  faixaInvestimento: { min: 21752, max: 27626 },
+  // Destaque da parcela de entrada (10x sem juros do duplo).
+  parcelaAPartir: '2.175,18',
   instagram: {
     handle: '@setuforeuvouviagens',
     url: 'https://www.instagram.com/setuforeuvouviagens/',
@@ -79,7 +82,7 @@ export const opcoesItens = [
 ]
 
 export const incluso = [
-  { icon: 'Plane', title: 'Aéreo ida e volta', desc: 'Saídas de Fortaleza e São Paulo, com o grupo se encontrando no caminho', emoji: '✈️' },
+  { icon: 'Plane', title: 'Aéreo ida e volta', desc: 'Saída de São Paulo (Guarulhos), com o líder voando junto com o grupo', emoji: '✈️' },
   { icon: 'Bed', title: 'Resort all inclusive', desc: '5 noites padrão Hilton ou similar, de frente para o Caribe', emoji: '🏝️' },
   { icon: 'Landmark', title: 'Chichén Itzá + cenote', desc: 'Guia em português, almoço buffet e degustação de tequila', emoji: '🛕' },
   { icon: 'MapPin', title: 'Catamarã exclusivo', desc: 'Isla Mujeres só com o grupo: snorkel, open bar e chef a bordo', emoji: '⛵' },
@@ -110,7 +113,7 @@ export const roteiro = [
     data: 'Ter, 17/08',
     cidade: 'Brasil → Cancún',
     titulo: 'Rumo ao Caribe',
-    atividades: ['Embarque em Fortaleza ou São Paulo', 'Encontro do grupo no caminho', 'Chegada a Cancún e transfer privativo ao resort'],
+    atividades: ['Embarque em São Paulo (Guarulhos) com o líder da expedição', 'Chegada a Cancún à tarde', 'Transfer privativo ao resort'],
     logistica: 'Voo ida | Transfer privativo | Resort all inclusive',
     imagem: `${A}/dia-1.jpg`,
     alt: 'Chegada a Cancún, no Caribe mexicano',
@@ -187,7 +190,7 @@ export const roteiro = [
     data: 'Seg, 23/08',
     cidade: 'Brasil',
     titulo: 'Chegada ao Brasil',
-    atividades: ['Chegada a Fortaleza ou São Paulo'],
+    atividades: ['Chegada a São Paulo logo após a meia-noite'],
     logistica: 'Fim da expedição',
     imagem: `${import.meta.env.BASE_URL}assets/aviao.webp`,
     alt: 'Avião de volta ao Brasil',
@@ -282,7 +285,7 @@ export const faq = [
   },
   {
     q: 'O aéreo está incluso?',
-    a: 'Sim, ida e volta, com saídas de Fortaleza ou São Paulo. Os dois grupos se encontram no caminho e chegam juntos a Cancún. A mala despachada é opcional e pode ser contratada à parte.',
+    a: 'Sim, ida e volta, saindo de São Paulo (Guarulhos). O grupo e o líder da expedição voam juntos o trajeto inteiro. A mala despachada é opcional e pode ser contratada à parte.',
   },
   {
     q: 'O que o all inclusive cobre?',

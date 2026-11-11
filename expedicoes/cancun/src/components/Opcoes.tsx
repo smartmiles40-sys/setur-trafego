@@ -188,6 +188,9 @@ export default function Opcoes() {
                 R$ {expedicao.faixaInvestimento.max.toLocaleString('pt-BR')}
               </p>
             </div>
+            <p className="relative -mt-5 mb-8 text-center sm:text-right text-sm md:text-base text-dark-teal/80">
+              ou <strong className="text-dark-teal">a partir de 10x de R$ {expedicao.parcelaAPartir} sem juros</strong> no cartão
+            </p>
 
             <a
               href="#formulario"

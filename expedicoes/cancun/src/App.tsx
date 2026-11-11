@@ -50,8 +50,8 @@ export default function App() {
       <Hero />
       <TudoResolvido />
       <Roteiro />
-      <Mapa />
       <Opcoes />
+      <Mapa />
       <Formulario />
       <PorQue />
       <Gastos />

@@ -3,8 +3,7 @@ import { Check, MapPin, Calendar, Plane, Sparkles, ArrowRight } from 'lucide-rea
 import { Wallet } from 'lucide-react'
 import { Leaf, Mountain, Snowflake, Sun, Palmtree, Compass } from 'lucide-react'
 import FloatingOrnaments from './FloatingOrnaments'
-import { expedicao, galeria, opcoesItens } from '../data/expedicao'
-import Imagem from './Imagem'
+import { expedicao, opcoesItens } from '../data/expedicao'
 
 // Mapeia o nome do ícone definido no data file (expedicao.iconeExpedicao)
 // para o componente lucide-react correspondente. Mantém a LP data-driven.
@@ -25,60 +24,6 @@ export default function Opcoes() {
   return (
     <section id="opcoes" className="section bg-off-white overflow-hidden relative">
       <FloatingOrnaments variant="light" density="medium" />
-
-      {/* Editorial polaroid gallery */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.9 }}
-        className="relative max-w-6xl mx-auto mb-16 md:mb-20"
-      >
-        <div className="flex justify-center items-end gap-4 md:gap-6 flex-wrap md:flex-nowrap px-4">
-          {galeria.map((img, i) => {
-            const rotations = ['-rotate-[6deg]', 'rotate-[3deg]', '-rotate-[1deg]', 'rotate-[5deg]', '-rotate-[4deg]']
-            const sizes = [
-              'w-28 h-36 md:w-40 md:h-52',
-              'w-32 h-40 md:w-48 md:h-60',
-              'w-44 h-56 md:w-64 md:h-80',
-              'w-32 h-40 md:w-48 md:h-60',
-              'w-28 h-36 md:w-40 md:h-52',
-            ]
-            return (
-              <motion.div
-                key={img.alt}
-                initial={{ opacity: 0, y: 50, rotate: 0 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ scale: 1.08, rotate: 0, zIndex: 10, y: -8 }}
-                className={`${sizes[i]} ${rotations[i]} relative flex-shrink-0 cursor-pointer transition-shadow`}
-              >
-                <div className="bg-white p-2 pb-10 md:pb-12 rounded-md shadow-[0_10px_30px_rgba(9,40,43,0.18)] h-full">
-                  <div className="w-full h-full rounded-sm overflow-hidden bg-soft-green">
-                    <Imagem
-                      src={img.src}
-                      sizes="(min-width: 768px) 320px, 240px"
-                      alt={img.alt}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.style.opacity = '0.3'
-                      }}
-                    />
-                  </div>
-                  <div className="absolute bottom-2 left-0 right-0 text-center">
-                    <span className="font-serif italic text-[10px] md:text-xs text-dark-teal leading-none">
-                      {img.alt}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
 
       {/* Editorial header */}
       <div className="container-x text-center relative mb-14 md:mb-16">

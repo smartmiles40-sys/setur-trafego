@@ -12,11 +12,11 @@ export const expedicao = {
   nome: 'Peru',
   nomeUpper: 'PERU',
   ano: 2027,
-  dataInicio: '2027-08-22',
-  dataInicioLabel: '22 de agosto',
-  dataFimLabel: '30 de agosto',
-  dataRange: '22 a 30 de agosto de 2027',
-  dataResumoCurto: 'Peru · 22–30 ago 2027',
+  dataInicio: '2027-08-14',
+  dataInicioLabel: '14 de agosto',
+  dataFimLabel: '22 de agosto',
+  dataRange: '14 a 22 de agosto de 2027',
+  dataResumoCurto: 'Peru · 14–22 ago 2027',
   duracao: '9 dias',
   duracaoNumero: 9,
   duracaoNumeroLegenda: '8 noites entre Cusco e Lima, com ritmo pensado para a altitude.',
@@ -163,7 +163,7 @@ export const naoIncluso = [
 export const roteiro = [
   {
     dia: 1,
-    data: '22/08',
+    data: '14/08',
     cidade: 'Cusco, Peru',
     titulo: 'Chegada em Cusco',
     atividades: ['Chegada ao aeroporto de Cusco', 'Traslado ao hotel', 'Aclimatação à altitude', 'Tarde livre para descanso'],
@@ -177,7 +177,7 @@ export const roteiro = [
   },
   {
     dia: 2,
-    data: '23/08',
+    data: '15/08',
     cidade: 'Vale Sagrado dos Incas',
     titulo: 'Vale Sagrado & Chinchero',
     atividades: ['Tecelãs tradicionais de Chinchero', 'Terraços e mercado de Pisac', 'Fortaleza de Ollantaytambo', 'Trem Expedition a Águas Calientes'],
@@ -191,7 +191,7 @@ export const roteiro = [
   },
   {
     dia: 3,
-    data: '24/08',
+    data: '16/08',
     cidade: 'Machu Picchu',
     titulo: 'Machu Picchu',
     atividades: ['Subida a Machu Picchu ao amanhecer', 'Tour guiado pela cidadela inca', 'Tempo livre para fotos', 'Retorno a Cusco no Trem Expedition'],
@@ -205,7 +205,7 @@ export const roteiro = [
   },
   {
     dia: 4,
-    data: '25/08',
+    data: '17/08',
     cidade: 'Cusco',
     titulo: 'Dia Livre em Cusco',
     atividades: ['Manhã livre para descanso', 'Passeios opcionais pela cidade', 'Gastronomia e compras locais', 'Suporte do líder brasileiro'],
@@ -216,7 +216,7 @@ export const roteiro = [
   },
   {
     dia: 5,
-    data: '26/08',
+    data: '18/08',
     cidade: 'Montanha Colorida',
     titulo: 'Vinicunca — Montanha Colorida',
     atividades: ['Trekking à Montanha Colorida (Vinicunca)', 'Trecho de acesso em mototáxi', 'Paisagens únicas dos Andes', 'Retorno a Cusco'],
@@ -227,7 +227,7 @@ export const roteiro = [
   },
   {
     dia: 6,
-    data: '27/08',
+    data: '19/08',
     cidade: 'Cusco → Lima',
     titulo: 'Cusco → Lima',
     atividades: ['Voo Cusco → Lima', 'Traslado ao hotel em Lima', 'Tarde livre na capital', 'Primeiro contato com Miraflores'],
@@ -241,7 +241,7 @@ export const roteiro = [
   },
   {
     dia: 7,
-    data: '28/08',
+    data: '20/08',
     cidade: 'Paracas & Huacachina',
     titulo: 'Ilhas Ballestas & Huacachina',
     atividades: ['Passeio de barco pelas Ilhas Ballestas', 'Oásis de Huacachina', 'Buggy nas dunas + sandboarding', 'Pernoite em Ica'],
@@ -255,7 +255,7 @@ export const roteiro = [
   },
   {
     dia: 8,
-    data: '29/08',
+    data: '21/08',
     cidade: 'Ica → Lima',
     titulo: 'Retorno a Lima',
     atividades: ['Saída de Ica rumo a Lima', 'Traslado ao hotel', 'Tarde livre em Miraflores', 'Exploração opcional de Barranco e Centro Histórico'],
@@ -266,7 +266,7 @@ export const roteiro = [
   },
   {
     dia: 9,
-    data: '30/08',
+    data: '22/08',
     cidade: 'Lima → Brasil',
     titulo: 'Retorno ao Brasil',
     atividades: ['Manhã livre em Lima', 'Traslado ao aeroporto', 'Voo internacional de volta', 'Despedida da equipe'],

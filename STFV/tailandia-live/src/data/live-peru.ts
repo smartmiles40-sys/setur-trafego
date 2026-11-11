@@ -67,7 +67,7 @@ export const livePeru: ConfigLive = {
     // a linha sozinho quando não há texto).
     complementoNome: '',
     ano: 2027,
-    resumoExpedicao: '9 dias · 22 a 30 de agosto de 2027',
+    resumoExpedicao: '9 dias · 14 a 22 de agosto de 2027',
     saidaCurta: 'Saída de Guarulhos (GRU)',
   },
 

@@ -1,0 +1,199 @@
+//  /api/save-lead — backend do formulário próprio das LPs (padrão
+//  PADRONIZACAO FORMULARIO LP, adaptado de save-lead.php para a Vercel).
+//
+//  Fluxo: o formulário multi-etapas faz POST com JSON; aqui o lead é
+//  normalizado e vai em PARALELO pra dois lugares:
+//    1) Bitrix24 direto (contato + negócio) — ver _bitrix-lead.mjs. Até
+//       20/10/2026 passava pelo n8n ("Páginas tráfego"); agora não passa mais.
+//    2) ledger site_leads no Supabase (rede de segurança).
+//  Cada lead também sai em console.log (Vercel → Functions → Logs).
+//
+//  A expedição é escolhida pelo slug do lead (campo `slug`, ou derivado de
+//  `form_name` = "expedicao-<slug>-<ano>"), e a fonte do Bitrix sai do mapa
+//  do servidor — nunca do navegador.
+
+import { criarLeadNoBitrix, EXPEDICOES } from './_bitrix-lead.mjs'
+
+/** slug explícito do payload, ou derivado de form_name ("expedicao-<slug>-<ano>"). */
+function slugDoLead(lead) {
+  if (lead.slug) return String(lead.slug)
+  const m = String(lead.form_name || '').match(/^expedicao-(.+)-\d{4}$/)
+  return m ? m[1] : ''
+}
+
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+// Click ids: única âncora quando a campanha não manda UTM (autotagging do Google
+// manda só gclid). Vão pro Bitrix junto com as UTMs. No ledger eles entram dentro
+// de `raw` — NÃO como coluna própria, pra não quebrar o insert do site_leads.
+const CLICK_KEYS = ['utm_id', 'gclid', 'fbclid', 'gbraid', 'wbraid']
+const TRACK_KEYS = [...UTM_KEYS, ...CLICK_KEYS]
+const RASTREIO_KEYS = ['fbc', 'fbp', 'ga_client_id', 'event_id', 'landing_page', 'referrer']
+
+/** Payload/CRM sempre recebem +55 + dígitos (ex.: +5542984265706). */
+function normalizarWhatsapp(valor) {
+  const digitos = String(valor || '').replace(/\D/g, '')
+  const semDDI = digitos.startsWith('55') && digitos.length > 11 ? digitos.slice(2) : digitos
+  return semDDI ? `+55${semDDI}` : ''
+}
+
+function dataHoraSaoPaulo() {
+  // d/m/Y H:i:s, mesmo formato do save-lead.php de referência
+  const f = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  })
+  return f.format(new Date()).replace(',', '')
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ ok: false, error: 'method_not_allowed' })
+    return
+  }
+
+  const body = typeof req.body === 'object' && req.body !== null ? req.body : {}
+
+  const str = (v, max) => String(v ?? '').slice(0, max)
+
+  // Allowlist: só os campos que o formulário realmente envia entram no lead
+  // (evita mass-assignment e poluição dos logs/webhook com dados arbitrários).
+  const lead = {
+    lead_id: str(body.lead_id, 80) || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
+    nome: str(body.nome, 150).trim(),
+    whatsapp: normalizarWhatsapp(body.whatsapp),
+    email: str(body.email, 120).toLowerCase().trim(),
+    instagram: str(body.instagram, 40),
+    expedicao: str(body.expedicao, 120),
+    fonte: str(body.fonte, 80),
+    source_id: str(body.source_id, 40),
+    // Respostas de qualificação (vocabulário controlado pelo formulário)
+    data: str(body.data, 60),
+    companhia: str(body.companhia, 60),
+    perfil: str(body.perfil, 60),
+    investimento: str(body.investimento, 60),
+    decisao: str(body.decisao, 60),
+    // Lead score calculado no site. Até 20/10/2026 ficava FORA desta lista e
+    // nunca chegava no Bitrix nem no QS pelos leads de tráfego.
+    lead_score: ['Quente', 'Morno', 'Frio'].includes(body.lead_score) ? body.lead_score : '',
+    lead_score_pontos: Number.isFinite(Number(body.lead_score_pontos)) ? String(Number(body.lead_score_pontos)) : '',
+    form_name: str(body.form_name, 80), // usado para achar a expedição
+    slug: str(body.slug, 40),
+    timestamp: str(body.timestamp, 40),
+    data_hora_cadastro: dataHoraSaoPaulo(),
+    etapa: str(body.etapa, 30) || 'completo',
+    formulario_completo: body.formulario_completo !== false,
+  }
+  for (const k of TRACK_KEYS) lead[k] = str(body[k], 200)
+
+  // Rastreio do clique (ver src/lib/rastreio.ts): cookies de anúncio, event_id
+  // (dedupe pixel × servidor) e a página/referrer do primeiro toque. Mais IP e
+  // navegador de quem enviou — é o que a conversão pelo servidor (Meta CAPI /
+  // Google Ads) usa pra casar o lead com o clique.
+  for (const k of RASTREIO_KEYS) lead[k] = String(body[k] ?? '').slice(0, 500)
+  lead.client_user_agent = String(req.headers['user-agent'] || '').slice(0, 400)
+  lead.client_ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim().slice(0, 64)
+
+  // Validação no servidor: nome e WhatsApp são obrigatórios e com forma mínima.
+  if (lead.nome.length < 2) {
+    res.status(400).json({ ok: false, error: 'nome_invalido' })
+    return
+  }
+  if (lead.whatsapp.length < 13) { // +55 + ao menos 10 dígitos
+    res.status(400).json({ ok: false, error: 'whatsapp_invalido' })
+    return
+  }
+
+  // Rede de segurança: todo lead fica nos logs da função
+  console.log('[lead]', JSON.stringify(lead))
+
+  const slug = slugDoLead(lead)
+  const slugOk = Boolean(EXPEDICOES[slug])
+
+  // ── Canal 1: Bitrix direto ──────────────────────────────────────────────────
+  // Devolve true só quando o negócio existe no Bitrix (criado agora ou já
+  // criado por este mesmo envio).
+  const enviarBitrix = async () => {
+    const base = process.env.BITRIX_WEBHOOK_URL
+    if (!base) {
+      console.error('[bitrix] BITRIX_WEBHOOK_URL ausente — lead só no ledger/logs')
+      return false
+    }
+    const r = await criarLeadNoBitrix(base, slug, lead)
+    if (!r.ok) {
+      console.error('[bitrix] falhou', JSON.stringify({ lead_id: lead.lead_id, slug, etapa: r.etapa, erro: r.erro, descricao: r.descricao }))
+      return false
+    }
+    console.log('[bitrix] ok', JSON.stringify({ lead_id: lead.lead_id, negocio: r.negocioId, repetido: !!r.repetido }))
+    return true
+  }
+
+  // ── Canal 2: ledger no Supabase, gravado por CÓDIGO (independe do n8n) ───────
+  // Captura 100% dos leads — inclusive slug sem rota ou Bitrix fora do ar. É a fonte de verdade que a conciliação de 3h confere contra o Bitrix.
+  // Falha aqui NUNCA trava o usuário nem perde o lead: só vira log.
+  const gravarLedger = async () => {
+    const SB_URL = process.env.SUPABASE_LEADS_URL
+    const SB_KEY = process.env.SUPABASE_LEADS_KEY
+    if (!SB_URL || !SB_KEY) {
+      console.warn('[ledger] SUPABASE_LEADS_URL/KEY ausentes — lead só no Bitrix/logs')
+      return
+    }
+    const ctrl = new AbortController()
+    const timeout = setTimeout(() => ctrl.abort(), 7000)
+    try {
+      const resp = await fetch(`${SB_URL.replace(/\/$/, '')}/rest/v1/site_leads`, {
+        method: 'POST',
+        headers: {
+          apikey: SB_KEY,
+          Authorization: `Bearer ${SB_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({
+          lead_id: lead.lead_id,
+          site: 'trafego',
+          slug,
+          slug_ok: slugOk,
+          form_name: lead.form_name || '',
+          nome: lead.nome || '',
+          whatsapp: lead.whatsapp || '',
+          email: lead.email || '',
+          instagram: lead.instagram || '',
+          expedicao: lead.expedicao || '',
+          fonte: lead.fonte || '',
+          source_id: lead.source_id || '',
+          resp_data: lead.data || '',
+          resp_companhia: lead.companhia || '',
+          resp_perfil: lead.perfil || '',
+          resp_investimento: lead.investimento || '',
+          resp_decisao: lead.decisao || '',
+          utm_source: lead.utm_source || '',
+          utm_medium: lead.utm_medium || '',
+          utm_campaign: lead.utm_campaign || '',
+          utm_term: lead.utm_term || '',
+          utm_content: lead.utm_content || '',
+          data_hora_cadastro: lead.data_hora_cadastro || '',
+          raw: lead,
+        }),
+        signal: ctrl.signal,
+      })
+      // 409 = lead_id repetido (re-submit) = já capturado, não é erro.
+      if (!resp.ok && resp.status !== 409) {
+        const txt = await resp.text().catch(() => '')
+        console.error('[ledger] status', resp.status, txt)
+      }
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
+  // Os dois canais correm em PARALELO: nenhum atrasa o outro, e o ledger captura
+  // mesmo que o Bitrix falhe.
+  const [rBitrix, rLedger] = await Promise.allSettled([enviarBitrix(), gravarLedger()])
+  if (rBitrix.status === 'rejected') console.error('[bitrix] falhou:', rBitrix.reason && rBitrix.reason.message)
+  if (rLedger.status === 'rejected') console.error('[ledger] falhou:', rLedger.reason && rLedger.reason.message)
+
+  // `bitrix`: o formulário usa pra decidir, na ligação com o SDR, se o QS
+  // precisa abrir o card (o Bitrix não recebeu) ou só adotar o que já existe.
+  res.status(200).json({ ok: true, bitrix: rBitrix.status === 'fulfilled' && rBitrix.value === true })
+}

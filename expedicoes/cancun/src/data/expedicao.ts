@@ -58,11 +58,11 @@ export const expedicao = {
   // Sem trilha por enquanto (a da China era zen/oriental). Vazio = sem botão de som.
   musicUrl: '',
   // Faixa de investimento por pessoa (briefing 11/11/2026, 10 viajantes + 1 líder):
-  // menor = quarto duplo por viajante (R$ 21.751,82), maior = single (R$ 27.626,22).
+  // Valores redondos (13/11/2026): de R$ 18.990 (menor) a R$ 27.990 (single).
   // Usada no card de investimento e na pergunta do formulário.
-  faixaInvestimento: { min: 21752, max: 27626 },
+  faixaInvestimento: { min: 18990, max: 27990 },
   // Destaque da parcela de entrada (10x sem juros do duplo).
-  parcelaAPartir: '2.175,18',
+  parcelaAPartir: '1.899,00',
   instagram: {
     handle: '@setuforeuvouviagens',
     url: 'https://www.instagram.com/setuforeuvouviagens/',

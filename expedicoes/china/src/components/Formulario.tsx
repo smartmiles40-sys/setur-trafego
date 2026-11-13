@@ -6,13 +6,14 @@ import FormularioLead from './FormularioLead'
 // Funil em UMA PÁGINA (decisão do Bruno, 2026-08-04): o formulário vive aqui
 // dentro da LP, na seção #formulario.
 //
-// Desde 08/10/2026 (doc de ajustes do time) ele fica FECHADO e só aparece
+// 13/11/2026: volta a ficar ABERTO desde o carregamento (aquisição Meta com 0,5%
+// de visita→lead em 10–12/11). Antes, desde 08/10, ficava FECHADO e só aparecia
 // depois que a pessoa clica num CTA de reserva ("Reservar minha vaga" em
 // Opções, "Quero garantir minha vaga" na barra do celular). Qualquer link
 // para #formulario abre e rola até aqui — não precisa mexer nos botões.
 // Quem chega com #formulario na URL já encontra o formulário aberto.
 export default function Formulario() {
-  const [aberto, setAberto] = useState(false)
+  const [aberto, setAberto] = useState(true)
 
   useEffect(() => {
     const abrir = () => {

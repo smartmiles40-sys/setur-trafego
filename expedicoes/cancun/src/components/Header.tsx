@@ -59,10 +59,10 @@ export default function Header({ musicPlaying, toggleMusic }: HeaderProps) {
 
           <div className="flex items-center gap-2">
             <a
-              href="#roteiro"
+              href="#formulario"
               className="hidden md:inline-flex items-center bg-lime hover:bg-lime-dark text-dark-teal font-semibold text-sm rounded-full px-5 py-2.5 transition-all hover:shadow-lime-glow"
             >
-              Quero ver o roteiro
+              Quero seguir os próximos passos
             </a>
             <button
               onClick={() => setMobileOpen((v) => !v)}
@@ -91,11 +91,11 @@ export default function Header({ musicPlaying, toggleMusic }: HeaderProps) {
               ))}
             </ul>
             <a
-              href="#roteiro"
+              href="#formulario"
               onClick={() => setMobileOpen(false)}
               className="btn-primary w-full mt-4"
             >
-              Quero ver o roteiro
+              Quero seguir os próximos passos
             </a>
           </div>
         )}

@@ -19,11 +19,17 @@ export default function Formulario() {
       setAberto(true)
       // espera o React montar o card antes de rolar até ele
       requestAnimationFrame(() =>
-        requestAnimationFrame(() =>
-          document
-            .getElementById('formulario')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-        ),
+        requestAnimationFrame(() => {
+          // centraliza o card do formulário na tela; se ele for mais alto que
+          // a tela, encosta o topo logo abaixo do cabeçalho fixo
+          const card =
+            document.querySelector<HTMLElement>('#formulario .form-section-wrap') ??
+            document.getElementById('formulario')
+          if (!card) return
+          const r = card.getBoundingClientRect()
+          const folga = Math.max(88, (window.innerHeight - r.height) / 2)
+          window.scrollTo({ top: window.scrollY + r.top - folga, behavior: 'smooth' })
+        }),
       )
     }
     const onClick = (e: MouseEvent) => {

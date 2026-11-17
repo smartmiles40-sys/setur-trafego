@@ -80,10 +80,11 @@ const PERGUNTAS: Pergunta[] = [
       'pt-BR',
     )} e R$ ${expedicao.faixaInvestimento.max.toLocaleString(
       'pt-BR',
-    )}. Você está preparado(a) para investir nessa experiência completa?`,
+    )}. Isso cabe no seu planejamento?`,
     opcoes: [
-      { label: 'Sim, estou ciente', slug: 'sim' },
-      { label: 'Não, quero entender melhor', slug: 'talvez' },
+      { label: 'Sim, cabe no meu planejamento (à vista ou parcelado)', slug: 'sim' },
+      { label: 'Cabe se o parcelamento for bom, quero ver as condições', slug: 'parcelamento' },
+      { label: 'Ainda não tenho esse valor, quero só conhecer', slug: 'nao' },
     ],
   },
 ]
@@ -101,12 +102,12 @@ function slugDaResposta(perguntaName: string, label: string | undefined): string
 // decisão — que saiu do formulário.
 //
 //   data          sim 10 · talvez 5 · não 0
-//   investimento  sim 10 · quero entender melhor 0
+//   investimento  cabe 10 · cabe se o parcelamento for bom 5 · ainda não tenho 0
 //
 //   20 = quente · 10 ou 15 = morno · até 5 = frio
 const PONTOS_LEAD: Record<string, Record<string, number>> = {
   data: { sim: 10, talvez: 5 },
-  investimento: { sim: 10 },
+  investimento: { sim: 10, parcelamento: 5 },
 }
 // ids da lista "Lead Scoring" no Bitrix
 const LEAD_SCORE_BITRIX = { Quente: 943, Morno: 941, Frio: 939 } as const

@@ -38,9 +38,10 @@ export const livePacotePeru: ConfigLive = {
   slug: 'pacote-peru-live',
 
   fonte: '[Pacote Peru] - Live',
-  // ⚠️ PREENCHER: STATUS_ID da origem "[Pacote Peru] - Live" no Bitrix.
-  // Vazio = o card nasce sem origem (o Bitrix não acusa erro).
-  sourceId: '',
+  // Origem "[Pacote Peru] - Live" no Bitrix, com o STATUS_ID LIVE_PACOTE_PERU
+  // (mesmo padrão de LIVE_PERU). Enquanto ela não existir no Bitrix,
+  // o card nasce sem origem (o Bitrix não acusa erro).
+  sourceId: 'LIVE_PACOTE_PERU',
 
   expedicao: expedicaoPacote,
 

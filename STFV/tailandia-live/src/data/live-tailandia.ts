@@ -54,7 +54,7 @@ export const liveTailandia: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: o roteiro pela Tailândia — Bangkok, Chiang Mai e as ilhas Phi Phi —, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: o roteiro pela Tailândia — Bangkok, Chiang Mai e as ilhas Phi Phi —, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',
@@ -82,7 +82,7 @@ export const liveTailandia: ConfigLive = {
     // 🔁 Remarcada em 09/11/2026 para quinta-feira, 12 de novembro de 2026, 20h00 (Meet).
     // 🔁 Remarcada em 17/11/2026 para terça-feira, 17 de novembro de 2026, 20h00 (sala nova fbs-yykv-uzp).
     inicioISO: '2026-11-17T20:00:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.

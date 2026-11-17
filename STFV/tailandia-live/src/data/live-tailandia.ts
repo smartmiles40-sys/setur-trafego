@@ -80,7 +80,8 @@ export const liveTailandia: ConfigLive = {
      * ✅ Definida pelo Bruno em 03/09/2026: domingo, 13 de setembro de 2026, 20h00 (BRT).
      */
     // 🔁 Remarcada em 09/11/2026 para quinta-feira, 12 de novembro de 2026, 20h00 (Meet).
-    inicioISO: '2026-11-12T20:00:00-03:00',
+    // 🔁 Remarcada em 17/11/2026 para terça-feira, 17 de novembro de 2026, 20h00 (sala nova fbs-yykv-uzp).
+    inicioISO: '2026-11-17T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -91,8 +92,8 @@ export const liveTailandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    // Sala desta live (Meet, 09/11/2026).
-    meetUrl: 'https://meet.google.com/uqs-wdmd-efv',
+    // Sala desta live (Meet, 17/11/2026).
+    meetUrl: 'https://meet.google.com/fbs-yykv-uzp',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

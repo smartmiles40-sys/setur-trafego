@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/islandia",
+      "destination": "/islandia/index.html"
+    },
+    {
+      "source": "/islandia/",
+      "destination": "/islandia/index.html"
+    }
   ]
 }

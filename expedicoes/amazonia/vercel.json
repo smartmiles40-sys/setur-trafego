@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/amazonia",
+      "destination": "/amazonia/index.html"
+    },
+    {
+      "source": "/amazonia/",
+      "destination": "/amazonia/index.html"
+    }
   ]
 }

@@ -1,0 +1,129 @@
+/* Conteúdo de confiança da V2 (Extras.tsx) — mesmos tokens do estilo.css */
+
+/* ---- Bloco 1 ---- */
+.prova-hero { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; font-size: 15px; color: rgba(255, 255, 255, 0.88); }
+.prova-hero .estrelas { color: var(--destaque); letter-spacing: 2px; }
+.prova-hero b { color: #fff; }
+.prova-hero .ponto { opacity: 0.5; }
+.dado-pag { font-size: 13px; font-weight: 700; color: var(--escuro); background: #eef6cf; border-radius: 8px; padding: 4px 8px; margin-top: 6px; align-self: flex-start; }
+
+.incluso-faixa { margin-top: 16px; background: #fff; border-radius: 20px; padding: 24px 28px; border: 1px solid var(--linha); }
+.incluso-tit { font-size: 13px; font-weight: 700; color: var(--texto-2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.incluso-faixa ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 14px 20px; }
+.incluso-faixa li { display: flex; gap: 10px; align-items: flex-start; }
+.incluso-emoji { font-size: 20px; line-height: 1.2; flex: none; }
+.incluso-faixa b { display: block; font-size: 15px; line-height: 1.3; }
+.incluso-faixa small { display: block; font-size: 13px; color: var(--texto-2); line-height: 1.35; margin-top: 2px; }
+
+/* ---- Bloco 2 ---- */
+.roteiro-pe { max-width: 1280px; margin: 0 auto; padding: 8px 24px 0; }
+.transparencia { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.transp-col { background: #fff; border: 1px solid var(--linha); border-radius: 20px; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; }
+.transp-col ul { margin: 4px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.transp-col li { font-size: 15px; color: var(--texto-2); padding-left: 20px; position: relative; }
+.transp-col li::before { content: '—'; position: absolute; left: 0; color: var(--linha-input); }
+.transp-valor { font-size: 24px; font-weight: 800; }
+
+/* ---- Bloco 3 ---- */
+.form-wrap { max-width: 1280px; }
+.form-grade { display: grid; gap: 24px; align-items: start; }
+@media (min-width: 960px) {
+  .form-grade { grid-template-columns: minmax(0, 1fr) 380px; }
+}
+@media (min-width: 960px) and (min-height: 820px) {
+  .form-grade > .form-tr { position: sticky; top: 16px; }
+}
+.lado { display: flex; flex-direction: column; gap: 16px; }
+.lado-caixa { background: var(--escuro); color: #fff; border-radius: 20px; padding: 22px 24px; }
+.lado-tit { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.conosco { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.conosco li { font-size: 14px; line-height: 1.4; padding-left: 24px; position: relative; color: rgba(255, 255, 255, 0.9); }
+.conosco li::before { content: '✓'; position: absolute; left: 0; color: var(--destaque); font-weight: 800; }
+.lado-depos { display: flex; flex-direction: column; gap: 12px; }
+.nota-pill { background: var(--destaque); border-radius: 999px; padding: 2px 8px; font-size: 12px; }
+.depo { margin: 0; background: #fff; border: 1px solid var(--linha); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.depo-estrelas { color: #e0a800; font-size: 13px; letter-spacing: 2px; }
+.depo blockquote { margin: 0; font-size: 14px; line-height: 1.5; color: var(--escuro); }
+.depo figcaption { display: flex; align-items: center; gap: 10px; }
+.depo figcaption img, .depo-ini { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex: none; }
+.depo-ini { background: var(--escuro); color: var(--destaque); display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+.depo figcaption b { display: block; font-size: 14px; }
+.depo figcaption small { display: block; font-size: 12px; color: var(--texto-2); }
+.ver-mais { background: none; border: 1px solid var(--linha-input); border-radius: 999px; padding: 12px; font: inherit; font-weight: 700; color: var(--escuro); cursor: pointer; min-height: 44px; }
+.ver-mais:hover { background: #fff; }
+
+.duvidas { margin-top: 48px; max-width: 760px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; gap: 10px; }
+.duvidas h2 { font-size: 30px; margin: 0 0 8px; letter-spacing: -0.01em; }
+.duvidas details { background: #fff; border: 1px solid var(--linha); border-radius: 16px; padding: 0 20px; }
+.duvidas summary { cursor: pointer; list-style: none; font-weight: 700; font-size: 16px; padding: 18px 28px 18px 0; position: relative; }
+.duvidas summary::-webkit-details-marker { display: none; }
+.duvidas summary::after { content: '+'; position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 22px; font-weight: 400; color: var(--texto-2); }
+.duvidas details[open] summary::after { content: '–'; }
+.duvidas details p { margin: 0 0 18px; font-size: 15px; line-height: 1.55; color: var(--texto-2); }
+.cta-escuro { background: var(--escuro); color: #fff; margin-top: 14px; align-self: center; padding: 16px 32px; }
+.cta-escuro:hover { color: #fff; background: var(--escuro-hover); filter: none; }
+
+.rodape { background: var(--escuro); color: rgba(255, 255, 255, 0.7); padding: 36px 24px 48px; display: flex; flex-wrap: wrap; gap: 24px 40px; justify-content: center; align-items: center; }
+.rodape-selos { display: flex; gap: 14px; align-items: center; }
+.selo-claro { background: #fff; border-radius: 12px; padding: 8px 12px; }
+.selo-claro img { height: 40px; width: auto; }
+.selo-premio { height: 72px; width: auto; }
+.rodape address { font-style: normal; font-size: 13px; line-height: 1.6; display: flex; flex-direction: column; }
+.rodape address b { color: #fff; font-size: 14px; }
+.rodape a { color: var(--destaque); }
+
+/* ---- Celular: barra fixa ---- */
+.barra-celular { display: none; }
+@media (max-width: 760px) {
+  .barra-celular { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; border-top: 1px solid var(--linha); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); gap: 12px; align-items: center; justify-content: space-between; box-shadow: 0 -8px 24px rgba(9, 40, 43, 0.08); transform: translateY(110%); transition: transform 0.25s ease; }
+  .barra-celular.ver { transform: none; }
+  .barra-celular small { display: block; font-size: 12px; color: var(--texto-2); }
+  .barra-celular b { font-size: 16px; }
+  .barra-celular .cta { padding: 12px 18px; font-size: 15px; white-space: nowrap; }
+  .prova-hero { font-size: 13px; }
+  .prova-hero .ponto, .prova-hero span:last-child { display: none; }
+  .incluso-faixa { padding: 20px; }
+  .duvidas h2 { font-size: 24px; }
+  .rodape { padding-bottom: 96px; }
+}
+@media (prefers-reduced-motion: reduce) { .barra-celular { transition: none; } }
+
+/* ---- Rodada 5: página mais larga, hero à esquerda, FAQ em 2 colunas, Google ---- */
+@media (min-width: 960px) {
+  .v2hero-foto .v2hero-txt { align-items: flex-start; text-align: left; }
+  .v2hero-foto .prova-hero { justify-content: flex-start; }
+  .duvidas { max-width: 1280px; display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 48px; align-items: start; }
+  .duvidas h2 { position: sticky; top: 24px; font-size: 36px; }
+  .duvidas-lista .cta-escuro { align-self: flex-start; }
+}
+.ver-google { text-align: center; font-weight: 700; font-size: 14px; padding: 6px; }
+.onde { margin-top: 56px; background: #fff; border: 1px solid var(--linha); border-radius: 24px; overflow: hidden; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
+.onde-txt { padding: 36px; display: flex; flex-direction: column; gap: 10px; }
+.onde-txt h2 { margin: 0; font-size: 28px; line-height: 1.15; letter-spacing: -0.01em; }
+.onde-txt p { margin: 0; font-size: 16px; line-height: 1.5; }
+.onde-google { display: flex; align-items: center; gap: 8px; font-size: 15px; margin-top: 6px; }
+.estrelas-g { color: #fbbc04; letter-spacing: 2px; font-size: 18px; }
+.onde-botoes { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-top: 10px; }
+.onde-botoes .cta-escuro { margin: 0; }
+.onde-rota { font-weight: 700; }
+.onde-mapa { width: 100%; min-height: 340px; height: 100%; border: 0; display: block; }
+@media (max-width: 640px) { .onde-txt { padding: 24px; } .onde-txt h2 { font-size: 22px; } .onde-mapa { min-height: 260px; } }
+
+.duvidas-lista { display: flex; flex-direction: column; gap: 10px; }
+
+/* ---- Onde estamos no formato do cartão do Google ---- */
+a.prova-hero { text-decoration: none; }
+a.prova-hero:hover { color: #fff; }
+.onde-txt h2 { font-size: 26px; }
+a.onde-google { text-decoration: none; color: var(--escuro); margin-top: 0; }
+.onde-link { color: #1a73e8; font-weight: 600; }
+.onde-botoes { gap: 10px; }
+.onde-btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--linha-input); border-radius: 999px; padding: 10px 18px; min-height: 44px; font-weight: 700; font-size: 15px; text-decoration: none; color: var(--escuro); background: #fff; }
+.onde-btn:hover { border-color: var(--escuro); color: var(--escuro); }
+.onde-btn span { color: #1a73e8; font-weight: 800; }
+.onde-dados { margin: 14px 0 0; padding-top: 16px; border-top: 1px solid var(--linha); display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.5; }
+.onde-dados dt { display: inline; font-weight: 800; }
+.onde-dados dd { display: inline; margin: 0; }
+.onde-dados a { color: #1a73e8; font-weight: 600; }
+.onde { margin-top: 40px; }
+.onde-mapa { min-height: 420px; }

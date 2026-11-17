@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/italia",
+      "destination": "/italia/index.html"
+    },
+    {
+      "source": "/italia/",
+      "destination": "/italia/index.html"
+    }
   ]
 }

@@ -186,7 +186,7 @@ function guardarMensagemWhatsapp(nomeLead: string, telefone: string) {
 
 // ---------------------------------------------------------------------------
 
-export default function FormularioLead() {
+export default function FormularioLead({ versao = 'v4' }: { versao?: string } = {}) {
   const [etapa, setEtapa] = useState<1 | 2>(1)
   const [nome, setNome] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
@@ -217,7 +217,7 @@ export default function FormularioLead() {
     // Marcador de versão: fallback DERIVADO, não persistido — se o lead voltar
     // numa visita taggeada, o utm_content real entra no lugar do 'v4'. E não
     // sobrescreve valor real (ex.: 'bio', dos links da bio do Instagram).
-    setTrack({ ...proximo, utm_content: proximo.utm_content || 'v4' })
+    setTrack({ ...proximo, utm_content: proximo.utm_content || versao })
   }, [])
 
   const setErro = useCallback((campo: string, msg: string) => {
@@ -305,6 +305,7 @@ export default function FormularioLead() {
         ...cliquesDoNavegador(track),
         event_id: eventId,
         form_name: FORM_NAME,
+        lp_versao: versao,
         timestamp: new Date().toISOString(),
         etapa: 'completo',
         formulario_completo: true,
@@ -361,6 +362,7 @@ export default function FormularioLead() {
         w.dataLayer = w.dataLayer || []
         w.dataLayer.push({
           event: 'expedicao_lead',
+          lp_versao: versao,
           destino: expedicao.slug,
           event_id: eventId,
           lead: {
@@ -395,7 +397,7 @@ export default function FormularioLead() {
         setEnviando(false)
       }
     },
-    [respostas, nome, whatsapp, email, instagram, setErro, track],
+    [respostas, nome, whatsapp, email, instagram, setErro, track, versao],
   )
 
   return (

@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/cancun",
+      "destination": "/cancun/index.html"
+    },
+    {
+      "source": "/cancun/",
+      "destination": "/cancun/index.html"
+    }
   ]
 }

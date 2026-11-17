@@ -196,7 +196,7 @@ function guardarMensagemWhatsapp(nomeLead: string, telefone: string) {
 
 // ---------------------------------------------------------------------------
 
-export default function FormularioLead() {
+export default function FormularioLead({ versao = 'STFV' }: { versao?: string } = {}) {
   const [etapa, setEtapa] = useState<1 | 2 | 3>(1)
   const [nome, setNome] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
@@ -358,6 +358,7 @@ export default function FormularioLead() {
         ...cliquesDoNavegador(track),
         event_id: eventId,
         form_name: FORM_NAME,
+        lp_versao: versao,
         timestamp: new Date().toISOString(),
         etapa: 'completo',
         formulario_completo: true,
@@ -414,7 +415,7 @@ export default function FormularioLead() {
         w.dataLayer = w.dataLayer || []
         w.dataLayer.push({
           event: 'expedicao_lead',
-          versao_lp: 'STFV', // marca a LP STFV (antes era o utm_content forçado)
+          versao_lp: versao, // marca a LP STFV (antes era o utm_content forçado)
           destino: expedicao.slug,
           event_id: eventId,
           lead: {
@@ -449,7 +450,7 @@ export default function FormularioLead() {
         setEnviando(false)
       }
     },
-    [respostas, nome, whatsapp, email, instagram, setErro, videoLiberado, track],
+    [respostas, nome, whatsapp, email, instagram, setErro, videoLiberado, track, versao],
   )
 
   return (

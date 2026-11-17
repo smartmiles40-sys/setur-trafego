@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/tailandia",
+      "destination": "/tailandia/index.html"
+    },
+    {
+      "source": "/tailandia/",
+      "destination": "/tailandia/index.html"
+    }
   ]
 }

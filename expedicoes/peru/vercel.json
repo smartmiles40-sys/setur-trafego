@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/peru",
+      "destination": "/peru/index.html"
+    },
+    {
+      "source": "/peru/",
+      "destination": "/peru/index.html"
+    }
   ]
 }

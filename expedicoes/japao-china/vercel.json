@@ -29,5 +29,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/japao",
+      "destination": "/japao/index.html"
+    },
+    {
+      "source": "/japao/",
+      "destination": "/japao/index.html"
+    }
   ]
 }

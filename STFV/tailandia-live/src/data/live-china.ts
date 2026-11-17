@@ -30,6 +30,7 @@ import type { ConfigLive } from './live-japao'
  * `LIVES` de public/entrar.html — trocou aqui, troque lá.
  */
 const SESSOES_CHINA = [
+  { inicioISO: '2026-11-17T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/china1711/' }, // hotwebinar (AppLive) — entrou no lugar do Pacote Japão (diretor, 17/11)
   { inicioISO: '2026-11-19T20:00:00-03:00', meetUrl: 'https://meet.google.com/jrt-xxrg-noe' },
   { inicioISO: '2026-11-21T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/china2111/' }, // hotwebinar (AppLive)
   { inicioISO: '2026-11-23T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/china2311/' }, // hotwebinar (AppLive)

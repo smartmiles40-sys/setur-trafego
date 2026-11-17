@@ -44,7 +44,6 @@ const expedicaoPacote = {
  * Os mesmos pares estão em `sessoes` no mapa `LIVES` de public/entrar.html.
  */
 const SESSOES_PACOTE_JAPAO = [
-  { inicioISO: '2026-11-17T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1711/' },
   { inicioISO: '2026-11-19T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1911/' },
   { inicioISO: '2026-11-22T20:00:00-03:00', meetUrl: 'https://meet.google.com/spu-kdxp-ziy' },
   { inicioISO: '2026-11-25T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2511/' },

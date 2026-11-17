@@ -54,7 +54,7 @@ export const liveTurquia: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: os 13 dias entre Istambul, a Capadócia, o cruzeiro pelo Egeu e Atenas, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: os 13 dias entre Istambul, a Capadócia, o cruzeiro pelo Egeu e Atenas, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',
@@ -81,7 +81,7 @@ export const liveTurquia: ConfigLive = {
      */
     // 🔁 Remarcada em 21/09/2026 para domingo, 27 de setembro de 2026, 20h00 (sala nova).
     inicioISO: '2026-09-28T19:30:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.

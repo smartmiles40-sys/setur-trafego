@@ -54,7 +54,7 @@ export const liveCostaAmalfitana: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: os 11 dias entre Nápoles, Pompeia, Sorrento, a Costa Amalfitana, Capri e Roma, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: os 11 dias entre Nápoles, Pompeia, Sorrento, a Costa Amalfitana, Capri e Roma, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',
@@ -81,7 +81,7 @@ export const liveCostaAmalfitana: ConfigLive = {
      */
     // 🔁 Remarcada em 28/10/2026 para quarta-feira, 28 de outubro de 2026, 21h00 (sala nova).
     inicioISO: '2026-10-28T21:00:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.

@@ -32,7 +32,7 @@ const SESSOES_CHINA = [
   { inicioISO: '2026-11-19T20:00:00-03:00', meetUrl: 'https://meet.google.com/jrt-xxrg-noe' },
   { inicioISO: '2026-11-28T20:00:00-03:00', meetUrl: 'https://meet.google.com/egy-uigk-rkc' },
 ]
-const DURACAO_CHINA_MIN = 90
+const DURACAO_CHINA_MIN = 60
 const SESSAO_CHINA =
   SESSOES_CHINA.find(
     (s) => new Date(s.inicioISO).getTime() + DURACAO_CHINA_MIN * 60_000 > Date.now(),
@@ -71,7 +71,7 @@ export const liveChina: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: o roteiro pela China — da Muralha e da Cidade Proibida aos Guerreiros de Terracota, aos pandas de Chengdu, às Montanhas de Avatar e a Xangai —, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: o roteiro pela China — da Muralha e da Cidade Proibida aos Guerreiros de Terracota, aos pandas de Chengdu, às Montanhas de Avatar e a Xangai —, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',

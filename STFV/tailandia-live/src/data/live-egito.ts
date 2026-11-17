@@ -33,7 +33,7 @@ const SESSOES_EGITO = [
   { inicioISO: '2026-09-27T20:00:00-03:00', meetUrl: 'https://meet.google.com/arw-qozv-pop' },
   { inicioISO: '2026-09-29T20:00:00-03:00', meetUrl: 'https://meet.google.com/pze-qexv-afu' },
 ]
-const DURACAO_EGITO_MIN = 90
+const DURACAO_EGITO_MIN = 60
 const SESSAO_EGITO =
   SESSOES_EGITO.find(
     (s) => new Date(s.inicioISO).getTime() + DURACAO_EGITO_MIN * 60_000 > Date.now(),
@@ -72,7 +72,7 @@ export const liveEgito: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: os 14 dias entre Cairo, o cruzeiro pelo Nilo, Luxor, Hurghada e a extensão Dubai, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: os 14 dias entre Cairo, o cruzeiro pelo Nilo, Luxor, Hurghada e a extensão Dubai, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',

@@ -80,7 +80,7 @@ export const liveJapao = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: o roteiro dos 17 dias pelo Japão, a extensão China, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: o roteiro dos 17 dias pelo Japão, a extensão China, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',
@@ -109,7 +109,7 @@ export const liveJapao = {
     // 🔁 Remarcada em 05/10/2026 para domingo, 11 de outubro de 2026, 20h00 (sala nova).
     // 🔁 Remarcada em 17/11/2026 para domingo, 29 de novembro de 2026, 20h00 (Meet, sala dfw-vtuf-yjz).
     inicioISO: '2026-11-29T20:00:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // Sala desta live (AppLive, não Meet).
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,

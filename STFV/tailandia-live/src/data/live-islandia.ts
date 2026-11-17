@@ -54,14 +54,14 @@ export const liveIslandia: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: os 11 dias pela Islândia — Círculo Dourado, praias negras, Jökulsárlón e as noites de caça à aurora —, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora com quem organiza a expedição: os 11 dias pela Islândia — Círculo Dourado, praias negras, Jökulsárlón e as noites de caça à aurora —, o que está incluso e quanto custa.',
 
   topicos: [
     'Roteiro dia a dia',
     'Aurora boreal: como funciona a caça',
     'Valores e formas de pagamento',
     'Como funciona o acompanhamento',
-    'Perguntas ao vivo',
+    'Como garantir sua vaga',
   ],
 
   // ---- A live --------------------------------------------------------------
@@ -84,7 +84,7 @@ export const liveIslandia: ConfigLive = {
      */
     // 🔁 Remarcada em 17/11/2026 para sexta-feira, 20 de novembro de 2026, 21h00 (sala nova vzm-btpx-efc).
     inicioISO: '2026-11-20T21:00:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.

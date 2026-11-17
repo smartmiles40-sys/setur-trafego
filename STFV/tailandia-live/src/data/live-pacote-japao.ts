@@ -72,7 +72,7 @@ export const livePacoteJapao: ConfigLive = {
      */
     // 🔁 Remarcada em 17/11/2026 para domingo, 22 de novembro de 2026, 20h00 (Meet, sala spu-kdxp-ziy).
     inicioISO: '2026-11-22T20:00:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.

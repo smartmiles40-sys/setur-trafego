@@ -73,7 +73,7 @@ export const livePeru: ConfigLive = {
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora e meia ao vivo com quem organiza a expedição: os 9 dias entre Lima, Vale Sagrado, Machu Picchu e Vinicunca, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'Uma hora ao vivo com quem organiza a expedição: os 9 dias entre Lima, Vale Sagrado, Machu Picchu e Vinicunca, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
 
   topicos: [
     'Roteiro dia a dia',
@@ -103,7 +103,7 @@ export const livePeru: ConfigLive = {
     // 🔁 Remarcada em 21/09/2026 para quarta-feira, 23 de setembro de 2026, 20h00 (sala nova).
     // 🔁 Remarcada em 17/11/2026 para sábado, 21 de novembro de 2026, 20h00 (Meet, sala woa-unae-jws).
     inicioISO: '2026-11-21T20:00:00-03:00',
-    duracaoMinutos: 90,
+    duracaoMinutos: 60,
 
     // ⚠️ PREENCHER — sala do Google Meet desta live. Vazio = o convite do
     // Google Agenda chega sem link da sala.

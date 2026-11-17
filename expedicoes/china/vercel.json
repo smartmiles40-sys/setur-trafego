@@ -32,6 +32,14 @@
   ],
   "rewrites": [
     {
+      "source": "/china-b",
+      "destination": "/china-b/index.html"
+    },
+    {
+      "source": "/china-b/",
+      "destination": "/china-b/index.html"
+    },
+    {
       "source": "/china",
       "destination": "/china/index.html"
     },

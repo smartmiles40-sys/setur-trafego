@@ -59,4 +59,15 @@ export const CONTEUDO = {
     momentosH2: '5 dias que você não esquece.',
     momentos: [[2, 'Presidente Figueiredo', 'Teatro Amazonas e cachoeiras', 'Trilha guiada e piscinas naturais.'], [3, 'Rio Negro', 'Encontro das Águas', 'Comunidade ribeirinha e banho de rio.'], [4, 'Rio Negro', 'Churrasco no flutuante', 'Barco privativo, banda ao vivo e pôr do sol.']],
   },
+  china: {
+    dominio: 'lps12', sub: 'china-b', mes: 'outubro de 2027', mesCurto: 'Outubro 2027', saida: 'Saída de Guarulhos', grande: 'CHINA',
+    h1: 'A China que você sempre quis ver, <em>com tudo resolvido</em> antes do embarque.',
+    texto: '16 dias entre Pequim, Xian, Chengdu, Chongqing, Zhangjiajie e Xangai. Voos, trem-bala, hotéis, visto e apps já resolvidos, com líderes brasileiros e guia bilíngue do primeiro ao último dia. Você só vive.',
+    dorH2: 'A China é incrível. Organizar sozinho, nem tanto.',
+    dorLead: 'Outro idioma, outra escrita, apps obrigatórios e distâncias continentais. Sem preparo, a viagem vira uma sequência de obstáculos.',
+    dores: [['Idioma e escrita', 'Placas, cardápios e transporte que você não lê.'], ['Alipay e WeChat', 'Sem eles você não paga quase nada.'], ['Internet bloqueada', 'Sem VPN, nada de Instagram e WhatsApp.'], ['Escala continental', 'Trem-bala, voos e metrô entre 6 cidades.']],
+    bastidores: [['Roteiro testado', 'Seis cidades com ritmo pensado do início ao fim.'], ['Trem-bala e voos', 'Domésticos e transfers já reservados.'], ['Visto chinês', 'Suporte na emissão antes da viagem.'], ['Alipay, WeChat e VPN', 'Instalação assistida e orientação antes de embarcar.'], ['Tours privativos', 'Muralha, Terracota e Avatar com guia.'], ['Líderes brasileiros', 'Com guia bilíngue do embarque ao retorno.']],
+    exclusivos: ['Tour privativo na Muralha da China', 'Montanhas de Avatar em Zhangjiajie', 'Pandas de Chengdu'],
+    momentos: [[3, 'Pequim', 'Muralha da China', 'Tour privativo em um dos trechos mais bonitos.'], [6, 'Xian', 'Guerreiros de Terracota', 'O exército de barro de 2.200 anos.'], [7, 'Chengdu', 'Pandas de Chengdu', 'Na reserva dos pandas gigantes.'], [9, 'Chongqing', 'Chongqing futurista', 'O trem que atravessa o prédio e Hongya Cave.'], [11, 'Zhangjiajie', 'Parque do Avatar', 'As montanhas flutuantes e o Bailong Elevator.'], [13, 'Xangai', 'The Bund e Old Shanghai', 'O skyline mais famoso da China.']],
+  },
 }

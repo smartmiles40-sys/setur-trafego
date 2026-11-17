@@ -10,7 +10,7 @@ import { CONTEUDO } from './conteudo-b.mjs'
 const [lpDir, chave] = process.argv.slice(2)
 const C = CONTEUDO[chave]
 if (!C) throw new Error('sem conteúdo para ' + chave)
-const STFV = path.resolve(lpDir, '..')
+const STFV = fs.existsSync(path.resolve(lpDir, '..', 'japao-china/public/japao/index.html')) ? path.resolve(lpDir, '..') : path.resolve(lpDir, '../../STFV')
 const modelo = fs.readFileSync(path.join(STFV, 'japao-china/public/japao/index.html'), 'utf8').replace(/\r\n/g, '\n')
 const idx = fs.readFileSync(path.join(lpDir, 'index.html'), 'utf8').replace(/\r\n/g, '\n')
 const m = await carregar(lpDir)
@@ -26,9 +26,10 @@ const foto = (d) => d?.imagem || E.heroImage
 const nDias = m.roteiro.length
 
 // ---------- head: rastreio da PRÓPRIA LP (GTM/Stape + Clarity) + CSS do modelo
-const gtmHead = idx.slice(idx.indexOf('<!-- Google Tag Manager -->'), idx.indexOf('<!-- End Microsoft Clarity -->') + '<!-- End Microsoft Clarity -->'.length)
+const fimHead = idx.includes('<!-- End Microsoft Clarity -->') ? '<!-- End Microsoft Clarity -->' : '<!-- End Google Tag Manager -->'
+const gtmHead = idx.slice(idx.indexOf('<!-- Google Tag Manager -->'), idx.indexOf(fimHead) + fimHead.length)
 const gtmBody = idx.slice(idx.indexOf('<!-- Google Tag Manager (noscript) -->'), idx.indexOf('<!-- End Google Tag Manager (noscript) -->') + '<!-- End Google Tag Manager (noscript) -->'.length)
-if (!gtmHead.includes('stape') || !gtmHead.includes('clarity') || !gtmBody.includes('GTM-')) throw new Error('GTM não encontrado em ' + lpDir)
+if (!gtmHead.includes('<script') || !gtmBody.includes('GTM-')) throw new Error('GTM não encontrado em ' + lpDir)
 const css = modelo.slice(modelo.indexOf('<style>'), modelo.indexOf('</style>') + 8)
   .replace(/url\("https:\/\/stfv1\.setuforeuvouviagens\.com\.br\/assets\/japao-china\/hero\.jpg"\)/, `url("${E.heroImage}")`)
   .replace(/\s*--img:"[^"]*";/, '')
@@ -66,7 +67,7 @@ const diasCel = m.roteiro.map((d) => {
   return `<div class="dia-c"><img loading="lazy" width="800" height="600" src="${foto(d)}" alt="${esc(d.titulo)}"><div><small>Dia ${d.dia} · ${esc(d.cidade || '')}</small><h3>${esc(d.titulo)}</h3>${desc ? `<p>${esc(desc)}</p>` : ''}</div></div>`
 }).join('\n      ')
 const incl = (m.incluso || []).map((i) => `        <li><div>${esc(i.title)}${i.desc ? `<span>${esc(i.desc)}</span>` : ''}</div></li>`).join('\n')
-const depos = (m.depoimentos || []).slice(0, 2).map((d) => `      <div class="quote">"${esc(d.texto)}"<b style="display:flex;align-items:center;gap:10px">${d.avatar ? `<img src="${esc(d.avatar)}" alt="" width="36" height="36" style="border-radius:50%">` : ''}${esc(nomeBonito(d.nome))} · ★★★★★</b></div>`).join('\n')
+const depos = (m.depoimentos || []).slice(0, 2).map((d) => `      <div class="quote">"${esc(d.texto)}"<b style="display:flex;align-items:center;gap:10px">${d.avatar ? `<img src="${esc(d.avatar)}" alt="" width="36" height="36" style="border-radius:50%" onerror="this.remove()">` : ''}${esc(nomeBonito(d.nome))} · ★★★★★</b></div>`).join('\n')
 const faqs = (m.faq || []).slice(0, 6).map((f) => `    <details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('\n')
 const sozinho = (m.porQue?.sozinho || []).slice(0, 4)
 const conosco = (m.porQue?.conosco || []).slice(0, 4)
@@ -308,18 +309,28 @@ rodape = rodape.replace('<div class="big-bg">JAPÃO</div>', `<div class="big-bg"
   .replace('10 a 27 de outubro de 2027', esc(E.dataRange))
   .replace('Encontro em Guarulhos (GRU)', C.saida === 'Encontro em Manaus' ? 'Encontro em Manaus' : 'Encontro em Guarulhos (GRU)')
   .replace(/https:\/\/stfv1\.setuforeuvouviagens\.com\.br\/politica-privacidade\.html/g, '/politica-privacidade.html')
-if (rodape.includes('JAPÃO') || rodape.includes('outubro de 2027')) throw new Error('rodapé com Japão')
+if (rodape.includes('JAPÃO') || rodape.includes('10 a 27 de outubro')) throw new Error('rodapé com Japão')
 
 // script = o do modelo, trocando a expedição e o vídeo VTurb
 let script = modelo.slice(modelo.indexOf('<div class="mobile-cta">'), modelo.lastIndexOf('</body>'))
 script = script.replace(/var EXP = \{[^}]*\};/, `var EXP = { slug: ${JSON.stringify(E.slug)}, ano: ${E.ano}, nome: ${JSON.stringify(E.nome)}, fonte: ${JSON.stringify(E.fonte)}, sourceId: ${JSON.stringify(E.sourceId)} };`)
-if (!E.vsl) throw new Error('LP sem VSL')
-script = script.split('vid-6a3e9b57e172d6fc8663e6f0').join(E.vsl.playerId)
+if (!E.vsl) {
+  const a = script.indexOf('  /* ---------- vídeo'), b = script.indexOf('  } catch (e) {}', a) + '  } catch (e) {}'.length
+  if (a < 0 || b < a) throw new Error('bloco do VTurb não achado')
+  script = script.slice(0, a) + script.slice(b)
+} else script = script.split('vid-6a3e9b57e172d6fc8663e6f0').join(E.vsl.playerId)
   .replace(/https:\/\/scripts\.converteai\.net\/f972c0cf[^']*player\.js/, E.vsl.playerSrc)
 if (script.includes('japao-china') || script.includes('6a3e9b57')) throw new Error('script ainda com Japão')
 
-const html = head + corpo + rodape + script + '</body>\n</html>\n'
-for (const proibido of ['Japão', 'japao', 'Pequim', 'Kyoto']) if (html.split('stape-japao').join('').includes(proibido)) throw new Error(`sobrou "${proibido}" na página de ${chave}`)
+let corpoF = corpo
+if (!E.vsl) {
+  const f = foto(dia(C.fotoHero || 3))
+  corpoF = corpoF.replace('<div class="vsl vsl-m"><div class="vsl-ph"><div class="play"></div>Vídeo</div></div>', '')
+    .replace('<div class="vsl"><div class="vsl-ph"><div class="play"></div>Vídeo</div></div>', '<img src="' + f + '" alt="" width="800" height="600" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.35)">')
+  if (corpoF.includes('vsl-ph')) throw new Error('placeholder de vídeo sobrou')
+}
+const html = head + corpoF + rodape + script + '</body>\n</html>\n'
+for (const proibido of ['Japão', 'japao', 'Kyoto']) if (html.split('stape-japao').join('').includes(proibido)) throw new Error(`sobrou "${proibido}" na página de ${chave}`)
 
 // ---------- grava + selos + vercel + save-lead aceita lp_versao
 const saida = path.join(lpDir, 'public', C.sub, 'index.html')

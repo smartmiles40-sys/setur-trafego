@@ -373,9 +373,17 @@
 
       var LIVES = {
         'japao-live': {
-          // 17/11/2026: saiu da AppLive para o Meet (live de 29/11, 20h).
+          // Fila de 17/11/2026: hotwebinars na AppLive + live de 29/11 no Meet.
+          // Vale a próxima que ainda não terminou; sala/inicio = reserva.
           sala: 'https://meet.google.com/dfw-vtuf-yjz',
           inicio: '2026-11-29T20:00:00-03:00',
+          sessoes: [
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/japaoechina1811/', inicio: '2026-11-18T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2011/', inicio: '2026-11-20T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2411/', inicio: '2026-11-24T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2711/', inicio: '2026-11-27T21:00:00-03:00' },
+            { sala: 'https://meet.google.com/dfw-vtuf-yjz', inicio: '2026-11-29T20:00:00-03:00' }
+          ],
           nome: 'Japão 2027',
           compl: 'com extensão China',
           fundo: '/assets/japao/hero.jpg'
@@ -398,12 +406,17 @@
           fundo: '/assets/italia/hero-positano.jpg'
         },
         'tailandia-live': {
-          // Duas lives: depois da de 17/11 a página passa sozinha para 26/11.
-          sala: 'https://meet.google.com/grn-axis-xqf',
-          inicio: '2026-11-26T20:00:00-03:00',
+          // Fila de 17/11/2026: lives no Meet + hotwebinars na AppLive.
+          // Vale a próxima que ainda não terminou; sala/inicio = reserva.
+          sala: 'https://stfvlivejapaoechina.applive.com.br/tailandia2811/',
+          inicio: '2026-11-28T21:00:00-03:00',
           sessoes: [
             { sala: 'https://meet.google.com/fbs-yykv-uzp', inicio: '2026-11-17T20:00:00-03:00' },
-            { sala: 'https://meet.google.com/grn-axis-xqf', inicio: '2026-11-26T20:00:00-03:00' }
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/tailandia1911/', inicio: '2026-11-19T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/tailandia2211/', inicio: '2026-11-22T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/tailandia2411/', inicio: '2026-11-24T21:00:00-03:00' },
+            { sala: 'https://meet.google.com/grn-axis-xqf', inicio: '2026-11-26T20:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/tailandia2811/', inicio: '2026-11-28T21:00:00-03:00' }
           ],
           nome: 'Tailândia 2027',
           compl: '',
@@ -417,18 +430,34 @@
           fundo: '/assets/turquia-grecia/hero.jpg'
         },
         'islandia-live': {
-          // 17/11/2026: live de 20/11, 21h (sala nova vzm-btpx-efc).
-          sala: 'https://meet.google.com/vzm-btpx-efc',
-          inicio: '2026-11-20T21:00:00-03:00',
+          // Fila de 17/11/2026: só hotwebinars na AppLive (live gravada).
+          // Vale a próxima que ainda não terminou; sala/inicio = reserva.
+          sala: 'https://stfvlivejapaoechina.applive.com.br/islandia2911/',
+          inicio: '2026-11-29T15:00:00-03:00',
+          sessoes: [
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/islandia1811/', inicio: '2026-11-18T12:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/islandia2011/', inicio: '2026-11-20T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/islandia2311/', inicio: '2026-11-23T19:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/islandia2611/', inicio: '2026-11-26T12:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/islandia2911/', inicio: '2026-11-29T15:00:00-03:00' }
+          ],
           nome: 'Islândia 2027',
           compl: '',
           fundo: '/assets/islandia/aurora-boreal.jpg'
         },
         'pacote-japao-live': {
           // Pacote (não expedição): `tipo` troca "Expedição" por "Pacote" no título.
-          // 17/11/2026: saiu da AppLive para o Meet (live de 22/11, 20h).
-          sala: 'https://meet.google.com/spu-kdxp-ziy',
-          inicio: '2026-11-22T20:00:00-03:00',
+          // Fila de 17/11/2026: hotwebinars na AppLive + live de 22/11 no Meet.
+          // Vale a próxima que ainda não terminou; sala/inicio = reserva.
+          sala: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2711/',
+          inicio: '2026-11-27T12:00:00-03:00',
+          sessoes: [
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1711/', inicio: '2026-11-17T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1911/', inicio: '2026-11-19T15:00:00-03:00' },
+            { sala: 'https://meet.google.com/spu-kdxp-ziy', inicio: '2026-11-22T20:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2511/', inicio: '2026-11-25T15:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2711/', inicio: '2026-11-27T12:00:00-03:00' }
+          ],
           tipo: 'Pacote',
           nome: 'Japão Essencial',
           compl: 'Tóquio · Osaka · Kyoto',
@@ -444,11 +473,15 @@
           fundo: '/assets/pacote-peru/hero.jpg'
         },
         'china-live': {
-          // Duas lives no Meet: depois da de 19/11 a página passa sozinha para 28/11.
+          // Fila de 17/11/2026: lives no Meet + hotwebinars na AppLive.
+          // Vale a próxima que ainda não terminou; sala/inicio = reserva.
           sala: 'https://meet.google.com/egy-uigk-rkc',
           inicio: '2026-11-28T20:00:00-03:00',
           sessoes: [
             { sala: 'https://meet.google.com/jrt-xxrg-noe', inicio: '2026-11-19T20:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/china2111/', inicio: '2026-11-21T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/china2311/', inicio: '2026-11-23T21:00:00-03:00' },
+            { sala: 'https://stfvlivejapaoechina.applive.com.br/china2511/', inicio: '2026-11-25T21:00:00-03:00' },
             { sala: 'https://meet.google.com/egy-uigk-rkc', inicio: '2026-11-28T20:00:00-03:00' }
           ],
           nome: 'China 2027',
@@ -554,7 +587,7 @@
           seloTxt.textContent = 'Live encerrada';
           quando.innerHTML = 'Esta transmissão já aconteceu. Deixe seus dados que a gente te avisa da próxima.';
         } else {
-          seloTxt.textContent = 'Live gratuita · Google Meet';
+          seloTxt.textContent = 'Live gratuita · ' + (/meet.google.com/.test(SALA_URL) ? 'Google Meet' : 'online');
           quando.innerHTML = 'Transmissão ao vivo · <strong>' + rotulo() + '</strong> (horário de Brasília)';
         }
       })();

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { CalendarDays, Video } from 'lucide-react'
 import ContagemRegressiva from './ContagemRegressiva'
 import FormularioLive from './FormularioLive'
-import { fundoDecorativo } from '../data/live'
+import { fundoDecorativo, plataformaCurta, plataformaNo } from '../data/live'
 import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 
 /**
@@ -47,8 +47,8 @@ export default function ChamadaFinal() {
           className="eyebrow-center mb-5 gap-2 rounded-full bg-lime/15 px-3 py-1.5 text-lime ring-1 ring-lime/35 md:mb-6 md:px-4"
         >
           <Video size={12} aria-hidden className="flex-shrink-0" />
-          <span className="md:hidden">Live gratuita · Google Meet</span>
-          <span className="hidden md:inline">Live gratuita · ao vivo no Google Meet</span>
+          <span className="md:hidden">Live gratuita · {plataformaCurta}</span>
+          <span className="hidden md:inline">Live gratuita · {plataformaNo}</span>
         </motion.div>
 
         <motion.h2

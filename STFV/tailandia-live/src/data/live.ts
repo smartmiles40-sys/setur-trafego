@@ -107,5 +107,17 @@ export const destaqueTitulo = extras.destaque ?? String(live.expedicao.ano)
 export const sobreProduto = ehPacote ? 'o Pacote' : 'a Expedição'
 /** "da expedição" | "do pacote" */
 export const doProduto = ehPacote ? 'do pacote' : 'da expedição'
+/**
+ * Onde a sessão da vez acontece. As lives misturam salas do Google Meet e
+ * sessões da AppLive (hotwebinar) na mesma fila de `sessoes` — o texto segue o
+ * link da sessão que a página escolheu, para não prometer Meet numa AppLive.
+ */
+export const salaNoMeet = /meet\.google\.com/.test(live.evento.meetUrl)
+/** "Google Meet" | "online" — selo curto do hero. */
+export const plataformaCurta = salaNoMeet ? 'Google Meet' : 'online'
+/** "ao vivo no Google Meet" | "ao vivo, online" */
+export const plataformaNo = salaNoMeet ? 'ao vivo no Google Meet' : 'ao vivo, online'
+/** "ao vivo pelo Google Meet" | "ao vivo, online" */
+export const plataformaPelo = salaNoMeet ? 'ao vivo pelo Google Meet' : 'ao vivo, online'
 /** Número gigante decorativo do fundo: o ano (pacote não tem). */
 export const fundoDecorativo = ehPacote ? '' : String(live.expedicao.ano)

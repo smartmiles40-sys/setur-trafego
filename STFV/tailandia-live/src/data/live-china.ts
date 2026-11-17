@@ -24,12 +24,16 @@ import type { ConfigLive } from './live-japao'
 /**
  * A China tem DUAS lives seguidas (cronograma de 17/11/2026). A página vale a
  * próxima que ainda não terminou (início + duracaoMinutos), decidido quando a
- * página abre: até o fim da live de 19/11 mostra 19/11; depois, sozinha, 28/11.
+ * página abre: cada sessão (Meet ou hotwebinar da AppLive) vale até o fim dela;
+ * depois a página passa sozinha para a próxima da lista.
  * Passada a última, fica na última. Os mesmos pares estão em `sessoes` no mapa
  * `LIVES` de public/entrar.html — trocou aqui, troque lá.
  */
 const SESSOES_CHINA = [
   { inicioISO: '2026-11-19T20:00:00-03:00', meetUrl: 'https://meet.google.com/jrt-xxrg-noe' },
+  { inicioISO: '2026-11-21T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/china2111/' }, // hotwebinar (AppLive)
+  { inicioISO: '2026-11-23T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/china2311/' }, // hotwebinar (AppLive)
+  { inicioISO: '2026-11-25T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/china2511/' }, // hotwebinar (AppLive)
   { inicioISO: '2026-11-28T20:00:00-03:00', meetUrl: 'https://meet.google.com/egy-uigk-rkc' },
 ]
 const DURACAO_CHINA_MIN = 60

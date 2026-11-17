@@ -24,13 +24,18 @@ import type { ConfigLive } from './live-japao'
 /**
  * A Tailândia tem DUAS lives seguidas (cronograma de 17/11/2026). A página vale
  * a próxima que ainda não terminou (início + duracaoMinutos), decidido quando a
- * página abre: até o fim da live de 17/11 mostra 17/11; depois, sozinha, 26/11.
+ * página abre: cada sessão (Meet ou hotwebinar da AppLive) vale até o fim dela;
+ * depois a página passa sozinha para a próxima da lista.
  * Passada a última, fica na última. Os mesmos pares estão em `sessoes` no mapa
  * `LIVES` de public/entrar.html — trocou aqui, troque lá.
  */
 const SESSOES_TAILANDIA = [
   { inicioISO: '2026-11-17T20:00:00-03:00', meetUrl: 'https://meet.google.com/fbs-yykv-uzp' },
+  { inicioISO: '2026-11-19T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia1911/' }, // hotwebinar (AppLive)
+  { inicioISO: '2026-11-22T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2211/' }, // hotwebinar (AppLive)
+  { inicioISO: '2026-11-24T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2411/' }, // hotwebinar (AppLive)
   { inicioISO: '2026-11-26T20:00:00-03:00', meetUrl: 'https://meet.google.com/grn-axis-xqf' },
+  { inicioISO: '2026-11-28T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2811/' }, // hotwebinar (AppLive)
 ]
 const DURACAO_TAILANDIA_MIN = 60
 const SESSAO_TAILANDIA =

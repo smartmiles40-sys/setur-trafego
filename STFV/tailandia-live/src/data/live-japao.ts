@@ -37,6 +37,23 @@
  * ============================================================================
  */
 
+/**
+ * Fila de sessões desta live (cronograma de 17/11/2026): salas do Google Meet e
+ * sessões gravadas (hotwebinar) da AppLive. A página vale a próxima que ainda
+ * não terminou (início + duracaoMinutos); passada a última, fica na última.
+ * Os mesmos pares estão em `sessoes` no mapa `LIVES` de public/entrar.html.
+ */
+const SESSOES_JAPAO = [
+  { inicioISO: '2026-11-18T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/japaoechina1811/' },
+  { inicioISO: '2026-11-20T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2011/' },
+  { inicioISO: '2026-11-24T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2411/' },
+  { inicioISO: '2026-11-27T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2711/' },
+  { inicioISO: '2026-11-29T20:00:00-03:00', meetUrl: 'https://meet.google.com/dfw-vtuf-yjz' },
+]
+const SESSAO_JAPAO =
+  SESSOES_JAPAO.find((s) => new Date(s.inicioISO).getTime() + 60 * 60_000 > Date.now()) ??
+  SESSOES_JAPAO[SESSOES_JAPAO.length - 1]
+
 export const liveJapao = {
   // slug do lead — roteia o webhook em /api/save-lead e separa esta base das
   // LPs de expedição no CRM/ledger. NÃO reaproveitar o slug 'japao-china'
@@ -108,13 +125,13 @@ export const liveJapao = {
      */
     // 🔁 Remarcada em 05/10/2026 para domingo, 11 de outubro de 2026, 20h00 (sala nova).
     // 🔁 Remarcada em 17/11/2026 para domingo, 29 de novembro de 2026, 20h00 (Meet, sala dfw-vtuf-yjz).
-    inicioISO: '2026-11-29T20:00:00-03:00',
+    inicioISO: SESSAO_JAPAO.inicioISO,
     duracaoMinutos: 60,
 
     // Sala desta live (AppLive, não Meet).
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
     // que redireciona pra cá). Trocou lá, troque aqui.
-    meetUrl: 'https://meet.google.com/dfw-vtuf-yjz',
+    meetUrl: SESSAO_JAPAO.meetUrl,
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

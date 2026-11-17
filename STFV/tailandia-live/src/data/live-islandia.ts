@@ -21,6 +21,23 @@
 
 import type { ConfigLive } from './live-japao'
 
+/**
+ * Fila de sessões desta live (cronograma de 17/11/2026): salas do Google Meet e
+ * sessões gravadas (hotwebinar) da AppLive. A página vale a próxima que ainda
+ * não terminou (início + duracaoMinutos); passada a última, fica na última.
+ * Os mesmos pares estão em `sessoes` no mapa `LIVES` de public/entrar.html.
+ */
+const SESSOES_ISLANDIA = [
+  { inicioISO: '2026-11-18T12:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/islandia1811/' },
+  { inicioISO: '2026-11-20T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/islandia2011/' },
+  { inicioISO: '2026-11-23T19:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/islandia2311/' },
+  { inicioISO: '2026-11-26T12:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/islandia2611/' },
+  { inicioISO: '2026-11-29T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/islandia2911/' },
+]
+const SESSAO_ISLANDIA =
+  SESSOES_ISLANDIA.find((s) => new Date(s.inicioISO).getTime() + 60 * 60_000 > Date.now()) ??
+  SESSOES_ISLANDIA[SESSOES_ISLANDIA.length - 1]
+
 export const liveIslandia: ConfigLive = {
   // Slug próprio: é ele que separa esta base das outras no ledger, no CRM,
   // no dataLayer e na coluna `Destino` da planilha do n8n.
@@ -83,7 +100,7 @@ export const liveIslandia: ConfigLive = {
      * 🔁 Remarcada em 10/11/2026 para domingo, 15 de novembro de 2026, 21h00 (sala nova gmr-nemh-cha).
      */
     // 🔁 Remarcada em 17/11/2026 para sexta-feira, 20 de novembro de 2026, 21h00 (sala nova vzm-btpx-efc).
-    inicioISO: '2026-11-20T21:00:00-03:00',
+    inicioISO: SESSAO_ISLANDIA.inicioISO,
     duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -94,7 +111,7 @@ export const liveIslandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/vzm-btpx-efc',
+    meetUrl: SESSAO_ISLANDIA.meetUrl,
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

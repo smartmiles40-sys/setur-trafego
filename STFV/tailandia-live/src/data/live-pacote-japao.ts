@@ -37,6 +37,23 @@ const expedicaoPacote = {
   titulo: 'Pacote Japão Essencial',
 }
 
+/**
+ * Fila de sessões desta live (cronograma de 17/11/2026): salas do Google Meet e
+ * sessões gravadas (hotwebinar) da AppLive. A página vale a próxima que ainda
+ * não terminou (início + duracaoMinutos); passada a última, fica na última.
+ * Os mesmos pares estão em `sessoes` no mapa `LIVES` de public/entrar.html.
+ */
+const SESSOES_PACOTE_JAPAO = [
+  { inicioISO: '2026-11-17T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1711/' },
+  { inicioISO: '2026-11-19T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1911/' },
+  { inicioISO: '2026-11-22T20:00:00-03:00', meetUrl: 'https://meet.google.com/spu-kdxp-ziy' },
+  { inicioISO: '2026-11-25T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2511/' },
+  { inicioISO: '2026-11-27T12:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2711/' },
+]
+const SESSAO_PACOTE_JAPAO =
+  SESSOES_PACOTE_JAPAO.find((s) => new Date(s.inicioISO).getTime() + 60 * 60_000 > Date.now()) ??
+  SESSOES_PACOTE_JAPAO[SESSOES_PACOTE_JAPAO.length - 1]
+
 export const livePacoteJapao: ConfigLive = {
   // Slug próprio: separa esta base das outras no ledger, no CRM, no dataLayer
   // e na coluna `Destino` da planilha do n8n.
@@ -71,12 +88,12 @@ export const livePacoteJapao: ConfigLive = {
      * ✅ Definida em 04/11/2026: domingo, 08 de novembro de 2026, 21h00 (BRT).
      */
     // 🔁 Remarcada em 17/11/2026 para domingo, 22 de novembro de 2026, 20h00 (Meet, sala spu-kdxp-ziy).
-    inicioISO: '2026-11-22T20:00:00-03:00',
+    inicioISO: SESSAO_PACOTE_JAPAO.inicioISO,
     duracaoMinutos: 60,
 
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/spu-kdxp-ziy',
+    meetUrl: SESSAO_PACOTE_JAPAO.meetUrl,
 
     descricao:
       'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar o Pacote Japão Essencial: os 13 dias por Tóquio, Osaka e Kyoto, com trem-bala, guias e traslados privativos, o que está incluso, valores e formas de pagamento. Traga suas perguntas.',

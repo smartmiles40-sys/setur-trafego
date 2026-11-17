@@ -7,7 +7,7 @@ import {
   type FormEvent,
 } from 'react'
 import { ArrowRight, Check, MessageCircle } from 'lucide-react'
-import { live, tituloProduto, doProduto } from '../data/live'
+import { live, tituloProduto, doProduto, plataformaPelo } from '../data/live'
 import { rotuloCompleto, rotuloSemFuso } from '../lib/calendario'
 import { assinarEnvio, lerEnvio, registrarEnvio, type Enviado } from '../lib/envio'
 
@@ -394,12 +394,12 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         <p className="mt-1.5 text-[13px] leading-relaxed text-dark-teal/65 md:mt-2 md:text-sm">
           <span className="md:hidden">
             {posicao === 'hero'
-              ? `${rotuloSemFuso()} · ao vivo pelo Google Meet`
+              ? `${rotuloSemFuso()} · ${plataformaPelo}`
               : `O roteiro inteiro, os valores e as vagas — ${rotuloSemFuso()}.`}
           </span>
           <span className="hidden md:inline">
             {posicao === 'hero'
-              ? `${rotuloCompleto()} · ao vivo pelo Google Meet`
+              ? `${rotuloCompleto()} · ${plataformaPelo}`
               : `Na live a gente abre o roteiro inteiro, os valores e as vagas — ${rotuloCompleto()}.`}
           </span>
         </p>

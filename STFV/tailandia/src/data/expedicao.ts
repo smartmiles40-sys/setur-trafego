@@ -17,6 +17,7 @@ export const expedicao = {
   dataFimLabel: '17 de novembro',
   dataRange: '2 a 17 de novembro de 2027',
   dataResumoCurto: 'Tailândia · 2–17 nov 2027',
+  avisoData: 'Datas podem sofrer alteração de 1 dia: o aéreo ainda não foi fechado.',
   duracao: '16 dias',
   duracaoNumero: 16,
   duracaoNumeroLegenda:

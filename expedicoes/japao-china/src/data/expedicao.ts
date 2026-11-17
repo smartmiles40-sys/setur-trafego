@@ -13,10 +13,11 @@ export const expedicao = {
   nomeUpper: 'JAPÃO',
   ano: 2027,
   dataInicio: '2027-10-10',
-  dataInicioLabel: '10 de outubro',
-  dataFimLabel: '27 de outubro',
-  dataRange: '10 a 27 de outubro de 2027',
-  dataResumoCurto: 'Japão · 10 – 27 out',
+  dataInicioLabel: '9 de outubro',
+  dataFimLabel: '26 de outubro',
+  dataRange: '9 a 26 de outubro de 2027',
+  dataResumoCurto: 'Japão · 9 – 26 out',
+  avisoData: 'Datas podem sofrer alteração de 1 dia: o aéreo ainda não foi fechado.',
   duracao: '18 dias',
   duracaoNumero: 18,
   duracaoNumeroLegenda:
@@ -144,7 +145,7 @@ export const naoIncluso = [
 export const roteiro = [
   {
     dia: 1,
-    data: '10/10',
+    data: '09/10',
     cidade: 'São Paulo → Pequim',
     titulo: 'Embarque internacional',
     atividades: [
@@ -160,7 +161,7 @@ export const roteiro = [
   },
   {
     dia: 2,
-    data: '11/10',
+    data: '10/10',
     cidade: 'Em trânsito',
     titulo: 'Em trânsito rumo a Pequim',
     atividades: [
@@ -176,7 +177,7 @@ export const roteiro = [
   },
   {
     dia: 3,
-    data: '12/10',
+    data: '11/10',
     cidade: 'Pequim',
     titulo: 'Extensão China · Chegada em Pequim',
     atividades: [
@@ -192,7 +193,7 @@ export const roteiro = [
   },
   {
     dia: 4,
-    data: '13/10',
+    data: '12/10',
     cidade: 'Pequim',
     titulo: 'Muralha da China · Tour Privativo',
     atividades: [
@@ -208,7 +209,7 @@ export const roteiro = [
   },
   {
     dia: 5,
-    data: '14/10',
+    data: '13/10',
     cidade: 'Pequim',
     titulo: 'Cidade Proibida & Templo do Céu',
     atividades: [
@@ -224,7 +225,7 @@ export const roteiro = [
   },
   {
     dia: 6,
-    data: '15/10',
+    data: '14/10',
     cidade: 'Pequim',
     titulo: 'Dia livre em Pequim',
     atividades: [
@@ -240,7 +241,7 @@ export const roteiro = [
   },
   {
     dia: 7,
-    data: '16/10',
+    data: '15/10',
     cidade: 'Pequim → Osaka',
     titulo: 'Fim da extensão China · Chegada ao Japão',
     atividades: [
@@ -256,7 +257,7 @@ export const roteiro = [
   },
   {
     dia: 8,
-    data: '17/10',
+    data: '16/10',
     cidade: 'Osaka',
     titulo: 'Castelo, Mercado & Dotonbori',
     atividades: [
@@ -272,7 +273,7 @@ export const roteiro = [
   },
   {
     dia: 9,
-    data: '18/10',
+    data: '17/10',
     cidade: 'Kyoto',
     titulo: 'Fushimi Inari, Kiyomizu & Gueixa',
     atividades: [
@@ -288,7 +289,7 @@ export const roteiro = [
   },
   {
     dia: 10,
-    data: '19/10',
+    data: '18/10',
     cidade: 'Kyoto',
     titulo: 'Bambu, Pavilhão Dourado & Gion',
     atividades: [
@@ -304,7 +305,7 @@ export const roteiro = [
   },
   {
     dia: 11,
-    data: '20/10',
+    data: '19/10',
     cidade: 'Hiroshima',
     titulo: 'Hiroshima & Ilha de Miyajima',
     atividades: [
@@ -323,7 +324,7 @@ export const roteiro = [
   },
   {
     dia: 12,
-    data: '21/10',
+    data: '20/10',
     cidade: 'Osaka',
     titulo: 'Dia livre em Osaka',
     atividades: [
@@ -339,7 +340,7 @@ export const roteiro = [
   },
   {
     dia: 13,
-    data: '22/10',
+    data: '21/10',
     cidade: 'Monte Fuji → Tóquio',
     titulo: 'Monte Fuji & Trem-bala para Tóquio',
     atividades: [
@@ -358,7 +359,7 @@ export const roteiro = [
   },
   {
     dia: 14,
-    data: '23/10',
+    data: '22/10',
     cidade: 'Tóquio',
     titulo: 'Asakusa, Sensō-ji & Akihabara',
     atividades: [
@@ -374,7 +375,7 @@ export const roteiro = [
   },
   {
     dia: 15,
-    data: '24/10',
+    data: '23/10',
     cidade: 'Tóquio',
     titulo: 'Harajuku, Meiji, Shibuya & Shinjuku',
     atividades: [
@@ -390,7 +391,7 @@ export const roteiro = [
   },
   {
     dia: 16,
-    data: '25/10',
+    data: '24/10',
     cidade: 'Tóquio',
     titulo: 'Dia livre em Tóquio',
     atividades: [
@@ -406,7 +407,7 @@ export const roteiro = [
   },
   {
     dia: 17,
-    data: '26/10',
+    data: '25/10',
     cidade: 'Tóquio → São Paulo',
     titulo: 'Despedida do Japão',
     atividades: [
@@ -422,7 +423,7 @@ export const roteiro = [
   },
   {
     dia: 18,
-    data: '27/10',
+    data: '26/10',
     cidade: 'São Paulo',
     titulo: 'Chegada ao Brasil',
     atividades: [
@@ -587,6 +588,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '', // 29/09/2026: sem número fixo — o WhatsApp é decidido pela rota do QS
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão 2027 (com extensão China) — 10 a 27 de outubro de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Japão 2027 (com extensão China) — 9 a 26 de outubro de 2027.',
 }
 export const whatsappUrl = `https://qs-turis.vercel.app/api/whatsapp?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

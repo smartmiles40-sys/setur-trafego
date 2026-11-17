@@ -15,6 +15,7 @@ export const expedicao = {
   dataFimLabel: '31 de outubro',
   dataRange: '16 a 31 de outubro de 2027',
   dataResumoCurto: 'China · 16 – 31 out',
+  avisoData: 'Datas podem sofrer alteração de 1 dia: o aéreo ainda não foi fechado.',
   duracao: '16 dias',
   duracaoNumero: 16,
   duracaoNumeroLegenda:

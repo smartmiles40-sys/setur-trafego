@@ -59,6 +59,7 @@ export default function Hero() {
             className="eyebrow-center text-lime mb-8 md:mb-10"
           >
             {expedicao.dataRange}
+            <span className="block mt-2 text-[11px] normal-case tracking-normal font-normal text-off-white/70">{expedicao.avisoData}</span>
           </motion.div>
 
           {/* 2. Expedição (italic médio) */}

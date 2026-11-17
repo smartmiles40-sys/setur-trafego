@@ -134,7 +134,7 @@ export const expedicoes: Expedicao[] = [
     id: 'japao-china-2027-out',
     destino: 'Japão & China',
     ano: 2027,
-    periodo: '14 a 30/10',
+    periodo: '09 a 26/10',
     dias: 17,
     resumo: 'Outono japonês com folhas vermelhas e a imensidão cultural da China.',
     imagem: 'https://setur-trafego.vercel.app/assets/japan-C2RpIZN9.jpg',

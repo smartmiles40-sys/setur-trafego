@@ -306,10 +306,10 @@ ${faqs}
 let rodape = modelo.slice(modelo.indexOf('<footer class="foot">'), modelo.indexOf('<div class="mobile-cta">'))
 rodape = rodape.replace('<div class="big-bg">JAPÃO</div>', `<div class="big-bg">${esc(C.grande)}</div>`)
   .replace('Expedição Japão 2027', `Expedição ${esc(E.nome)} ${E.ano}`)
-  .replace('10 a 27 de outubro de 2027', esc(E.dataRange))
+  .replace('9 a 26 de outubro de 2027', esc(E.dataRange))
   .replace('Encontro em Guarulhos (GRU)', C.saida === 'Encontro em Manaus' ? 'Encontro em Manaus' : 'Encontro em Guarulhos (GRU)')
   .replace(/https:\/\/stfv1\.setuforeuvouviagens\.com\.br\/politica-privacidade\.html/g, '/politica-privacidade.html')
-if (rodape.includes('JAPÃO') || rodape.includes('10 a 27 de outubro')) throw new Error('rodapé com Japão')
+if (rodape.includes('JAPÃO') || rodape.includes('9 a 26 de outubro')) throw new Error('rodapé com Japão')
 
 // script = o do modelo, trocando a expedição e o vídeo VTurb
 let script = modelo.slice(modelo.indexOf('<div class="mobile-cta">'), modelo.lastIndexOf('</body>'))

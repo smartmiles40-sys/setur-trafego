@@ -21,6 +21,7 @@ type Expedicao = {
   fonte: string
   sourceId: string
   dataRange: string
+  avisoData?: string
   duracao: string
   faixaInvestimento: { min: number; max: number }
   heroImage?: string

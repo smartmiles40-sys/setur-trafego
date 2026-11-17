@@ -47,6 +47,21 @@ troca('  .slot.has img+.lbl{display:none}', `  .slot.has img+.lbl{display:none}
   h3.sem-arquivo{display:none}
   #prova-video:not(:has(.has)){display:none}`)
 
+// 4b) "Quem já viajou com a gente": Short de depoimentos do YouTube (vertical), no
+//     lugar do depoimento.mp4 que não veio. Capa primeiro; o player carrega no toque.
+const YT = 'R7nfZV9OLCU'
+h = h.replace(/<div class="slot vid"[^\n]*?<\/video><div class="lbl">[\s\S]*?<\/div><\/div>/, () =>
+  `<div class="vid yt has"><button type="button" aria-label="Assistir depoimentos de viajantes" onclick="this.outerHTML='<iframe src=&quot;https://www.youtube-nocookie.com/embed/${YT}?autoplay=1&amp;playsinline=1&amp;rel=0&quot; title=&quot;Depoimentos de viajantes&quot; allow=&quot;autoplay; encrypted-media; picture-in-picture; fullscreen&quot; allowfullscreen></iframe>'"><img src="https://i.ytimg.com/vi/${YT}/oardefault.jpg" alt="" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/${YT}/hqdefault.jpg'"><span class="play"></span><span class="rot">Depoimentos de quem já viajou</span></button></div>`)
+if (!h.includes('vid yt has')) throw new Error('vídeo do YouTube não entrou')
+troca('  .vid{aspect-ratio:9/16;max-width:320px;margin:22px auto 0}', `  .vid{aspect-ratio:9/16;max-width:320px;margin:22px auto 0}
+  .yt{width:100%;border-radius:16px;overflow:hidden;background:var(--teal);box-shadow:0 14px 34px rgba(9,40,43,.2)}
+  .yt iframe,.yt button{display:block;width:100%;height:100%;border:0;padding:0}
+  .yt button{position:relative;cursor:pointer;background:var(--teal)}
+  .yt img{width:100%;height:100%;object-fit:cover}
+  .yt .play{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;background:var(--lime);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .yt .play:after{content:"";position:absolute;left:27px;top:21px;border-left:20px solid var(--teal);border-top:13px solid transparent;border-bottom:13px solid transparent}
+  .yt .rot{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 14px;color:#fff;font-weight:700;font-size:14px;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.7))}`)
+
 // 5) vídeo: o mesmo player VTurb da LP STFV (um só player; vai pro bloco visível)
 troca('  .vsl-ph .play:after', '  .vsl.tem-video{aspect-ratio:auto;background:transparent;border:0}\n  .vsl-ph .play:after')
 

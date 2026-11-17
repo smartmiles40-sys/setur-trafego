@@ -218,6 +218,13 @@
   .groups{display:grid;grid-template-columns:1fr;gap:12px;margin-top:22px}
   .groups .slot{aspect-ratio:4/3;min-height:0}
   .vid{aspect-ratio:9/16;max-width:320px;margin:22px auto 0}
+  .yt{width:100%;border-radius:16px;overflow:hidden;background:var(--teal);box-shadow:0 14px 34px rgba(9,40,43,.2)}
+  .yt iframe,.yt button{display:block;width:100%;height:100%;border:0;padding:0}
+  .yt button{position:relative;cursor:pointer;background:var(--teal)}
+  .yt img{width:100%;height:100%;object-fit:cover}
+  .yt .play{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;background:var(--lime);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .yt .play:after{content:"";position:absolute;left:27px;top:21px;border-left:20px solid var(--teal);border-top:13px solid transparent;border-bottom:13px solid transparent}
+  .yt .rot{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 14px;color:#fff;font-weight:700;font-size:14px;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.7))}
   /* garantias */
   .guar{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:28px}
   .guar div{background:var(--white);border:2px solid var(--lime-dark);border-radius:16px;padding:22px}
@@ -372,7 +379,7 @@
   <div class="wrap" style="text-align:center">
     <div class="eyebrow">Quem já viajou com a gente</div>
 
-    <div class="slot vid" style="margin-top:12px"><video src="/japao/assets-japao/depoimento.mp4" controls playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover" onloadeddata="this.parentNode.classList.add('has')" onerror="this.remove()"></video><div class="lbl">assets-japao/depoimento.mp4<br>(vídeo de quem foi à Ásia)</div></div>
+    <div class="vid yt has"><button type="button" aria-label="Assistir depoimentos de viajantes" onclick="this.outerHTML='<iframe src=&quot;https://www.youtube-nocookie.com/embed/R7nfZV9OLCU?autoplay=1&amp;playsinline=1&amp;rel=0&quot; title=&quot;Depoimentos de viajantes&quot; allow=&quot;autoplay; encrypted-media; picture-in-picture; fullscreen&quot; allowfullscreen></iframe>'"><img src="https://i.ytimg.com/vi/R7nfZV9OLCU/oardefault.jpg" alt="" loading="lazy" onerror="this.src='https://i.ytimg.com/vi/R7nfZV9OLCU/hqdefault.jpg'"><span class="play"></span><span class="rot">Depoimentos de quem já viajou</span></button></div>
   </div>
 </section>
 

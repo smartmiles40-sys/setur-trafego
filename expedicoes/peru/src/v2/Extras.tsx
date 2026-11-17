@@ -144,6 +144,32 @@ function Depoimento({ d }: { d: LpV2['depoimentos'][number] }) {
   )
 }
 
+/* ---------- Vídeo de depoimentos (Short do YouTube da agência, vertical) ----------
+   Mostra só a capa; o player do YouTube carrega quando a pessoa toca (não pesa a LP). */
+const VIDEO_DEPOIMENTOS = 'R7nfZV9OLCU'
+export function VideoDepoimentos() {
+  const [tocando, setTocando] = useState(false)
+  return (
+    <div className="video-depo">
+      {tocando ? (
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${VIDEO_DEPOIMENTOS}?autoplay=1&playsinline=1&rel=0`}
+          title="Depoimentos de viajantes · Se Tu For, Eu Vou!"
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+          allowFullScreen
+        />
+      ) : (
+        <button type="button" onClick={() => setTocando(true)} aria-label="Assistir depoimentos de viajantes">
+          <img src={`https://i.ytimg.com/vi/${VIDEO_DEPOIMENTOS}/oardefault.jpg`} alt="" loading="lazy"
+            onError={(e) => { e.currentTarget.src = `https://i.ytimg.com/vi/${VIDEO_DEPOIMENTOS}/hqdefault.jpg` }} />
+          <span className="video-depo-play" aria-hidden />
+          <span className="video-depo-rot">Depoimentos de quem já viajou</span>
+        </button>
+      )}
+    </div>
+  )
+}
+
 export function LadoConfianca({ lp }: { lp: LpV2 }) {
   const [qtd, setQtd] = useState(3)
   const lista = lp.depoimentos.slice(0, qtd)
@@ -166,6 +192,7 @@ export function LadoConfianca({ lp }: { lp: LpV2 }) {
           <div className="lado-tit">
             Quem já viajou com a gente <span className="nota-pill">★ {GOOGLE_NOTA.nota} no Google</span>
           </div>
+          <VideoDepoimentos />
           {lista.map((d) => (
             <Depoimento key={d.nome} d={d} />
           ))}

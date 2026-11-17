@@ -82,7 +82,8 @@ export const liveIslandia: ConfigLive = {
      * 🔁 Remarcada em 06/11/2026 para sexta-feira, 06 de novembro de 2026, 20h00 (sala nova sri-emmt-nie).
      * 🔁 Remarcada em 10/11/2026 para domingo, 15 de novembro de 2026, 21h00 (sala nova gmr-nemh-cha).
      */
-    inicioISO: '2026-11-15T21:00:00-03:00',
+    // 🔁 Remarcada em 17/11/2026 para sexta-feira, 20 de novembro de 2026, 21h00 (sala nova vzm-btpx-efc).
+    inicioISO: '2026-11-20T21:00:00-03:00',
     duracaoMinutos: 90,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -93,7 +94,7 @@ export const liveIslandia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/gmr-nemh-cha',
+    meetUrl: 'https://meet.google.com/vzm-btpx-efc',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

@@ -21,6 +21,23 @@
 
 import type { ConfigLive } from './live-japao'
 
+/**
+ * A Tailândia tem DUAS lives seguidas (cronograma de 17/11/2026). A página vale
+ * a próxima que ainda não terminou (início + duracaoMinutos), decidido quando a
+ * página abre: até o fim da live de 17/11 mostra 17/11; depois, sozinha, 26/11.
+ * Passada a última, fica na última. Os mesmos pares estão em `sessoes` no mapa
+ * `LIVES` de public/entrar.html — trocou aqui, troque lá.
+ */
+const SESSOES_TAILANDIA = [
+  { inicioISO: '2026-11-17T20:00:00-03:00', meetUrl: 'https://meet.google.com/fbs-yykv-uzp' },
+  { inicioISO: '2026-11-26T20:00:00-03:00', meetUrl: 'https://meet.google.com/grn-axis-xqf' },
+]
+const DURACAO_TAILANDIA_MIN = 60
+const SESSAO_TAILANDIA =
+  SESSOES_TAILANDIA.find(
+    (s) => new Date(s.inicioISO).getTime() + DURACAO_TAILANDIA_MIN * 60_000 > Date.now(),
+  ) ?? SESSOES_TAILANDIA[SESSOES_TAILANDIA.length - 1]
+
 export const liveTailandia: ConfigLive = {
   // Slug próprio: é ele que separa esta base das outras no ledger, no CRM,
   // no dataLayer e na coluna `Destino` da planilha do n8n.
@@ -81,8 +98,9 @@ export const liveTailandia: ConfigLive = {
      */
     // 🔁 Remarcada em 09/11/2026 para quinta-feira, 12 de novembro de 2026, 20h00 (Meet).
     // 🔁 Remarcada em 17/11/2026 para terça-feira, 17 de novembro de 2026, 20h00 (sala nova fbs-yykv-uzp).
-    inicioISO: '2026-11-17T20:00:00-03:00',
-    duracaoMinutos: 60,
+    // 🔁 17/11/2026: duas lives, 17/11 e 26/11 às 20h — ver SESSOES_TAILANDIA no topo.
+    inicioISO: SESSAO_TAILANDIA.inicioISO,
+    duracaoMinutos: DURACAO_TAILANDIA_MIN,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.
@@ -93,7 +111,7 @@ export const liveTailandia: ConfigLive = {
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
     // Sala desta live (Meet, 17/11/2026).
-    meetUrl: 'https://meet.google.com/fbs-yykv-uzp',
+    meetUrl: SESSAO_TAILANDIA.meetUrl,
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

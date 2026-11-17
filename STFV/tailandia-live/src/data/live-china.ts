@@ -21,6 +21,23 @@
 
 import type { ConfigLive } from './live-japao'
 
+/**
+ * A China tem DUAS lives seguidas (cronograma de 17/11/2026). A página vale a
+ * próxima que ainda não terminou (início + duracaoMinutos), decidido quando a
+ * página abre: até o fim da live de 19/11 mostra 19/11; depois, sozinha, 28/11.
+ * Passada a última, fica na última. Os mesmos pares estão em `sessoes` no mapa
+ * `LIVES` de public/entrar.html — trocou aqui, troque lá.
+ */
+const SESSOES_CHINA = [
+  { inicioISO: '2026-11-19T20:00:00-03:00', meetUrl: 'https://meet.google.com/jrt-xxrg-noe' },
+  { inicioISO: '2026-11-28T20:00:00-03:00', meetUrl: 'https://meet.google.com/egy-uigk-rkc' },
+]
+const DURACAO_CHINA_MIN = 90
+const SESSAO_CHINA =
+  SESSOES_CHINA.find(
+    (s) => new Date(s.inicioISO).getTime() + DURACAO_CHINA_MIN * 60_000 > Date.now(),
+  ) ?? SESSOES_CHINA[SESSOES_CHINA.length - 1]
+
 export const liveChina: ConfigLive = {
   // Slug próprio: é ele que separa esta base das outras no ledger, no CRM,
   // no dataLayer e na coluna `Destino` da planilha do n8n.
@@ -79,9 +96,10 @@ export const liveChina: ConfigLive = {
      *
      * ✅ Definida pelo Bruno em 23/10/2026: quinta-feira, 29 de outubro de 2026, 20h00 (BRT).
      * 🔁 Remarcada em 04/11/2026 para quinta-feira, 05 de novembro de 2026, 21h00 (BRT).
+     * 🔁 17/11/2026: duas lives, 19/11 e 28/11 às 20h — ver SESSOES_CHINA no topo.
      */
-    inicioISO: '2026-11-05T21:00:00-03:00',
-    duracaoMinutos: 90,
+    inicioISO: SESSAO_CHINA.inicioISO,
+    duracaoMinutos: DURACAO_CHINA_MIN,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 23/10/2026). Vazio = o convite
     // do Google Agenda chega sem link da sala.
@@ -91,7 +109,7 @@ export const liveChina: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/rtx-qybs-pzb',
+    meetUrl: SESSAO_CHINA.meetUrl,
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

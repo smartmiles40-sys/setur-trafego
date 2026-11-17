@@ -107,13 +107,14 @@ export const liveJapao = {
      *    horário das outras cinco lives de setembro (20h, não 19h30).
      */
     // 🔁 Remarcada em 05/10/2026 para domingo, 11 de outubro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-10-27T20:00:00-03:00',
+    // 🔁 Remarcada em 17/11/2026 para domingo, 29 de novembro de 2026, 20h00 (Meet, sala dfw-vtuf-yjz).
+    inicioISO: '2026-11-29T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // Sala desta live (AppLive, não Meet).
     // ⚠️ É o MESMO link de `SALA_URL` em public/entrar.html (a porta da live,
     // que redireciona pra cá). Trocou lá, troque aqui.
-    meetUrl: 'https://stfvlivejapaoechina.applive.com.br/japaoechina2027/',
+    meetUrl: 'https://meet.google.com/dfw-vtuf-yjz',
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

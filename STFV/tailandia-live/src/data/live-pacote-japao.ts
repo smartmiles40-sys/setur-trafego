@@ -70,12 +70,13 @@ export const livePacoteJapao: ConfigLive = {
      *
      * ✅ Definida em 04/11/2026: domingo, 08 de novembro de 2026, 21h00 (BRT).
      */
-    inicioISO: '2026-11-08T21:00:00-03:00',
+    // 🔁 Remarcada em 17/11/2026 para domingo, 22 de novembro de 2026, 20h00 (Meet, sala spu-kdxp-ziy).
+    inicioISO: '2026-11-22T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/tib-uswd-wee',
+    meetUrl: 'https://meet.google.com/spu-kdxp-ziy',
 
     descricao:
       'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar o Pacote Japão Essencial: os 13 dias por Tóquio, Osaka e Kyoto, com trem-bala, guias e traslados privativos, o que está incluso, valores e formas de pagamento. Traga suas perguntas.',

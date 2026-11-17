@@ -101,7 +101,8 @@ export const livePeru: ConfigLive = {
      *    NÃO é no mesmo horário da do Japão.
      */
     // 🔁 Remarcada em 21/09/2026 para quarta-feira, 23 de setembro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-09-23T20:00:00-03:00',
+    // 🔁 Remarcada em 17/11/2026 para sábado, 21 de novembro de 2026, 20h00 (Meet, sala woa-unae-jws).
+    inicioISO: '2026-11-21T20:00:00-03:00',
     duracaoMinutos: 90,
 
     // ⚠️ PREENCHER — sala do Google Meet desta live. Vazio = o convite do
@@ -109,7 +110,7 @@ export const livePeru: ConfigLive = {
     //
     // NÃO reaproveitar a sala do Japão: as duas lives podem acontecer na mesma
     // semana, e quem tem o link acaba entrando na sala errada.
-    meetUrl: 'https://stfvlivejapaoechina.applive.com.br/peru2027/',
+    meetUrl: 'https://meet.google.com/woa-unae-jws',
 
     descricao:
       'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar a Expedição Peru 2027: os 9 dias entre Lima, Cusco, Vale Sagrado, Machu Picchu e Vinicunca, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',

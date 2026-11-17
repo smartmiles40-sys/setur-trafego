@@ -78,15 +78,6 @@ const PERGUNTAS: Pergunta[] = [
     ],
   },
   {
-    name: 'perfil',
-    label: 'Qual o seu perfil de viajante?',
-    opcoes: [
-      { label: 'Será minha primeira viagem internacional', slug: 'primeira' },
-      { label: 'Já viajei algumas vezes para fora do Brasil', slug: 'algumas' },
-      { label: 'Sou viajante experiente', slug: 'frequente' },
-    ],
-  },
-  {
     name: 'investimento',
     label: `O investimento nessa expedição fica entre R$ ${expedicao.faixaInvestimento.min.toLocaleString(
       'pt-BR',
@@ -431,7 +422,6 @@ export default function FormularioLead() {
           },
           resp: {
             disponibilidade: slugDaResposta('data', respostas['data']),
-            perfil: slugDaResposta('perfil', respostas['perfil']),
             investimento: slugDaResposta('investimento', respostas['investimento']),
             temperatura: leadScore(respostas).lead_score.toLowerCase(),
           },
@@ -574,7 +564,7 @@ export default function FormularioLead() {
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-xl bg-lime/25 border border-lime px-4 py-3 text-dark-teal text-sm font-semibold">
             <Check className="h-4 w-4 flex-shrink-0" strokeWidth={3} aria-hidden />
-            <span>Liberado! Falta só o seu perfil de viagem.</span>
+            <span>Liberado! Faltam só as últimas perguntas.</span>
             <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden />
           </div>
         )}

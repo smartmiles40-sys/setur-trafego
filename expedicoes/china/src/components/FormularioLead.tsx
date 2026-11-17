@@ -66,15 +66,6 @@ const PERGUNTAS: Pergunta[] = [
     ],
   },
   {
-    name: 'perfil',
-    label: 'Qual o seu perfil de viajante?',
-    opcoes: [
-      { label: 'Será minha primeira viagem internacional', slug: 'primeira' },
-      { label: 'Já viajei algumas vezes para fora do Brasil', slug: 'algumas' },
-      { label: 'Sou viajante experiente', slug: 'frequente' },
-    ],
-  },
-  {
     name: 'investimento',
     label: `O investimento nessa expedição fica entre R$ ${expedicao.faixaInvestimento.min.toLocaleString(
       'pt-BR',
@@ -380,7 +371,6 @@ export default function FormularioLead() {
           },
           resp: {
             disponibilidade: slugDaResposta('data', respostas['data']),
-            perfil: slugDaResposta('perfil', respostas['perfil']),
             investimento: slugDaResposta('investimento', respostas['investimento']),
             temperatura: leadScore(respostas).lead_score.toLowerCase(),
           },

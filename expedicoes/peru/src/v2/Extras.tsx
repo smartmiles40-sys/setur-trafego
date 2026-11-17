@@ -192,7 +192,7 @@ export function LadoConfianca({ lp }: { lp: LpV2 }) {
           <div className="lado-tit">
             Quem já viajou com a gente <span className="nota-pill">★ {GOOGLE_NOTA.nota} no Google</span>
           </div>
-          <VideoDepoimentos />
+          {/* Vídeo de depoimentos DESLIGADO por enquanto (Bruno, 17/11) — volta quando ajustar: <VideoDepoimentos /> */}
           {lista.map((d) => (
             <Depoimento key={d.nome} d={d} />
           ))}

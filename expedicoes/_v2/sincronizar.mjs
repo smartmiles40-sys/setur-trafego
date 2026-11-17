@@ -27,7 +27,7 @@ const LPS = [
   { raiz: EXP, pasta: 'peru', sub: 'peru', versao: 'v2' },
   { raiz: EXP, pasta: 'cancun', sub: 'cancun', versao: 'v2' },
   { raiz: EXP, pasta: 'amazonia', sub: 'amazonia', versao: 'v2' },
-  { raiz: STFV, pasta: 'japao-china', sub: 'japao', versao: 'STFV-v2' },
+  // STFV/japao-china/japao é o HTML PRÓPRIO do Bruno (teste A/B), não a V2 — fica fora daqui.
 ]
 
 // lê sempre com \n (o repo tem arquivos CRLF e LF) e grava de volta como estava

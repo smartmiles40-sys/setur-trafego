@@ -310,6 +310,24 @@
     .foot .badge-slot,.foot .badge-slot img{height:34px}
   }
   @media (max-width:480px){.pain{grid-template-columns:1fr 1fr}}
+
+  .dias-cel{display:none}
+  @media (max-width:860px){
+    .moments,details.full{display:none}
+    .dias-cel{display:block;margin-top:22px}
+    .dias-topo{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;margin-bottom:10px}
+    .dias-topo span{color:var(--muted);font-size:13px}
+    .dias-trilho{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -16px;padding:0 16px 4px;scrollbar-width:none;scroll-padding:0 16px}
+    .dias-trilho::-webkit-scrollbar{display:none}
+    .dia-c{flex:0 0 80%;scroll-snap-align:start;background:var(--white);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+    .dia-c img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+    .dia-c div{padding:14px 16px 16px}
+    .dia-c small{font-weight:700;color:var(--lime-dark);letter-spacing:.08em;text-transform:uppercase;font-size:11px}
+    .dia-c h3{font-size:18px;margin:4px 0 4px}
+    .dia-c p{color:var(--muted);font-size:14px}
+    .dias-barra{height:4px;background:var(--line);border-radius:4px;margin-top:14px;overflow:hidden}
+    .dias-barra span{display:block;height:100%;width:5.56%;background:var(--lime-dark);border-radius:4px;transition:width .2s}
+  }
 </style>
 </head>
 <body>
@@ -452,6 +470,30 @@
         <li>Chegada a Guarulhos</li>
       </ol>
     </details>
+    <div class="dias-cel">
+      <div class="dias-topo"><b id="dias-n">Dia 1 de 18</b><span>Arraste para o lado →</span></div>
+      <div class="dias-trilho" id="dias-trilho">
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-01.jpg" alt="Embarque em Guarulhos (GRU) rumo a Pequim"><div><small>Dia 1 · Guarulhos</small><h3>Embarque em Guarulhos (GRU) rumo a Pequim</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-02.jpg" alt="Em trânsito, com suporte do líder"><div><small>Dia 2 · Em trânsito</small><h3>Em trânsito, com suporte do líder</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-13.jpg" alt="Chegada a Pequim"><div><small>Dia 3 · Pequim</small><h3>Chegada a Pequim</h3><p>Transfer privativo e Alipay e WeChat configurados com a gente.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/galeria-04.jpg" alt="Muralha da China em tour privativo"><div><small>Dia 4 · Pequim</small><h3>Muralha da China em tour privativo</h3><p>Trecho menos turístico, com guia bilíngue.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/galeria-05.jpg" alt="Cidade Proibida, Praça da Paz Celestial e Templo do Céu"><div><small>Dia 5 · Pequim</small><h3>Cidade Proibida, Praça da Paz Celestial e Templo do Céu</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-16.jpg" alt="Dia livre em Pequim"><div><small>Dia 6 · Pequim</small><h3>Dia livre em Pequim</h3><p>Hutongs e a rua Wangfujing.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-02.jpg" alt="Voo Pequim → Osaka"><div><small>Dia 7 · Pequim → Osaka</small><h3>Voo Pequim → Osaka</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-09.jpg" alt="Castelo de Osaka e Kuromon Market"><div><small>Dia 8 · Osaka</small><h3>Castelo de Osaka e Kuromon Market</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/galeria-03.jpg" alt="Fushimi Inari e chá da tarde com gueixa"><div><small>Dia 9 · Kyoto</small><h3>Fushimi Inari e chá da tarde com gueixa</h3><p>Os mil portões torii e o bairro de Gion.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/arashiyama.jpg" alt="Floresta de bambu de riquixá"><div><small>Dia 10 · Arashiyama</small><h3>Floresta de bambu de riquixá</h3><p>Um passeio tradicional pelo Japão antigo, e Gion.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-11.jpg" alt="O torii flutuante de Miyajima"><div><small>Dia 11 · Hiroshima</small><h3>O torii flutuante de Miyajima</h3><p>Parque Memorial da Paz e ferry até a ilha, de trem-bala.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-10.jpg" alt="Dia livre em Osaka"><div><small>Dia 12 · Osaka</small><h3>Dia livre em Osaka</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-06.jpg" alt="Fuji e trem-bala para Tóquio"><div><small>Dia 13 · Monte Fuji</small><h3>Fuji e trem-bala para Tóquio</h3><p>Shinkansen com assento reservado.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-04.jpg" alt="Asakusa e Akihabara"><div><small>Dia 14 · Tóquio</small><h3>Asakusa e Akihabara</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/galeria-01.jpg" alt="Harajuku, Santuário Meiji, Shibuya e Shinjuku"><div><small>Dia 15 · Tóquio</small><h3>Harajuku, Santuário Meiji, Shibuya e Shinjuku</h3><p>Do tradicional ao futurista, com guia bilíngue.</p></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-03.jpg" alt="Dia livre em Tóquio"><div><small>Dia 16 · Tóquio</small><h3>Dia livre em Tóquio</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/hero.jpg" alt="Manhã livre e voo de volta"><div><small>Dia 17 · Tóquio</small><h3>Manhã livre e voo de volta</h3></div></div>
+      <div class="dia-c"><img loading="lazy" width="800" height="600" src="https://stfv1.setuforeuvouviagens.com.br/assets/japao-china/dia-01.jpg" alt="Chegada a Guarulhos"><div><small>Dia 18 · Guarulhos</small><h3>Chegada a Guarulhos</h3></div></div>
+      </div>
+      <div class="dias-barra"><span id="dias-barra"></span></div>
+    </div>
   </div>
 </section>
 
@@ -809,6 +851,18 @@
       });
   });
 })();
+
+  /* ---------- roteiro no celular: contador "Dia X de 18" + barra ---------- */
+  (function () {
+    var t = document.getElementById('dias-trilho'); if (!t) return;
+    var n = document.getElementById('dias-n'), b = document.getElementById('dias-barra'), total = t.children.length;
+    t.addEventListener('scroll', function () {
+      var c = t.children[0], passo = c.getBoundingClientRect().width + 12;
+      var i = Math.min(total, Math.round(t.scrollLeft / passo) + 1);
+      n.textContent = 'Dia ' + i + ' de ' + total;
+      b.style.width = (i / total * 100) + '%';
+    }, { passive: true });
+  })();
 </script>
 </body>
 </html>

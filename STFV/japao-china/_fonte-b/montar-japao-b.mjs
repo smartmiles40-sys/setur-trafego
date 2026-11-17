@@ -3,6 +3,7 @@
 //   fotos certas, selos, vídeo VTurb, GTM/Stape + Clarity, formulário ligado
 //   ao /api/save-lead (mesmo caminho da LP STFV) e a barra amarela de protótipo.
 import fs from 'node:fs'
+import { htmlDias, CSS_DIAS, JS_DIAS } from './dias-cel.mjs'
 
 const [orig, lpIndex, saida] = process.argv.slice(2)
 let h = fs.readFileSync(orig, 'utf8').replace(/\r\n/g, '\n')
@@ -57,10 +58,15 @@ h = h.replace(/(<div class="who">[\s\S]*?<\/section>)/, (b) => b.replace(/<li>�
 // ajustes de CSS (comparativo + celular)
 troca('</style>', fs.readFileSync(new URL('./ajustes-b.css', import.meta.url), 'utf8') + '</style>')
 
+// 5c) celular: roteiro completo dos 18 dias em carrossel com foto (troca momentos + lista)
+troca('    </details>\n  </div>\n</section>', '    </details>' + htmlDias() + '\n  </div>\n</section>')
+troca('</style>', CSS_DIAS + '\n</style>')
+
 // 6) formulário: script do protótipo → envio real
 const s0 = h.lastIndexOf('<script>')
 const s1 = h.lastIndexOf('</script>') + '</script>'.length
-h = h.slice(0, s0) + fs.readFileSync(new URL('./japao-b-form.js', import.meta.url), 'utf8').trim() + h.slice(s1)
+h = h.slice(0, s0) + fs.readFileSync(new URL('./japao-b-form.js', import.meta.url), 'utf8').trim().replace('})();\n</script>', '})();\n' + JS_DIAS + '</script>') + h.slice(s1)
+if (!h.includes('dias-trilho') || !h.includes("getElementById('dias-trilho')")) throw new Error('carrossel dos dias não entrou')
 
 fs.writeFileSync(saida, h)
 console.log('ok', n, 'trocas →', saida)

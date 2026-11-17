@@ -29,5 +29,23 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/tailandia",
+      "destination": "/tailandia/index.html"
+    },
+    {
+      "source": "/tailandia/",
+      "destination": "/tailandia/index.html"
+    },
+    {
+      "source": "/16 dias entre Bangkok, as ilhas de Phi Phi, Chiang Mai e Chiang Rai, com o Festival das Lanternas. Voos, ferries, hotéis e passeios já resolvidos, com líder brasileiro do primeiro ao último dia. Você só vive.",
+      "destination": "/16 dias entre Bangkok, as ilhas de Phi Phi, Chiang Mai e Chiang Rai, com o Festival das Lanternas. Voos, ferries, hotéis e passeios já resolvidos, com líder brasileiro do primeiro ao último dia. Você só vive./index.html"
+    },
+    {
+      "source": "/16 dias entre Bangkok, as ilhas de Phi Phi, Chiang Mai e Chiang Rai, com o Festival das Lanternas. Voos, ferries, hotéis e passeios já resolvidos, com líder brasileiro do primeiro ao último dia. Você só vive./",
+      "destination": "/16 dias entre Bangkok, as ilhas de Phi Phi, Chiang Mai e Chiang Rai, com o Festival das Lanternas. Voos, ferries, hotéis e passeios já resolvidos, com líder brasileiro do primeiro ao último dia. Você só vive./index.html"
+    }
   ]
 }

@@ -1,0 +1,62 @@
+// Textos da versão B (modelo do HTML do Japão) para cada expedição STFV.
+// Fatos (datas, roteiro, incluso, comparativo, FAQ, depoimentos, faixa) vêm do
+// src/data/expedicao.ts de cada LP; aqui fica só a redação de cada bloco.
+// moments: [nº do dia, rótulo, título, texto] — fotos = as do próprio roteiro.
+export const CONTEUDO = {
+  tailandia: {
+    dominio: 'stfv6', sub: 'tailandia', mes: 'novembro de 2027', mesCurto: 'Novembro 2027', saida: 'Saída de Guarulhos', grande: 'TAILÂNDIA',
+    h1: 'A Tailândia que você sonha, <em>com tudo resolvido</em> antes do embarque.',
+    texto: '16 dias entre Bangkok, as ilhas de Phi Phi, Chiang Mai e Chiang Rai, com o Festival das Lanternas. Voos, ferries, hotéis e passeios já resolvidos, com líder brasileiro do primeiro ao último dia. Você só vive.',
+    dorH2: 'A Tailândia é incrível. Organizar sozinho, nem tanto.',
+    dorLead: 'São três regiões, voos domésticos, ferries e um festival com data marcada. Cada decisão isolada vira um obstáculo, e dia perdido com logística é dia a menos vivido.',
+    dores: [['Voos e ferries', 'Bangkok, Phi Phi e Chiang Mai na mesma viagem.'], ['Festival com data marcada', 'O Loy Krathong exige ingresso e planejamento.'], ['Outro alfabeto', 'Placas, cardápios e transporte que você não lê.'], ['Elefantes com ética', 'Separar santuário sério de armadilha exige pesquisa.']],
+    bastidores: [['Roteiro testado', 'Desenhado por quem já fez a viagem, com ritmo entre cidade, ilhas e norte.'], ['Voos, ferries e transfers', 'Domésticos, barcos e traslados já reservados.'], ['Festival Loy Krathong', 'Ingresso Premium/VIP garantido em Chiang Mai.'], ['Santuário ético', 'Elefantes sem montaria, em santuário verificado.'], ['Guias em português', 'Guias especializados em cada cidade.'], ['Líder brasileiro', 'Do embarque em Guarulhos ao último dia.']],
+    exclusivos: ['Festival das Lanternas com ingresso VIP', 'Lancha privativa nas ilhas de Phi Phi', 'Santuário ético de elefantes'],
+    momentos: [[4, 'Bangkok', 'Templos de Bangkok', 'Grand Palace, Buda Reclinado e ferry com vista para o Wat Arun.'], [5, 'Bangkok', 'Mercado do trem e mercado flutuante', 'E um tour de tuk tuk pela Bangkok noturna.'], [8, 'Phi Phi', 'Gold Day Tour em lancha privativa', 'Enseadas, snorkel e almoço a bordo.'], [11, 'Chiang Mai', 'Santuário ético de elefantes', 'Alimentação e banho com os elefantes, sem montaria.'], [12, 'Chiang Rai', 'Templo Branco e Templo Azul', 'E a Vila das Mulheres Girafa.'], [13, 'Chiang Mai', 'Festival das Lanternas', 'Loy Krathong com ingresso Premium/VIP.']],
+  },
+  islandia: {
+    dominio: 'stfv3', sub: 'islandia', mes: 'fevereiro de 2027', mesCurto: 'Fevereiro 2027', saida: 'Saída de Guarulhos', grande: 'ISLÂNDIA',
+    h1: 'A Islândia do inverno, <em>com tudo resolvido</em> antes do embarque.',
+    texto: '11 dias dando a volta completa na ilha em 4×4 modificados com motorista, caçando a aurora boreal todas as noites. Ice Cave, Blue Lagoon, hotéis e voo já resolvidos, com líder brasileiro do início ao fim.',
+    dorH2: 'A Islândia no inverno é incrível. Encarar sozinho, nem tanto.',
+    dorLead: 'Estradas geladas, distâncias longas e uma aurora que precisa ser caçada. No inverno islandês, cada decisão errada custa um dia inteiro.',
+    dores: [['Estradas geladas', 'Inverno extremo e condições que mudam rápido.'], ['Aurora boreal', 'Exige caça noturna planejada, longe das luzes.'], ['Distâncias longas', 'A volta na ilha pede logística afinada.'], ['Custo alto sozinho', '4×4, hotéis e passeios pesam no bolso.']],
+    bastidores: [['4×4 modificados', 'Veículos preparados para o inverno, com motorista licenciado.'], ['Volta completa', 'Sul, leste, norte e Círculo Dourado em um só roteiro.'], ['Caça à aurora', 'Saídas todas as noites no interior, longe das luzes.'], ['Ice Cave reservada', 'A caverna de gelo azul dentro da geleira, já inclusa.'], ['Blue Lagoon', 'Experiência termal para fechar a expedição.'], ['Líder brasileiro', 'Do embarque em Guarulhos ao último dia.']],
+    exclusivos: ['Ice Cave dentro da geleira', 'Caça à aurora boreal todas as noites', 'Blue Lagoon incluso'],
+    momentos: [[3, 'Sul', 'Cachoeiras e praia negra', 'Seljalandsfoss por trás da queda e Skógafoss.'], [4, 'Jökulsárlón', 'Icebergs e Ice Cave', 'Lagoa glaciar, Diamond Beach e a caverna de gelo azul.'], [5, 'Leste', 'Vestrahorn e os fiordes', 'Os chifres do leste ao amanhecer.'], [6, 'Nordeste', 'Goðafoss e Stuðlagil', 'A cachoeira dos deuses e as colunas de basalto.'], [8, 'Círculo Dourado', 'Gullfoss e Geysir', 'E almoço na estufa de Friðheimar.'], [9, 'Sudoeste', 'Þingvellir e Blue Lagoon', 'Entre as placas tectônicas, e o banho termal.']],
+  },
+  italia: {
+    dominio: 'stfv4', sub: 'italia', mes: 'setembro de 2027', mesCurto: 'Setembro 2027', saida: 'Saída de Guarulhos', grande: 'AMALFI',
+    h1: 'A Costa Amalfitana que você adia, <em>com tudo resolvido</em> antes do embarque.',
+    texto: '11 dias entre Nápoles, Pompéia, Sorrento, Amalfi, Capri, Positano e Roma. Voos, hotéis, van e barcos privativos já resolvidos, com líderes da agência do primeiro ao último dia. Você só vive.',
+    dorH2: 'A Costa Amalfitana é linda. Organizar sozinho, nem tanto.',
+    dorLead: 'Estrada estreita no penhasco, estacionamento quase impossível e barcos com horário. Na alta temporada, cada reserva vira disputa.',
+    dores: [['Estrada no penhasco', 'Dirigir na costa é estreito e tenso.'], ['Barcos e horários', 'Sem carro, você depende da tabela dos ferries.'], ['Alta temporada', 'Hotéis e restaurantes disputados.'], ['Idioma', 'Fora dos grandes centros, pouco inglês.']],
+    bastidores: [['Van privativa', 'A estrada panorâmica sem você ao volante.'], ['Barcos exclusivos', 'Catamarã em Capri e barco privativo pela costa.'], ['Hotéis selecionados', 'Nápoles, Sorrento e Roma já reservados.'], ['Gastronomia curada', 'Pizza napolitana, vinícola no Vesúvio e limoncello.'], ['Pompéia e city tours', 'Com guia, sem fila para resolver.'], ['Líderes da agência', 'Com você desde o embarque no Brasil.']],
+    exclusivos: ['Catamarã de luxo em Capri', 'Barco privativo pela Costa Amalfitana', 'Aula de limoncello em Sorrento'],
+    momentos: [[3, 'Nápoles', 'Nápoles e a pizza original', 'Centro monumental e tour gastronômico.'], [4, 'Pompéia', 'Pompéia e vinícola no Vesúvio', 'Almoço harmonizado com vinhos vulcânicos.'], [5, 'Sorrento', 'Aula de limoncello', 'E city tour por Sorrento.'], [6, 'Costa Amalfitana', 'Amalfi, Ravello e Minori', 'Van privativa pela estrada panorâmica.'], [7, 'Capri', 'Capri de catamarã', 'Volta na ilha com bebidas e snacks a bordo.'], [8, 'Positano', 'Positano vista do mar', 'Barco privativo por toda a costa.']],
+  },
+  peru: {
+    dominio: 'stfv5', sub: 'peru', mes: 'agosto de 2027', mesCurto: 'Agosto 2027', saida: 'Saída de Guarulhos', grande: 'PERU',
+    h1: 'O Peru que você adia há anos, <em>com tudo resolvido</em> antes do embarque.',
+    texto: '9 dias entre Cusco, Vale Sagrado, Machu Picchu, Montanha Colorida, Lima e o oásis de Huacachina. Voos, trem panorâmico, ingressos e hotéis já resolvidos, com acompanhamento do início ao fim.',
+    dorH2: 'Machu Picchu é incrível. Organizar sozinho, nem tanto.',
+    dorLead: 'Altitude, ingressos com horário, trem, voos internos e deslocamentos longos. Cada decisão prática vira um peso nos seus dias de viagem.',
+    dores: [['Altitude', 'A aclimatação muda o ritmo do roteiro.'], ['Ingressos e trem', 'Machu Picchu tem horário e vagas limitadas.'], ['Deslocamentos longos', 'Cusco, Lima e Ica pedem logística.'], ['Idioma e regras', 'Espanhol e regras locais geram insegurança.']],
+    bastidores: [['Roteiro com ritmo', 'Pausas pensadas para a altitude.'], ['Trem panorâmico', 'Rumo a Machu Picchu, já reservado.'], ['Ingressos garantidos', 'Machu Picchu e passeios guiados inclusos.'], ['Voos e transfers', 'Internacionais, Cusco → Lima e traslados privativos.'], ['Guias especializados', 'Em cada parada do roteiro.'], ['Acompanhamento constante', 'As decisões não ficam nas suas costas.']],
+    exclusivos: ['Machu Picchu ao amanhecer', 'Trem panorâmico pelo Vale Sagrado', 'Buggy nas dunas de Huacachina'],
+    momentos: [[2, 'Vale Sagrado', 'Vale Sagrado e Chinchero', 'Tecelãs, Pisac e Ollantaytambo.'], [3, 'Machu Picchu', 'Machu Picchu ao amanhecer', 'Tour guiado pela cidadela inca.'], [4, 'Cusco', 'Cusco no seu ritmo', 'Dia livre com suporte do líder.'], [5, 'Andes', 'Montanha Colorida', 'Trekking em Vinicunca.'], [6, 'Lima', 'Lima e Miraflores', 'A capital à beira do Pacífico.'], [7, 'Paracas', 'Ilhas Ballestas e Huacachina', 'Barco, oásis, buggy e sandboarding.']],
+  },
+  amazonia: {
+    dominio: 'stfv2', sub: 'amazonia', mes: 'julho de 2027', mesCurto: 'Julho 2027', saida: 'Encontro em Manaus', grande: 'AMAZÔNIA',
+    h1: 'A Amazônia de verdade, <em>com tudo resolvido</em> antes de você chegar.',
+    texto: '5 dias entre Manaus, Presidente Figueiredo e o Rio Negro, com barco privativo, comunidade ribeirinha e churrasco no flutuante. Hotel, traslados, passeios e almoços regionais já resolvidos, com líder brasileiro do início ao fim.',
+    dorH2: 'A Amazônia é gigante. Organizar sozinho, nem tanto.',
+    dorLead: 'Logística fluvial, acessos que dependem de contatos locais e distâncias imensas. Sem quem conhece a floresta, você gasta a viagem resolvendo.',
+    dores: [['Logística fluvial', 'Barcos e horários pouco intuitivos.'], ['Acessos locais', 'Comunidades dependem de contatos.'], ['Distâncias imensas', 'Tempo e energia no deslocamento.'], ['Particularidades regionais', 'Clima, regras e costumes.']],
+    bastidores: [['Barco privativo', 'O Rio Negro com guias, no seu ritmo.'], ['Acessos resolvidos', 'Relação estabelecida com comunidades locais.'], ['Hotel e café da manhã', 'Hospedagem selecionada em Manaus.'], ['Almoços regionais', 'A culinária da floresta inclusa.'], ['Traslados', 'Terrestres e fluviais, sem preocupação.'], ['Líder brasileiro', 'Acompanhando tudo, do início ao fim.']],
+    exclusivos: ['Encontro das Águas', 'Cachoeiras de Presidente Figueiredo', 'Churrasco no flutuante com banda'],
+    momentosH2: '5 dias que você não esquece.',
+    momentos: [[2, 'Presidente Figueiredo', 'Teatro Amazonas e cachoeiras', 'Trilha guiada e piscinas naturais.'], [3, 'Rio Negro', 'Encontro das Águas', 'Comunidade ribeirinha e banho de rio.'], [4, 'Rio Negro', 'Churrasco no flutuante', 'Barco privativo, banda ao vivo e pôr do sol.']],
+  },
+}

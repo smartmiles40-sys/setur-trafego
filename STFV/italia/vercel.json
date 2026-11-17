@@ -29,5 +29,23 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/italia",
+      "destination": "/italia/index.html"
+    },
+    {
+      "source": "/italia/",
+      "destination": "/italia/index.html"
+    },
+    {
+      "source": "/11 dias entre Nápoles, Pompéia, Sorrento, Amalfi, Capri, Positano e Roma. Voos, hotéis, van e barcos privativos já resolvidos, com líderes da agência do primeiro ao último dia. Você só vive.",
+      "destination": "/11 dias entre Nápoles, Pompéia, Sorrento, Amalfi, Capri, Positano e Roma. Voos, hotéis, van e barcos privativos já resolvidos, com líderes da agência do primeiro ao último dia. Você só vive./index.html"
+    },
+    {
+      "source": "/11 dias entre Nápoles, Pompéia, Sorrento, Amalfi, Capri, Positano e Roma. Voos, hotéis, van e barcos privativos já resolvidos, com líderes da agência do primeiro ao último dia. Você só vive./",
+      "destination": "/11 dias entre Nápoles, Pompéia, Sorrento, Amalfi, Capri, Positano e Roma. Voos, hotéis, van e barcos privativos já resolvidos, com líderes da agência do primeiro ao último dia. Você só vive./index.html"
+    }
   ]
 }

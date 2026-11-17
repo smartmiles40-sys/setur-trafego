@@ -90,6 +90,8 @@ export default async function handler(req, res) {
     perfil: str(body.perfil, 60),
     investimento: str(body.investimento, 60),
     decisao: str(body.decisao, 60),
+    // Qual página gerou o lead (STFV = LP de sempre, STFV-B = teste A/B)
+    lp_versao: str(body.lp_versao, 20),
     form_name: str(body.form_name, 80), // usado para rotear o webhook por destino
     slug: str(body.slug, 40),
     timestamp: str(body.timestamp, 40),

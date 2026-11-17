@@ -29,5 +29,23 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/islandia",
+      "destination": "/islandia/index.html"
+    },
+    {
+      "source": "/islandia/",
+      "destination": "/islandia/index.html"
+    },
+    {
+      "source": "/11 dias dando a volta completa na ilha em 4×4 modificados com motorista, caçando a aurora boreal todas as noites. Ice Cave, Blue Lagoon, hotéis e voo já resolvidos, com líder brasileiro do início ao fim.",
+      "destination": "/11 dias dando a volta completa na ilha em 4×4 modificados com motorista, caçando a aurora boreal todas as noites. Ice Cave, Blue Lagoon, hotéis e voo já resolvidos, com líder brasileiro do início ao fim./index.html"
+    },
+    {
+      "source": "/11 dias dando a volta completa na ilha em 4×4 modificados com motorista, caçando a aurora boreal todas as noites. Ice Cave, Blue Lagoon, hotéis e voo já resolvidos, com líder brasileiro do início ao fim./",
+      "destination": "/11 dias dando a volta completa na ilha em 4×4 modificados com motorista, caçando a aurora boreal todas as noites. Ice Cave, Blue Lagoon, hotéis e voo já resolvidos, com líder brasileiro do início ao fim./index.html"
+    }
   ]
 }

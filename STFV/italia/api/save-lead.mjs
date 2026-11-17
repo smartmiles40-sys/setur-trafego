@@ -72,6 +72,8 @@ export default async function handler(req, res) {
     perfil: str(body.perfil, 60),
     investimento: str(body.investimento, 60),
     decisao: str(body.decisao, 60),
+    // Qual página gerou o lead (STFV = LP de sempre, STFV-B = teste A/B)
+    lp_versao: str(body.lp_versao, 20),
     // Lead score calculado no site. Até 20/10/2026 ficava FORA desta lista e
     // nunca chegava no Bitrix nem no QS pelos leads de tráfego.
     lead_score: ['Quente', 'Morno', 'Frio'].includes(body.lead_score) ? body.lead_score : '',

@@ -29,5 +29,23 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/amazonia",
+      "destination": "/amazonia/index.html"
+    },
+    {
+      "source": "/amazonia/",
+      "destination": "/amazonia/index.html"
+    },
+    {
+      "source": "/5 dias entre Manaus, Presidente Figueiredo e o Rio Negro, com barco privativo, comunidade ribeirinha e churrasco no flutuante. Hotel, traslados, passeios e almoços regionais já resolvidos, com líder brasileiro do início ao fim.",
+      "destination": "/5 dias entre Manaus, Presidente Figueiredo e o Rio Negro, com barco privativo, comunidade ribeirinha e churrasco no flutuante. Hotel, traslados, passeios e almoços regionais já resolvidos, com líder brasileiro do início ao fim./index.html"
+    },
+    {
+      "source": "/5 dias entre Manaus, Presidente Figueiredo e o Rio Negro, com barco privativo, comunidade ribeirinha e churrasco no flutuante. Hotel, traslados, passeios e almoços regionais já resolvidos, com líder brasileiro do início ao fim./",
+      "destination": "/5 dias entre Manaus, Presidente Figueiredo e o Rio Negro, com barco privativo, comunidade ribeirinha e churrasco no flutuante. Hotel, traslados, passeios e almoços regionais já resolvidos, com líder brasileiro do início ao fim./index.html"
+    }
   ]
 }

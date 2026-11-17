@@ -40,7 +40,7 @@ export default function Pagina({ lp, formulario }: { lp: LpV2; formulario: React
             <div className="dado-nota">{lp.saida}</div>
           </div>
           <div className="dado">
-            <div className="dado-rot">Investimento</div>
+            <div className="dado-rot">Faixa de investimento</div>
             <div className="dado-val">{lp.investimento}</div>
             <div className="dado-nota">{lp.investimentoNota}</div>
             {lp.pagamento && <div className="dado-pag">{lp.pagamento}</div>}

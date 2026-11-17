@@ -82,7 +82,7 @@
 <div id="wrap">
   <svg id="map" role="img" aria-label="Mapa mundi com rota da expedição Tailândia"></svg>
   <div class="badge top-left">Distância total: <strong id="distance">…</strong></div>
-  <div class="badge bottom-left">Brasil → Bangkok → Chiang Mai → Chiang Rai → Krabi → Phi Phi → Brasil</div>
+  <div class="badge bottom-left">Brasil → Bangkok → Krabi → Phi Phi → Chiang Mai → Chiang Rai → Bangkok → Brasil</div>
   <div class="badge bottom-right">
     <span class="legend-item"><span class="legend-line dashed"></span>Voos</span>
     <span class="legend-item"><span class="legend-line solid"></span>Transfer · barco</span>
@@ -124,15 +124,17 @@
   const stops = Object.values(S);
 
   // Cada segmento: stroke + dashed (voo). A classificação do veículo fica nas fases (phaseDefs).
+  // Roteiro de 17/11/2026: Bangkok → Phi Phi → Chiang Mai (Chiang Rai) → Bangkok.
   const segments = [
     { from: S.sao,       to: S.bangkok,   stroke: '#09282B', dashed: true },  // 0 voo internacional
-    { from: S.bangkok,   to: S.chiangMai, stroke: '#1F7A8C', dashed: true },  // 1 voo doméstico
-    { from: S.chiangMai, to: S.chiangRai, stroke: '#BFD850' },                // 2 van (ida)
-    { from: S.chiangRai, to: S.chiangMai, stroke: '#1F7A8C' },                // 3 van (volta)
-    { from: S.chiangMai, to: S.krabi,     stroke: '#E67E22', dashed: true },  // 4 voo doméstico
-    { from: S.krabi,     to: S.phiPhi,    stroke: '#3498DB' },                // 5 barco/ferry
-    { from: S.phiPhi,    to: S.bangkok,   stroke: '#D4AC0D', dashed: true },  // 6 voo doméstico
-    { from: S.bangkok,   to: S.sao,       stroke: '#09282B', dashed: true },  // 7 voo internacional
+    { from: S.bangkok,   to: S.krabi,     stroke: '#E67E22', dashed: true },  // 1 voo doméstico
+    { from: S.krabi,     to: S.phiPhi,    stroke: '#3498DB' },                // 2 ferry
+    { from: S.phiPhi,    to: S.krabi,     stroke: '#3498DB' },                // 3 ferry (volta)
+    { from: S.krabi,     to: S.chiangMai, stroke: '#1F7A8C', dashed: true },  // 4 voo doméstico
+    { from: S.chiangMai, to: S.chiangRai, stroke: '#BFD850' },                // 5 van (ida)
+    { from: S.chiangRai, to: S.chiangMai, stroke: '#1F7A8C' },                // 6 van (volta)
+    { from: S.chiangMai, to: S.bangkok,   stroke: '#D4AC0D', dashed: true },  // 7 voo doméstico
+    { from: S.bangkok,   to: S.sao,       stroke: '#09282B', dashed: true },  // 8 voo internacional
   ];
 
   const buildLine = (from, to, steps = 48) => {
@@ -183,13 +185,14 @@
     // vehicle: 'plane' = voo | 'van' = transfer terrestre | 'boat' = barco/ferry
     const phaseDefs = [
       { seg: 0, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // GRU → Bangkok (voo internacional)
-      { seg: 1, vehicle: 'plane', scale: SCALE.flight, duration: 2600 }, // Bangkok → Chiang Mai (voo)
-      { seg: 2, vehicle: 'van',   scale: SCALE.ground, duration: 3800 }, // Chiang Mai → Chiang Rai (van)
-      { seg: 3, vehicle: 'van',   scale: SCALE.ground, duration: 3800 }, // Chiang Rai → Chiang Mai (van)
-      { seg: 4, vehicle: 'plane', scale: SCALE.flight, duration: 3600 }, // Chiang Mai → Krabi (voo)
-      { seg: 5, vehicle: 'boat',  scale: SCALE.ground, duration: 4200 }, // Krabi → Phi Phi (barco)
-      { seg: 6, vehicle: 'plane', scale: SCALE.flight, duration: 3200 }, // Phi Phi → Bangkok (voo)
-      { seg: 7, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Bangkok → GRU (voo internacional)
+      { seg: 1, vehicle: 'plane', scale: SCALE.flight, duration: 3200 }, // Bangkok → Krabi/Phuket (voo)
+      { seg: 2, vehicle: 'boat',  scale: SCALE.ground, duration: 4200 }, // Krabi → Phi Phi (ferry)
+      { seg: 3, vehicle: 'boat',  scale: SCALE.ground, duration: 4200 }, // Phi Phi → Krabi (ferry)
+      { seg: 4, vehicle: 'plane', scale: SCALE.flight, duration: 3600 }, // Krabi → Chiang Mai (voo)
+      { seg: 5, vehicle: 'van',   scale: SCALE.ground, duration: 3800 }, // Chiang Mai → Chiang Rai (van)
+      { seg: 6, vehicle: 'van',   scale: SCALE.ground, duration: 3800 }, // Chiang Rai → Chiang Mai (van)
+      { seg: 7, vehicle: 'plane', scale: SCALE.flight, duration: 2600 }, // Chiang Mai → Bangkok (voo)
+      { seg: 8, vehicle: 'plane', scale: SCALE.flight, duration: 6500 }, // Bangkok → GRU (voo internacional)
     ];
 
     phaseDefs.forEach(p => {

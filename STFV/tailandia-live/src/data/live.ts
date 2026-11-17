@@ -115,9 +115,9 @@ export const doProduto = ehPacote ? 'do pacote' : 'da expedição'
 export const salaNoMeet = /meet\.google\.com/.test(live.evento.meetUrl)
 /** "Google Meet" | "online" — selo curto do hero. */
 export const plataformaCurta = salaNoMeet ? 'Google Meet' : 'online'
-/** "ao vivo no Google Meet" | "ao vivo, online" */
-export const plataformaNo = salaNoMeet ? 'ao vivo no Google Meet' : 'ao vivo, online'
-/** "ao vivo pelo Google Meet" | "ao vivo, online" */
-export const plataformaPelo = salaNoMeet ? 'ao vivo pelo Google Meet' : 'ao vivo, online'
+/** "ao vivo no Google Meet" | "online" */
+export const plataformaNo = salaNoMeet ? 'ao vivo no Google Meet' : 'online'
+/** "ao vivo pelo Google Meet" | "online" */
+export const plataformaPelo = salaNoMeet ? 'ao vivo pelo Google Meet' : 'online'
 /** Número gigante decorativo do fundo: o ano (pacote não tem). */
 export const fundoDecorativo = ehPacote ? '' : String(live.expedicao.ano)

@@ -12,6 +12,7 @@ export default {
     './egito.html',
     './china.html',
     './pacote-japao.html',
+    './pacote-peru.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {

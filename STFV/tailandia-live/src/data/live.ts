@@ -14,6 +14,7 @@
  *    live.setuforeuvouviagens.com.br/egito             → Egito
  *    live.setuforeuvouviagens.com.br/china             → China
  *    live.setuforeuvouviagens.com.br/pacote-japao      → Pacote Japão Essencial
+ *    live.setuforeuvouviagens.com.br/pacote-peru       → Pacote Peru Clássico
  *
  *  Um projeto só na Vercel, um build só, um deploy só. O que muda é o
  *  conjunto de dados escolhido AQUI, pelo caminho da URL.
@@ -50,6 +51,7 @@ import { liveIslandia } from './live-islandia'
 import { liveEgito } from './live-egito'
 import { liveChina } from './live-china'
 import { livePacoteJapao } from './live-pacote-japao'
+import { livePacotePeru } from './live-pacote-peru'
 import type { ConfigLive } from './live-japao'
 
 /**
@@ -70,6 +72,7 @@ const POR_CAMINHO: Record<string, ConfigLive> = {
   egito: liveEgito,
   china: liveChina,
   'pacote-japao': livePacoteJapao,
+  'pacote-peru': livePacotePeru,
 }
 
 function escolherLive(): ConfigLive {

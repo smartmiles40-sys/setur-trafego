@@ -23,7 +23,9 @@
     { "source": "/china", "destination": "/china.html" },
     { "source": "/china/", "destination": "/china.html" },
     { "source": "/pacote-japao", "destination": "/pacote-japao.html" },
-    { "source": "/pacote-japao/", "destination": "/pacote-japao.html" }
+    { "source": "/pacote-japao/", "destination": "/pacote-japao.html" },
+    { "source": "/pacote-peru", "destination": "/pacote-peru.html" },
+    { "source": "/pacote-peru/", "destination": "/pacote-peru.html" }
   ],
   "redirects": [
     { "source": "/japao", "destination": "/", "permanent": true },

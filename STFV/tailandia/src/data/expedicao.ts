@@ -12,11 +12,11 @@ export const expedicao = {
   nome: 'Tailândia',
   nomeUpper: 'TAILÂNDIA',
   ano: 2027,
-  dataInicio: '2027-11-06',
-  dataInicioLabel: '6 de novembro',
-  dataFimLabel: '21 de novembro',
-  dataRange: '6 a 21 de novembro de 2027',
-  dataResumoCurto: 'Tailândia · 6–21 nov 2027',
+  dataInicio: '2027-11-02',
+  dataInicioLabel: '2 de novembro',
+  dataFimLabel: '17 de novembro',
+  dataRange: '2 a 17 de novembro de 2027',
+  dataResumoCurto: 'Tailândia · 2–17 nov 2027',
   duracao: '15 dias',
   duracaoNumero: 15,
   duracaoNumeroLegenda:
@@ -150,7 +150,7 @@ export const naoIncluso = [
 export const roteiro = [
   {
     dia: 1,
-    data: '06/11',
+    data: '02/11',
     cidade: 'Brasil',
     titulo: 'Saída do Brasil',
     atividades: [
@@ -166,7 +166,7 @@ export const roteiro = [
   },
   {
     dia: 2,
-    data: '07/11',
+    data: '03/11',
     cidade: 'Em viagem',
     titulo: 'Em viagem rumo à Tailândia',
     atividades: [
@@ -182,7 +182,7 @@ export const roteiro = [
   },
   {
     dia: 3,
-    data: '08/11',
+    data: '04/11',
     cidade: 'Bangkok',
     titulo: 'Chegada em Bangkok',
     atividades: [
@@ -198,7 +198,7 @@ export const roteiro = [
   },
   {
     dia: 4,
-    data: '09/11',
+    data: '05/11',
     cidade: 'Bangkok',
     titulo: 'Templos e Cultura',
     atividades: [
@@ -214,7 +214,7 @@ export const roteiro = [
   },
   {
     dia: 5,
-    data: '10/11',
+    data: '06/11',
     cidade: 'Bangkok',
     titulo: 'Mercados e Noite Agitada',
     atividades: [
@@ -230,7 +230,7 @@ export const roteiro = [
   },
   {
     dia: 6,
-    data: '11/11',
+    data: '07/11',
     cidade: 'Chiang Mai',
     titulo: 'Rumo ao Norte',
     atividades: [
@@ -246,7 +246,7 @@ export const roteiro = [
   },
   {
     dia: 7,
-    data: '12/11',
+    data: '08/11',
     cidade: 'Chiang Rai',
     titulo: 'Bate-volta cultural',
     atividades: [
@@ -262,7 +262,7 @@ export const roteiro = [
   },
   {
     dia: 8,
-    data: '13/11',
+    data: '09/11',
     cidade: 'Chiang Mai',
     titulo: 'Festival das Lanternas',
     atividades: [
@@ -278,7 +278,7 @@ export const roteiro = [
   },
   {
     dia: 9,
-    data: '14/11',
+    data: '10/11',
     cidade: 'Chiang Mai',
     titulo: 'Contato com a natureza',
     atividades: [
@@ -294,7 +294,7 @@ export const roteiro = [
   },
   {
     dia: 10,
-    data: '15/11',
+    data: '11/11',
     cidade: 'Phi Phi',
     titulo: 'Viagem às ilhas',
     atividades: [
@@ -313,7 +313,7 @@ export const roteiro = [
   },
   {
     dia: 11,
-    data: '16/11',
+    data: '12/11',
     cidade: 'Phi Phi',
     titulo: 'Natureza e Cultura',
     atividades: [
@@ -329,7 +329,7 @@ export const roteiro = [
   },
   {
     dia: 12,
-    data: '17/11',
+    data: '13/11',
     cidade: 'Phi Phi',
     titulo: 'Gold Day Tour Privativo',
     atividades: [
@@ -345,7 +345,7 @@ export const roteiro = [
   },
   {
     dia: 13,
-    data: '18/11',
+    data: '14/11',
     cidade: 'Phi Phi',
     titulo: 'Dia Livre',
     atividades: [
@@ -361,7 +361,7 @@ export const roteiro = [
   },
   {
     dia: 14,
-    data: '19/11',
+    data: '15/11',
     cidade: 'Bangkok',
     titulo: 'Retorno a Bangkok',
     atividades: [
@@ -380,7 +380,7 @@ export const roteiro = [
   },
   {
     dia: 15,
-    data: '20/11',
+    data: '16/11',
     cidade: 'Bangkok',
     titulo: 'Saída de Bangkok',
     atividades: [
@@ -399,7 +399,7 @@ export const roteiro = [
   },
   {
     dia: 16,
-    data: '21/11',
+    data: '17/11',
     cidade: 'Brasil',
     titulo: 'Chegada ao Brasil',
     atividades: [
@@ -533,6 +533,6 @@ export const gastosPessoais = {
 
 export const whatsappConfig = {
   numero: '', // 29/09/2026: sem número fixo — o WhatsApp é decidido pela rota do QS
-  mensagem: 'Olá! Quero saber mais sobre a Expedição Tailândia 2027 — 6 a 21 de novembro de 2027.',
+  mensagem: 'Olá! Quero saber mais sobre a Expedição Tailândia 2027 — 2 a 17 de novembro de 2027.',
 }
 export const whatsappUrl = `https://qs-turis.vercel.app/api/whatsapp?text=Quero%20seguir%20os%20pr%C3%B3ximos%20passos`

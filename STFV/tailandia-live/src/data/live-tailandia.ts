@@ -48,7 +48,7 @@ export const liveTailandia: ConfigLive = {
     ano: 2027,
     // Aparece no rodapé. É a ÚNICA data de turma da página: o carrossel do
     // roteiro mostra "Dia 1, Dia 2...", sem dia do mês.
-    resumoExpedicao: '6 a 21 de novembro de 2027 · Bangkok, Chiang Mai e Phi Phi',
+    resumoExpedicao: '2 a 17 de novembro de 2027 · Bangkok, Chiang Mai e Phi Phi',
     saidaCurta: 'Encontro em Guarulhos (GRU)',
   },
 

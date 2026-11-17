@@ -146,7 +146,7 @@ export const expedicoes: Expedicao[] = [
     id: 'tailandia-2027',
     destino: 'Tailândia',
     ano: 2027,
-    periodo: '06 a 21/11',
+    periodo: '02 a 17/11',
     dias: 16,
     resumo: 'Templos dourados, praias paradisíacas e a cultura tailandesa.',
     imagem: 'https://setur-trafego.vercel.app/assets/thailand-D2WHjF8d.jpg',

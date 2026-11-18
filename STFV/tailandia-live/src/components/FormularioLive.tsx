@@ -274,7 +274,11 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
         /* aba anônima: a obrigado.html se vira com o `?live=` */
       }
       const query = SLUG === 'japao-live' ? '' : `?live=${encodeURIComponent(SLUG)}`
-      window.location.href = `${import.meta.env.BASE_URL}obrigado.html${query}`
+      // 18/11/2026: o fbq('track','Lead') acima é uma requisição do navegador;
+      // pular de página na mesma hora cortava o envio. Espera 1,5 s antes de sair.
+      window.setTimeout(() => {
+        window.location.href = `${import.meta.env.BASE_URL}obrigado.html${query}`
+      }, 1500)
     },
     [posicao],
   )
@@ -363,7 +367,6 @@ export default function FormularioLive({ posicao = 'hero' }: { posicao?: Posicao
           return
         }
         setErroEnvio(true)
-      } finally {
         setEnviando(false)
       }
     },

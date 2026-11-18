@@ -69,6 +69,9 @@
       body { padding: 16px; align-items: flex-start; }
       .card { padding: 36px 18px; border-radius: 24px; }
     }
+    .aviso { margin-top: 16px; font-size: 14px; color: rgba(9, 40, 43, 0.55); }
+    .aviso[hidden] { display: none; }
+    .btn[hidden] { display: none; }
   </style>
 </head>
 <body>
@@ -82,84 +85,128 @@
       Nosso time vai analisar seu perfil e entrar em contato pelo WhatsApp
       para alinharmos os próximos passos da sua viagem. Fica de olho no celular!
     </p>
+    <a class="btn" id="btn-whatsapp" href="#" hidden>
+      Chamar no WhatsApp agora
+    </a>
+    <p class="aviso" id="aviso-redirect" hidden>
+      Abrindo seu WhatsApp em <b id="contagem">3</b>…
+    </p>
     <!--
-      22/10/2026 (Bruno): a ligação com o SDR é marcada AQUI, não mais no
-      formulário. O lead chega nesta página assim que envia (é a visita a ela
-      que a Stape/GTM conta como conversão do Meta) e, já contado, escolhe o
-      horário. Agenda = página pública do QS no modo SDR (/agendar/?com=sdr):
-      reserva com trava por SDR, atividade na fila dele, e o card do Bitrix
-      passa pro nome de quem vai ligar (alcancarLigacaoSdr, no QS). Os dados
-      vêm do formulário pelo sessionStorage ('stfv_agenda'); sem eles (visita
-      direta, aba privada) a página fica só com a confirmação.
+      18/11/2026 (Bruno): VOLTOU o fluxo "preencheu o formulário → WhatsApp".
+      Sai a agenda com o SDR (22/10). A pessoa manda a PRIMEIRA mensagem pra
+      SDR que é DONA dela no QS:
+        • durante os 3 s desta página (tempo da Stape/GTM contar a conversão
+          desta visita), ela pergunta ao QS (/api/lead) de quem é o telefone;
+        • o QS devolve a dona (carteira/bilhete já existente) ou escolhe pela
+          distribuição e grava o bilhete — quando o lead chega no QS pelo
+          Bitrix, o gatilho trg_qs_assign_owner dá o card pra MESMA SDR;
+        • abre o wa.me dela com a mensagem pronta do formulário.
+      QS fora do ar ou lento (> 3,5 s): não redireciona pra ninguém escolhido
+      no chute; mostra o botão (que tenta de novo) e o time chama pelo QS.
     -->
-    <section id="agenda" class="agenda" hidden>
-      <p class="agenda-titulo">Falta só um passo: marque uma ligação rápida com o nosso time</p>
-      <p class="agenda-texto" id="agenda-texto">
-        Escolha o melhor horário e a gente te liga no WhatsApp para uma conversa de 5 minutos.
-      </p>
-      <iframe id="agenda-quadro" title="Escolha o horário da ligação" loading="eager"></iframe>
-      <p class="agenda-nota" id="agenda-nota">Se preferir não marcar agora, tudo bem: nosso time te chama no WhatsApp.</p>
-    </section>
-    <script>
-      (function () {
-        var QS = 'https://qs-turis.vercel.app';
-        var dados = null;
-        try { dados = JSON.parse(sessionStorage.getItem('stfv_agenda') || 'null'); } catch (e) {}
-        if (!dados || !dados.telefone) return;
-
-        var secao = document.getElementById('agenda');
-        var quadro = document.getElementById('agenda-quadro');
-        var padrao = document.getElementById('texto-padrao');
-        function dl(evento, extra) {
-          window.dataLayer = window.dataLayer || [];
-          var o = { event: evento, form_name: dados.form_name, destino: dados.destino };
-          for (var k in extra) o[k] = extra[k];
-          window.dataLayer.push(o);
-        }
-
-        if (padrao) padrao.hidden = true;
-        document.getElementById('agenda-texto').textContent =
-          'Escolha o melhor horário e a gente te liga no WhatsApp para uma conversa de 5 minutos sobre o pacote ' +
-          dados.expedicao + '.';
-        secao.hidden = false;
-
-        window.addEventListener('message', function (e) {
-          if (e.origin !== QS || !e.data || typeof e.data !== 'object') return;
-          var d = e.data;
-          // O iframe avisa quando está pronto; só então os dados vão. Por
-          // postMessage e não pela URL: endereço de iframe fica no histórico.
-          if (d.tipo === 'qs-agendar:pronto') {
-            quadro.contentWindow.postMessage({
-              tipo: 'qs-agendar:preencher',
-              nome: dados.nome,
-              email: dados.email,
-              telefone: dados.telefone,
-              expedicao: dados.expedicao,
-              origem: dados.origem,
-              ja_no_bitrix: dados.ja_no_bitrix !== false
-            }, QS);
-          }
-          if (d.tipo === 'qs-agendar:altura' && d.altura) quadro.style.height = d.altura + 'px';
-          if (d.tipo === 'qs-agendar:concluido') {
-            // Evento próprio: ligação marcada não é reunião com especialista.
-            dl('ligacao_agendada', { ja_existia: d.ja_existia === true, com: d.com || 'sdr' });
-            document.getElementById('agenda-nota').textContent = 'Pronto! Horário marcado. A gente te liga no WhatsApp.';
-            try { sessionStorage.removeItem('stfv_agenda'); } catch (e2) {}
-          }
-        });
-
-        quadro.src = QS + '/agendar/?com=sdr&embed=1&tema=stfv&dias=3&expedicao=' + encodeURIComponent(dados.expedicao);
-        dl('agenda_sdr_exibida', {});
-      })();
-    </script>
     <a class="voltar" href="./">← Voltar para a página do pacote</a>
     <div class="marca">Se Tu For, Eu Vou! · Viagens</div>
   </main>
-  <!--
-    29/09/2026 (Bruno): sem WhatsApp aqui. A página não escolhe SDR nem abre
-    conversa: o lead entra no QS e a distribuição do QS decide o dono, que
-    chama a pessoa. Esta página existe pra confirmar o envio e pro GTM contar
-    a conversão.
-  -->
+  <script>
+    (function () {
+      var DISTRIBUIDOR = 'https://qs-turis.vercel.app/api/lead';
+      var ROTA_FORM = 'https://qs-turis.vercel.app/api/whatsapp';
+      var ESPERA_MAX_MS = 3500;
+      var SEGUNDOS = 3;
+      var MSG_PADRAO = 'Quero seguir os próximos passos';
+
+      function ler(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+      function gravar(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+      function apagar(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+      function json(k) { try { return JSON.parse(ler(k) || 'null'); } catch (e) { return null; } }
+      function valido(n) {
+        var s = String(n || '');
+        return /^[0-9]{12,13}$/.test(s) && s !== '5511951251935' ? s : null;
+      }
+
+      // Dados do lead: o formulário das expedições grava stfv_wa_lead + a
+      // mensagem pronta; o do pacote só grava stfv_agenda.
+      var agenda = json('stfv_agenda');
+      var lead = json('stfv_wa_lead') || (agenda && agenda.telefone ? {
+        nome: agenda.nome, telefone: agenda.telefone, expedicao: agenda.expedicao, origem: agenda.origem
+      } : null);
+      var msg = ler('stfv_wa_msg') || (lead && lead.nome
+        ? 'Olá! Sou ' + lead.nome + ' e acabei de preencher o formulário sobre ' + (lead.expedicao || 'a viagem') + '. Quero seguir os próximos passos.'
+        : MSG_PADRAO);
+      var numero = valido(ler('stfv_wa_numero'));
+
+      var btn = document.getElementById('btn-whatsapp');
+      var aviso = document.getElementById('aviso-redirect');
+      var contagem = document.getElementById('contagem');
+      function link() { return numero ? 'https://wa.me/' + numero + '?text=' + encodeURIComponent(msg) : null; }
+      function mostrarBotao() {
+        if (!btn) return;
+        btn.hidden = false;
+        btn.href = link() || (ROTA_FORM + '?text=' + encodeURIComponent(msg));
+      }
+      function dl(evento, extra) {
+        window.dataLayer = window.dataLayer || [];
+        var o = { event: evento };
+        for (var k in extra) o[k] = extra[k];
+        window.dataLayer.push(o);
+      }
+
+      function perguntar(cb) {
+        if (!lead || !lead.telefone || !window.fetch) return cb(null);
+        var feito = false;
+        function fim(n) { if (feito) return; feito = true; cb(valido(n)); }
+        var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var limite = setTimeout(function () { if (ctrl) ctrl.abort(); fim(null); }, ESPERA_MAX_MS);
+        fetch(DISTRIBUIDOR, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(lead),
+          signal: ctrl ? ctrl.signal : undefined
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (d) { clearTimeout(limite); fim(d && d.numero); })
+          .catch(function () { clearTimeout(limite); fim(null); });
+      }
+
+      // Quem volta do WhatsApp (ou abre a página direto) só vê o botão.
+      if (!lead) { if (numero) mostrarBotao(); return; }
+      // Uma vez só: voltar do WhatsApp não pode virar laço.
+      apagar('stfv_wa_lead'); apagar('stfv_agenda');
+
+      var decidido = false, acabou = false;
+      function ir() {
+        if (!numero) {
+          // Sem dona definida: não chuta número. Botão tenta de novo no clique.
+          if (aviso) aviso.hidden = true;
+          mostrarBotao();
+          dl('whatsapp_sem_numero', {});
+          return;
+        }
+        dl('whatsapp_redirect', { sdr_numero_final: numero.slice(-4) });
+        window.location.replace(link()); // voltar do WhatsApp cai na LP
+      }
+      perguntar(function (n) {
+        decidido = true;
+        if (n) { numero = n; gravar('stfv_wa_numero', n); }
+        if (acabou) ir();
+      });
+      if (btn) btn.addEventListener('click', function (e) {
+        if (numero) return;
+        e.preventDefault();
+        perguntar(function (n) {
+          if (n) { numero = n; gravar('stfv_wa_numero', n); window.location.href = link(); }
+          else window.location.href = ROTA_FORM + '?text=' + encodeURIComponent(msg);
+        });
+      });
+
+      if (aviso) aviso.hidden = false;
+      var restante = SEGUNDOS;
+      var timer = setInterval(function () {
+        restante -= 1;
+        if (contagem) contagem.textContent = Math.max(restante, 0);
+        if (restante <= 0) { clearInterval(timer); acabou = true; if (decidido) ir(); }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

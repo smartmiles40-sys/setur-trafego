@@ -411,6 +411,15 @@ export default function FormularioLead({ versao = 'STFV' }: { versao?: string } 
           irParaObrigado()
         }
 
+        // 18/11/2026: o pixel da Meta e os hits pra Stape são requisições do
+        // navegador que saem DEPOIS deste push. Se a página pula pra agenda na
+        // mesma hora, o envio é cortado no meio e a Meta não conta o Lead.
+        // Por isso: pelo menos 1,5 s entre o push e a ida pro obrigado.html.
+        const pushEm = Date.now()
+        const seguirComFolga = () => {
+          setTimeout(seguir, Math.max(0, 1500 - (Date.now() - pushEm)))
+        }
+
         const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
         w.dataLayer = w.dataLayer || []
         w.dataLayer.push({
@@ -430,12 +439,12 @@ export default function FormularioLead({ versao = 'STFV' }: { versao?: string } 
             temperatura: leadScore(respostas).lead_score.toLowerCase(),
           },
           ...track,
-          eventCallback: seguir,
+          eventCallback: seguirComFolga,
           eventTimeout: 2000,
         })
 
         // Rede de segurança: se o GTM não chamar o callback, redireciona mesmo assim
-        setTimeout(seguir, 2000)
+        setTimeout(seguir, 3500)
       } catch (err) {
         if (import.meta.env.DEV) {
           // Em dev o /api não existe (função roda só na Vercel) — segue o fluxo
@@ -446,7 +455,6 @@ export default function FormularioLead({ versao = 'STFV' }: { versao?: string } 
           return
         }
         setErroEnvio(true)
-      } finally {
         setEnviando(false)
       }
     },

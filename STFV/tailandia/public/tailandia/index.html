@@ -820,16 +820,20 @@
           ss('stfv_wa_numero', null); ss('stfv_wa_redirecionado', null);
           location.href = '/obrigado.html';
         }
+        // 18/11/2026: o pixel da Meta e os hits pra Stape saem DEPOIS do push; se a
+        // página pula pra agenda na hora, o envio é cortado. Espera >= 1,5 s.
+        var pushEm = Date.now();
+        function seguirComFolga() { setTimeout(seguir, Math.max(0, 1500 - (Date.now() - pushEm))); }
         window.dataLayer = window.dataLayer || [];
         var ev = {
           event: 'expedicao_lead', form_name: FORM_NAME, versao_lp: VERSAO, destino: EXP.slug, event_id: eventId,
           lead: { nome: d.nome, email: d.email, whatsapp: tel, instagram: '' },
           resp: { disponibilidade: data.slug, investimento: { cabe: 'sim', parcelamento: 'parcelamento', sem_valor: 'nao' }[inv.slug], prazo: prazo.slug, temperatura: rotulo.toLowerCase() },
-          eventCallback: seguir, eventTimeout: 2000
+          eventCallback: seguirComFolga, eventTimeout: 2000
         };
         for (var k3 in track) ev[k3] = track[k3];
         window.dataLayer.push(ev);
-        setTimeout(seguir, 2000); // se o GTM não chamar o callback, segue mesmo assim
+        setTimeout(seguir, 3500); // se o GTM não chamar o callback, segue mesmo assim
       })
       .catch(function () {
         enviando = false; botao.disabled = false; botao.textContent = botao.dataset.txt;

@@ -237,14 +237,20 @@ export default function FormularioPacote() {
         foi = true;
         window.location.href = `${import.meta.env.BASE_URL}obrigado.html`;
       };
-      // Dá tempo do GTM mandar o lead_conversion antes de sair da página
+      // Dá tempo do GTM mandar o lead_conversion antes de sair da página.
+      // 18/11/2026: o callback do GTM chega antes de o pixel terminar de enviar;
+      // espera pelo menos 1,5 s depois do push pra não cortar o Lead da Meta.
+      const pushEm = Date.now();
+      const irComFolga = () => {
+        setTimeout(irParaObrigado, Math.max(0, 1500 - (Date.now() - pushEm)));
+      };
       pushDataLayer("lead_conversion", {
         pacote: captacao.slug,
         value: 1,
-        eventCallback: irParaObrigado,
+        eventCallback: irComFolga,
         eventTimeout: 2000,
       });
-      setTimeout(irParaObrigado, 2000);
+      setTimeout(irParaObrigado, 3500);
     } catch {
       setEstado("form");
       setErro("Não conseguimos enviar agora. Tente de novo em alguns segundos.");

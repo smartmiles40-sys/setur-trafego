@@ -80,9 +80,9 @@ export const liveTurquia: ConfigLive = {
      * ✅ Definida pelo Bruno em 03/09/2026: terça-feira, 15 de setembro de 2026, 20h00 (BRT).
      */
     // 🔁 Remarcada em 21/09/2026 para domingo, 27 de setembro de 2026, 20h00 (sala nova).
-    // 🚀 19/11/2026: super live de LANÇAMENTO da turma 2028 — terça, 24/11/2026, 20h,
-    // no lugar da live da Tailândia no Meet que estava nesse horário.
-    inicioISO: '2026-11-24T20:00:00-03:00',
+    // 🚀 19/11/2026: super live de LANÇAMENTO da turma 2028 — quarta, 25/11/2026, 20h
+    // (inicialmente marcada para terça 24/11; corrigida para quarta 25/11 no mesmo dia)
+    inicioISO: '2026-11-25T20:00:00-03:00',
     duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -93,7 +93,7 @@ export const liveTurquia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/rxo-tjru-ary', // sala da live de 24/11 (19/11/2026)
+    meetUrl: 'https://meet.google.com/rxo-tjru-ary', // sala da live de 25/11 (19/11/2026)
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:

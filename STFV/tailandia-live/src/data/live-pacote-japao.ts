@@ -45,7 +45,7 @@ const expedicaoPacote = {
  */
 const SESSOES_PACOTE_JAPAO = [
   { inicioISO: '2026-11-19T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao1911/' },
-  { inicioISO: '2026-11-22T20:00:00-03:00', meetUrl: 'https://meet.google.com/spu-kdxp-ziy' },
+  // 22/11 20h no Meet (spu-kdxp-ziy) CANCELADA em 19/11/2026.
   { inicioISO: '2026-11-25T15:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2511/' },
   { inicioISO: '2026-11-27T12:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/pacotejapao2711/' },
 ]

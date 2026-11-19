@@ -32,7 +32,7 @@ import type { ConfigLive } from './live-japao'
 const SESSOES_TAILANDIA = [
   { inicioISO: '2026-11-17T20:00:00-03:00', meetUrl: 'https://meet.google.com/fbs-yykv-uzp' },
   // 19/11 21h (AppLive tailandia1911) SAIU em 19/11/2026, a pedido do time.
-  { inicioISO: '2026-11-22T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2211/' }, // hotwebinar (AppLive)
+  { inicioISO: '2026-11-22T20:00:00-03:00', meetUrl: 'https://meet.google.com/grn-axis-xqf' }, // live no Meet, movida de 24/11 (19/11/2026)
   // 24/11 20h no Meet SAIU (19/11/2026): o horário ficou com a super live de lançamento da Turquia & Grécia 2028.
   { inicioISO: '2026-11-28T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2811/' }, // hotwebinar (AppLive)
 ]
@@ -163,7 +163,7 @@ export const liveTailandia: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/CJLWF1MFhHg91avo49r3Wo',
+    url: 'https://chat.whatsapp.com/KYujEr5AMUlLZHlpRIgL3b', // grupo novo (19/11/2026)
     nome: 'Live - Tailândia 2027',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',

@@ -1,7 +1,7 @@
 /**
  * ROTEIRO E COPY DA SECAO "ROTEIRO" -- expedicao TURQUIA & GRÉCIA.
  *
- * Gerado a partir do roteiro da LP de trafego (`STFV/turquia-grecia`), com UMA
+ * Gerado a partir do roteiro da LP de 2028 (setur-unificado, `expedicoes/turquia-grecia-2028`, 19/11/2026), com UMA
  * diferenca: o campo `data` ('04/09', '05/09'...) foi removido de cada dia,
  * porque o `components/Roteiro.tsx` desta LP nao renderiza dia do mes -- o
  * carrossel mostra "Dia 1, Dia 2...". A data da turma aparece uma vez so, no
@@ -22,7 +22,8 @@ export const copyRoteiroTurquia = {
 
 export const roteiroTurquia = [
   {
-    dia: 1,    cidade: 'São Paulo',
+    dia: 1,
+    cidade: 'São Paulo',
     titulo: 'Saída do Brasil',
     atividades: [
       'Encontro em Guarulhos (GRU)',
@@ -36,24 +37,25 @@ export const roteiroTurquia = [
     veiculos: [{ emoji: '✈️', label: 'Voo internacional GRU → Istambul' }],
   },
   {
-    dia: 2,    cidade: 'Istambul',
-    titulo: 'Chegada em Istambul & Bósforo',
+    dia: 2,
+    cidade: 'Istambul',
+    titulo: 'Chegada em Istambul',
     atividades: [
       'Recepção no aeroporto de Istambul',
       'Traslado privativo até o hotel',
       'Check-in e ajuste de fuso',
-      'Passeio de barco pelo Estreito de Bósforo',
+      'Primeira noite em Istambul',
     ],
-    logistica: 'Traslado aeroporto → hotel | Passeio de barco no Bósforo',
+    logistica: 'Traslado aeroporto → hotel | Check-in',
     imagem: `${import.meta.env.BASE_URL}assets/turquia-grecia/dia-02.jpg`,
     destaque: false,
     veiculos: [
       { emoji: '🚐', label: 'Traslado privativo' },
-      { emoji: '⛵', label: 'Barco no Bósforo' },
     ],
   },
   {
-    dia: 3,    cidade: 'Istambul',
+    dia: 3,
+    cidade: 'Istambul',
     titulo: 'Istambul Imperial',
     atividades: [
       'Hipódromo, Mesquita Azul e Vista Panorâmica Santa Sofia',
@@ -68,11 +70,12 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 4,    cidade: 'Istambul → Capadócia',
+    dia: 4,
+    cidade: 'Istambul → Capadócia',
     titulo: 'Rumo à Capadócia',
     atividades: [
-      'Manhã livre e check-out em Istambul',
-      'Voo de Istambul a Capadócia',
+      'Último dia em Istambul e check-out',
+      'Voo noturno de Istambul a Capadócia',
       'Traslado ao hotel-caverna',
     ],
     logistica: 'Voo Istambul → Capadócia | Transfer | Hotel-caverna',
@@ -84,7 +87,8 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 5,    cidade: 'Capadócia',
+    dia: 5,
+    cidade: 'Capadócia',
     titulo: 'Balão ao amanhecer & Tour Vermelho',
     atividades: [
       'Voo de balão ao nascer do sol',
@@ -101,7 +105,8 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 6,    cidade: 'Capadócia',
+    dia: 6,
+    cidade: 'Capadócia',
     titulo: '2ª chance de balão & Tour Verde',
     atividades: [
       'Balão: 2ª tentativa opcional caso o clima impeça o 1º voo',
@@ -117,7 +122,8 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 7,    cidade: 'Capadócia → Kusadasi',
+    dia: 7,
+    cidade: 'Capadócia → Kusadasi',
     titulo: '3ª chance do balão & deslocamento para Kusadasi',
     atividades: [
       'Balão: 3ª tentativa opcional caso o clima tenha impedido os voos anteriores',
@@ -134,7 +140,8 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 8,    cidade: 'Kusadasi',
+    dia: 8,
+    cidade: 'Kusadasi',
     titulo: 'Embarque no Cruzeiro & Parada em Patmos',
     atividades: [
       'Embarque no cruzeiro pelas ilhas gregas em Kusadasi',
@@ -149,7 +156,8 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 9,    cidade: 'Creta / Santorini',
+    dia: 9,
+    cidade: 'Creta / Santorini',
     titulo: 'Parada do Cruzeiro em Heraklion e Santorini',
     atividades: [
       'Parada do Cruzeiro em Heraklion',
@@ -161,7 +169,8 @@ export const roteiroTurquia = [
     veiculos: [{ emoji: '🚢', label: 'Cruzeiro Creta + Santorini' }],
   },
   {
-    dia: 10,    cidade: 'Atenas / Mykonos',
+    dia: 10,
+    cidade: 'Atenas / Mykonos',
     titulo: 'Parada do Cruzeiro em Atenas & Moinhos de Mykonos',
     atividades: [
       'City tour em Atenas — Acrópole e Partenon',
@@ -174,16 +183,16 @@ export const roteiroTurquia = [
     veiculos: [{ emoji: '🚢', label: 'Cruzeiro Atenas + Mykonos' }],
   },
   {
-    dia: 11,    cidade: 'Kusadasi → Pamukkale',
-    titulo: 'Éfeso, Casa da Virgem Maria & Pamukkale',
+    dia: 11,
+    cidade: 'Kusadasi → Pamukkale',
+    titulo: 'Casa da Virgem Maria & Pamukkale',
     atividades: [
       'Desembarque do cruzeiro em Kusadasi',
-      'Ruínas de Éfeso e a Biblioteca de Celso',
       'Casa da Virgem Maria, no Monte Coressos',
       'Deslocamento a Pamukkale',
       'Passeio pelos terraços termais de Pamukkale',
     ],
-    logistica: 'Desembarque | Excursão Éfeso | Traslado a Pamukkale | Terraços',
+    logistica: 'Desembarque | Casa de Maria | Traslado a Pamukkale | Terraços',
     imagem: `${import.meta.env.BASE_URL}assets/turquia-grecia/dia-09.jpg`,
     destaque: true,
     veiculos: [
@@ -192,12 +201,13 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 12,    cidade: 'Pamukkale → Istambul / Brasil',
+    dia: 12,
+    cidade: 'Pamukkale → Istambul / Brasil',
     titulo: 'Voo de volta ao Brasil',
     atividades: [
       'Café da manhã e check-out do hotel em Pamukkale',
       'Deslocamento até o aeroporto de Istambul',
-      'Embarque no voo internacional de retorno',
+      'Embarque no voo internacional de retorno, às 20h25',
       'Boa viagem de volta',
     ],
     logistica: 'Check-out em Pamukkale → aeroporto de Istambul | Voo internacional → GRU',
@@ -209,11 +219,12 @@ export const roteiroTurquia = [
     ],
   },
   {
-    dia: 13,    cidade: 'São Paulo',
+    dia: 13,
+    cidade: 'São Paulo',
     titulo: 'Chegada ao Brasil',
     atividades: [
       'Voo internacional de retorno',
-      'Chegada em Guarulhos (GRU)',
+      'Chegada em Guarulhos (GRU), às 03h30',
       'Desembarque com a expedição na bagagem',
       'Despedida do grupo',
     ],

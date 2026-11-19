@@ -45,20 +45,20 @@ export const liveTurquia: ConfigLive = {
     nomeUpper: 'TURQUIA & GRÉCIA',
     // Linha de apoio do hero. Vazia = quem renderiza esconde a linha sozinho.
     complementoNome: '',
-    ano: 2027,
+    ano: 2028,
     // Aparece no rodapé. É a ÚNICA data de turma da página: o carrossel do
     // roteiro mostra "Dia 1, Dia 2...", sem dia do mês.
-    resumoExpedicao: '13 dias · 26 de junho a 8 de julho de 2027',
+    resumoExpedicao: '13 dias · 27 de maio a 8 de junho de 2028',
     saidaCurta: 'Encontro em Guarulhos (GRU)',
   },
 
   // ---- Copy da primeira tela ----------------------------------------------
   promessa:
-    'Uma hora ao vivo com quem organiza a expedição: os 13 dias entre Istambul, a Capadócia, o cruzeiro pelo Egeu e Atenas, o que está incluso, quanto custa e as suas perguntas respondidas na hora.',
+    'A super live de lançamento da Expedição Turquia & Grécia 2028: os 13 dias entre Istambul, a Capadócia, Pamukkale e o cruzeiro pelas ilhas gregas, o que está incluso, quanto custa e as suas perguntas respondidas ao vivo.',
 
   topicos: [
     'Roteiro dia a dia',
-    'Capadócia e o cruzeiro pelo Egeu',
+    'Capadócia, Pamukkale e o cruzeiro pelas ilhas gregas',
     'Valores e formas de pagamento',
     'Como funciona o acompanhamento',
     'Perguntas ao vivo',
@@ -66,7 +66,7 @@ export const liveTurquia: ConfigLive = {
 
   // ---- A live --------------------------------------------------------------
   evento: {
-    titulo: 'Live: Expedição Turquia e Grécia 2027 · Se Tu For, Eu Vou',
+    titulo: 'Super live de lançamento: Expedição Turquia e Grécia 2028 · Se Tu For, Eu Vou',
 
     /**
      * Data e hora da live, no fuso de São Paulo.
@@ -80,7 +80,9 @@ export const liveTurquia: ConfigLive = {
      * ✅ Definida pelo Bruno em 03/09/2026: terça-feira, 15 de setembro de 2026, 20h00 (BRT).
      */
     // 🔁 Remarcada em 21/09/2026 para domingo, 27 de setembro de 2026, 20h00 (sala nova).
-    inicioISO: '2026-09-28T19:30:00-03:00',
+    // 🚀 19/11/2026: super live de LANÇAMENTO da turma 2028 — terça, 24/11/2026, 20h,
+    // no lugar da live da Tailândia no Meet que estava nesse horário.
+    inicioISO: '2026-11-24T20:00:00-03:00',
     duracaoMinutos: 60,
 
     // ✅ Sala do Google Meet DESTA live (Bruno, 04/09/2026). Vazio = o convite
@@ -91,11 +93,11 @@ export const liveTurquia: ConfigLive = {
     //
     // ⚠️ O mesmo link precisa entrar no mapa `LIVES` de public/entrar.html
     // (a porta da sala). Trocou aqui, troque lá.
-    meetUrl: 'https://meet.google.com/yis-dunh-opv',
+    meetUrl: 'https://meet.google.com/rxo-tjru-ary', // sala da live de 24/11 (19/11/2026)
 
     // Vai na descrição do convite do Google Agenda / .ics
     descricao:
-      'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para apresentar a Expedição Turquia & Grécia 2027: os 13 dias entre Istambul, Capadócia, o cruzeiro pelo Egeu e Atenas, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',
+      'Encontro ao vivo com a equipe da Se Tu For, Eu Vou para lançar a Expedição Turquia & Grécia 2028 (27/05 a 08/06/2028): os 13 dias entre Istambul, Capadócia, Pamukkale e o cruzeiro pelas ilhas gregas, valores, como funciona o acompanhamento da agência e as vagas disponíveis. Traga suas perguntas.',
   },
 
   // Mesmo Short das outras lives: o depoimento é sobre a AGÊNCIA, não sobre o
@@ -139,8 +141,8 @@ export const liveTurquia: ConfigLive = {
    * cola no "compartilhar" — o que identifica o grupo é só o código.
    */
   comunidade: {
-    url: 'https://chat.whatsapp.com/I3eb8uP6zKHCFkozKujvsn',
-    nome: 'Live - Turquia & Grécia 2027',
+    url: 'https://chat.whatsapp.com/Lpaxzmtut4lETAEKw06QDl', // grupo novo do lançamento 2028 (19/11/2026)
+    nome: 'Live - Turquia & Grécia 2028',
     descricao:
       'É por lá que o link da live é enviado, com os avisos, os bastidores da expedição e o aviso de abertura das vagas.',
   },

@@ -31,7 +31,7 @@ import type { ConfigLive } from './live-japao'
  */
 const SESSOES_TAILANDIA = [
   { inicioISO: '2026-11-17T20:00:00-03:00', meetUrl: 'https://meet.google.com/fbs-yykv-uzp' },
-  { inicioISO: '2026-11-19T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia1911/' }, // hotwebinar (AppLive)
+  // 19/11 21h (AppLive tailandia1911) SAIU em 19/11/2026, a pedido do time.
   { inicioISO: '2026-11-22T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2211/' }, // hotwebinar (AppLive)
   // 24/11 20h no Meet SAIU (19/11/2026): o horário ficou com a super live de lançamento da Turquia & Grécia 2028.
   { inicioISO: '2026-11-28T21:00:00-03:00', meetUrl: 'https://stfvlivejapaoechina.applive.com.br/tailandia2811/' }, // hotwebinar (AppLive)
